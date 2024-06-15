@@ -6,9 +6,13 @@
 
 <h1 align="center">Welcome to the Lightna Open Source project!</h1>
 
+<p align="center">
 Lightna is being developed at the moment, this repository will provide releases of Lightna
+</p>
 
+<p align="center">
 <a href="https://lightna.com">About Lightna</a>
  | <a href="https://lightna.com#contributors">Contributors</a>
  | <a href="https://lightna.com#progress">Progress</a>
  | <a href="https://lightna.com/contact.html">Contact</a>
+</p>
