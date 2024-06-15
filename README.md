@@ -4,7 +4,7 @@
 </a>
 </p>
 
-<h1 align="center">Welcome to the Lightna Open Source project!</h1>
+<h1 align="center">Welcome to the Lightna project!</h1>
 
 <p align="center">
 Lightna is being developed at the moment, this repository will provide releases of Lightna
