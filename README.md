@@ -1,6 +1,6 @@
 <p align="center">
 <a href="https://lightna.com">
-<img src="https://lightna.com/image/lightna-logo.svg" height="33 alt="Lightna Logo"/>
+<img src="https://lightna.com/asset/Lightna-Front/image/lightna-logo.svg" height="33 alt="Lightna Logo"/>
 </a>
 </p>
 
