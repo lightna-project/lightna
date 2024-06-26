@@ -7,7 +7,8 @@
 <h1 align="center">Welcome to the Lightna project!</h1>
 
 <p align="center">
-Lightna is being developed at the moment, this repository will provide releases of Lightna
+Lightna is being developed at the moment, this repository will provide releases of Lightna.
+<br>The code will be shared on GitHub before the first release.
 </p>
 
 <p align="center">
