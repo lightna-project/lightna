@@ -1,1 +1,7 @@
-.idea/
+/.idea
+/compiled
+/entry/*/auth.json
+/entry/*/env.php
+/entry/*/node_modules
+/entry/*/vendor
+/project
