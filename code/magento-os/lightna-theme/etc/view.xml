@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/view.xsd">
+    <media>
+        <images module="Magento_Catalog">
+            <image id="lightna_tile" type="thumbnail">
+                <width>285</width>
+                <height>354</height>
+            </image>
+            <image id="lightna_preview" type="thumbnail">
+                <width>535</width>
+                <height>664</height>
+            </image>
+            <image id="lightna_thumbnail" type="thumbnail">
+                <width>100</width>
+                <height>124</height>
+            </image>
+        </images>
+    </media>
+</view>

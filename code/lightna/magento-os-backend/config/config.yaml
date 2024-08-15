@@ -1,0 +1,47 @@
+router.bypass:
+  rules.url_starts_with:
+    - soap/
+    - rest/
+project:
+  connection:
+    host: localhost
+    port: 3306
+    username:
+    password:
+    dbname:
+entity:
+  url_rewrite:
+    entity: Lightna\Magento\App\Entity\Route
+    index: Lightna\Magento\Index\Route\UrlRewrite
+  cms:
+    entity: Lightna\Magento\App\Entity\Cms
+    index: Lightna\Magento\Index\Cms
+    data: Lightna\Magento\Data\Cms
+    layout: cms
+  product:
+    entity: Lightna\Magento\App\Entity\Product
+    index: Lightna\Magento\Index\Product
+    data: Lightna\Magento\Data\Product
+    layout: product
+  config:
+    entity: Lightna\Magento\App\Entity\Config
+    index: Lightna\Magento\Index\Config
+    data: Lightna\Magento\Data\Config
+    storage: opcache
+  content_page:
+    entity: Lightna\Magento\App\Entity\Content\Page
+    index: Lightna\Magento\Index\Content\Page
+    data: Lightna\Magento\Data\Content\Page
+  content_product:
+    entity: Lightna\Magento\App\Entity\Content\Product
+    index: Lightna\Magento\Index\Content\Product
+    data: Lightna\Magento\Data\Content\Product
+  category:
+    entity: Lightna\Magento\App\Entity\Category
+    index: Lightna\Magento\Index\Category
+    data: Lightna\Magento\Data\Category
+    layout: category
+  content_category:
+    entity: Lightna\Magento\App\Entity\Content\Category
+    index: Lightna\Magento\Index\Content\Category
+    data: Lightna\Magento\Data\Content\Category

@@ -1,0 +1,8 @@
+directives:
+  - position .body.server-time first
+.head:
+  .ga:
+    template: ga.phtml
+.body:
+  .server-time:
+    template: server-time-container.phtml

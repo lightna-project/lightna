@@ -1,0 +1,14 @@
+magento.configuration.list:
+  country/code: general/country/default
+  locale/code: general/locale/code
+  store/name: general/store_information/name
+  logo/src: design/header/logo_src
+  logo/width: design/header/logo_width
+  logo/height: design/header/logo_height
+  logo/alt: design/header/logo_alt
+  favicon/href: design/head/shortcut_icon
+  copyright: design/footer/copyright
+  noRoutePageIdentifier: web/default/cms_no_route
+  currency/default: currency/options/default
+  ga/active: google/analytics/active
+  ga/account: google/analytics/account

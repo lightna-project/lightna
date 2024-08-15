@@ -1,0 +1,20 @@
+<?php
+/** @var string $title */
+/** @var string $logId */
+?>
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <title>500 - <?= htmlspecialchars($title) ?></title>
+    <meta charset="utf-8">
+</head>
+<body style="height: 100%; padding: 0; margin: 0;">
+<div style="text-align: center; padding: 8vh 20vw">
+    <span style="font-size: xx-large">Error 500</span>
+    <hr/>
+    <span style="font-size: large"><?= htmlspecialchars($title) ?></span><br>
+    <span style="font-size: medium; color: gray">
+        Find details in the log: <?= htmlspecialchars($logId) ?>
+    </span>
+</div>
+</body>

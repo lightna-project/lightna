@@ -1,0 +1,7 @@
+indexer:
+  changelog:
+    tables:
+      include: [ ]
+      exclude: [ ]
+    batch:
+      handlers: [ ]

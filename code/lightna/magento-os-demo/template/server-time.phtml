@@ -1,0 +1,14 @@
+<?php
+$serverTime = round((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 2);
+$elasticTime = round(Lightna\Elasticsearch\App\Client::$timeSpent * 1000, 2);
+?>
+<script>
+    const serverTime = <?= escape($serverTime, 'json-js') ?>;
+    const elasticTime = <?= escape($elasticTime, 'json-js') ?>;
+    const el = document.getElementById('serverTime');
+
+    el.innerHTML = 'Server rendering time: ' + serverTime + 'ms';
+    if (elasticTime) {
+        el.innerHTML += ' (incl. Elasticsearch: ' + elasticTime + 'ms)';
+    }
+</script>

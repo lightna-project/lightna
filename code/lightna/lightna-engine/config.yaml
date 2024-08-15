@@ -1,0 +1,37 @@
+# Path to the public folder accessible from Web where static assets will be placed
+asset_dir: null
+# List of Key-Value storages
+storage:
+  opcache:
+    adapter: Lightna\Engine\App\Storage\Opcache
+    options:
+      dir: opcache
+router:
+  # List of router custom actions (name: class)
+  action:
+    page: Lightna\Engine\App\Router\Action\Page
+  bypass:
+    process_after_routing: 1
+    rules:
+      # Regular expressions for URL path, URL path excludes "/" at the beginning
+      # Expression is performed after prepending "^" to avoid parsing a whole URL path
+      url_starts_with: [ ]
+    # If rules aren't empty and are true, then specified file will be used to handle the request
+    file: null
+    cookie:
+      enabled: false
+      name: null
+  404:
+    action: ""
+entity:
+  route:
+  config:
+cli:
+  command:
+    deploy:asset:sign: Lightna\Engine\App\Console\Deploy\AssetSign
+    deploy:opcache: Lightna\Engine\App\Console\Deploy\Opcache
+    deploy:data: Lightna\Engine\App\Console\Deploy\Data
+    indexer:schema:update: Lightna\Engine\App\Console\Indexer\UpdateSchema
+    indexer:process: Lightna\Engine\App\Console\Indexer\Process
+default:
+  storage: opcache

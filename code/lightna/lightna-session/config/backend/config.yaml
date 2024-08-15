@@ -1,0 +1,3 @@
+plugin:
+  Lightna\Engine\App:
+    - Lightna\Session\App\Plugin\App

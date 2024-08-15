@@ -1,0 +1,35 @@
+indexer:
+  changelog:
+    tables:
+      include:
+        ^catalog_product_entity: [ entity_id ]
+        ^catalog_product_index_price$: [ ]
+        ^catalog_product_relation$: [ ]
+        ^catalog_product_super_attribute$: [ product_id ]
+        ^cms_page: [ ]
+        ^cataloginventory_stock_item$: [ product_id ]
+        ^catalog_product_website$: [ product_id ]
+        ^url_rewrite$: [ entity_type, entity_id ]
+        ^core_config_data$: [ ]
+        ^catalog_category_entity: [ entity_id ]
+        ^eav_attribute$: [ ]
+        ^eav_attribute_label$: [ ]
+        ^eav_attribute_option$: [ ]
+        ^eav_attribute_option_value$: [ ]
+        ^catalog_eav_attribute$: [ ]
+        ^cms_block: [ ]
+      exclude:
+        - _(cl|tmp|idx|replica)$
+        - ^sequence_
+        - ^catalog_product_entity_media_gallery
+    batch:
+      handlers:
+        lightna_product_handler: Lightna\Magento\App\Index\Changelog\ProductBatchHandler
+        lightna_cms_page_handler: Lightna\Magento\App\Index\Changelog\CmsPageBatchHandler
+        lightna_stock_handler: Lightna\Magento\App\Index\Changelog\StockBatchHandler
+        lightna_product_website_handler: Lightna\Magento\App\Index\Changelog\ProductWebsiteBatchHandler
+        lightna_url_rewrite_handler: Lightna\Magento\App\Index\Changelog\UrlRewriteBatchHandler
+        lightna_config_handler: Lightna\Magento\App\Index\Changelog\ConfigBatchHandler
+        lightna_category_handler: Lightna\Magento\App\Index\Changelog\CategoryBatchHandler
+        lightna_attributes_handler: Lightna\Magento\App\Index\Changelog\AttributesBatchHandler
+        lightna_cms_block_handler: Lightna\Magento\App\Index\Changelog\CmsBlockBatchHandler

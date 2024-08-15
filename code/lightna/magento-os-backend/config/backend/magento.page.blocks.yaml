@@ -1,0 +1,3 @@
+magento.page.blocks:
+  footerLinksHtml: footer_links
+  uspHtml: usp

@@ -1,0 +1,3 @@
+router.bypass.rules.url_starts_with:
+  - checkout/
+  - customer/section/load/

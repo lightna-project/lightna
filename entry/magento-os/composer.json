@@ -1,0 +1,14 @@
+{
+    "require": {
+        "laminas/laminas-db": "^2.20"
+    },
+    "scripts": {
+        "lightna:build": [
+            "./cli compile",
+            "./cli indexer:schema:update",
+            "npm run build",
+            "./cli deploy:opcache",
+            "./cli deploy:data"
+        ]
+    }
+}

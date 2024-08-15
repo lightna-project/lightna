@@ -1,0 +1,5 @@
+plugin:
+  Lightna\Engine\App:
+    - Lightna\Magento\App\Plugin\App
+  Lightna\Engine\App\Scope:
+    - Lightna\Magento\App\Plugin\App\Scope

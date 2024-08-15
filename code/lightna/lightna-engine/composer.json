@@ -1,0 +1,8 @@
+{
+    "name": "lightna/lightna-engine",
+    "type": "library",
+    "description": "",
+    "require": {
+        "ext-yaml": "*"
+    }
+}
