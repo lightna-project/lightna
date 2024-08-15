@@ -68,6 +68,7 @@ ln -s ../../../entry/magento-os/index.php project/magento-os/pub/index.php
 * Edit `entry/magento-os/env.php` and define `*****` with your values
 * Make sure Elasticsearch and Session options match to Magento setup
 * Make sure `session.serialize_handler` value is set to `php_serialize`
+* Make sure session is stored in files (at the moment, only file storage is supported)
 
 
 ### Build
