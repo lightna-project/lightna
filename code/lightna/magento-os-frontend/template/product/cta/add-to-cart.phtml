@@ -1,0 +1,10 @@
+<?php
+/** @var Lightna\Engine\Data\Block $block */
+/** @var Lightna\Magento\Data\Product $product */
+?>
+<div <?= $block->attributes() ?> data-product-id="<?= $product->entityId() ?>">
+    <?php block('options') ?>
+    <button type="button" class="btn-cart">
+        <span><?= phrase('Add to Cart') ?></span>
+    </button>
+</div>

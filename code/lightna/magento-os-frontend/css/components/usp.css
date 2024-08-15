@@ -1,0 +1,54 @@
+@layer components {
+    .usp {
+        @apply overflow-hidden bg-primary-bg px-5 md:px-6;
+    }
+
+    .usp ul {
+        @apply m-auto flex max-w-screen-xl items-center text-center text-sm md:grid md:animate-none md:gap-6;
+    }
+
+    .usp ul:hover {
+        animation-play-state: paused;
+    }
+
+    .usp li {
+        @apply w-full shrink-0 py-1;
+    }
+
+    .product-usp {
+        @apply my-5;
+    }
+
+    .product-usp ul {
+        @apply flex flex-col gap-1;
+    }
+
+    .product-usp li {
+        @apply relative pl-6;
+    }
+
+    .product-usp li:before {
+        content: '';
+        @apply icon-sm checkmark absolute left-0 top-[5px] mr-2 block shrink-0;
+    }
+}
+
+.slide-2 ul {
+    @apply animate-slide-2 md:grid-cols-2;
+}
+
+.slide-3 ul {
+    @apply animate-slide-3 md:grid-cols-3;
+}
+
+.slide-4 ul {
+    @apply animate-slide-4 md:grid-cols-4;
+}
+
+.slide-5 ul {
+    @apply animate-slide-5 md:grid-cols-5;
+}
+
+.usp[class*='slide'] ul {
+    @apply md:animate-none;
+}

@@ -1,0 +1,22 @@
+@import "tailwindcss/base";
+@import "base/animation.css";
+@import "base/buttons.css";
+@import "base/forms.css";
+@import "base/icons.css";
+@import "base/layout.css";
+@import "base/price.css";
+@import "base/typography.css";
+
+@import "tailwindcss/components";
+@import "components/collapsible.css";
+@import "components/mobile-overlay.css";
+@import "components/tabs.css";
+@import "components/toggle-link.css";
+@import "components/usp.css";
+@import "components/common/import.css";
+@import "components/listing/import.css";
+@import "components/product/import.css";
+
+@import "tailwindcss/utilities";
+
+@config "../tailwind.config.js";

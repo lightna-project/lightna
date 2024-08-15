@@ -1,0 +1,5 @@
+@layer components {
+    .toolbar {
+        @apply mb-4 mt-8 border-t border-stone-200 py-4;
+    }
+}

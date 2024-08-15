@@ -1,0 +1,49 @@
+template: page.phtml
+.head:
+  container: head
+  .meta:
+    .encoding:
+      template: page/head/meta/encoding.phtml
+    .viewport:
+      template: page/head/meta/viewport.phtml
+  .title:
+    template: page/head/title.phtml
+  .link:
+    .favicon:
+      template: page/head/link/favicon.phtml
+    .font:
+      template: page/head/link/font.phtml
+    .stylesheet:
+      template: page/head/link/style-common.phtml
+  .script:
+    template: page/head/js/common.phtml
+.body:
+  container: body
+  .usp:
+    template: page/usp.phtml
+  .header:
+    template: page/header.phtml
+    .logo:
+      template: page/header/logo.phtml
+    .minicart:
+      template: page/header/minicart.phtml
+    .menu:
+      template: page/menu.phtml
+  .main:
+    container: div
+    attributes:
+      class:
+        - page-container
+  .footer:
+    container: footer
+    .menu:
+      template: page/footer/menu.phtml
+    .copyright:
+      template: page/footer/copyright.phtml
+  .minicart-content:
+    template: page/header/minicart-content.phtml
+  .messages-container:
+    container: div
+    attributes:
+      class:
+        - page-messages

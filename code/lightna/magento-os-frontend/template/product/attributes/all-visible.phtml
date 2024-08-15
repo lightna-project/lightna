@@ -1,0 +1,12 @@
+<?php
+/** @var Lightna\Magento\Data\Product $product */
+/** @var Lightna\Magento\Data\Content\Product $productContent */
+?>
+<?php foreach ($productContent->visibleOnFrontAttributes as $attribute) { ?>
+    <?php if ($value = $product->{$attribute->code}) { ?>
+        <div class="product-attributes-list__item">
+            <span class="product-attributes-list__item__label"><?= $attribute->label() ?></span>
+            <span class="product-attributes-list__item__value"><?= escape($value) ?></span>
+        </div>
+    <?php } ?>
+<?php } ?>

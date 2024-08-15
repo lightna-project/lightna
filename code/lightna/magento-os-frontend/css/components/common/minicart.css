@@ -1,0 +1,25 @@
+@layer components {
+    .minicart {
+        @apply fixed right-0 top-0 z-[55] flex h-full w-full max-w-[420px] translate-x-full flex-col gap-2 overflow-auto bg-white p-5 shadow-lg transition-transform duration-500;
+    }
+
+    .minicart__footer {
+        @apply mt-auto flex flex-col gap-1 border-t pt-4;
+    }
+
+    .minicart__totals {
+        @apply mb-2 flex justify-between gap-4 text-lg font-semibold;
+    }
+
+    .minicart-open .minicart {
+        @apply translate-x-0;
+    }
+
+    .minicart__overlay {
+        @apply fixed left-0 top-0 z-50 hidden h-full w-full bg-black opacity-10;
+    }
+
+    .minicart-open .minicart__overlay {
+        @apply block;
+    }
+}

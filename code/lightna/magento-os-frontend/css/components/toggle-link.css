@@ -1,0 +1,14 @@
+@layer components {
+    .toggle-link {
+        @apply order-last text-center underline hover:no-underline;
+    }
+
+    .toggle-link .on,
+    .toggle-link.active .off {
+        @apply hidden;
+    }
+
+    .toggle-link.active .on {
+        @apply inline;
+    }
+}

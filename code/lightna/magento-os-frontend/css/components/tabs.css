@@ -1,0 +1,25 @@
+@layer components {
+    .tabs {
+        @apply overflow-hidden;
+    }
+
+    .tabs__headings-container {
+        @apply flex gap-8 overflow-auto border-b py-2 font-semibold uppercase;
+    }
+
+    .tab-trigger {
+        @apply cursor-pointer whitespace-nowrap py-2 text-sm opacity-50 hover:opacity-100 md:text-base;
+    }
+
+    .tab-trigger.active {
+        @apply opacity-100;
+    }
+
+    .tab-content {
+        @apply hidden py-4 md:text-lg;
+    }
+
+    .tab-content.active {
+        @apply block;
+    }
+}

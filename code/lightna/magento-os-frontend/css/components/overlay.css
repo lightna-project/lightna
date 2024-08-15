@@ -1,0 +1,13 @@
+@layer components {
+    .overlay__title__container {
+        @apply mb-4 flex justify-between border-b pb-5;
+    }
+
+    .overlay__title {
+        @apply text-xl font-normal uppercase;
+    }
+
+    .overlay__title__container .icon {
+        @apply close cursor-pointer;
+    }
+}

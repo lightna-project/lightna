@@ -1,0 +1,37 @@
+@layer components {
+    .products-list--minicart {
+        @apply flex max-h-[calc(100%_-_200px)] flex-col gap-6 overflow-auto;
+    }
+
+    .products-list__item {
+        @apply flex items-start gap-2;
+    }
+
+    .products-list__item__image {
+        @apply mt-[5px] h-16 w-16 shrink-0 rounded-sm bg-primary-main/10;
+    }
+
+    .products-list__item__info {
+        @apply flex w-full flex-col;
+    }
+
+    .products-list__item__name {
+        @apply mb-1 font-normal;
+    }
+
+    .products-list__item__details {
+        @apply text-xs;
+    }
+
+    .products-list__item__details span {
+        @apply text-slate-500;
+    }
+
+    .products-list__item__price {
+        @apply price mt-2 text-sm;
+    }
+
+    .products-list__item__remove {
+        @apply icon close close-xs shrink-0 cursor-pointer;
+    }
+}

@@ -1,0 +1,19 @@
+<?php
+/** @var Lightna\Engine\Data\Block $block */
+?>
+<div class="cjs-product-info-tabs tabs">
+    <div class="tabs__headings-container">
+        <?php foreach ($block->tabs as $index => $tab): ?>
+            <div class="cjs-tab-trigger tab-trigger <?= $tab->active ? 'active' : '' ?>"
+                 data-tab-index="<?= $index ?>">
+                <?= phrase($tab->title()) ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php foreach ($block->tabs as $index => $tab): ?>
+        <div class="cjs-tab tab-content <?= $tab->active ? 'active' : '' ?>"
+             data-tab="<?= $index ?>">
+            <?php template($tab->template) ?>
+        </div>
+    <?php endforeach; ?>
+</div>

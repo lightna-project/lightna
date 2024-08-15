@@ -1,0 +1,17 @@
+@layer components {
+    .product-options {
+        @apply mb-2 flex flex-wrap items-center gap-2;
+    }
+
+    .product-options__label {
+        @apply w-full text-sm font-normal text-slate-500;
+    }
+
+    .product-options__option {
+        @apply h-9 min-w-9 cursor-pointer rounded-sm border px-2 py-1 text-center;
+    }
+
+    .product-options__option.active {
+        @apply border-primary-main;
+    }
+}

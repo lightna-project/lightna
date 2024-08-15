@@ -1,0 +1,5 @@
+@layer components {
+    .product-sku {
+        @apply text-sm font-normal text-slate-500;
+    }
+}

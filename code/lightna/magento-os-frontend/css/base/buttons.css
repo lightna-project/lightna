@@ -1,0 +1,42 @@
+@layer base {
+    .btn {
+        @apply disabled:btn-disabled mb-2 inline-flex justify-center rounded-sm border border-solid border-primary-main bg-primary-main px-4 py-3 text-center font-normal text-white transition hover:bg-hover-main;
+    }
+
+    .btn-primary {
+        @apply btn hover:bg-hover-alt hover:border-hover-alt border-primary-alt bg-primary-alt text-primary-text;
+    }
+
+    .btn-ghost {
+        @apply btn border border-solid border-primary-main bg-transparent text-primary-main hover:bg-transparent hover:opacity-80;
+    }
+
+    .btn-disabled {
+        @apply pointer-events-none opacity-40;
+    }
+
+    .loading:after {
+        content: '';
+        @apply absolute h-5 w-5 animate-spin rounded-full border-2 border-solid border-white border-b-transparent border-l-transparent;
+    }
+
+    .loading span {
+        @apply opacity-0 transition-opacity;
+    }
+
+    .btn-s {
+        @apply py-2;
+    }
+
+    .btn-l {
+        @apply py-3.5;
+    }
+
+    .btn-cart {
+        @apply m-0 w-full px-6 md:max-w-[300px];
+    }
+
+    button {
+        @apply btn;
+    }
+}

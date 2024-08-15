@@ -1,0 +1,13 @@
+<?php
+/** @var array $messages */
+?>
+<?php foreach ($messages as $message): ?>
+    <div class="message <?= escape($message['type']) ?> fade-in">
+        <div class="message__content">
+            <span>
+                <?= /* @noEscape */ $message['text'] ?>
+            </span>
+        </div>
+        <div class="message__close"></div>
+    </div>
+<?php endforeach; ?>

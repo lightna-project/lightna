@@ -1,0 +1,29 @@
+@import "./overlay.css";
+
+@layer components {
+    .mobile-overlay__title__container {
+        @apply flex justify-between pb-5 md:hidden;
+    }
+
+    .mobile-overlay__title {
+        @apply text-xl font-normal uppercase;
+    }
+
+    .mobile-overlay__title__container .icon {
+        @apply close cursor-pointer;
+    }
+
+    @media screen and (max-width: 767px) {
+        .mobile-overlay {
+            @apply fixed -left-full top-0 z-50 block h-full w-full overflow-auto bg-white transition-transform duration-500;
+        }
+
+        .mobile-overlay-active {
+            @apply relative h-full w-full overflow-hidden;
+        }
+
+        .mobile-overlay-active .mobile-overlay.active {
+            @apply translate-x-full;
+        }
+    }
+}

@@ -1,0 +1,8 @@
+<?php
+/** @var Lightna\Magento\Data\Content\Page $page */
+?>
+<?php if ($uspHtml = $page->uspHtml) : ?>
+    <div class="usp slide-<?= substr_count($uspHtml, '<li>') ?>">
+        <?= $uspHtml ?>
+    </div>
+<?php endif; ?>

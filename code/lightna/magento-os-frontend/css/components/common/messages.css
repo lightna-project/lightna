@@ -1,0 +1,66 @@
+@layer base {
+    .page-messages {
+        @apply fixed right-0 top-0 z-50 mx-5 my-6 flex flex-col items-end gap-4 sm:mx-6 sm:my-8;
+    }
+
+    .message {
+        @apply flex gap-4 rounded-sm bg-white p-4 text-sm shadow-md md:max-w-2xl md:text-base;
+    }
+
+    .message.success {
+        @apply bg-message-success-bg text-message-success-text;
+    }
+
+    .message.error {
+        @apply bg-message-error-bg text-message-error-text;
+    }
+
+    .message.warning {
+        @apply bg-message-warning-bg text-message-warning-text;
+    }
+
+    .message.notice {
+        @apply bg-message-notice-bg text-message-notice-text;
+    }
+
+    .message a {
+        @apply underline hover:no-underline;
+    }
+
+    .message:before {
+        content: '';
+        @apply h-[20px] w-[20px] shrink-0 md:h-[24px] md:w-[24px];
+    }
+
+    .success.message:before {
+        background: url('../../magento-os-frontend/image/icon/message/success.svg')
+            center / contain no-repeat;
+    }
+
+    .error.message:before {
+        background: url('../../magento-os-frontend/image/icon/message/error.svg')
+            center / contain no-repeat;
+    }
+
+    .warning.message:before {
+        background: url('../../magento-os-frontend/image/icon/message/warning.svg')
+            center / contain no-repeat;
+    }
+
+    .notice.message:before {
+        background: url('../../magento-os-frontend/image/icon/message/notice.svg')
+            center / contain no-repeat;
+    }
+
+    .message__close {
+        @apply h-[20px] w-[20px] shrink-0 cursor-pointer opacity-50 md:h-[24px] md:w-[24px];
+        background: url('../../magento-os-frontend/image/icon/cross-small.svg')
+            center / contain no-repeat;
+    }
+
+    @media (min-width: theme('screens.xl')) {
+        .page-messages {
+            right: calc((100% - theme('screens.xl')) / 2);
+        }
+    }
+}

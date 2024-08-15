@@ -1,0 +1,29 @@
+@layer components {
+    header {
+        @apply sticky top-0 z-[45] bg-white shadow-lg shadow-primary-main/5;
+    }
+
+    .header__container {
+        @apply page-container flex flex-wrap items-center justify-between gap-3 py-4 md:grid md:grid-cols-5 md:flex-nowrap md:py-0;
+    }
+
+    .header__open-menu {
+        @apply icon burger-menu md:hidden;
+    }
+
+    .header__right {
+        @apply flex items-center justify-end;
+    }
+
+    .logo__container {
+        @apply flex items-center;
+    }
+
+    .logo__link {
+        @apply inline-flex;
+    }
+
+    .logo__image {
+        @apply md:max-w-[80px] lg:max-w-none;
+    }
+}

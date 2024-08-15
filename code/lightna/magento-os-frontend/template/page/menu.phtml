@@ -1,0 +1,11 @@
+<?php
+/** @var Lightna\Magento\Data\Content\Page $page */
+?>
+<nav class="main-navigation mobile-overlay no-js" data-overlay-id="menu">
+    <div class="mobile-overlay__title__container">
+        <span class="mobile-overlay__title"><?= phrase('Menu') ?></span>
+        <!-- Close mobile menu -->
+        <div class="cjs-toggle-overlay icon" data-overlay="menu"></div>
+    </div>
+    <?php template('page/menu/item.phtml', ['item' => $page->menu]) ?>
+</nav>

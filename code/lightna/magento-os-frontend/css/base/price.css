@@ -1,0 +1,41 @@
+@layer base {
+    .price {
+        @apply text-sm font-normal md:text-base;
+    }
+
+    .special-price {
+        @apply price text-rose-700;
+    }
+
+    .old-price {
+        @apply price line-through opacity-70;
+    }
+
+    .price-lg .price {
+        @apply text-2xl;
+    }
+
+    .price-lg .special-price {
+        @apply text-3xl;
+    }
+
+    .price-lg .old-price {
+        @apply text-lg;
+    }
+
+    .discount {
+        @apply rounded-sm bg-rose-700 px-1.5 py-1 text-xs font-normal text-white;
+    }
+
+    .discount.amount:before {
+        content: '-';
+    }
+
+    .discount.percent {
+        @apply uppercase;
+    }
+
+    .discount.percent .value:after {
+        content: '%';
+    }
+}

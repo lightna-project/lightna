@@ -1,0 +1,50 @@
+@layer components {
+    .facets {
+        @apply p-5 md:p-0;
+    }
+
+    .facets__toggle-button {
+        @apply md:hidden;
+    }
+
+    .facets__toggle-button button {
+        @apply w-full;
+    }
+
+    .facets__toggle-button .icon {
+        @apply ml-4 filter;
+    }
+
+    .facets__item__container {
+        @apply border-t px-2 last:border-b;
+    }
+
+    .facets__item__title {
+        @apply flex cursor-pointer py-4 font-normal;
+    }
+
+    .facets__item__title .icon {
+        @apply chevron-down ml-auto;
+    }
+
+    .facets__item__options {
+        @apply mb-4 flex flex-col gap-3;
+    }
+
+    .facet__option {
+        @apply !flex items-center;
+    }
+
+    .facet__option__label {
+        @apply font-light;
+    }
+
+    .facet__option__count {
+        @apply ml-auto text-sm text-slate-500;
+    }
+
+    .toggle-link:not(.active) ~ li:nth-child(n + 7) {
+        /* +1 for the show more button */
+        @apply hidden;
+    }
+}

@@ -1,0 +1,13 @@
+@layer components {
+    .product-stock {
+        @apply mt-4 inline-flex rounded-sm px-2 py-1 text-xs font-semibold;
+    }
+
+    .product-stock.in-stock {
+        @apply bg-green-100 text-green-600;
+    }
+
+    .product-stock.out-of-stock {
+        @apply bg-red-100 text-red-600;
+    }
+}

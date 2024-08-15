@@ -1,0 +1,23 @@
+extends:
+  - page
+.body:
+  attributes:
+    class:
+      - category
+  .main:
+    .content:
+      container: div
+      .details:
+        template: category/details.phtml
+      .columns:
+        container: div
+        attributes:
+          class:
+          - grid
+          - gap-6
+          - md:gap-12
+          - md:grid-cols-[280px_1fr]
+        .facets:
+          template: category/facets.phtml
+        .result:
+          template: category/result.phtml

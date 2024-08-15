@@ -1,0 +1,9 @@
+@layer components {
+    .product-attributes-list__item {
+        @apply flex justify-between gap-x-2 border-b border-dashed py-2 first:pt-0;
+    }
+
+    .product-attributes-list__item__value {
+        @apply max-w-[70%] text-right font-normal;
+    }
+}

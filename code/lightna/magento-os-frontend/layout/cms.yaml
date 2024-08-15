@@ -1,0 +1,12 @@
+extends:
+  - page
+.body:
+  attributes:
+    class:
+      - cms
+  .main:
+    container: div
+    .heading:
+      template: cms/heading.phtml
+    .content:
+      template: cms/content.phtml

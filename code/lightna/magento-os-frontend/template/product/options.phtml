@@ -1,0 +1,22 @@
+<?php
+/** @var Lightna\Engine\Data\Block $block */
+/** @var Lightna\Magento\Data\Product $product */
+$options = $product->options;
+if (!$options->attributes) {
+    return;
+}
+?>
+<div <?= $block->attributes() ?>>
+    <?php foreach ($options->attributes as $attribute) { ?>
+        <div class="product-options options-<?= $attribute->code() ?>">
+            <div class="product-options__label"><?= $attribute->label() ?>:</div>
+            <input type="hidden" autocomplete="off" id="option_<?= $attribute->code() ?>" name="super_attribute[<?= $attribute->id() ?>]">
+            <?php foreach ($options->getAttributeOptions($attribute->code) as $option) { ?>
+                <span data-option="<?= $option('json-html') ?>"
+                      class="product-options__option option-<?= $attribute->code() ?>">
+                    <?= $option->label() ?>
+                </span>
+            <?php } ?>
+        </div>
+    <?php } ?>
+</div>

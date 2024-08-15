@@ -1,0 +1,21 @@
+@layer components {
+    .footer-columns {
+        @apply bg-primary-bg lg:mt-20;
+    }
+
+    .footer-columns .columns {
+        @apply page-container grid gap-4 md:grid-cols-2 lg:grid-cols-4;
+    }
+
+    .footer-columns .title {
+        @apply mb-2 font-semibold uppercase;
+    }
+
+    .footer-columns ul {
+        @apply flex flex-col gap-2;
+    }
+
+    .copyright {
+        @apply py-4 text-center text-xs;
+    }
+}

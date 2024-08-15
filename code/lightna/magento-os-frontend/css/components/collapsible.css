@@ -1,0 +1,13 @@
+@layer components {
+    .collapsible__content {
+        @apply hidden overflow-hidden transition-[max-height] duration-200 ease-out;
+    }
+
+    .collapsible--active .collapsible__content {
+        @apply block;
+    }
+
+    .collapsible--active .chevron-down {
+        @apply -scale-y-100;
+    }
+}

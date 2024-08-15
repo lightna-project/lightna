@@ -1,0 +1,56 @@
+<?php
+/** @var Lightna\Magento\Data\Product\Search $search */
+?>
+<div>
+    <?php if ($search->facets) { ?>
+        <div class="facets__toggle-button">
+            <button type="button" class="cjs-toggle-overlay" data-overlay="facets">
+                <?= phrase('Facets') ?>
+                <span class="icon" aria-hidden="true"></span>
+            </button>
+        </div>
+    <?php } ?>
+    <div class="cjs-facets facets mobile-overlay" data-overlay-id="facets">
+        <div class="mobile-overlay__title__container">
+            <span class="mobile-overlay__title"><?= phrase('Facets') ?></span>
+            <!-- Close mobile facets -->
+            <div class="cjs-toggle-overlay icon" data-overlay="facets"></div>
+        </div>
+        <?php foreach ($search->facets as $facet) { ?>
+            <?php $collapsibleActive = $facet->position < 5 || $facet->isInUse ?>
+            <div class="cjs-collapsible facets__item__container <?= $collapsibleActive ? 'collapsible--active' : '' ?>">
+                <?php if ($facet->type === 'range') { ?>
+                    <div class="py-4">
+                        <span class="font-normal">Range <?= $facet->label() ?>:</span>
+                        <?= $facet->min() ?> - <?= $facet->max() ?>
+                    </div>
+                <?php } ?>
+                <?php if ($facet->type === 'option') { ?>
+                    <div class="cjs-collapsible-trigger collapsible__trigger facets__item__title">
+                        <?= $facet->label() ?>
+                        <span class="icon" aria-hidden="true"></span>
+                    </div>
+                    <div class="cjs-collapsible-content collapsible__content">
+                        <ul class="facets__item__options">
+                            <?php if (count($facet->options) > 5) { ?>
+                                <?php template('component/toggle-link.phtml') ?>
+                            <?php } ?>
+                            <?php foreach ($facet->options as $key => $option) { ?>
+                                <li>
+                                    <input type="checkbox" id="<?= escape($facet->code . $key) ?>"
+                                           name="<?= $facet->code() ?>" value="<?= $option->value() ?>"
+                                        <?= $option->applied ? 'checked="checked"' : '' ?>
+                                           autocomplete="off">
+                                    <label for="<?= escape($facet->code . $key) ?>" class="facet__option">
+                                        <span class="facet__option__label"><?= $option->label() ?></span>
+                                        <span class="facet__option__count"><?= $option->count() ?></span>
+                                    </label>
+                                </li>
+                            <?php } ?>
+                        </ul>
+                    </div>
+                <?php } ?>
+            </div>
+        <?php } ?>
+    </div>
+</div>

@@ -1,0 +1,9 @@
+@layer base {
+    .fade-in {
+        @apply animate-fade-in;
+    }
+
+    .fade-out {
+        @apply animate-fade-out;
+    }
+}

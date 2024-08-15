@@ -1,0 +1,16 @@
+<?php
+/** @var Lightna\Magento\Data\Config $config */
+$logo = $config->logo;
+?>
+<div class="logo__container">
+    <a href="/" class="logo__link" aria-label="<?= phrase('Go to Home page') ?>"
+       title="<?= $logo->alt() ?>">
+        <img
+            src="<?= $logo->src() ?>"
+            width="<?= $logo->width() ?>"
+            height="<?= $logo->height() ?>"
+            alt="<?= $logo->alt() ?>"
+            class="logo__image"
+        />
+    </a>
+</div>

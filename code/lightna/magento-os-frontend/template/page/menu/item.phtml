@@ -1,0 +1,31 @@
+<?php
+/** @var Lightna\Magento\Data\Content\Page\Menu\Item $item */
+?>
+<?php if ($item->level > 3) return; ?>
+<?php $cssLevel = 'level-' . $item->level() ?>
+
+<div class="<?= $cssLevel ?> <?= ($item->children) ? 'has-children' : '' ?>">
+    <?php if ($item->level > 0) { ?>
+        <div class="<?= $cssLevel . '__title' ?>">
+            <a href="<?= $item->url() ?>" title="<?= $item->name() ?>">
+                <?= $item->name() ?>
+            </a>
+        </div>
+    <?php } ?>
+    <?php if ($item->children) { ?>
+        <div class="<?= $cssLevel . '__children-container' ?>">
+            <div class="<?= $cssLevel . '__children' ?>">
+                <?php foreach ($item->children as $child) { ?>
+                    <?php template('page/menu/item.phtml', ['item' => $child]) ?>
+                <?php } ?>
+            </div>
+            <?php if ($item->level === 1) { ?>
+                <div class="level-1__show-all">
+                    <a href="<?= $item->url() ?>" title="<?= $item->name() ?>">
+                        <i><?= phrase('Show all in ') .   $item->name() ?></i>
+                    </a>
+                </div>
+            <?php } ?>
+        </div>
+    <?php } ?>
+</div>

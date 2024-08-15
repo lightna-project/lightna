@@ -1,0 +1,93 @@
+@layer components {
+    .gallery-grid {
+        @apply relative gap-5 md:grid md:grid-cols-[77px_auto] lg:grid-cols-[102px_auto];
+    }
+
+    .gallery-thumbnails-container {
+        @apply relative hidden overflow-hidden md:block;
+    }
+
+    .gallery-thumbnails {
+        @apply no-scrollbar hidden h-0 min-h-full flex-col items-center gap-3 overflow-auto scroll-smooth md:flex;
+    }
+
+    .gallery-thumbnail {
+        @apply relative flex select-none items-center justify-center rounded-sm border bg-primary-bg;
+    }
+
+    .gallery-thumbnail img {
+        @apply max-w-full rounded-sm;
+    }
+
+    .gallery-thumbnail.active {
+        @apply before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:rounded-sm before:bg-primary-main before:opacity-10;
+    }
+
+    .gallery-thumbnails-arrow {
+        @apply absolute z-10 flex h-8 w-full cursor-pointer items-center justify-center bg-white bg-opacity-50;
+    }
+
+    .gallery-thumbnails-arrow.previous {
+        @apply top-0 border-t;
+    }
+
+    .gallery-thumbnails-arrow.next {
+        @apply bottom-0 border-b;
+    }
+
+    .gallery-thumbnails-arrow.disabled {
+        @apply hidden;
+    }
+
+    .gallery-preview {
+        @apply relative -mx-5 overflow-hidden md:mx-0 md:rounded-sm md:border;
+    }
+
+    .gallery-slider {
+        @apply flex transition-transform duration-500;
+    }
+
+    .gallery-slide {
+        @apply mr-px w-full shrink-0 select-none;
+    }
+
+    .gallery-slide img {
+        @apply w-full md:rounded-sm;
+    }
+
+    .gallery-arrow {
+        @apply absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-full border bg-white bg-opacity-50 shadow-md shadow-primary-main/5 hover:shadow-lg lg:h-12 lg:w-12;
+    }
+
+    .gallery-arrow.previous {
+        @apply left-5;
+    }
+
+    .gallery-arrow.next {
+        @apply right-5;
+    }
+
+    .gallery-arrow.disabled {
+        @apply pointer-events-none cursor-default opacity-20;
+    }
+
+    .gallery-dots {
+        @apply flex items-center justify-center gap-3 md:hidden;
+    }
+
+    .gallery-dot {
+        @apply mt-4 h-2 w-2 cursor-pointer rounded-full bg-slate-500 only:hidden;
+    }
+
+    .gallery-dot.active {
+        @apply h-3 w-3 bg-primary-main;
+    }
+
+    .gallery-progress-bar {
+        @apply absolute bottom-5 left-0 right-0 rounded-sm border bg-white/50 p-px md:hidden;
+    }
+
+    .gallery-progress {
+        @apply h-[2px] rounded-sm bg-primary-main transition-all duration-500;
+    }
+}

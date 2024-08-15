@@ -1,0 +1,52 @@
+<?php
+/** @var Lightna\Magento\Data\Session $session */
+/** @var Lightna\Magento\Data\Currency $currency */
+
+$cart = $session->cart;
+?>
+<div class="cjs-minicart-content">
+    <div class="minicart" data-total-qty="<?= $cart->qty() ?>">
+        <div class="overlay__title__container">
+            <span class="overlay__title"><?= phrase('Your Cart') ?></span>
+            <!-- Close minicart -->
+            <div class="cjs-close-minicart icon"></div>
+        </div>
+        <?php if ($cart->qty === 0): ?>
+            <div class="minicart--empty text-center text-lg"><?= phrase('Your cart is empty') ?></div>
+        <?php else: ?>
+            <ul class="products-list--minicart">
+                <?php foreach ($cart->items as $id => $item): ?>
+                    <li class="products-list__item">
+                        <div class="products-list__item__image"></div>
+                        <div class="products-list__item__info">
+                            <span class="products-list__item__name">
+                                <?= $item->name() ?>
+                            </span>
+                            <span class="products-list__item__details">
+                                <?= phrase('SKU:') ?>
+                                <span><?= $item->sku() ?></span>
+                            </span>
+                            <span class="products-list__item__details">
+                                <?= phrase('Qty:') ?>
+                                <span><?= $item->qty() ?></span>
+                            </span>
+                            <span class="products-list__item__price">
+                                <?= $currency->render($item->price) ?>
+                            </span>
+                        </div>
+                        <div class="cjs-remove-from-cart products-list__item__remove"
+                             data-item-id="<?= escape($id) ?>"></div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <div class="minicart__footer">
+                <div class="minicart__totals">
+                    <span><?= phrase('Grand Total') ?></span><span><?= $currency->render($cart->grandTotal) ?></span>
+                </div>
+                <a class="btn" href="/checkout/cart"><?= phrase('View Cart') ?></a>
+                <a class="btn-ghost" href="/checkout/"><?= phrase('Proceed to Checkout') ?></a>
+            </div>
+        <?php endif; ?>
+    </div>
+    <div class="cjs-close-minicart minicart__overlay"></div>
+</div>

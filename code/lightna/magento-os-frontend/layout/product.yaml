@@ -1,0 +1,87 @@
+extends:
+  - page
+.head:
+  attributes:
+    prefix: "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#"
+.body:
+  attributes:
+    class:
+      - product
+  .main:
+    .content:
+      container: div
+      attributes:
+        class:
+          - grid
+          - gap-6
+          - lg:gap-x-20
+          - md:gap-8
+          - md:grid-cols-[auto_40%]
+          - items-start
+      .gallery:
+        template: product/gallery.phtml
+      .main:
+        container: div
+        attributes:
+          class:
+            - md:sticky
+            - top-[88px]
+        .sku:
+          template: product/attributes/sku.phtml
+        .name:
+          template: product/attributes/name.phtml
+        .price-and-discount:
+          container: div
+          attributes:
+            class:
+              - flex
+              - items-center
+              - gap-x-3
+              - gap-y-1
+              - flex-wrap-reverse
+              - pb-2
+              - mb-4
+              - price-lg
+          .price:
+            template: product/price.phtml
+            attributes:
+              class:
+                - flex
+                - items-center
+                - flex-wrap
+                - gap-x-3
+                - gap-y-1
+          .discount:
+            template: product/discount.phtml
+        .cta:
+          .add-to-cart:
+            template: product/cta/add-to-cart.phtml
+            attributes:
+              class:
+                - cjs-add-to-cart
+                - flex
+                - flex-wrap
+                - gap-4
+            .options:
+              template: product/options.phtml
+              attributes:
+                class:
+                  - cjs-product-options
+                  - w-full
+                  - flex
+                  - flex-col
+                  - gap-2
+        .stock:
+          template: product/stock.phtml
+        .usp:
+          template: product/usp.phtml
+      .details:
+        template: product/tabs.phtml
+        tabs:
+          description:
+            title: "Description"
+            active: true
+            template: product/description.phtml
+          specifications:
+            title: "Specifications"
+            template: product/attributes/all-visible.phtml
