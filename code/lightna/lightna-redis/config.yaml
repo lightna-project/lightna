@@ -1,0 +1,10 @@
+storage:
+  redis:
+    adapter: Lightna\Redis\App\Storage\Redis
+    options:
+      host: null
+      port: null
+      db: null
+      persistent: true
+default:
+  storage: redis

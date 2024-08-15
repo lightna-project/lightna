@@ -1,0 +1,8 @@
+{
+    "name": "lightna/lightna-redis",
+    "type": "library",
+    "description": "",
+    "require": {
+        "ext-redis": "*"
+    }
+}
