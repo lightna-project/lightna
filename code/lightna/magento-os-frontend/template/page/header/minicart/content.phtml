@@ -1,0 +1,23 @@
+<?php
+/** @var Lightna\Magento\Data\Session $session */
+/** @var Lightna\Engine\Data\Request $request */
+
+if (!$request->isPost) {
+    return;
+}
+$cart = $session->cart;
+?>
+<div class="minicart">
+    <div class="overlay__title__container">
+        <span class="overlay__title"><?= phrase('Your Cart') ?></span>
+        <!-- Close minicart -->
+        <div class="icon" data-action="close-minicart"></div>
+    </div>
+    <?php if ($cart->qty === 0): ?>
+        <?php block('empty') ?>
+    <?php else: ?>
+        <?php block('products') ?>
+        <?php block('footer') ?>
+    <?php endif; ?>
+</div>
+<div class="minicart__overlay" data-action="close-minicart"></div>

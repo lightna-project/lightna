@@ -27,6 +27,14 @@ template: page.phtml
       template: page/header/logo.phtml
     .minicart:
       template: page/header/minicart.phtml
+      .content:
+        template: page/header/minicart/content.phtml
+        .empty:
+          template: page/header/minicart/empty.phtml
+        .products:
+          template: page/header/minicart/products-list.phtml
+        .footer:
+          template: page/header/minicart/footer.phtml
     .menu:
       template: page/menu.phtml
   .main:
@@ -40,8 +48,6 @@ template: page.phtml
       template: page/footer/menu.phtml
     .copyright:
       template: page/footer/copyright.phtml
-  .minicart-content:
-    template: page/header/minicart-content.phtml
   .messages-container:
     container: div
     attributes:

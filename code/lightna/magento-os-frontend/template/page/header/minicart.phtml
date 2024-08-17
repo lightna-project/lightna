@@ -1,6 +1,10 @@
 <?php
 /** @var Lightna\Magento\Data\Session $session */
+$cart = $session->cart;
 ?>
-<div class="cjs-minicart icon cart cursor-pointer">
-    <div class="cjs-minicart-counter counter"><?= $session->cart->qty() ?></div>
+<div class="cjs-minicart">
+    <div class="icon cart cursor-pointer" data-action="open-minicart">
+        <div class="counter"><?= $cart->qty() ?></div>
+    </div>
+    <?php block('content') ?>
 </div>

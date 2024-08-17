@@ -33,9 +33,9 @@ class HttpClient {
             this.lock = false;
 
             if (response.headers.get('Content-Type') === 'application/json') {
-                await this.handleJson(response, onSuccess, onError, options.showMessage);
+                return await this.handleJson(response, onSuccess, onError, options.showMessage);
             } else {
-                await this.handleText(response, onSuccess, onError, options.showMessage);
+                return await this.handleText(response, onSuccess, onError, options.showMessage);
             }
         } catch (error) {
             this.lock = false;
@@ -55,6 +55,8 @@ class HttpClient {
         if (showMessage && responseJson.messagesHtml) {
             new PageMessage(responseJson.messagesHtml);
         }
+
+        return responseJson;
     }
 
     async handleText(response, onSuccess, onError) {
@@ -65,6 +67,8 @@ class HttpClient {
         } else {
             onError(responseText);
         }
+
+        return responseText;
     }
 
     get(url, options = {}) {
@@ -86,13 +90,9 @@ class HttpClient {
         });
     }
 
-    onSuccess(response) {
-        console.log(response);
-    }
+    onSuccess(response) {}
 
-    onError(error) {
-        console.error(error);
-    }
+    onError(error) {}
 }
 
 const request = new HttpClient();

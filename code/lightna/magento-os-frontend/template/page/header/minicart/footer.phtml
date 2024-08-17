@@ -1,0 +1,13 @@
+<?php
+/** @var Lightna\Magento\Data\Session $session */
+/** @var Lightna\Magento\Data\Currency $currency */
+
+$cart = $session->cart;
+?>
+<div class="minicart__footer">
+    <div class="minicart__totals">
+        <span><?= phrase('Grand Total') ?></span><span><?= $currency->render($cart->grandTotal) ?></span>
+    </div>
+    <a class="btn" href="/checkout/cart"><?= phrase('View Cart') ?></a>
+    <a class="btn-ghost" href="/checkout/"><?= phrase('Proceed to Checkout') ?></a>
+</div>
