@@ -26,22 +26,25 @@ class Compile extends CompileA
         rcleandir(LIGHTNA_CODE);
         $this->printEnd();
 
+        $this->runItem([
+            'message' => 'make objects map',
+            'compiler' => new ClassMapCompiler(),
+        ]);
+
+        Bootstrap::autoload();
+
         $this->runSequence([
             [
                 'message' => 'make config',
                 'compiler' => new ConfigCompiler(),
             ],
             [
-                'message' => 'make objects map',
-                'compiler' => new ClassMapCompiler(),
+                'message' => 'make objects schema',
+                'compiler' => new ObjectSchemaCompiler(),
             ],
             [
                 'message' => 'make plugins',
                 'compiler' => new PluginCompiler(),
-            ],
-            [
-                'message' => 'make objects schema',
-                'compiler' => new ObjectSchemaCompiler(),
             ],
         ]);
 

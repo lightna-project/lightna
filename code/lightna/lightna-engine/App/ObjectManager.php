@@ -26,14 +26,15 @@ class ObjectManager
     public static function new(string $className, $data = []): mixed
     {
         static::validateClass($className);
-        $className = static::$extended[$className] ?? $className;
+        $name = static::$extended[$className] ?? $className;
+        $schema = static::$schema[$className];
 
         /** @var ObjectA $instance */
-        $instance = new $className();
-        $instance->construct(static::$schema[$className]['p']);
+        $instance = new $name();
+        $instance->construct($schema['p']);
 
-        if (count($data) === 0 && isset(static::$schema[$className]['data'])) {
-            $data = static::$schema[$className]['data'];
+        if (count($data) === 0 && isset($schema['data'])) {
+            $data = $schema['data'];
         }
         $instance->initialize($data);
 

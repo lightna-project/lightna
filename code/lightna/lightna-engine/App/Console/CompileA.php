@@ -12,8 +12,8 @@ class CompileA extends CommandA
     {
         $config = require LIGHTNA_ENTRY . 'config.php';
         require LIGHTNA_ENTRY . $config['src_dir'] . '/App/Bootstrap.php';
+        require LIGHTNA_ENTRY . $config['src_dir'] . '/App/Compiler/ClassMap.php';
         Bootstrap::declaration($config);
-        Bootstrap::autoload();
     }
 
     protected function runSequence(array $sequence): void
