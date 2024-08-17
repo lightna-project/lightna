@@ -1,10 +1,11 @@
 @layer components {
     .minicart {
-        @apply fixed right-0 top-0 z-[55] flex h-full w-full max-w-[420px] translate-x-full flex-col gap-2 overflow-auto bg-white p-5 shadow-lg transition-transform duration-500;
+        @apply fixed right-0 top-0 z-[55] flex h-full w-full max-w-[420px] translate-x-[calc(100%_+_15px)]
+        flex-col gap-2 overflow-auto bg-white p-5 pb-0 shadow-lg transition-transform duration-500;
     }
 
     .minicart__footer {
-        @apply mt-auto flex flex-col gap-1 border-t pt-4;
+        @apply sticky bottom-0 bg-white mt-auto flex flex-col gap-1 border-t py-4;
     }
 
     .minicart__totals {
@@ -16,10 +17,11 @@
     }
 
     .minicart__overlay {
-        @apply fixed left-0 top-0 z-50 hidden h-full w-full bg-black opacity-10;
+        @apply fixed left-0 top-0 z-50 h-full w-full bg-black opacity-0 invisible
+        transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s]
     }
 
     .minicart-open .minicart__overlay {
-        @apply block;
+        @apply visible opacity-10 delay-[.1s,_0s];
     }
 }
