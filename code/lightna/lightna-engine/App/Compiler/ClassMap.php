@@ -46,7 +46,7 @@ class ClassMap implements ObjectManagerIgnore
 
     protected function getAllLibs(): array
     {
-        $config = $this->compiled->loadAppConfig();
+        $config = require LIGHTNA_ENTRY . 'config.php';
 
         return merge(
             ['Lightna\Engine' => LIGHTNA_SRC],
