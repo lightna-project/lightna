@@ -8,7 +8,7 @@
 
 <p align="center">
 We develop Lightna Engine and MVP for Magento 2 Storefront.<br>
-Readiness - 70%.
+Readiness - 75%.
 </p>
 
 <p align="center">
