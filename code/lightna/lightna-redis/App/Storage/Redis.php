@@ -10,6 +10,10 @@ use Redis as RedisClient;
 
 class Redis extends ObjectA implements StorageInterface
 {
+
+    public const FIELD_VALUE = 'value';
+    public const FIELD_TAGS  = 'tags';
+
     protected ?RedisClient $client;
 
     protected array $connection;
@@ -50,10 +54,34 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function set(string $key, mixed $value, array $tags = []): void
     {
-        $this->client->set($key, $value);
+        // Start a transaction
+        $this->client->multi();
 
-        // Add the key to a set that represents the tag
-        $this->client->sAdd($this->getTagKey($tags), $key);
+        try {
+            $result = $this->client->hSet($key, self::FIELD_VALUE, $value);
+            if (!$result) {
+                throw new \RedisException("Could not set value for key: $key");
+            }
+
+            $result = $this->client->hSet($key, self::FIELD_TAGS, json_encode($tags));
+            if (!$result) {
+                throw new \RedisException("Could not set tag for key: $key");
+            }
+
+            // Store the tags associated with the key
+            foreach ($tags as $tag) {
+                // Add the key to a set that represents the tags
+                $this->client->sAdd($tag, $key);
+            }
+
+            // Execute the transaction
+            $this->client->exec();
+        } catch (\RedisException $e) {
+            // Rollback the transaction
+            $this->client->discard();
+
+            throw $e;
+        }
     }
 
     /**
@@ -61,7 +89,33 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function unset(string $key): void
     {
+        // Retrieve all tags associated with the key
+        $tags = $this->getTagsForKey($key);
+
+        // Remove the key from Redis
         $this->client->del($key);
+
+        // Iterate over each tag and remove the key from the tag set
+        foreach ($tags as $tag) {
+            $this->client->sRem($tag, $key);
+
+            // Check if the tag set is now empty and remove it if it is
+            if ($this->client->sCard($tag) == 0) {
+                $this->client->del($tag);
+            }
+        }
+    }
+
+    // Method to retrieve tags for a key
+
+    /**
+     * @throws \RedisException
+     */
+    private function getTagsForKey($key): array
+    {
+        $tags = $this->client->hGet($key, self::FIELD_TAGS);
+
+        return $tags ? json_decode($tags) : [];
     }
 
     /**
@@ -94,31 +148,30 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function clean(array $tags): void
     {
-        // Get all keys associated with the tag
-        $keys = $this->client->sMembers($this->getTagKey($tags));
+        foreach ($tags as $tag) {
+            // Get all keys associated with the tag
+            $keys = $this->client->sMembers($tag);
 
-        // Start a transaction
-        $this->client->multi();
+            // Start a transaction
+            $this->client->multi();
 
-        try {
-            // Delete each key
-            foreach ($keys as $key) {
-                $this->unset($key);
+            try {
+                // Delete each key
+                foreach ($keys as $key) {
+                    $this->unset($key);
+                }
+
+                // Delete the tag set
+                $this->client->del($tag);
+
+                // Execute the transaction
+                $this->client->exec();
+            } catch (\RedisException $e) {
+                // Rollback the transaction
+                $this->client->discard();
+
+                throw $e;
             }
-
-            // Delete the tag set
-            $this->unset($this->getTagKey($tags));
-
-            // Execute the transaction
-            $this->client->exec();
-        } catch (\RedisException $e) {
-            // Rollback the transaction
-            $this->client->discard();
         }
-    }
-
-    private function getTagKey(array $tags): string
-    {
-        return '|' . implode('|', $tags) . '|';
     }
 }
