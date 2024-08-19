@@ -11,8 +11,12 @@ use Redis as RedisClient;
 class Redis extends ObjectA implements StorageInterface
 {
     protected ?RedisClient $client;
+
     protected array $connection;
 
+    /**
+     * @throws \RedisException
+     */
     protected function init(array $connection): void
     {
         $this->connection = $connection;
@@ -20,6 +24,9 @@ class Redis extends ObjectA implements StorageInterface
         $this->connect();
     }
 
+    /**
+     * @throws \RedisException
+     */
     protected function connect(): self
     {
         $connType = ($this->connection['persistent'] ?? null) ? 'pconnect' : 'connect';
@@ -38,16 +45,28 @@ class Redis extends ObjectA implements StorageInterface
         return $this;
     }
 
-    public function set(string $key, mixed $value): void
+    /**
+     * @throws \RedisException
+     */
+    public function set(string $key, mixed $value, array $tags = []): void
     {
         $this->client->set($key, $value);
+
+        // Add the key to a set that represents the tag
+        $this->client->sAdd($this->getTagKey($tags), $key);
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function unset(string $key): void
     {
         $this->client->del($key);
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function get(string $key): string|array
     {
         $result = $this->client->get($key);
@@ -55,6 +74,9 @@ class Redis extends ObjectA implements StorageInterface
         return is_array($result) ? $result : (string)$result;
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function getList(array $keys): array
     {
         $result = $this->client->mGet($keys);
@@ -67,8 +89,36 @@ class Redis extends ObjectA implements StorageInterface
         return $return;
     }
 
+    /**
+     * @throws \RedisException
+     */
     public function clean(array $tags): void
     {
-        // TODO: Implement clean() method.
+        // Get all keys associated with the tag
+        $keys = $this->client->sMembers($this->getTagKey($tags));
+
+        // Start a transaction
+        $this->client->multi();
+
+        try {
+            // Delete each key
+            foreach ($keys as $key) {
+                $this->unset($key);
+            }
+
+            // Delete the tag set
+            $this->unset($this->getTagKey($tags));
+
+            // Execute the transaction
+            $this->client->exec();
+        } catch (\RedisException $e) {
+            // Rollback the transaction
+            $this->client->discard();
+        }
+    }
+
+    private function getTagKey(array $tags): string
+    {
+        return '|' . implode('|', $tags) . '|';
     }
 }
