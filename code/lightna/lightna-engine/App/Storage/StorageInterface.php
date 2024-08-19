@@ -6,7 +6,7 @@ namespace Lightna\Engine\App\Storage;
 
 interface StorageInterface
 {
-    public function set(string $key, mixed $value): void;
+    public function set(string $key, mixed $value, array $tags = []): void;
 
     public function unset(string $key): void;
 

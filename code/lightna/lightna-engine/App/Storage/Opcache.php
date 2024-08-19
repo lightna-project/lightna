@@ -21,7 +21,7 @@ class Opcache extends ObjectA implements StorageInterface
         $this->dir = $this->dir . '/';
     }
 
-    public function set(string $key, mixed $value): void
+    public function set(string $key, mixed $value, array $tags = []): void
     {
         $this->compiled->save($this->dir . $this->getFileName($key), $value);
     }
