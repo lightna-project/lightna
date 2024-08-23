@@ -42,25 +42,34 @@ Readiness - 75%.
 
 * Initialize packages:
 ```
-cd entry/magento-os
-composer install
-npm install
+cd entry/magento-os && \
+composer install && \
+npm install && \
+cd ../..
 ```
 
 
 ### Integrate Lightna and Magento
 * Symlink Lightna module and theme:
 ```
-mkdir -p project/magento-os/app/code/Lightna
-mkdir -p project/magento-os/app/design/frontend/Lightna
-ln -s ../../../../../code/magento-os/lightna-frontend project/magento-os/app/code/Lightna/Frontend
-ln -s ../../../../../../code/magento-os/lightna-theme project/magento-os/app/design/frontend/Lightna/Lightna
+mkdir -p project/magento-os/app/code/Lightna && \
+mkdir -p project/magento-os/app/design/frontend/Lightna && \
+ln -s ../../../../../code/magento-os/lightna-frontend project/magento-os/app/code/Lightna/Frontend && \
+ln -s ../../../../../../code/magento-os/lightna-theme project/magento-os/app/design/frontend/Lightna/Lightna && \
 ```
 
 * Redirect Magento index.php to Lightna:
 ```
-mv project/magento-os/pub/index.php project/magento-os/pub/magento_index.php
+mv project/magento-os/pub/index.php project/magento-os/pub/magento_index.php && \
 ln -s ../../../entry/magento-os/index.php project/magento-os/pub/index.php
+```
+
+* Change current Magento theme to Lightna
+
+
+* Enable Lightna theme and module:
+```
+project/magento-os/bin/magento setup:upgrade
 ```
 
 ### Configure Lightna
@@ -72,8 +81,14 @@ ln -s ../../../entry/magento-os/index.php project/magento-os/pub/index.php
 
 ### Build
 ```
-cd entry/magento-os
+cd entry/magento-os && \
 composer lightna:build
+```
+
+
+### Setup Lightna indexer schema
+```
+./cli indexer:schema:update
 ```
 
 
