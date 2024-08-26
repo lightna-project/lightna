@@ -22,7 +22,7 @@ class BatchDataProvider extends ObjectA
     protected Gallery $gallery;
 
     /** Batch variables */
-    protected array $parentIds;
+    protected array $ids;
     protected array $children;
     protected array $childrenIds;
     protected array $allIds;
@@ -35,49 +35,78 @@ class BatchDataProvider extends ObjectA
     /** Result */
     protected array $data = [];
 
-    public function getData(array $parentIds): array
+    public function getData(array $ids): array
     {
-        $this->parentIds = $parentIds;
-        $this->loadChildrenRelations();
-        $this->allIds = array_unique(merge($this->parentIds, array_values($this->childrenIds)));
+        $this->ids = $this->allIds = $ids;
+        $this->addRelations();
+        $this->loadData();
 
+        $batchSelect = $this->productIndex->getBatchSelect($this->allIds);
+        foreach ($this->db->fetch($batchSelect, 'entity_id') as $id => $product) {
+            if (!$this->isProductIndexable($product)) {
+                continue;
+            }
+
+            $this->collectProductData($product, $id);
+            $this->applyProductData($product, $id);
+        }
+
+        $this->applyData();
+
+        return $this->data;
+    }
+
+    protected function addRelations(): void
+    {
+        $this->loadChildrenRelations();
+        $this->allIds = array_unique(merge($this->allIds, array_values($this->childrenIds)));
+    }
+
+    protected function loadData(): void
+    {
         $this->loadAttributes();
         $this->loadPrices();
         $this->loadUrls();
         $this->loadOptions();
         $this->loadVariantValueIds();
         $this->loadGallery();
+    }
 
-        $batchSelect = $this->productIndex->getBatchSelect($this->allIds);
-        foreach ($this->db->fetch($batchSelect, 'entity_id') as $id => $product) {
-            if (
-                // Skip products without indexed price
-                !isset($this->prices[$id])
-                // Skip configurable without children
-                || ($product['type_id'] === 'configurable' && !isset($this->children[$id]))
-            ) {
-                continue;
-            }
+    protected function isProductIndexable(array $product): bool
+    {
+        $na =
+            // Skip products without indexed price
+            !isset($this->prices[$product['entity_id']])
+            // Skip configurable without children
+            || ($product['type_id'] === 'configurable' && empty($this->children[$product['entity_id']]));
 
-            $this->applyAttributes($product, $id);
-            $this->applyPrice($product, $id);
-            $this->applyStock($product, $id);
-            $this->applyUrl($product, $id);
-            $this->applyOptions($product, $id);
-            $this->applyGallery($product, $id);
+        return !$na;
+    }
 
-            unset($product['children']);
-            $this->data[$id] = $product;
-        }
+    protected function collectProductData(&$product, $id): void
+    {
+        $this->collectAttributes($product, $id);
+        $this->collectPrice($product, $id);
+        $this->collectStock($product, $id);
+        $this->collectUrl($product, $id);
+        $this->collectOptions($product, $id);
+        $this->collectGallery($product, $id);
+    }
 
+    protected function applyProductData($product, $id): void
+    {
+        unset($product['children']);
+        $this->data[$id] = $product;
+    }
+
+    protected function applyData(): void
+    {
         // Clean children from result (considering they are not visible individually)
         foreach ($this->data as $id => $product) {
             if (isset($this->childrenIds[$id])) {
                 unset($this->data[$id]);
             }
         }
-
-        return $this->data;
     }
 
     protected function loadChildrenRelations(): void
@@ -86,7 +115,7 @@ class BatchDataProvider extends ObjectA
         $this->childrenIds = [];
 
         $select = $this->db->select('catalog_product_relation');
-        $select->where->in('parent_id', $this->parentIds);
+        $select->where->in('parent_id', $this->ids);
 
         foreach ($this->db->fetch($select) as $row) {
             $this->children[$row['parent_id']][$row['child_id']] = [];
@@ -159,7 +188,7 @@ class BatchDataProvider extends ObjectA
         }
     }
 
-    protected function applyAttributes(array &$product, string|int $id): void
+    protected function collectAttributes(array &$product, string|int $id): void
     {
         $product = merge(
             $product,
@@ -167,12 +196,12 @@ class BatchDataProvider extends ObjectA
         );
     }
 
-    protected function applyPrice(array &$product, string|int $id): void
+    protected function collectPrice(array &$product, string|int $id): void
     {
         if (!isset($this->children[$id])) {
             $product['price'] = $this->getSimplePriceData($product, $id);
         } else {
-            $this->applyConfigurablePriceData($product, $id);
+            $this->collectConfigurablePriceData($product, $id);
         }
     }
 
@@ -197,7 +226,7 @@ class BatchDataProvider extends ObjectA
         ];
     }
 
-    protected function applyConfigurablePriceData(array &$product, string|int $id): void
+    protected function collectConfigurablePriceData(array &$product, string|int $id): void
     {
         $minPrice = null;
         foreach ($this->children[$id] as $childId => $null) {
@@ -212,7 +241,7 @@ class BatchDataProvider extends ObjectA
         $product['price'] = $minPrice;
     }
 
-    protected function applyStock(array &$product, string|int $id): void
+    protected function collectStock(array &$product, string|int $id): void
     {
         if (isset($this->children[$id])) {
             $qty = 0;
@@ -241,7 +270,7 @@ class BatchDataProvider extends ObjectA
         );
     }
 
-    protected function applyUrl(array &$product, string|int $id): void
+    protected function collectUrl(array &$product, string|int $id): void
     {
         if (!isset($this->urls[$id])) {
             return;
@@ -252,7 +281,7 @@ class BatchDataProvider extends ObjectA
         $product['url'] = $isRelative ? '/' . $url : $url;
     }
 
-    protected function applyOptions(array &$product, string|int $id): void
+    protected function collectOptions(array &$product, string|int $id): void
     {
         if ($product['type_id'] === 'configurable') {
             $product['options']['attributes'] = $this->options[$id];
@@ -274,7 +303,7 @@ class BatchDataProvider extends ObjectA
         }
     }
 
-    protected function applyGallery(array &$product, string|int $id): void
+    protected function collectGallery(array &$product, string|int $id): void
     {
         $gallery = [];
         $images = $this->galleryItems[$id] ?? ['/coming-soon.jpg'];
