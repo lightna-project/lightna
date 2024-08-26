@@ -11,4 +11,7 @@
             <argument name="storage" xsi:type="object">Lightna\Frontend\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface">
+        <plugin name="lightna_db_schema" type="Lightna\Frontend\Plugin\DbSchema"/>
+    </type>
 </config>
