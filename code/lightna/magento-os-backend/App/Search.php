@@ -7,6 +7,7 @@ namespace Lightna\Magento\App;
 use Lightna\Engine\Data\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Elasticsearch\App\Client as ElasticClient;
+use Lightna\Engine\Data\Request;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
 use Lightna\Magento\Data\Category;
 use Lightna\Magento\Data\Content\Category as CategoryContent;
@@ -20,6 +21,7 @@ class Search extends DataA
     protected Category $category;
     protected Session $session;
     protected CategoryContent $categoryContent;
+    protected Request $request;
 
     public function search(): array
     {
@@ -61,10 +63,10 @@ class Search extends DataA
     {
         $must = &$query['query']['bool']['must'];
         foreach ($this->categoryContent->filterableAttributes as $attribute) {
-            if (($_GET[$attribute->code] ?? '') === '') {
+            if ($this->request->{$attribute->code} === null) {
                 continue;
             }
-            $values = explode('_', $_GET[$attribute->code]);
+            $values = explode('_', $this->request->{$attribute->code});
             foreach ($values as $value) {
                 $must[] = ['term' => [$attribute->code => $value]];
             }
@@ -179,7 +181,7 @@ class Search extends DataA
             return;
         }
 
-        $q = $_GET[$facet['code']] ?? '';
+        $q = $this->request->{$facet['code']} ?? '';
         $q = $q !== '' ? array_flip(explode('_', $q)) : [];
 
         foreach ($facet['options'] as $i => $option) {

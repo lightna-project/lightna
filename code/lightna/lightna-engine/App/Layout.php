@@ -8,11 +8,13 @@ use Exception;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityA;
+use Lightna\Engine\Data\Request;
 
 class Layout extends ObjectA
 {
     protected Compiled $compiled;
     protected Templating $templating;
+    protected Request $request;
     protected array $layout;
     protected array $current;
     protected bool $isMainCurrent;
@@ -26,7 +28,7 @@ class Layout extends ObjectA
         $this->load();
         $this->isMainCurrent = true;
 
-        if ($block = $_GET['block'] ?? '') {
+        if ($block = $this->request->block) {
             $this->renderSingleBlock($block);
         } else {
             $this->renderPage();
