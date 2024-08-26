@@ -6,6 +6,7 @@ namespace Lightna\Engine\App;
 
 use Lightna\Engine\App\Entity\Route;
 use Lightna\Engine\App\Router\PassedException;
+use Lightna\Engine\Data\Request;
 use const FILTER_SANITIZE_URL;
 
 class Router extends ObjectA
@@ -14,10 +15,11 @@ class Router extends ObjectA
     /** @AppConfig(router/bypass) */
     protected ?array $bypass;
     protected Route $route;
+    protected Request $request;
 
     protected function init(): void
     {
-        $url = $_SERVER['REQUEST_URI'];
+        $url = $this->request->uri;
         $qi = strpos($url, '?');
 
         $this->urlPath = substr($url, 1, $qi !== false ? $qi - 1 : null);
