@@ -2,21 +2,15 @@
 
 declare(strict_types=1);
 
+use Lightna\Engine\App\Escaper;
 use Lightna\Engine\App\Layout;
 
 function escape(mixed $var, ?string $method = 'html'): string
 {
-    if ($method === null || $method === 'html') {
-        return escape_html((string)$var);
-    } elseif ($method === 'json-js') {
-        return json($var);
-    } elseif ($method === 'json-html') {
-        return escape_html(json($var));
-    } elseif ($method === 'url-param') {
-        return urlencode($var);
-    } else {
-        throw new Exception('Unknown escape method "' . $method . '"');
-    }
+    static $escaper;
+    $escaper ??= getobj(Escaper::class);
+
+    return $escaper->escape($var, $method);
 }
 
 function escape_html(string $var): string
