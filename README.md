@@ -29,7 +29,6 @@ Readiness - 75%.
 
 ### Setup Magento OS
 * Setup Magento OS into `project/magento-os` folder following standard instruction
-* MSI modules have not yet been adopted, you can disable all Magento_Inventory* modules
 
 
 ### Setup Lightna

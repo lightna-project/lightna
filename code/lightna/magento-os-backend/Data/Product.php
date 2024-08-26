@@ -10,7 +10,7 @@ use Lightna\Engine\Data\EntityA;
 use Lightna\Magento\Data\Product\Gallery\Image;
 use Lightna\Magento\Data\Product\Options as ProductOptions;
 use Lightna\Magento\Data\Product\Price as ProductPrice;
-use Lightna\Magento\Data\Product\Stock as ProductStock;
+use Lightna\Magento\Data\Product\Inventory as ProductInventory;
 
 /**
  * @property-read Product[] children
@@ -23,14 +23,14 @@ use Lightna\Magento\Data\Product\Stock as ProductStock;
  * @method string price(string $escapeMethod = null)
  * @method string shortDescription(string $escapeMethod = null)
  * @method string sku(string $escapeMethod = null)
- * @method string stock(string $escapeMethod = null)
+ * @method string inventory(string $escapeMethod = null)
  * @method string typeId(string $escapeMethod = null)
  * @method string url(string $escapeMethod = null)
  */
 class Product extends EntityA
 {
     public ProductPrice $price;
-    public ProductStock $stock;
+    public ProductInventory $inventory;
     public ProductOptions $options;
     public array $children;
     public array $gallery;

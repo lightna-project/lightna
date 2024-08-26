@@ -7,12 +7,13 @@ namespace Lightna\Magento\Index\Product;
 use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\Data\Context;
+use Lightna\Magento\App\Query\Inventory;
 use Lightna\Magento\App\Query\Product\Eav;
 use Lightna\Magento\App\Query\Product\Gallery;
 use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\Index\Product as ProductIndex;
 
-class BatchDataProvider extends ObjectA
+class Batch extends ObjectA
 {
     protected Database $db;
     protected ProductIndex $productIndex;
@@ -20,14 +21,16 @@ class BatchDataProvider extends ObjectA
     protected Store $store;
     protected Eav $eav;
     protected Gallery $gallery;
+    protected Inventory $inventoryQuery;
 
     /** Batch variables */
     protected array $ids;
     protected array $children;
-    protected array $childrenIds;
+    protected array $parents;
     protected array $allIds;
     protected array $attributes;
     protected array $prices;
+    protected array $inventory;
     protected array $urls;
     protected array $options;
     protected array $variantValueIds;
@@ -44,6 +47,7 @@ class BatchDataProvider extends ObjectA
         $batchSelect = $this->productIndex->getBatchSelect($this->allIds);
         foreach ($this->db->fetch($batchSelect, 'entity_id') as $id => $product) {
             if (!$this->isProductIndexable($product)) {
+                $this->unloadProduct($id);
                 continue;
             }
 
@@ -59,13 +63,14 @@ class BatchDataProvider extends ObjectA
     protected function addRelations(): void
     {
         $this->loadChildrenRelations();
-        $this->allIds = array_unique(merge($this->allIds, array_values($this->childrenIds)));
+        $this->allIds = array_unique(merge($this->allIds, array_keys($this->parents)));
     }
 
     protected function loadData(): void
     {
         $this->loadAttributes();
         $this->loadPrices();
+        $this->loadInventory();
         $this->loadUrls();
         $this->loadOptions();
         $this->loadVariantValueIds();
@@ -83,11 +88,31 @@ class BatchDataProvider extends ObjectA
         return !$na;
     }
 
+    protected function unloadProduct(int|string $id): void
+    {
+        if (isset($this->parents[$id])) {
+            unset($this->children[$this->parents[$id]][$id]);
+            unset($this->parents[$id]);
+        }
+    }
+
+    protected function isProductAvailable(array $product): bool
+    {
+        $inventory = $product['inventory'];
+        $na =
+            // Clean children from result (considering they are not visible individually)
+            isset($this->parents[$product['entity_id']])
+            // Skip out of stock products
+            || (!$inventory['status'] && !$inventory['backorders']);
+
+        return !$na;
+    }
+
     protected function collectProductData(&$product, $id): void
     {
         $this->collectAttributes($product, $id);
         $this->collectPrice($product, $id);
-        $this->collectStock($product, $id);
+        $this->collectInventory($product, $id);
         $this->collectUrl($product, $id);
         $this->collectOptions($product, $id);
         $this->collectGallery($product, $id);
@@ -101,9 +126,8 @@ class BatchDataProvider extends ObjectA
 
     protected function applyData(): void
     {
-        // Clean children from result (considering they are not visible individually)
         foreach ($this->data as $id => $product) {
-            if (isset($this->childrenIds[$id])) {
+            if (!$this->isProductAvailable($product)) {
                 unset($this->data[$id]);
             }
         }
@@ -112,14 +136,14 @@ class BatchDataProvider extends ObjectA
     protected function loadChildrenRelations(): void
     {
         $this->children = [];
-        $this->childrenIds = [];
+        $this->parents = [];
 
         $select = $this->db->select('catalog_product_relation');
         $select->where->in('parent_id', $this->ids);
 
         foreach ($this->db->fetch($select) as $row) {
             $this->children[$row['parent_id']][$row['child_id']] = [];
-            $this->childrenIds[$row['child_id']] = $row['child_id'];
+            $this->parents[$row['child_id']] = $row['parent_id'];
         }
     }
 
@@ -148,6 +172,11 @@ class BatchDataProvider extends ObjectA
             }
             $this->prices[$row['entity_id']][$row['customer_group_id']] = $row['final_price'];
         }
+    }
+
+    protected function loadInventory(): void
+    {
+        $this->inventory = $this->inventoryQuery->getBatch($this->allIds);
     }
 
     protected function loadUrls(): void
@@ -241,33 +270,25 @@ class BatchDataProvider extends ObjectA
         $product['price'] = $minPrice;
     }
 
-    protected function collectStock(array &$product, string|int $id): void
+    protected function collectInventory(array &$product, string|int $id): void
     {
+        $inventory = ['qty' => 0, 'status' => false, 'backorders' => false];
+
         if (isset($this->children[$id])) {
-            $qty = 0;
-            $inStock = 0;
             foreach ($this->children[$id] as $childId => $null) {
-                $childStock = $this->data[$childId]['stock'];
-                $product['children'][$childId]['stock'] = $childStock;
-
-                $qty += $childStock['qty'];
-                $inStock = $inStock || $childStock['is_in_stock'];
+                $childInventory = $this->data[$childId]['inventory'];
+                $product['children'][$childId]['inventory'] = $childInventory;
+                $inventory['qty'] += $childInventory['qty'];
+                $inventory['status'] = $inventory['status'] || $childInventory['status'];
+                $inventory['backorders'] = $inventory['backorders'] || $childInventory['backorders'];
             }
-
-            $product['qty'] = $qty;
-            $product['is_in_stock'] = $inStock;
+        } else {
+            $inventory = $this->inventory[$id] ?? $inventory;
+            $inventory['backorders'] = (bool)$product['backorders'];
         }
 
-        // Remove .0000
-        $product['qty'] += 0;
-        settype($product['is_in_stock'], 'bool');
-        settype($product['backorders'], 'bool');
-
-        $this->moveInside(
-            'stock',
-            ['qty', 'is_in_stock', 'backorders'],
-            $product
-        );
+        unset($product['backorders']);
+        $product['inventory'] = $inventory;
     }
 
     protected function collectUrl(array &$product, string|int $id): void
@@ -342,14 +363,5 @@ class BatchDataProvider extends ObjectA
     protected function loadGallery(): void
     {
         $this->galleryItems = $this->gallery->getItems($this->allIds);
-    }
-
-    protected function moveInside(string $toKey, array $fromKeys, array &$subject): void
-    {
-        foreach ($fromKeys as $oldName => $newName) {
-            $oldName = is_string($oldName) ? $oldName : $newName;
-            $subject[$toKey][$newName] = $subject[$oldName];
-            unset($subject[$oldName]);
-        }
     }
 }

@@ -1,7 +1,7 @@
 <?php
 /** @var Lightna\Magento\Data\Product $product */
 ?>
-<?php if ($product->stock->isInStock) : ?>
+<?php if ($product->inventory->status) : ?>
     <span class="product-stock in-stock">
         <?= phrase('In stock') ?>
     </span>

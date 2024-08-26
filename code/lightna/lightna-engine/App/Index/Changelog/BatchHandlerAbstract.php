@@ -10,11 +10,11 @@ abstract class BatchHandlerAbstract extends ObjectA
 {
     abstract public function handle(string $table, array $changelog): array;
 
-    protected function collectIds(array $changelog, string $column): array
+    protected function collectIds(array $changelog, string $column, string $type = 'int'): array
     {
         $ids = [];
         foreach ($changelog as $record) {
-            foreach ($this->collectRecordIds($record, $column) as $id) {
+            foreach ($this->collectRecordIds($record, $column, $type) as $id) {
                 $ids[$id] = $id;
             }
         }
@@ -22,11 +22,12 @@ abstract class BatchHandlerAbstract extends ObjectA
         return $ids;
     }
 
-    protected function collectRecordIds(array $record, string $column): array
+    protected function collectRecordIds(array $record, string $column, string $type = 'int'): array
     {
         $ids = [];
         foreach ($this->collectRecordValues($record, $column) as $id) {
-            $ids[$id] = (int)$id;
+            $ids[$id] = $id;
+            settype($ids[$id], $type);
         }
 
         return $ids;

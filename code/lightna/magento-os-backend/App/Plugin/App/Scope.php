@@ -11,13 +11,19 @@ use Lightna\Engine\App\ObjectA;
 class Scope extends ObjectA
 {
     protected Database $db;
+    protected array $list;
+
+    protected function defineList(): void
+    {
+        $this->list = $this->db->fetchCol($this->getListSelect());
+    }
 
     public function getList(): array
     {
-        return $this->db->fetchCol($this->getSelect());
+        return $this->list;
     }
 
-    protected function getSelect(): Select
+    protected function getListSelect(): Select
     {
         return $this->db
             ->select('store')
