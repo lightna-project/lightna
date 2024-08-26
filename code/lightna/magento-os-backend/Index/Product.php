@@ -11,7 +11,7 @@ use Lightna\Engine\App\Index\IndexAbstract;
 use Lightna\Engine\Data\Context;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
 use Lightna\Magento\App\Query\Store;
-use Lightna\Magento\Index\Product\BatchDataProvider;
+use Lightna\Magento\Index\Product\Batch as BatchDataProvider;
 
 class Product extends IndexAbstract
 {
@@ -32,7 +32,7 @@ class Product extends IndexAbstract
         $select->join(
             ['i' => 'cataloginventory_stock_item'],
             'i.product_id = e.entity_id',
-            ['qty', 'is_in_stock', 'backorders'],
+            ['backorders'],
             Select::JOIN_LEFT
         );
 

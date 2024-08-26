@@ -52,7 +52,6 @@ abstract class ScopeIndexAbstract extends IndexAbstract
             return [];
         }
 
-        // IDs not used in ScopeIndexAbstract, we just need single value here
-        return [1];
+        return [$this->context->scope];
     }
 }

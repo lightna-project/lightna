@@ -12,17 +12,17 @@ class Store extends ObjectA
     protected Database $db;
     protected array $stores;
 
-    protected function init(): void
-    {
-        $this->loadStores();
-    }
-
-    protected function loadStores(): void
+    protected function defineStores(): void
     {
         $this->stores = $this->db->fetch(
             $this->db->select('store'),
             'store_id',
         );
+    }
+
+    public function getList(): array
+    {
+        return $this->stores;
     }
 
     public function get(string|int $id): array
