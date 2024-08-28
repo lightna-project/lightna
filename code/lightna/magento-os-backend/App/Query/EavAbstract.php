@@ -66,7 +66,7 @@ abstract class EavAbstract extends ObjectA
         foreach ($attributesBatch as &$attributes) {
             foreach ($attributes as &$data) {
                 $isMultiselect = $this->attributesById[$data['attribute_id']]['frontend_input'] === 'multiselect';
-                $values = $isMultiselect ? explode(',', $data['value']) : [$data['value']];
+                $values = $isMultiselect ? explode(',', (string)$data['value']) : [$data['value']];
 
                 foreach ($values as &$value) {
                     $value = $options[$data['attribute_id']][$value] ?? $value;
