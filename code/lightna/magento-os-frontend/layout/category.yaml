@@ -19,5 +19,7 @@ extends:
           - md:grid-cols-[280px_1fr]
         .facets:
           template: category/facets.phtml
+          .toggle-facets:
+            template: component/toggle-link.phtml
         .result:
           template: category/result.phtml
