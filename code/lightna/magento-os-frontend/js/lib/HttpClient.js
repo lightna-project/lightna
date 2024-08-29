@@ -33,9 +33,9 @@ class HttpClient {
             this.lock = false;
 
             if (response.headers.get('Content-Type') === 'application/json') {
-                return await this.handleJson(response, onSuccess, onError, options.showMessage);
+                return await this.handleJson(response, onSuccess, onError);
             } else {
-                return await this.handleText(response, onSuccess, onError, options.showMessage);
+                return await this.handleText(response, onSuccess, onError);
             }
         } catch (error) {
             this.lock = false;
@@ -43,7 +43,7 @@ class HttpClient {
         }
     }
 
-    async handleJson(response, onSuccess, onError, showMessage = true) {
+    async handleJson(response, onSuccess, onError) {
         const responseJson = await response.json();
 
         if (response.ok) {
@@ -52,7 +52,7 @@ class HttpClient {
             onError(responseJson);
         }
 
-        if (showMessage && responseJson.messagesHtml) {
+        if (responseJson.messagesHtml) {
             new PageMessage(responseJson.messagesHtml);
         }
 
