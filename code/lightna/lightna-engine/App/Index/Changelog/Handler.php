@@ -12,12 +12,14 @@ use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Changelog\Schema as ChangelogSchema;
 use Lightna\Engine\App\Index\Queue\Schema as QueueSchema;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Magento\App\Query\Product;
 
 class Handler extends ObjectA
 {
     /** @AppConfig(indexer/changelog/batch/handlers) */
     protected array $handlers;
     protected Database $db;
+    protected Product $productQuery;
 
     public function process(): void
     {
@@ -123,17 +125,28 @@ class Handler extends ObjectA
     protected function filterUnchanged(array $batch): array
     {
         foreach ($batch as $pk => $columns) {
-            $old = $new = [];
-            foreach ($columns as $column => $values) {
-                $old[$column] = $values['old_value'];
-                $new[$column] = $values['new_value'];
-            }
-            if ($old === $new) {
+            if (!$this->areColumnsChanged($columns)) {
                 unset($batch[$pk]);
             }
         }
 
         return $batch;
+    }
+
+    protected function areColumnsChanged(array $columns): bool
+    {
+        foreach ($columns as $values) {
+            $old = $values['old_value'];
+            $new = $values['new_value'];
+            if ($old !== $new) {
+                return true;
+            } elseif (is_string($old) && strlen($old) === ChangelogSchema::VALUE_MAX_LENGTH) {
+                // Values are equal and are cut to VALUE_MAX_LENGTH, we can't determine if unchanged
+                return true;
+            }
+        }
+
+        return false;
     }
 
     protected function processItems(): void
@@ -142,6 +155,7 @@ class Handler extends ObjectA
             while ($batch = $this->getTableBatch($table)) {
                 if ($filteredBatch = $this->filterUnchanged($batch)) {
                     $indexBatch = $this->getIndexBatch($table, $filteredBatch);
+                    $this->addIndexBatchDependencies($indexBatch);
                     $this->saveIndexBatch($indexBatch);
                 }
                 $this->cleanBatchFromChangelog($table, $batch);
@@ -168,6 +182,13 @@ class Handler extends ObjectA
     protected function getChangelogBatchHandler(string $class): BatchHandlerAbstract
     {
         return getobj($class);
+    }
+
+    protected function addIndexBatchDependencies(array &$indexBatch): void
+    {
+        $productIds = $indexBatch['product'] ?? [];
+        $parentIds = $productIds ? $this->productQuery->getParentsBatch($productIds) : [];
+        $indexBatch['product'] = merge($productIds, $parentIds);
     }
 
     protected function saveIndexBatch(array $indexItems): void

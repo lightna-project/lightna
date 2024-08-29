@@ -13,7 +13,6 @@ use Lightna\Magento\Data\Product\Price as ProductPrice;
 use Lightna\Magento\Data\Product\Inventory as ProductInventory;
 
 /**
- * @property-read Product[] children
  * @property-read Image[] gallery
  * @method string attributeSetId(string $escapeMethod = null)
  * @method string children(string $escapeMethod = null)
@@ -32,7 +31,6 @@ class Product extends EntityA
     public ProductPrice $price;
     public ProductInventory $inventory;
     public ProductOptions $options;
-    public array $children;
     public array $gallery;
     public int $attributeSetId;
     public int $entityId;

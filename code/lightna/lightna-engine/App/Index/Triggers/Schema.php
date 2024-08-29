@@ -226,10 +226,11 @@ class Schema extends ObjectA
     protected function getInsertIntoChangelogStatement(string $table, string $event, string $field): string
     {
         $fieldIdent = $this->db->quoteIdentifier($field);
+        $maxLength = ChangelogSchema::VALUE_MAX_LENGTH;
         $oldExpr = "OLD.$fieldIdent";
         $newExpr = "NEW.$fieldIdent";
-        $oldExpr = "SUBSTRING($oldExpr, 1, 16)";
-        $newExpr = "SUBSTRING($newExpr, 1, 16)";
+        $oldExpr = "SUBSTRING($oldExpr, 1, $maxLength)";
+        $newExpr = "SUBSTRING($newExpr, 1, $maxLength)";
         $fieldExpr = $this->db->quote($field);
         $oldExpr = $event === 'insert' ? 'NULL' : $oldExpr;
         $newExpr = $event === 'delete' ? 'NULL' : $newExpr;
