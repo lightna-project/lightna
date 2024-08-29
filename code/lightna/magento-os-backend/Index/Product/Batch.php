@@ -120,7 +120,6 @@ class Batch extends ObjectA
 
     protected function applyProductData($product, $id): void
     {
-        unset($product['children']);
         $this->data[$id] = $product;
     }
 
@@ -259,9 +258,6 @@ class Batch extends ObjectA
     {
         $minPrice = null;
         foreach ($this->children[$id] as $childId => $null) {
-            // Simple products already handled because of batch sorting thus price exists
-            $product['children'][$childId]['price'] = $this->data[$childId]['price'];
-
             if ($minPrice === null || $this->data[$childId]['price']['final_prices'] < $minPrice) {
                 $minPrice = $this->data[$childId]['price'];
             }
@@ -277,7 +273,6 @@ class Batch extends ObjectA
         if (isset($this->children[$id])) {
             foreach ($this->children[$id] as $childId => $null) {
                 $childInventory = $this->data[$childId]['inventory'];
-                $product['children'][$childId]['inventory'] = $childInventory;
                 $inventory['qty'] += $childInventory['qty'];
                 $inventory['status'] = $inventory['status'] || $childInventory['status'];
                 $inventory['backorders'] = $inventory['backorders'] || $childInventory['backorders'];
