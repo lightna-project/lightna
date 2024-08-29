@@ -2,7 +2,6 @@ import { Cookie } from '../lib/Cookie';
 import { UserInput } from '../lib/UserInput';
 import request from '../lib/HttpClient';
 import { $, $$ } from "../lib/utils";
-import { PageMessage } from './PageMessage';
 
 export class AddToCart {
     components = [];
@@ -31,26 +30,22 @@ export class AddToCart {
         const data = {
             ...UserInput.collect(component),
             product: component.getAttribute('data-product-id'),
+            noSuccessMessages: true,
         };
 
         await request.post(this.addToCartUrl, data, {
-            onSuccess: this.addProductSuccessHandler.bind(this),
-            showMessage: false,
+            onSuccess: this.onAddProductSuccess.bind(this)
         })
 
         this.toggleAnimation(actionTrigger, false);
     }
 
-    addProductSuccessHandler(response) {
-        // todo: add type of message to response
-        const temp = document.createElement('div');
-        temp.innerHTML = response.messagesHtml;
-        if (temp.querySelector('.message').classList.contains('success')) {
-            document.dispatchEvent(new CustomEvent('add-to-cart'));
-            this.updateMagentoCartSectionId();
-        } else {
-            this.showResponseMessage(response);
+    onAddProductSuccess(response) {
+        if (response.messagesHtml) {
+            return;
         }
+        document.dispatchEvent(new CustomEvent('add-to-cart'));
+        this.updateMagentoCartSectionId();
     }
 
     updateMagentoCartSectionId() {
@@ -62,10 +57,6 @@ export class AddToCart {
             'section_data_ids',
             encodeURIComponent(JSON.stringify(sids)),
         );
-    }
-
-    showResponseMessage(response) {
-        new PageMessage(response.messagesHtml);
     }
 
     toggleAnimation(element, isLoading) {
