@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\Data;
+namespace Lightna\Engine\App;
 
-use Lightna\Engine\Data\Context\Entity;
+use Lightna\Engine\App\Context\Entity;
+use Lightna\Engine\Data\DataA;
 
 class Context extends DataA
 {

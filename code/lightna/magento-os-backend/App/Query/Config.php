@@ -7,7 +7,7 @@ namespace Lightna\Magento\App\Query;
 use Laminas\Db\Sql\Expression;
 use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 
 class Config extends ObjectA
 {

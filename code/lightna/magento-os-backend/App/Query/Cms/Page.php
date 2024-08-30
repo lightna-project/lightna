@@ -7,7 +7,7 @@ namespace Lightna\Magento\App\Query\Cms;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 
 class Page extends ObjectA
 {

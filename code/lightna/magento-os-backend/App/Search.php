@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App;
 
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Elasticsearch\App\Client as ElasticClient;
 use Lightna\Engine\Data\Request;

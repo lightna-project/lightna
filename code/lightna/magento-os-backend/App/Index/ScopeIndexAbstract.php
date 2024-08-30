@@ -7,7 +7,7 @@ namespace Lightna\Magento\App\Index;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\IndexAbstract;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 
 abstract class ScopeIndexAbstract extends IndexAbstract
 {

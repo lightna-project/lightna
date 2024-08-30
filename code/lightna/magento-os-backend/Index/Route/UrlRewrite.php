@@ -9,7 +9,7 @@ use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Entity\Route as RouteEntity;
 use Lightna\Engine\App\Index\IndexAbstract;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 
 class UrlRewrite extends IndexAbstract
 {

@@ -8,7 +8,7 @@ use Lightna\Engine\App\NotFoundException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Router;
 use Lightna\Engine\App\Router\PassedException as RouterPassedException;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Throwable;
 
 class App extends ObjectA
