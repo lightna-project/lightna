@@ -11,14 +11,15 @@ class Context extends DataA
     public int $scope;
     public Entity $entity;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($data);
         $this->resolve();
     }
 
-    protected function resolve()
+    protected function resolve(): void
     {
+        // To plugin
         $this->scope = 1;
     }
 }

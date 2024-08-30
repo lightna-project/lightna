@@ -20,7 +20,7 @@ class Cms extends EntityA
     protected string $cmsEntity;
     protected Context $context;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($this->getEntityData());
     }

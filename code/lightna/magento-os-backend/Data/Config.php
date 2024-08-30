@@ -29,7 +29,7 @@ class Config extends DataA
     protected string $configEntity;
     protected Context $context;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($this->getEntityData());
     }

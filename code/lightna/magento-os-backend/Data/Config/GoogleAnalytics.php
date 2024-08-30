@@ -10,13 +10,13 @@ use Lightna\Engine\Data\DataA;
  * @property-read bool active
  * @method string account(string $escapeMethod = null)
  */
-
 class GoogleAnalytics extends DataA
 {
     public bool $active;
     public string $account;
 
-    protected function init($data = []) {
+    protected function init($data = []): void
+    {
         settype($data['active'], 'bool');
 
         parent::init($data);
