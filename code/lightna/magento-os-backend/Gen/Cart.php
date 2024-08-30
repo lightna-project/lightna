@@ -15,11 +15,11 @@ class Cart extends ObjectA
 
     public function getData(string|int $id): array
     {
-        if (!$quoteRow = $this->getQuote($id)) {
-            return [];
-        }
-
-        if (!$itemRows = $this->getQuoteItems($id)) {
+        if (
+            (!$quoteRow = $this->getQuote($id))
+            || $quoteRow['is_active'] !== 1
+            || !$itemRows = $this->getQuoteItems($id)
+        ) {
             return [];
         }
 
