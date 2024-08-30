@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data\Content;
 
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Data\Content\Product\VisibleOnFrontAttribute;
 

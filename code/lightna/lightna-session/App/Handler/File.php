@@ -6,7 +6,7 @@ namespace Lightna\Session\App\Handler;
 
 use Exception;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Throwable;
 
 class File extends ObjectA implements HandlerInterface

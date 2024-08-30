@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Magento\Data;
 
 use Lightna\Engine\App\NotFoundException;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\EntityA;
 use Lightna\Magento\Data\Product\Gallery\Image;
 use Lightna\Magento\Data\Product\Options as ProductOptions;

@@ -6,7 +6,7 @@ namespace Lightna\Engine\App\Router\Action;
 
 use Lightna\Engine\App\Layout;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 
 class Page extends ObjectA
 {
