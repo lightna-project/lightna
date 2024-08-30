@@ -12,14 +12,12 @@ use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Changelog\Schema as ChangelogSchema;
 use Lightna\Engine\App\Index\Queue\Schema as QueueSchema;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Query\Product;
 
 class Handler extends ObjectA
 {
     /** @AppConfig(indexer/changelog/batch/handlers) */
     protected array $handlers;
     protected Database $db;
-    protected Product $productQuery;
 
     public function process(): void
     {
@@ -186,9 +184,7 @@ class Handler extends ObjectA
 
     protected function addIndexBatchDependencies(array &$indexBatch): void
     {
-        $productIds = $indexBatch['product'] ?? [];
-        $parentIds = $productIds ? $this->productQuery->getParentsBatch($productIds) : [];
-        $indexBatch['product'] = merge($productIds, $parentIds);
+        // To plugin
     }
 
     protected function saveIndexBatch(array $indexItems): void
