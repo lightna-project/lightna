@@ -24,7 +24,7 @@ class Search extends DataA
 
     protected AppSearch $appSearch;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($this->appSearch->search());
     }

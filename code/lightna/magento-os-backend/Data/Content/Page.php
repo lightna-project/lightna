@@ -20,7 +20,7 @@ class Page extends DataA
     protected string $contentPageEntity;
     protected Context $context;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($this->getEntityData());
     }

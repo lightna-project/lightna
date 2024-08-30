@@ -13,7 +13,7 @@ class Page extends ObjectA
     protected Layout $layout;
     protected Context $context;
 
-    protected function init($params)
+    protected function init($params): void
     {
         $this->context->entity->type = $params['type'];
         $this->context->entity->id = $params['id'] ?? null;

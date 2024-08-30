@@ -14,7 +14,7 @@ class Url extends DataA
     /** @AppConfig(asset_base) */
     protected string $assetBase;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         $this->assetHashes = $this->compiled->load('asset/hashes');
     }

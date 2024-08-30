@@ -20,7 +20,7 @@ class Product extends DataA
     protected string $contentProductEntity;
     protected Context $context;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($this->getEntityData());
     }

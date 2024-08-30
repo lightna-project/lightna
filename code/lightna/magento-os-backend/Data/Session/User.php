@@ -13,7 +13,7 @@ class User extends DataA
 {
     public string|int $groupId;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($data);
         $this->groupId ??= 0;

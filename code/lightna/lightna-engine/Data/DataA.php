@@ -8,7 +8,7 @@ use Lightna\Engine\App\ObjectA;
 
 class DataA extends ObjectA
 {
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         foreach ($this->objectify($data) as $key => $value) {
             $this->{$key} = $value;
