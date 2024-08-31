@@ -18,7 +18,7 @@ class Scope extends ObjectA
         $this->list = $this->db->fetchCol($this->getListSelect());
     }
 
-    public function getList(): array
+    public function getListExtended(): array
     {
         return $this->list;
     }
