@@ -12,7 +12,7 @@ class App extends ObjectA
 {
     protected Config $config;
 
-    public function renderNoRoute(): Closure
+    public function renderNoRouteExtended(): Closure
     {
         $config = $this->config;
 

@@ -12,7 +12,7 @@ class Handler extends ObjectA
 {
     protected Product $productQuery;
 
-    public function addIndexBatchDependencies(Closure $proceed, array &$indexBatch): void
+    public function addIndexBatchDependenciesExtended(Closure $proceed, array &$indexBatch): void
     {
         $productIds = $indexBatch['product'] ?? [];
         $parentIds = $productIds ? $this->productQuery->getParentsBatch($productIds) : [];
