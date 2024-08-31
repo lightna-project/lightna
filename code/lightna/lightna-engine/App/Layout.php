@@ -51,10 +51,7 @@ class Layout extends ObjectA
 
         $this->current[] = $block;
 
-        if (isset($block['.']['before'])) {
-            block('before', $vars);
-        }
-
+        $this->beforeBlock($block, $vars);
         if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
             $this->isMainCurrent = false;
             $this->renderBlockTemplate($block, $vars);
@@ -62,12 +59,25 @@ class Layout extends ObjectA
             $this->isMainCurrent = false;
             $this->renderBlockContent($block, $vars);
         }
-
-        if (isset($block['.']['after'])) {
-            block('after', $vars);
-        }
+        $this->afterBlock($block, $vars);
 
         array_pop($this->current);
+    }
+
+    protected function beforeBlock(array &$block, array $vars): void
+    {
+        if (isset($block['.']['before'])) {
+            block('before', $vars);
+            unset($block['.']['before']);
+        }
+    }
+
+    protected function afterBlock(array &$block, array $vars): void
+    {
+        if (isset($block['.']['after'])) {
+            block('after', $vars);
+            unset($block['.']['after']);
+        }
     }
 
     public function template(string $template, array $vars = []): void
