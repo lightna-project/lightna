@@ -20,6 +20,7 @@ return [
         'Lightna\Magento\Frontend' => '../../code/lightna/magento-os-frontend',
         'Lightna\Magento\Frontend\Semi' => '../../code/lightna/magento-os-frontend-semi',
         'Lightna\Magento\Demo' => '../../code/lightna/magento-os-demo',
+        'Lightna\AmastyLabel' => '../../code/lightna/amasty-label',
     ],
     'libs' => [
         'Laminas\Db' => 'vendor/laminas/laminas-db/src',

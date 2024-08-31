@@ -1,0 +1,3 @@
+.body.main.content.columns.result.item.before:
+  .amasty-label:
+    template: amasty-label/category.phtml

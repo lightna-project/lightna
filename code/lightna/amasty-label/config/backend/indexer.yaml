@@ -1,0 +1,8 @@
+indexer:
+  changelog:
+    tables:
+      include:
+        ^amasty_label_index$: [ ]
+    batch:
+      handlers:
+        lightna_amasty_label: Lightna\AmastyLabel\App\Index\Changelog\LabelBatchHandler

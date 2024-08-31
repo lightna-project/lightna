@@ -1,0 +1,8 @@
+<?php
+/** @var Lightna\AmastyLabel\Data\Product $product */
+$label = $productLabel = $product->amastyLabel->category;
+if (!$label->image) {
+    return;
+}
+?>
+<img src="/media/amasty/amlabel/<?= $label->image() ?>" alt="">

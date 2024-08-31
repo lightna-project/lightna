@@ -1,0 +1,5 @@
+plugin:
+  Lightna\Magento\Index\Product\Batch:
+    - Lightna\AmastyLabel\Plugin\Index\Product\Batch
+  Lightna\Magento\Data\Product:
+    - Lightna\AmastyLabel\Plugin\Data\Product
