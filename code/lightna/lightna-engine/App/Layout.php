@@ -41,7 +41,7 @@ class Layout extends ObjectA
         $this->block();
     }
 
-    public function block(string $blockName = ''): void
+    public function block(string $blockName = '', array $vars = []): void
     {
         $current = end($this->current);
         $block = $blockName ? $current['.'][$blockName] : ($current ?: $this->layout);
@@ -51,12 +51,20 @@ class Layout extends ObjectA
 
         $this->current[] = $block;
 
+        if (isset($block['.']['before'])) {
+            block('before', $vars);
+        }
+
         if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
             $this->isMainCurrent = false;
-            $this->renderBlockTemplate($block);
+            $this->renderBlockTemplate($block, $vars);
         } else {
             $this->isMainCurrent = false;
-            $this->renderBlockContent($block);
+            $this->renderBlockContent($block, $vars);
+        }
+
+        if (isset($block['.']['after'])) {
+            block('after', $vars);
         }
 
         array_pop($this->current);
@@ -76,21 +84,21 @@ class Layout extends ObjectA
         $this->layout = $this->compiled->load('layout/' . $layoutName);
     }
 
-    protected function renderBlockTemplate(array $block): void
+    protected function renderBlockTemplate(array $block, array $vars = []): void
     {
         $this->templating->render(
             $block['template'],
-            $this->getBlockVars($block)
+            $this->getBlockVars($block, $vars)
         );
     }
 
-    protected function renderBlockContent(array $block): void
+    protected function renderBlockContent(array $block, array $vars = []): void
     {
         $cTag = $block['container'] ?? '';
         $cTag && print('<' . $cTag . $this->getBlockData($block, BlockData::class)->attributes() . '>');
 
         foreach ($block['.'] as $name => $child) {
-            $this->block($name);
+            $this->block($name, $vars);
         }
 
         $cTag && print('</' . $cTag . '>');
@@ -104,9 +112,8 @@ class Layout extends ObjectA
         return newobj($class, $data);
     }
 
-    protected function getBlockVars(array $block): array
+    protected function getBlockVars(array $block, array $vars = []): array
     {
-        $vars = [];
         foreach ($this->templating->getTemplateSchema($block['template']) as $name => $type) {
             if (is_a($type, BlockData::class, true)) {
                 $vars[$name] = $this->getBlockData($block, $type);

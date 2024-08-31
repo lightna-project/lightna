@@ -13,13 +13,15 @@ extends:
         container: div
         attributes:
           class:
-          - grid
-          - gap-6
-          - md:gap-12
-          - md:grid-cols-[280px_1fr]
+            - grid
+            - gap-6
+            - md:gap-12
+            - md:grid-cols-[280px_1fr]
         .facets:
           template: category/facets.phtml
           .toggle-facets:
             template: component/toggle-link.phtml
         .result:
           template: category/result.phtml
+          .item:
+            template: category/result/item.phtml
