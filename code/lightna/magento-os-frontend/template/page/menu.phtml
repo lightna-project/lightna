@@ -7,5 +7,5 @@
         <!-- Close mobile menu -->
         <div class="cjs-toggle-overlay icon" data-overlay="menu"></div>
     </div>
-    <?php template('page/menu/item.phtml', ['item' => $page->menu]) ?>
+    <?php block('item', ['item' => $page->menu]) ?>
 </nav>

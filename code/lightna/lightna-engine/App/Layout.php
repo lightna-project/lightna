@@ -43,13 +43,7 @@ class Layout extends ObjectA
 
     public function block(string $blockName = '', array $vars = []): void
     {
-        $current = end($this->current);
-        $block = $blockName ? $current['.'][$blockName] : ($current ?: $this->layout);
-        if (!$block) {
-            return;
-        }
-
-        $this->current[] = $block;
+        $this->current[] = $block = $this->resolveBlock($blockName);
 
         $this->beforeBlock($block, $vars);
         if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
@@ -62,6 +56,22 @@ class Layout extends ObjectA
         $this->afterBlock($block, $vars);
 
         array_pop($this->current);
+    }
+
+    protected function resolveBlock(string $blockName): ?array
+    {
+        $current = end($this->current);
+        if ($blockName !== '') {
+            $block = $current['.'][$blockName] ?? null;
+            $block ??= $blockName === 'self' ? $current : null;
+        } else {
+            $block = $current ?: $this->layout;
+        }
+        if (!$block) {
+            throw new Exception("Block \"$blockName\" not found");
+        }
+
+        return $block;
     }
 
     protected function beforeBlock(array &$block, array $vars): void
@@ -82,6 +92,10 @@ class Layout extends ObjectA
 
     public function template(string $template, array $vars = []): void
     {
+        if (IS_DEV_MODE && $this->current) {
+            throw new Exception("The template() method call is not intended for use within blocks.");
+        }
+
         $this->templating->render(
             $template,
             $this->getTemplateVars($template, $vars)
@@ -116,10 +130,12 @@ class Layout extends ObjectA
 
     protected function getBlockData(array $block, string $class): BlockData
     {
-        $data = $block;
-        unset($data['.']);
+        foreach ($block['.'] as $name => $child) {
+            // Clean deep structure and pass only children of current block
+            unset($block['.'][$name]['.']);
+        }
 
-        return newobj($class, $data);
+        return newobj($class, $block);
     }
 
     protected function getBlockVars(array $block, array $vars = []): array

@@ -37,6 +37,8 @@ template: page.phtml
           template: page/header/minicart/footer.phtml
     .menu:
       template: page/menu.phtml
+      .item:
+        template: page/menu/item.phtml
   .main:
     container: div
     attributes:

@@ -77,11 +77,10 @@ extends:
           template: product/usp.phtml
       .details:
         template: product/tabs.phtml
-        tabs:
-          description:
-            title: "Description"
-            active: true
-            template: product/description.phtml
-          specifications:
-            title: "Specifications"
-            template: product/attributes/all-visible.phtml
+        .description:
+          title: "Description"
+          active: true
+          template: product/description.phtml
+        .specifications:
+          title: "Specifications"
+          template: product/attributes/all-visible.phtml
