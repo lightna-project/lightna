@@ -25,3 +25,5 @@ extends:
           template: category/result.phtml
           .item:
             template: category/result/item.phtml
+            .price:
+              template: product/price.phtml

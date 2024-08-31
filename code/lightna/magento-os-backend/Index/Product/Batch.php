@@ -108,7 +108,7 @@ class Batch extends ObjectA
         return !$na;
     }
 
-    protected function collectProductData(&$product, $id): void
+    protected function collectProductData(array &$product, int $id): void
     {
         $this->collectAttributes($product, $id);
         $this->collectPrice($product, $id);
@@ -216,7 +216,7 @@ class Batch extends ObjectA
         }
     }
 
-    protected function collectAttributes(array &$product, string|int $id): void
+    protected function collectAttributes(array &$product, int $id): void
     {
         $product = merge(
             $product,
@@ -224,7 +224,7 @@ class Batch extends ObjectA
         );
     }
 
-    protected function collectPrice(array &$product, string|int $id): void
+    protected function collectPrice(array &$product, int $id): void
     {
         if (!isset($this->children[$id])) {
             $product['price'] = $this->getSimplePriceData($product, $id);
@@ -266,7 +266,7 @@ class Batch extends ObjectA
         $product['price'] = $minPrice;
     }
 
-    protected function collectInventory(array &$product, string|int $id): void
+    protected function collectInventory(array &$product, int $id): void
     {
         $inventory = ['qty' => 0, 'status' => false, 'backorders' => false];
 
@@ -286,7 +286,7 @@ class Batch extends ObjectA
         $product['inventory'] = $inventory;
     }
 
-    protected function collectUrl(array &$product, string|int $id): void
+    protected function collectUrl(array &$product, int $id): void
     {
         if (!isset($this->urls[$id])) {
             return;
@@ -297,7 +297,7 @@ class Batch extends ObjectA
         $product['url'] = $isRelative ? '/' . $url : $url;
     }
 
-    protected function collectOptions(array &$product, string|int $id): void
+    protected function collectOptions(array &$product, int $id): void
     {
         if ($product['type_id'] === 'configurable') {
             $product['options']['attributes'] = $this->options[$id];
@@ -319,7 +319,7 @@ class Batch extends ObjectA
         }
     }
 
-    protected function collectGallery(array &$product, string|int $id): void
+    protected function collectGallery(array &$product, int $id): void
     {
         $gallery = [];
         $images = $this->galleryItems[$id] ?? ['/coming-soon.jpg'];

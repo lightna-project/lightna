@@ -87,9 +87,14 @@ class Schema extends ObjectA
     {
         $unwatchedTables = array_diff_assoc($this->tables, $this->watchedTables);
         foreach ($unwatchedTables as $table) {
-            $triggerName = $this->getTriggerName($table, 'update');
-            if (isset($this->triggers[$triggerName])) {
-                $this->db->query('DROP TRIGGER ' . $triggerName);
+            $triggerNames = [];
+            foreach (['update', 'delete', 'insert'] as $event) {
+                $triggerNames[] = $this->getTriggerName($table, $event);
+            }
+            foreach ($triggerNames as $triggerName) {
+                if (isset($this->triggers[$triggerName])) {
+                    $this->db->query('DROP TRIGGER ' . $triggerName);
+                }
             }
         }
     }
@@ -125,7 +130,7 @@ class Schema extends ObjectA
 
     protected function isTableIncluded(string $table): bool
     {
-        foreach ($this->config['changelog']['tables']['include'] ?? [] as $rx => $null) {
+        foreach ($this->getIncludedTables() as $rx => $null) {
             if (preg_match('~' . $rx . '~', $table)) {
                 return true;
             }
@@ -134,9 +139,19 @@ class Schema extends ObjectA
         return false;
     }
 
+    protected function getIncludedTables(): array
+    {
+        $ref = &$this->config['changelog']['tables']['include'];
+        if (!is_array($ref)) {
+            throw new Exception('The config "indexer.changelog.tables.include" should be an array');
+        }
+
+        return $ref;
+    }
+
     protected function getForcedColumns(string $table): array
     {
-        foreach ($this->config['changelog']['tables']['include'] ?? [] as $rx => $forcedColumns) {
+        foreach ($this->getIncludedTables() as $rx => $forcedColumns) {
             if (preg_match('~' . $rx . '~', $table)) {
                 $result = [];
                 foreach ($forcedColumns as $column) {

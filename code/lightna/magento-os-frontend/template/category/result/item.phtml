@@ -18,7 +18,7 @@
         <span class="product-item__sku"><?= $product->sku() ?></span>
         <a class="product-item__link" href="<?= $product->url() ?>"><?= $product->name() ?></a>
         <div class="product-item__price">
-            <?php template('product/price.phtml', ['product' => $product]) ?>
+            <?php block('price', ['product' => $product]) ?>
         </div>
     </div>
 </li>
