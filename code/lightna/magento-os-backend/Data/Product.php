@@ -47,12 +47,13 @@ class Product extends EntityA
 
     protected function init($data = []): void
     {
-        if (!$data) {
-            parent::init($this->getEntityData());
-            $this->title = $this->name;
-        } else {
-            parent::init($data);
-        }
+        parent::init($this->getData($data));
+        $this->title = $this->name;
+    }
+
+    protected function getData(array $data): array
+    {
+        return $data ?: $this->getEntityData();
     }
 
     protected function getEntityData(): array
