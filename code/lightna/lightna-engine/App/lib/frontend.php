@@ -18,13 +18,13 @@ function escape_html(string $var): string
     return htmlspecialchars($var, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
 }
 
-function block(string $blockName = ''): void
+function block(string $blockName = '', array $vars = []): void
 {
     /** @var Layout $layout */
     static $layout;
     $layout ??= getobj(Layout::class);
 
-    $layout->block($blockName);
+    $layout->block($blockName, $vars);
 }
 
 function template(string $template, array $vars = []): void

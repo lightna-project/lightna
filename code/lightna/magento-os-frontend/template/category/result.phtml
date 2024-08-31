@@ -1,6 +1,5 @@
 <?php
 /** @var Lightna\Magento\Data\Product\Search $search */
-/** @var Lightna\Magento\Data\Currency $currency */
 ?>
 <div>
     <?php if (!count($search->result)) { ?>
@@ -8,25 +7,7 @@
     <?php } else { ?>
         <ul class="products-grid">
             <?php foreach ($search->result as $index => $product) { ?>
-                <?php $mainImage = reset($product->gallery) ?>
-                <li class="product-item">
-                    <a class="block" href="<?= $product->url() ?>" title="<?= $product->name() ?>">
-                        <div class="product-item__top">
-                            <img class="product-item__image"
-                                 loading="<?= $index > 2 ? 'lazy' : 'eager' ?>"
-                                 width="285" height="354"
-                                 src="<?= $mainImage->tile() ?>" alt="<?= $product->name() ?>">
-                            <!-- todo: replace width and height with config values-->
-                        </div>
-                    </a>
-                    <div class="product-item__bottom">
-                        <span class="product-item__sku"><?= $product->sku() ?></span>
-                        <a class="product-item__link" href="<?= $product->url() ?>"><?= $product->name() ?></a>
-                        <div class="product-item__price">
-                            <?php template('product/price.phtml', ['product' => $product]) ?>
-                        </div>
-                    </div>
-                </li>
+                <?php block('item', compact('index', 'product')) ?>
             <?php } ?>
         </ul>
         <div class="toolbar">
