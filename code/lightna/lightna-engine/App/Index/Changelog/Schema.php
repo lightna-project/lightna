@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Index\Changelog;
 
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Triggers\Schema as TriggersSchema;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Schema extends ObjectA
 {

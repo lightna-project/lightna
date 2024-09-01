@@ -6,9 +6,9 @@ namespace Lightna\Magento\App\Query;
 
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Inventory extends ObjectA
 {

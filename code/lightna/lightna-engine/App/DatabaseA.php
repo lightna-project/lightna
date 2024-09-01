@@ -15,14 +15,13 @@ use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
 use Lightna\Engine\App\Database\Structure;
 
-class Database extends ObjectA
+abstract class DatabaseA extends ObjectA
 {
     public Structure $structure;
 
-    /** @AppConfig(project/connection) */
-    protected array $connection;
     protected ?Adapter $adapter;
     protected ?Sql $sql;
+    protected array $connection;
 
     protected function init(): void
     {

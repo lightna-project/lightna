@@ -6,10 +6,10 @@ namespace Lightna\Magento\Index\Route;
 
 use Exception;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Entity\Route as RouteEntity;
 use Lightna\Engine\App\Index\IndexAbstract;
-use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Project\Database;
 
 class UrlRewrite extends IndexAbstract
 {

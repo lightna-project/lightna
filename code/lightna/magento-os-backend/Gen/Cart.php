@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lightna\Magento\Gen;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 use function array_camel;
 
 class Cart extends ObjectA

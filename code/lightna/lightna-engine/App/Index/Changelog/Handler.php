@@ -8,10 +8,10 @@ use Exception;
 use Laminas\Db\Sql\Delete;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Update;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Changelog\Schema as ChangelogSchema;
 use Lightna\Engine\App\Index\Queue\Schema as QueueSchema;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Handler extends ObjectA
 {

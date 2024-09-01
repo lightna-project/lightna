@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App\Index\Changelog;
 
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
+use Lightna\Engine\App\Project\Database;
 
 class ProductBatchHandler extends BatchHandlerAbstract
 {
