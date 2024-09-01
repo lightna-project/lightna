@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Index\Queue;
 
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Schema extends ObjectA
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Plugin\App;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Scope extends ObjectA
 {

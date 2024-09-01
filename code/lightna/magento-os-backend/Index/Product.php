@@ -6,9 +6,9 @@ namespace Lightna\Magento\Index;
 
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
-use Lightna\Engine\App\Index\IndexAbstract;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Index\IndexAbstract;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
 use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\Index\Product\Batch as BatchDataProvider;

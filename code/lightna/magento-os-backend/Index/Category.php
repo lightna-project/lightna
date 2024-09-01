@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lightna\Magento\Index;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\IndexAbstract;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Entity\Category as CategoryEntity;
 use Lightna\Magento\App\Query\Categories;
 

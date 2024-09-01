@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Query\Cms;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Page extends ObjectA
 {

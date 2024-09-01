@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Index\Product;
 
-use Lightna\Engine\App\Database;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Inventory;
 use Lightna\Magento\App\Query\Product\Eav;
 use Lightna\Magento\App\Query\Product\Gallery;

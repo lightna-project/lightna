@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Query\Product;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Config as MagentoConfig;
 
 class Gallery extends ObjectA

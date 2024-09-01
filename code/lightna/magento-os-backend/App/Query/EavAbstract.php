@@ -8,9 +8,9 @@ use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Combine;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 abstract class EavAbstract extends ObjectA
 {
