@@ -6,27 +6,6 @@ $cart = $session->cart;
 ?>
 <ul class="products-list--minicart">
     <?php foreach ($cart->items as $id => $item): ?>
-        <li class="products-list__item">
-            <div class="products-list__item__image"></div>
-            <div class="products-list__item__info">
-                <span class="products-list__item__name">
-                    <?= $item->name() ?>
-                </span>
-                <span class="products-list__item__details">
-                    <?= phrase('SKU:') ?>
-                    <span><?= $item->sku() ?></span>
-                </span>
-                <span class="products-list__item__details">
-                    <?= phrase('Qty:') ?>
-                    <span><?= $item->qty() ?></span>
-                </span>
-                <span class="products-list__item__price">
-                    <?= $currency->render($item->price) ?>
-                </span>
-            </div>
-            <div class="products-list__item__remove"
-                 data-action="remove-product"
-                 data-item-id="<?= escape($id) ?>"></div>
-        </li>
+        <?php block('item', compact('id', 'item')) ?>
     <?php endforeach; ?>
 </ul>
