@@ -19,7 +19,7 @@
         @apply flex flex-col py-4;
     }
 
-    .product-item__sku {
+    .product-item .product-sku {
         @apply text-xs text-slate-500;
     }
 

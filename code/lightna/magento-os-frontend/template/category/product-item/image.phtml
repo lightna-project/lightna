@@ -1,0 +1,13 @@
+<?php
+/**
+ * @var Lightna\Magento\Data\Product $product
+ * @var int $index
+ */
+?>
+<?php $mainImage = reset($product->gallery) ?>
+<a class="block" href="<?= $product->url() ?>" title="<?= $product->name() ?>">
+    <img class="product-item__image"
+         loading="<?= $index > 2 ? 'lazy' : 'eager' ?>"
+         width="285" height="354"
+         src="<?= $mainImage->tile() ?>" alt="<?= $product->name() ?>">
+</a>
