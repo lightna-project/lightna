@@ -92,7 +92,7 @@ class Layout extends ObjectA
 
     public function template(string $template, array $vars = []): void
     {
-        if (IS_DEV_MODE && $this->current) {
+        if (IS_DEV_MODE && !empty($this->current)) {
             throw new Exception("The template() method call is not intended for use within blocks.");
         }
 
