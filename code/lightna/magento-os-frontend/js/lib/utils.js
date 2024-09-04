@@ -82,10 +82,10 @@ export function isTouchDevice() {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
 }
 
-export function getBlockHtml(path) {
+export function getBlockHtml(path, data = {}) {
     const url = `${document.location.pathname}?block=${path}`;
 
-    return request.post(url, {});
+    return request.post(url, data);
 }
 
 Object.prototype.foreach = function (cb) {

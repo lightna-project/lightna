@@ -16,4 +16,6 @@ class Option extends DataA
     public int $id;
     public string $label;
     public string $attributeCode;
+    public bool $selected;
+    public bool $available;
 }
