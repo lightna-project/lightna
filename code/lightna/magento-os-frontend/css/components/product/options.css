@@ -14,4 +14,9 @@
     .product-options__option.active {
         @apply border-primary-main;
     }
+
+    .product-options__option.disabled {
+        @apply text-slate-300 border-gray-100 cursor-default;
+        border: 1px solid #eee;
+    }
 }

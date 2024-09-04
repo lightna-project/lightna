@@ -36,4 +36,13 @@ class Request extends DataA
     {
         $this->$name = $_REQUEST[$name] ?? null;
     }
+
+    public function __isset(string $name): bool
+    {
+        if (!parent::__isset($name)) {
+            return isset($_REQUEST[$name]);
+        }
+
+        return true;
+    }
 }

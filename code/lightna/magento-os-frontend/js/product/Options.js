@@ -1,13 +1,24 @@
-import { $, $$ } from '../lib/utils';
+import { $, $$, getBlockHtml } from '../lib/utils';
+import { UserInput } from '../lib/UserInput';
 
 export class ProductOptions {
+    cjs = '.cjs-product-options';
+    block = '.body.main.content.main.cta.add-to-cart.options';
+
     constructor() {
-        this.jsc = $('.cjs-product-options');
+        this.init();
+    }
+
+    init() {
+        this.component = $(this.cjs);
         this.bindEvents();
     }
 
     bindEvents() {
-        $$('[data-option]', this.jsc).foreach((i, element) => {
+        $$('[data-option]', this.component).foreach((i, element) => {
+            if (element.classList.contains('disabled')) {
+                return;
+            }
             const option = JSON.parse(element.dataset.option);
 
             element.addEventListener('click', () => {
@@ -16,12 +27,10 @@ export class ProductOptions {
         });
     }
 
-    optionClick(element, option) {
-        $$('.options-' + option.attributeCode + ' [data-option]').foreach((i, el) => {
-            el.classList.remove('active');
-        });
-
-        element.classList.add('active');
+    async optionClick(element, option) {
         $('#option_' + option.attributeCode).value = option.id;
+        this.component.outerHTML = await getBlockHtml(this.block, UserInput.collect(this.component));
+
+        this.init();
     }
 }

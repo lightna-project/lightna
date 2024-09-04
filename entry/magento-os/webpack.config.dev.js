@@ -8,5 +8,5 @@ module.exports = {
     },
     mode: 'development',
     watch: true,
-    devtool: 'eval',
+    devtool: 'inline-source-map',
 };

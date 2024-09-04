@@ -10,10 +10,14 @@ if (!$options->attributes) {
     <?php foreach ($options->attributes as $attribute) { ?>
         <div class="product-options options-<?= $attribute->code() ?>">
             <div class="product-options__label"><?= $attribute->label() ?>:</div>
-            <input type="hidden" autocomplete="off" id="option_<?= $attribute->code() ?>" name="super_attribute[<?= $attribute->id() ?>]">
+            <input type="hidden" autocomplete="off" id="option_<?= $attribute->code() ?>"
+                   name="super_attribute[<?= $attribute->id() ?>]"
+                   value="<?= escape($options->getCurrentAttributeValue($attribute->code)) ?>">
             <?php foreach ($options->getAttributeOptions($attribute->code) as $option) { ?>
+                <?php $active = $option->selected ? 'active' : '' ?>
+                <?php $disabled = $option->available ? '' : 'disabled' ?>
                 <span data-option="<?= $option('json-html') ?>"
-                      class="product-options__option option-<?= $attribute->code() ?>">
+                      class="product-options__option option-<?= $attribute->code() ?> <?= $active ?> <?= $disabled ?>">
                     <?= $option->label() ?>
                 </span>
             <?php } ?>

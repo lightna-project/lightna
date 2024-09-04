@@ -92,7 +92,9 @@ class HttpClient {
 
     onSuccess(response) {}
 
-    onError(error) {}
+    onError(error) {
+        throw error;
+    }
 }
 
 const request = new HttpClient();
