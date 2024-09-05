@@ -7,7 +7,7 @@ namespace Lightna\Engine\App;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Index\Queue\Handler as QueueHandler;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Project\Database;
 
 class Indexer extends ObjectA
 {

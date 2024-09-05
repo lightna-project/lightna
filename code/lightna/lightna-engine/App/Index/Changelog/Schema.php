@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Index\Changelog;
 
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Triggers\Schema as TriggersSchema;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Schema extends ObjectA
 {
     public const TABLE_NAME = 'lightna_indexer_changelog';
+    public const VALUE_MAX_LENGTH = 16;
 
     protected Database $db;
     protected TriggersSchema $triggersSchema;
@@ -42,6 +43,7 @@ class Schema extends ObjectA
         $tablesEnumExpr = "'" . implode("','", $this->getTableColumnValues()) . "'";
         $maxColumnLength = $this->triggersSchema->getMaxColumnLength();
         $tableName = static::TABLE_NAME;
+        $maxLength = static::VALUE_MAX_LENGTH;
 
         return <<<SQL
 CREATE TABLE `$tableName` (
@@ -50,8 +52,8 @@ CREATE TABLE `$tableName` (
   `column` varchar($maxColumnLength) NOT NULL,
   `primary_key` bigint(20) unsigned NOT NULL,
   `status` enum('pending','processing') NOT NULL,
-  `old_value` varchar(16) DEFAULT NULL,
-  `new_value` varchar(16) DEFAULT NULL,
+  `old_value` varchar($maxLength) DEFAULT NULL,
+  `new_value` varchar($maxLength) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `{$tableName}_uniq_key` (`table`,`status`,`primary_key`,`column`),
   KEY `{$tableName}_status` (`status`),

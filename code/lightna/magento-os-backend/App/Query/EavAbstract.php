@@ -8,9 +8,9 @@ use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Combine;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Project\Database;
 
 abstract class EavAbstract extends ObjectA
 {
@@ -66,7 +66,7 @@ abstract class EavAbstract extends ObjectA
         foreach ($attributesBatch as &$attributes) {
             foreach ($attributes as &$data) {
                 $isMultiselect = $this->attributesById[$data['attribute_id']]['frontend_input'] === 'multiselect';
-                $values = $isMultiselect ? explode(',', $data['value']) : [$data['value']];
+                $values = $isMultiselect ? explode(',', (string)$data['value']) : [$data['value']];
 
                 foreach ($values as &$value) {
                     $value = $options[$data['attribute_id']][$value] ?? $value;

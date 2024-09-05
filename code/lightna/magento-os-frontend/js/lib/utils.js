@@ -1,3 +1,5 @@
+import request from './HttpClient';
+
 export function $(element, scope) {
     // if elements is a string then it's selector
     if (getClassName(element) === 'String') {
@@ -78,6 +80,12 @@ export function objectToQuery(data, prefix) {
 
 export function isTouchDevice() {
     return 'ontouchstart' in window || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0;
+}
+
+export function getBlockHtml(path) {
+    const url = `${document.location.pathname}?block=${path}`;
+
+    return request.post(url, {});
 }
 
 Object.prototype.foreach = function (cb) {

@@ -12,7 +12,7 @@ class App extends ObjectA
 {
     protected Session $session;
 
-    public function process(Closure $proceed): void
+    public function processExtended(Closure $proceed): void
     {
         $this->session->prolong();
         $proceed();

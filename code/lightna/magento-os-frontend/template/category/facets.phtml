@@ -33,7 +33,7 @@
                     <div class="cjs-collapsible-content collapsible__content">
                         <ul class="facets__item__options">
                             <?php if (count($facet->options) > 5) { ?>
-                                <?php template('component/toggle-link.phtml') ?>
+                                <?php block('toggle-facets') ?>
                             <?php } ?>
                             <?php foreach ($facet->options as $key => $option) { ?>
                                 <li>

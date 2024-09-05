@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Lightna\Magento\Gen;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 use function array_camel;
 
 class Cart extends ObjectA
@@ -15,11 +15,11 @@ class Cart extends ObjectA
 
     public function getData(string|int $id): array
     {
-        if (!$quoteRow = $this->getQuote($id)) {
-            return [];
-        }
-
-        if (!$itemRows = $this->getQuoteItems($id)) {
+        if (
+            (!$quoteRow = $this->getQuote($id))
+            || $quoteRow['is_active'] !== 1
+            || !$itemRows = $this->getQuoteItems($id)
+        ) {
             return [];
         }
 

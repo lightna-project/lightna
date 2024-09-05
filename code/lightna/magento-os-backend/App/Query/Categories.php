@@ -6,9 +6,9 @@ namespace Lightna\Magento\App\Query;
 
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Category\Eav;
 
 class Categories extends ObjectA

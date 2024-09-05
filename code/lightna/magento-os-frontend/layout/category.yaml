@@ -13,11 +13,41 @@ extends:
         container: div
         attributes:
           class:
-          - grid
-          - gap-6
-          - md:gap-12
-          - md:grid-cols-[280px_1fr]
+            - grid
+            - gap-6
+            - md:gap-12
+            - md:grid-cols-[280px_1fr]
         .facets:
           template: category/facets.phtml
+          .toggle-facets:
+            template: component/toggle-link.phtml
         .result:
           template: category/result.phtml
+          .item:
+            container: li
+            attributes:
+              class:
+                - product-item
+            .top:
+              container: div
+              attributes:
+                class:
+                  - product-item__top
+              .image:
+                template: category/product-item/image.phtml
+            .bottom:
+              container: div
+              attributes:
+                class:
+                  - product-item__bottom
+              .sku:
+                template: product/attributes/sku.phtml
+              .name:
+                template: category/product-item/name.phtml
+              .price-container:
+                container: div
+                attributes:
+                  class:
+                    - product-item__price
+                .price:
+                  template: product/price.phtml

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Query;
 
 use Laminas\Db\Sql\Expression;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Project\Database;
 
 class Config extends ObjectA
 {

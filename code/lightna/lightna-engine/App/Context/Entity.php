@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\Data\Context;
+namespace Lightna\Engine\App\Context;
 
 use Lightna\Engine\Data\DataA;
 

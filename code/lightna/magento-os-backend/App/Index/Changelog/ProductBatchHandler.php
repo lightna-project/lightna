@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App\Index\Changelog;
 
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
+use Lightna\Engine\App\Project\Database;
 
 class ProductBatchHandler extends BatchHandlerAbstract
 {
@@ -23,7 +23,6 @@ class ProductBatchHandler extends BatchHandlerAbstract
         $this->collectDefault();
         $this->collectProductRelation();
         $this->collectSuperAttribute();
-        $this->collectParents();
 
         return $this->toQueue;
     }
@@ -56,20 +55,5 @@ class ProductBatchHandler extends BatchHandlerAbstract
                 $this->collectIds($this->changelog, 'product_id'),
             );
         }
-    }
-
-    protected function collectParents(): void
-    {
-        if (empty($this->toQueue['product'])) {
-            return;
-        }
-
-        $select = $this->db->select('catalog_product_relation');
-        $select->where->in('child_id', $this->toQueue['product']);
-
-        $this->toQueue['product'] = merge(
-            $this->toQueue['product'],
-            $this->db->fetchCol($select, 'parent_id', 'parent_id'),
-        );
     }
 }

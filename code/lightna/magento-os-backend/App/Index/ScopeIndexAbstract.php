@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Index;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Index\IndexAbstract;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Project\Database;
 
 abstract class ScopeIndexAbstract extends IndexAbstract
 {
@@ -52,7 +52,6 @@ abstract class ScopeIndexAbstract extends IndexAbstract
             return [];
         }
 
-        // IDs not used in ScopeIndexAbstract, we just need single value here
-        return [1];
+        return [$this->context->scope];
     }
 }

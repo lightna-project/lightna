@@ -8,11 +8,13 @@ use Exception;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityA;
+use Lightna\Engine\Data\Request;
 
 class Layout extends ObjectA
 {
     protected Compiled $compiled;
     protected Templating $templating;
+    protected Request $request;
     protected array $layout;
     protected array $current;
     protected bool $isMainCurrent;
@@ -26,7 +28,7 @@ class Layout extends ObjectA
         $this->load();
         $this->isMainCurrent = true;
 
-        if ($block = $_GET['block'] ?? '') {
+        if ($block = $this->request->block) {
             $this->renderSingleBlock($block);
         } else {
             $this->renderPage();
@@ -39,29 +41,61 @@ class Layout extends ObjectA
         $this->block();
     }
 
-    public function block(string $blockName = ''): void
+    public function block(string $blockName = '', array $vars = []): void
     {
-        $current = end($this->current);
-        $block = $blockName ? $current['.'][$blockName] : ($current ?: $this->layout);
-        if (!$block) {
-            return;
-        }
+        $this->current[] = $block = $this->resolveBlock($blockName);
 
-        $this->current[] = $block;
-
+        $this->beforeBlock($block, $vars);
         if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
             $this->isMainCurrent = false;
-            $this->renderBlockTemplate($block);
+            $this->renderBlockTemplate($block, $vars);
         } else {
             $this->isMainCurrent = false;
-            $this->renderBlockContent($block);
+            $this->renderBlockContent($block, $vars);
         }
+        $this->afterBlock($block, $vars);
 
         array_pop($this->current);
     }
 
+    protected function resolveBlock(string $blockName): ?array
+    {
+        $current = end($this->current);
+        if ($blockName !== '') {
+            $block = $current['.'][$blockName] ?? null;
+            $block ??= $blockName === 'self' ? $current : null;
+        } else {
+            $block = $current ?: $this->layout;
+        }
+        if (!$block) {
+            throw new Exception("Block \"$blockName\" not found");
+        }
+
+        return $block;
+    }
+
+    protected function beforeBlock(array &$block, array $vars): void
+    {
+        if (isset($block['.']['before'])) {
+            block('before', $vars);
+            unset($block['.']['before']);
+        }
+    }
+
+    protected function afterBlock(array &$block, array $vars): void
+    {
+        if (isset($block['.']['after'])) {
+            block('after', $vars);
+            unset($block['.']['after']);
+        }
+    }
+
     public function template(string $template, array $vars = []): void
     {
+        if (IS_DEV_MODE && !empty($this->current)) {
+            throw new Exception("The template() method call is not intended for use within blocks.");
+        }
+
         $this->templating->render(
             $template,
             $this->getTemplateVars($template, $vars)
@@ -74,21 +108,21 @@ class Layout extends ObjectA
         $this->layout = $this->compiled->load('layout/' . $layoutName);
     }
 
-    protected function renderBlockTemplate(array $block): void
+    protected function renderBlockTemplate(array $block, array $vars = []): void
     {
         $this->templating->render(
             $block['template'],
-            $this->getBlockVars($block)
+            $this->getBlockVars($block, $vars)
         );
     }
 
-    protected function renderBlockContent(array $block): void
+    protected function renderBlockContent(array $block, array $vars = []): void
     {
         $cTag = $block['container'] ?? '';
         $cTag && print('<' . $cTag . $this->getBlockData($block, BlockData::class)->attributes() . '>');
 
         foreach ($block['.'] as $name => $child) {
-            $this->block($name);
+            $this->block($name, $vars);
         }
 
         $cTag && print('</' . $cTag . '>');
@@ -96,15 +130,16 @@ class Layout extends ObjectA
 
     protected function getBlockData(array $block, string $class): BlockData
     {
-        $data = $block;
-        unset($data['.']);
+        foreach ($block['.'] as $name => $child) {
+            // Clean deep structure and pass only children of current block
+            unset($block['.'][$name]['.']);
+        }
 
-        return newobj($class, $data);
+        return newobj($class, $block);
     }
 
-    protected function getBlockVars(array $block): array
+    protected function getBlockVars(array $block, array $vars = []): array
     {
-        $vars = [];
         foreach ($this->templating->getTemplateSchema($block['template']) as $name => $type) {
             if (is_a($type, BlockData::class, true)) {
                 $vars[$name] = $this->getBlockData($block, $type);

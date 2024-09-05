@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Magento\Data;
 
 use Lightna\Engine\App\NotFoundException;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\EntityA;
 
 /**
@@ -23,7 +23,7 @@ class Category extends EntityA
     protected string $categoryEntity;
     protected Context $context;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         if (!$data) {
             parent::init($this->getEntityData());

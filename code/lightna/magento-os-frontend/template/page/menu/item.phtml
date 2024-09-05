@@ -16,13 +16,13 @@
         <div class="<?= $cssLevel . '__children-container' ?>">
             <div class="<?= $cssLevel . '__children' ?>">
                 <?php foreach ($item->children as $child) { ?>
-                    <?php template('page/menu/item.phtml', ['item' => $child]) ?>
+                    <?php block('self', ['item' => $child]) ?>
                 <?php } ?>
             </div>
             <?php if ($item->level === 1) { ?>
                 <div class="level-1__show-all">
                     <a href="<?= $item->url() ?>" title="<?= $item->name() ?>">
-                        <i><?= phrase('Show all in ') .   $item->name() ?></i>
+                        <i><?= phrase('Show all in ') . $item->name() ?></i>
                     </a>
                 </div>
             <?php } ?>

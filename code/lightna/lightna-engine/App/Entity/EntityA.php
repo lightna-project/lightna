@@ -7,7 +7,7 @@ namespace Lightna\Engine\App\Entity;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage;
 use Lightna\Engine\App\Storage\StorageInterface;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 
 class EntityA extends ObjectA
 {

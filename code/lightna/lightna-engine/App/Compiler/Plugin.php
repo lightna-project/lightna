@@ -64,12 +64,19 @@ class Plugin extends ObjectA
             foreach ($plugins as $plugin) {
                 $pluginMethods = $this->getClassMethods($plugin, ['ownMethodsOnly' => true, 'publicOnly' => true]);
                 foreach ($pluginMethods as $uname => $method) {
-                    if (!isset($classMethods[$uname])) {
+                    $count = 0;
+                    $origUname = preg_replace('~extended$~i', '', $uname, -1, $count);
+                    if ($count !== 1) {
+                        throw new \Exception("Plugin method $plugin::{$method['name']} name must end with \"Extended\"");
+                    }
+
+                    if (!isset($classMethods[$origUname])) {
                         throw new \Exception("Plugin method $plugin::{$method['name']} has no available method to plugin in $class");
                     }
-                    $methodRef = &$this->methods[$class][$uname];
+
+                    $methodRef = &$this->methods[$class][$origUname];
                     if (!isset($methodRef)) {
-                        $methodRef = $classMethods[$uname];
+                        $methodRef = $classMethods[$origUname];
                         $methodRef['paramsRef'] = preg_replace('~[$]~m', '&$', $methodRef['params']);
                     }
                     $methodRef['plugins'][] = [
@@ -189,13 +196,14 @@ class Plugin extends ObjectA
             }
             $def .= "\n$t$t\$plugins = [";
             foreach ($method['plugins'] as $plugin) {
-                $def .= "\n$t$t{$t}['{$plugin['type']}', " . var_export($plugin['class'], true) . "],";
+                $def .= "\n$t$t{$t}['{$plugin['type']}', \\{$plugin['class']}::class],";
             }
             $def .= "\n$t$t];";
             $params = $method['params'];
             $paramsRef = $method['paramsRef'];
             $paramsAppend = $params ? ', ' . $params : '';
             $paramsRefAppend = $paramsRef ? ', ' . $paramsRef : '';
+            $methodNameExtended = $method['name'] . 'Extended';
             $def .= "\n\n" . <<<PROCEED_CODE
         \$proceed = function () use (&\$plugins, &\$proceed$paramsRefAppend) {
             if (!\$callee = array_shift(\$plugins)) {
@@ -203,9 +211,9 @@ class Plugin extends ObjectA
             } else {
                 \$instance = getobj(\$callee[1]);
                 if (\$callee[0] === 'c') {
-                    {$return}\$instance->{$method['name']}()->bindTo(\$this, __CLASS__)(\$proceed$paramsAppend);
+                    {$return}\$instance->$methodNameExtended()->bindTo(\$this, __CLASS__)(\$proceed$paramsAppend);
                 } else {
-                    {$return}\$instance->{$method['name']}(\$proceed$paramsAppend);
+                    {$return}\$instance->$methodNameExtended(\$proceed$paramsAppend);
                 }
             }
         };

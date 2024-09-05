@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Index\Product;
 
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Project\Database;
+use Lightna\Magento\App\Query\Inventory;
 use Lightna\Magento\App\Query\Product\Eav;
 use Lightna\Magento\App\Query\Product\Gallery;
 use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\Index\Product as ProductIndex;
 
-class BatchDataProvider extends ObjectA
+class Batch extends ObjectA
 {
     protected Database $db;
     protected ProductIndex $productIndex;
@@ -20,14 +21,16 @@ class BatchDataProvider extends ObjectA
     protected Store $store;
     protected Eav $eav;
     protected Gallery $gallery;
+    protected Inventory $inventoryQuery;
 
     /** Batch variables */
-    protected array $parentIds;
+    protected array $ids;
     protected array $children;
-    protected array $childrenIds;
+    protected array $parents;
     protected array $allIds;
     protected array $attributes;
     protected array $prices;
+    protected array $inventory;
     protected array $urls;
     protected array $options;
     protected array $variantValueIds;
@@ -35,62 +38,111 @@ class BatchDataProvider extends ObjectA
     /** Result */
     protected array $data = [];
 
-    public function getData(array $parentIds): array
+    public function getData(array $ids): array
     {
-        $this->parentIds = $parentIds;
-        $this->loadChildrenRelations();
-        $this->allIds = array_unique(merge($this->parentIds, array_values($this->childrenIds)));
+        $this->ids = $this->allIds = $ids;
+        $this->addRelations();
+        $this->loadData();
 
+        $batchSelect = $this->productIndex->getBatchSelect($this->allIds);
+        foreach ($this->db->fetch($batchSelect, 'entity_id') as $id => $product) {
+            if (!$this->isProductIndexable($product)) {
+                $this->unloadProduct($id);
+                continue;
+            }
+
+            $this->collectProductData($product, $id);
+            $this->applyProductData($product, $id);
+        }
+
+        $this->applyData();
+
+        return $this->data;
+    }
+
+    protected function addRelations(): void
+    {
+        $this->loadChildrenRelations();
+        $this->allIds = array_unique(merge($this->allIds, array_keys($this->parents)));
+    }
+
+    protected function loadData(): void
+    {
         $this->loadAttributes();
         $this->loadPrices();
+        $this->loadInventory();
         $this->loadUrls();
         $this->loadOptions();
         $this->loadVariantValueIds();
         $this->loadGallery();
+    }
 
-        $batchSelect = $this->productIndex->getBatchSelect($this->allIds);
-        foreach ($this->db->fetch($batchSelect, 'entity_id') as $id => $product) {
-            if (
-                // Skip products without indexed price
-                !isset($this->prices[$id])
-                // Skip configurable without children
-                || ($product['type_id'] === 'configurable' && !isset($this->children[$id]))
-            ) {
-                continue;
-            }
+    protected function isProductIndexable(array $product): bool
+    {
+        $na =
+            // Skip products without indexed price
+            !isset($this->prices[$product['entity_id']])
+            // Skip configurable without children
+            || ($product['type_id'] === 'configurable' && empty($this->children[$product['entity_id']]));
 
-            $this->applyAttributes($product, $id);
-            $this->applyPrice($product, $id);
-            $this->applyStock($product, $id);
-            $this->applyUrl($product, $id);
-            $this->applyOptions($product, $id);
-            $this->applyGallery($product, $id);
+        return !$na;
+    }
 
-            unset($product['children']);
-            $this->data[$id] = $product;
+    protected function unloadProduct(int|string $id): void
+    {
+        if (isset($this->parents[$id])) {
+            unset($this->children[$this->parents[$id]][$id]);
+            unset($this->parents[$id]);
         }
+    }
 
-        // Clean children from result (considering they are not visible individually)
+    protected function isProductAvailable(array $product): bool
+    {
+        $inventory = $product['inventory'];
+        $na =
+            // Clean children from result (considering they are not visible individually)
+            isset($this->parents[$product['entity_id']])
+            // Skip out of stock products
+            || (!$inventory['status'] && !$inventory['backorders']);
+
+        return !$na;
+    }
+
+    protected function collectProductData(array &$product, int $id): void
+    {
+        $this->collectAttributes($product, $id);
+        $this->collectPrice($product, $id);
+        $this->collectInventory($product, $id);
+        $this->collectUrl($product, $id);
+        $this->collectOptions($product, $id);
+        $this->collectGallery($product, $id);
+    }
+
+    protected function applyProductData($product, $id): void
+    {
+        $this->data[$id] = $product;
+    }
+
+    protected function applyData(): void
+    {
         foreach ($this->data as $id => $product) {
-            if (isset($this->childrenIds[$id])) {
+            if (!$this->isProductAvailable($product)) {
                 unset($this->data[$id]);
             }
         }
-
-        return $this->data;
     }
 
     protected function loadChildrenRelations(): void
     {
         $this->children = [];
-        $this->childrenIds = [];
+        $this->parents = [];
 
         $select = $this->db->select('catalog_product_relation');
-        $select->where->in('parent_id', $this->parentIds);
+        $select->where->in('parent_id', $this->ids);
 
         foreach ($this->db->fetch($select) as $row) {
             $this->children[$row['parent_id']][$row['child_id']] = [];
-            $this->childrenIds[$row['child_id']] = $row['child_id'];
+            $this->parents[$row['child_id']] = $row['parent_id'];
         }
     }
 
@@ -119,6 +171,11 @@ class BatchDataProvider extends ObjectA
             }
             $this->prices[$row['entity_id']][$row['customer_group_id']] = $row['final_price'];
         }
+    }
+
+    protected function loadInventory(): void
+    {
+        $this->inventory = $this->inventoryQuery->getBatch($this->allIds);
     }
 
     protected function loadUrls(): void
@@ -159,7 +216,7 @@ class BatchDataProvider extends ObjectA
         }
     }
 
-    protected function applyAttributes(array &$product, string|int $id): void
+    protected function collectAttributes(array &$product, int $id): void
     {
         $product = merge(
             $product,
@@ -167,12 +224,12 @@ class BatchDataProvider extends ObjectA
         );
     }
 
-    protected function applyPrice(array &$product, string|int $id): void
+    protected function collectPrice(array &$product, int $id): void
     {
         if (!isset($this->children[$id])) {
             $product['price'] = $this->getSimplePriceData($product, $id);
         } else {
-            $this->applyConfigurablePriceData($product, $id);
+            $this->collectConfigurablePriceData($product, $id);
         }
     }
 
@@ -197,13 +254,10 @@ class BatchDataProvider extends ObjectA
         ];
     }
 
-    protected function applyConfigurablePriceData(array &$product, string|int $id): void
+    protected function collectConfigurablePriceData(array &$product, string|int $id): void
     {
         $minPrice = null;
         foreach ($this->children[$id] as $childId => $null) {
-            // Simple products already handled because of batch sorting thus price exists
-            $product['children'][$childId]['price'] = $this->data[$childId]['price'];
-
             if ($minPrice === null || $this->data[$childId]['price']['final_prices'] < $minPrice) {
                 $minPrice = $this->data[$childId]['price'];
             }
@@ -212,36 +266,27 @@ class BatchDataProvider extends ObjectA
         $product['price'] = $minPrice;
     }
 
-    protected function applyStock(array &$product, string|int $id): void
+    protected function collectInventory(array &$product, int $id): void
     {
+        $inventory = ['qty' => 0, 'status' => false, 'backorders' => false];
+
         if (isset($this->children[$id])) {
-            $qty = 0;
-            $inStock = 0;
             foreach ($this->children[$id] as $childId => $null) {
-                $childStock = $this->data[$childId]['stock'];
-                $product['children'][$childId]['stock'] = $childStock;
-
-                $qty += $childStock['qty'];
-                $inStock = $inStock || $childStock['is_in_stock'];
+                $childInventory = $this->data[$childId]['inventory'];
+                $inventory['qty'] += $childInventory['qty'];
+                $inventory['status'] = $inventory['status'] || $childInventory['status'];
+                $inventory['backorders'] = $inventory['backorders'] || $childInventory['backorders'];
             }
-
-            $product['qty'] = $qty;
-            $product['is_in_stock'] = $inStock;
+        } else {
+            $inventory = $this->inventory[$id] ?? $inventory;
+            $inventory['backorders'] = (bool)$product['backorders'];
         }
 
-        // Remove .0000
-        $product['qty'] += 0;
-        settype($product['is_in_stock'], 'bool');
-        settype($product['backorders'], 'bool');
-
-        $this->moveInside(
-            'stock',
-            ['qty', 'is_in_stock', 'backorders'],
-            $product
-        );
+        unset($product['backorders']);
+        $product['inventory'] = $inventory;
     }
 
-    protected function applyUrl(array &$product, string|int $id): void
+    protected function collectUrl(array &$product, int $id): void
     {
         if (!isset($this->urls[$id])) {
             return;
@@ -252,7 +297,7 @@ class BatchDataProvider extends ObjectA
         $product['url'] = $isRelative ? '/' . $url : $url;
     }
 
-    protected function applyOptions(array &$product, string|int $id): void
+    protected function collectOptions(array &$product, int $id): void
     {
         if ($product['type_id'] === 'configurable') {
             $product['options']['attributes'] = $this->options[$id];
@@ -274,7 +319,7 @@ class BatchDataProvider extends ObjectA
         }
     }
 
-    protected function applyGallery(array &$product, string|int $id): void
+    protected function collectGallery(array &$product, int $id): void
     {
         $gallery = [];
         $images = $this->galleryItems[$id] ?? ['/coming-soon.jpg'];
@@ -313,14 +358,5 @@ class BatchDataProvider extends ObjectA
     protected function loadGallery(): void
     {
         $this->galleryItems = $this->gallery->getItems($this->allIds);
-    }
-
-    protected function moveInside(string $toKey, array $fromKeys, array &$subject): void
-    {
-        foreach ($fromKeys as $oldName => $newName) {
-            $oldName = is_string($oldName) ? $oldName : $newName;
-            $subject[$toKey][$newName] = $subject[$oldName];
-            unset($subject[$oldName]);
-        }
     }
 }

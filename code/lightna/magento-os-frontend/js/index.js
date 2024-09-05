@@ -1,4 +1,5 @@
 import { $ } from './lib/utils';
+import { AddToCart } from './common/AddToCart';
 import { ShoppingCart } from './common/ShoppingCart';
 import { Menu } from './common/Menu';
 import { MobileOverlay } from './common/MobileOverlay';
@@ -8,6 +9,7 @@ import { Collapsible } from './common/Collapsible';
 import { Tabs } from './common/Tabs';
 import { Gallery } from './product/Gallery';
 
+new AddToCart();
 new ShoppingCart();
 new Menu();
 new MobileOverlay();

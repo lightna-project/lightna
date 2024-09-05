@@ -1,0 +1,11 @@
+<?php
+/** @var Lightna\Magento\Data\Session $session */
+/** @var Lightna\Magento\Data\Currency $currency */
+
+$cart = $session->cart;
+?>
+<ul class="products-list--minicart">
+    <?php foreach ($cart->items as $id => $item): ?>
+        <?php block('item', compact('id', 'item')) ?>
+    <?php endforeach; ?>
+</ul>

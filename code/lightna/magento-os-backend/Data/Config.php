@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Lightna\Engine\Data\Context;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Data\Config\Currency;
 use Lightna\Magento\Data\Config\Favicon;
@@ -29,7 +29,7 @@ class Config extends DataA
     protected string $configEntity;
     protected Context $context;
 
-    protected function init($data = [])
+    protected function init($data = []): void
     {
         parent::init($this->getEntityData());
     }

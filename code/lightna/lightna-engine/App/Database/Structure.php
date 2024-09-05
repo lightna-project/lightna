@@ -7,8 +7,8 @@ namespace Lightna\Engine\App\Database;
 use Laminas\Db\Metadata\MetadataInterface;
 use Laminas\Db\Metadata\Source\Factory as MetadataFactory;
 use Laminas\Db\Sql\TableIdentifier;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Structure extends ObjectA
 {

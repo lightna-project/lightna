@@ -9,7 +9,7 @@ use Lightna\Engine\App\ObjectA;
 
 class Layout extends ObjectA
 {
-    public function renderPage(Closure $proceed): void
+    public function renderPageExtended(Closure $proceed): void
     {
         $proceed();
         template('server-time.phtml');

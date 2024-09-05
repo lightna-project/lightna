@@ -5,19 +5,25 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Plugin\App;
 
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Database;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
 
 class Scope extends ObjectA
 {
     protected Database $db;
+    protected array $list;
 
-    public function getList(): array
+    protected function defineList(): void
     {
-        return $this->db->fetchCol($this->getSelect());
+        $this->list = $this->db->fetchCol($this->getListSelect());
     }
 
-    protected function getSelect(): Select
+    public function getListExtended(): array
+    {
+        return $this->list;
+    }
+
+    protected function getListSelect(): Select
     {
         return $this->db
             ->select('store')
