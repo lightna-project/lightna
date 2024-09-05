@@ -123,7 +123,7 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function get(string $key): string|array
     {
-        $result = $this->client->get($key);
+        $result = $this->client->hGet($key, self::FIELD_VALUE);
 
         return is_array($result) ? $result : (string)$result;
     }
