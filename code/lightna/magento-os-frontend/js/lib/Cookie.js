@@ -19,6 +19,8 @@ export class Cookie {
             expires = `; expires=${date.toUTCString()}`;
         }
 
-        document.cookie = name + '=' + (value || '') + expires + '; path=/; SameSite=Lax';
+        document.cookie = name + '=' + (value || '') + expires
+            + '; domain=' + window.location.hostname
+            + '; path=/; SameSite=Lax';
     }
 }

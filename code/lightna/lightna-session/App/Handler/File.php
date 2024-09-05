@@ -57,6 +57,7 @@ class File extends ObjectA implements HandlerInterface
             [
                 'expires' => $lt > 0 ? time() + $lt : 0,
                 'path' => '/',
+                'domain' => $_SERVER['HTTP_HOST'],
                 'secure' => $this->options['cookie']['secure'],
                 'httponly' => true,
                 'samesite' => 'Lax',
