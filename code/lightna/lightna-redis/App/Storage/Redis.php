@@ -92,17 +92,30 @@ class Redis extends ObjectA implements StorageInterface
         // Retrieve all tags associated with the key
         $tags = $this->getTagsForKey($key);
 
-        // Remove the key from Redis
-        $this->client->del($key);
+        // Start a transaction
+        $this->client->multi();
 
-        // Iterate over each tag and remove the key from the tag set
-        foreach ($tags as $tag) {
-            $this->client->sRem($tag, $key);
+        try {
+            // Remove the key from Redis
+            $this->client->del($key);
 
-            // Check if the tag set is now empty and remove it if it is
-            if ($this->client->sCard($tag) == 0) {
-                $this->client->del($tag);
+            // Iterate over each tag and remove the key from the tag set
+            foreach ($tags as $tag) {
+                $this->client->sRem($tag, $key);
+
+                // Check if the tag set is now empty and remove it if it is
+                if ($this->client->sCard($tag) == 0) {
+                    $this->client->del($tag);
+                }
             }
+
+            // Execute the transaction
+            $this->client->exec();
+        } catch (\RedisException $e) {
+            // Rollback the transaction
+            $this->client->discard();
+
+            throw $e;
         }
     }
 
@@ -133,7 +146,10 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function getList(array $keys): array
     {
-        $result = $this->client->mGet($keys);
+        $result = [];
+        foreach ($keys as $key) {
+            $result[] = $this->get($key);
+        }
 
         $return = [];
         foreach (array_values($keys) as $i => $key) {
