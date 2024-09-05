@@ -1,3 +1,9 @@
 router.bypass.rules.url_starts_with:
   - checkout/
-  - customer/section/load/
+  - customer/
+  - sales/
+  - wishlist/
+  - downloadable/customer/products/
+  - newsletter/manage/
+  - vault/cards/listaction/
+  - review/customer/

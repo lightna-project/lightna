@@ -3,8 +3,10 @@
 $cart = $session->cart;
 ?>
 <div class="cjs-minicart">
-    <div class="icon cart cursor-pointer" data-action="open-minicart">
-        <div class="counter"><?= $cart->qty() ?></div>
+    <div class="header__icon" data-action="open-minicart">
+        <div class="icon cart">
+            <div class="counter"><?= $cart->qty() ?></div>
+        </div>
     </div>
     <?php block('content') ?>
 </div>

@@ -1,0 +1,15 @@
+<?php
+/** @var Lightna\Magento\Data\Session $session */
+$isLoggedIn = $session->user->groupId !== 0;
+$iconClass = $isLoggedIn ? 'user__filled' : 'user__outline';
+?>
+<div class="icon-dropdown dropdown">
+    <div class="header__icon header__icon--hover">
+        <a href="/customer/account" class="icon <?= $iconClass ?>"></a>
+    </div>
+    <?php if ($isLoggedIn): ?>
+        <?php block('customer') ?>
+    <?php else: ?>
+        <?php block('guest') ?>
+    <?php endif; ?>
+</div>

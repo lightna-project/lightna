@@ -70,6 +70,7 @@ export class Menu {
     itemWithChildrenClick(item, event) {
         if (window.innerWidth < this.mobileBreakpoint) {
             this.toggleMobileSubmenu(item);
+            event.preventDefault();
             return;
         }
 

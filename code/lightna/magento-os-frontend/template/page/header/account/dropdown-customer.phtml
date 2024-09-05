@@ -1,0 +1,14 @@
+<?php
+/** @var Lightna\Engine\Data\Block $block */
+?>
+<div class="dropdown__wrap">
+    <ul class="dropdown__content dropdown__content--account">
+        <?php foreach ($block->links as $link): ?>
+            <li>
+                <a href="<?= $link->url() ?>" title="<?= phrase($link->label) ?>">
+                    <?= phrase($link->label) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
