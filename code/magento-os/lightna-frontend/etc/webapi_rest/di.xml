@@ -1,9 +1,6 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\App\FrontController">
-        <plugin name="lightna_response" type="Lightna\Frontend\Plugin\Response"/>
-    </type>
     <type name="Magento\Checkout\Model\Session">
         <plugin name="lightna_checkout_session" type="Lightna\Frontend\Plugin\CheckoutSession"/>
     </type>
