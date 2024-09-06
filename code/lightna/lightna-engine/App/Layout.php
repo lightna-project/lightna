@@ -28,8 +28,8 @@ class Layout extends ObjectA
         $this->load();
         $this->isMainCurrent = true;
 
-        if ($block = $this->request->block) {
-            $this->renderSingleBlock($block);
+        if ($blockId = $this->request->blockId) {
+            $this->renderSingleBlock($blockId);
         } else {
             $this->renderPage();
         }
@@ -169,20 +169,24 @@ class Layout extends ObjectA
         return $vars;
     }
 
-    protected function renderSingleBlock(string $blockName): void
+    protected function renderSingleBlock(string $blockId): void
     {
-        list($child, $parent) = $this->parseBlockName($blockName);
+        if (!$blockPath = $this->layout['blockById'][$blockId] ?? null) {
+            throw new Exception('Block id "' . $blockId . '" not found');
+        }
+
+        list($child, $parent) = $this->parseBlockPath($blockPath);
         if (!$node = array_path_get($this->layout, $parent)) {
-            throw new Exception('Block "' . $blockName . '" not found');
+            throw new Exception('Block id "' . $blockId . '" not found');
         }
 
         $this->current[] = $node;
         $this->block($child);
     }
 
-    protected function parseBlockName(string $block): array
+    protected function parseBlockPath(string $path): array
     {
-        $path = explode('.', $block);
+        $path = explode('/', $path);
         $child = array_pop($path);
         $parent = implode('/./', $path);
 

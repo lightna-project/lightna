@@ -3,7 +3,7 @@ import { UserInput } from '../lib/UserInput';
 
 export class ProductOptions {
     cjs = '.cjs-product-options';
-    block = '.body.main.content.main.cta.add-to-cart.options';
+    blockId = 'product-options';
 
     constructor() {
         this.init();
@@ -29,7 +29,7 @@ export class ProductOptions {
 
     async optionClick(element, option) {
         $('#option_' + option.attributeCode).value = option.id;
-        this.component.outerHTML = await getBlockHtml(this.block, UserInput.collect(this.component));
+        this.component.outerHTML = await getBlockHtml(this.blockId, UserInput.collect(this.component));
 
         this.init();
     }

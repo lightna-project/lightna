@@ -2,7 +2,7 @@ import request from '../lib/HttpClient';
 import { $, $$, getBlockHtml } from '../lib/utils';
 
 export class ShoppingCart {
-    minicartBlockPath = '.body.header.minicart';
+    blockId = 'minicart';
     removeFromCartUrl = '/checkout/sidebar/removeItem';
     minActionDuration = 200;
     classes = {
@@ -38,7 +38,7 @@ export class ShoppingCart {
     }
 
     async update() {
-        const minicartHtml = await getBlockHtml(this.minicartBlockPath);
+        const minicartHtml = await getBlockHtml(this.blockId);
         this.redraw(minicartHtml);
         this.open();
     }

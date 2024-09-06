@@ -63,6 +63,7 @@ extends:
                 - flex-wrap
                 - gap-4
             .options:
+              id: product-options
               template: product/options.phtml
               attributes:
                 class:
