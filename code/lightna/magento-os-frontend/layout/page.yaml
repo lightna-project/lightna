@@ -26,6 +26,7 @@ template: page.phtml
     .logo:
       template: page/header/logo.phtml
     .minicart:
+      id: minicart
       template: page/header/minicart.phtml
       .content:
         template: page/header/minicart/content.phtml
