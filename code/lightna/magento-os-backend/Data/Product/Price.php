@@ -25,11 +25,12 @@ class Price extends DataA
     protected function init($data = []): void
     {
         $group = $this->session->user->groupId;
+        $priceGroup = isset($data['finalPrices'][$group]) ? $group : 0;
 
         $data = array_merge($data, [
-            'final' => $data['finalPrices'][$group],
-            'discount' => $data['discounts'][$group],
-            'discountPercent' => $data['discountPercents'][$group],
+            'final' => $data['finalPrices'][$priceGroup],
+            'discount' => $data['discounts'][$priceGroup],
+            'discountPercent' => $data['discountPercents'][$priceGroup],
         ]);
 
         parent::init($data);
