@@ -1,8 +1,11 @@
 directives:
-  - position .body.server-time first
+  - position .body.server-time-container first
+  - position .body.server-time last
 .head:
   .ga:
     template: ga.phtml
 .body:
-  .server-time:
+  .server-time-container:
     template: server-time-container.phtml
+  .server-time:
+    template: server-time.phtml

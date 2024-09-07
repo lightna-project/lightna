@@ -25,7 +25,7 @@ class Options extends DataA
     {
         $this->selected = [];
         foreach ($this->attributes as $attribute) {
-            $this->selected[$attribute->code] = $this->request->super_attribute[$attribute->id] ?? false;
+            $this->selected[$attribute->code] = $this->request->param->super_attribute[$attribute->id] ?? false;
         }
     }
 

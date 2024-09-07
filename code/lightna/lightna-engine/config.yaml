@@ -26,6 +26,8 @@ router:
 entity:
   route:
   config:
+  no-route:
+    layout: no-route
 cli:
   command:
     deploy:asset:sign: Lightna\Engine\App\Console\Deploy\AssetSign

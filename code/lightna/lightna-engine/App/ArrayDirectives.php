@@ -127,7 +127,7 @@ class ArrayDirectives implements ObjectManagerIgnore
         $path = new ArrayPath($pathS);
         $value = null;
         if ($mode === 'value') {
-            if (!is_array(array_path_get($data, $path->parent)[$path->key])) {
+            if (!is_array(array_path_get($data, $path->path))) {
                 throw new Exception($topic . ': specified path "' . $path->path . '" isn\'t array' . $context);
             }
             $value = array_shift($params);
@@ -161,14 +161,14 @@ class ArrayDirectives implements ObjectManagerIgnore
 
     protected static function makeDeleteValue(array &$data, ArrayPath $path, string $value): void
     {
-        $parent = array_path_get($data, $path->parent);
-        foreach ($parent[$path->key] as $k => $v) {
-            if ($v === $value) {
-                unset($parent[$path->key][$k]);
+        $node = array_path_get($data, $path->path);
+        foreach ($node as $k => $v) {
+            if ($v == $value) {
+                unset($node[$k]);
             }
         }
 
-        array_path_set($data, $path->parent, $parent);
+        array_path_set($data, $path->path, $node);
     }
 
     protected static function applyMove(array &$data, array $params = []): void

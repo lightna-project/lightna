@@ -76,7 +76,12 @@ class App extends ObjectA
 
     protected function renderNoRoute(): void
     {
-        template('no-route.phtml');
+        $this->action = [
+            'name' => 'page',
+            'params' => ['type' => 'no-route'],
+        ];
+
+        $this->runAction();
     }
 
     protected function renderError500(Throwable $e): void
