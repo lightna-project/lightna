@@ -5,7 +5,9 @@ $cart = $session->cart;
 <div class="cjs-minicart">
     <div class="header__icon" data-action="open-minicart">
         <div class="icon cart">
-            <div class="counter"><?= $cart->qty() ?></div>
+            <?php if ($cart->qty() > 0) { ?>
+                <div class="counter"><?= $cart->qty() ?></div>
+            <?php } ?>
         </div>
     </div>
     <?php block('content') ?>
