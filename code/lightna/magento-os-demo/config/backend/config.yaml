@@ -1,3 +1,0 @@
-plugin:
-  Lightna\Engine\App\Layout:
-    - Lightna\Magento\Demo\Plugin\App\Layout

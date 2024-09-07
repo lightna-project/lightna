@@ -28,7 +28,7 @@ class Layout extends ObjectA
         $this->load();
         $this->isMainCurrent = true;
 
-        if ($blockId = $this->request->blockId) {
+        if ($blockId = $this->request->param->blockId) {
             $this->renderSingleBlock($blockId);
         } else {
             $this->renderPage();

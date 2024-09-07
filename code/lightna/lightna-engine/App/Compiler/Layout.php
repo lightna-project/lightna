@@ -157,7 +157,12 @@ class Layout extends ObjectA
         if (preg_match('~\w+/\w+/[.]$~', $path)) {
             throw new Exception('Unexpected "." node in "' . ltrim($path, '/') . '"');
         }
+
         $aligned = [];
+        if ($path === '' && !isset($aligned['.'])) {
+            $aligned['.'] = [];
+        }
+
         foreach ($layout as $key => $value) {
             if (is_array($value)) {
                 $aligned[$key] = $this->alignValues($value, $key === '.', $path . '/' . $key);
