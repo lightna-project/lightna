@@ -54,33 +54,55 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function set(string $key, mixed $value, array $tags = []): void
     {
-        // Start a transaction
-        $this->client->multi();
+        $this->startTransaction();
 
         try {
-            $result = $this->client->hSet($key, self::FIELD_VALUE, $value);
-            if (!$result) {
-                throw new \RedisException("Could not set value for key: $key");
-            }
+            $this->setKeyValue($key, $value);
+            $this->createTags($key, $tags);
 
-            $result = $this->client->hSet($key, self::FIELD_TAGS, json_encode($tags));
-            if (!$result) {
-                throw new \RedisException("Could not set tag for key: $key");
-            }
-
-            // Store the tags associated with the key
-            foreach ($tags as $tag) {
-                // Add the key to a set that represents the tags
-                $this->client->sAdd($tag, $key);
-            }
-
-            // Execute the transaction
-            $this->client->exec();
+            $this->commitTransaction();
         } catch (\RedisException $e) {
-            // Rollback the transaction
-            $this->client->discard();
+            $this->rollbackTransaction();
 
             throw $e;
+        }
+    }
+
+    /**
+     * Set key value.
+     *
+     * @param string $key
+     * @param mixed $value
+     *
+     * @throws \RedisException
+     */
+    public function setKeyValue(string $key, mixed $value): void
+    {
+        $result = $this->client->hSet($key, self::FIELD_VALUE, $value);
+        if (!$result) {
+            throw new \RedisException("Could not set value for key: $key");
+        }
+    }
+
+    /**
+     * Create tags for a key
+     *
+     * @param string $key
+     * @param array $tags
+     *
+     * @throws \RedisException
+     */
+    private function createTags(string $key, array $tags): void
+    {
+        $result = $this->client->hSet($key, self::FIELD_TAGS, json_encode($tags));
+        if (!$result) {
+            throw new \RedisException("Could not set tag for key: $key");
+        }
+
+        // Store the tags associated with the key
+        foreach ($tags as $tag) {
+            // Add the key to a set that represents the tags
+            $this->client->sAdd($tag, $key);
         }
     }
 
@@ -89,46 +111,18 @@ class Redis extends ObjectA implements StorageInterface
      */
     public function unset(string $key): void
     {
-        // Retrieve all tags associated with the key
-        $tags = $this->getTagsForKey($key);
-
-        // Start a transaction
-        $this->client->multi();
+        $this->startTransaction();
 
         try {
-            // Remove the key from Redis
             $this->client->del($key);
+            $this->cleanTags($key);
 
-            // Iterate over each tag and remove the key from the tag set
-            foreach ($tags as $tag) {
-                $this->client->sRem($tag, $key);
-
-                // Check if the tag set is now empty and remove it if it is
-                if ($this->client->sCard($tag) == 0) {
-                    $this->client->del($tag);
-                }
-            }
-
-            // Execute the transaction
-            $this->client->exec();
+            $this->commitTransaction();
         } catch (\RedisException $e) {
-            // Rollback the transaction
-            $this->client->discard();
+            $this->rollbackTransaction();
 
             throw $e;
         }
-    }
-
-    // Method to retrieve tags for a key
-
-    /**
-     * @throws \RedisException
-     */
-    private function getTagsForKey($key): array
-    {
-        $tags = $this->client->hGet($key, self::FIELD_TAGS);
-
-        return $tags ? json_decode($tags) : [];
     }
 
     /**
@@ -165,29 +159,91 @@ class Redis extends ObjectA implements StorageInterface
     public function clean(array $tags): void
     {
         foreach ($tags as $tag) {
-            // Get all keys associated with the tag
-            $keys = $this->client->sMembers($tag);
-
-            // Start a transaction
-            $this->client->multi();
-
-            try {
-                // Delete each key
-                foreach ($keys as $key) {
-                    $this->unset($key);
-                }
-
-                // Delete the tag set
-                $this->client->del($tag);
-
-                // Execute the transaction
-                $this->client->exec();
-            } catch (\RedisException $e) {
-                // Rollback the transaction
-                $this->client->discard();
-
-                throw $e;
+            foreach ($this->getKeysForTag($tag) as $key) {
+                $this->unset($key);
             }
         }
+    }
+
+    /**
+     * Start transaction
+     *
+     * @throws \RedisException
+     */
+    public function startTransaction(): void
+    {
+        $this->client->multi();
+    }
+
+    /**
+     * Commit transaction
+     *
+     * @throws \RedisException
+     */
+    public function commitTransaction(): void
+    {
+        $this->client->exec();
+    }
+
+    /**
+     * Rollback transaction
+     *
+     * @throws \RedisException
+     */
+    public function rollbackTransaction(): void
+    {
+        $this->client->discard();
+    }
+
+    /**
+     * Clean tags
+     *
+     * @param string $key
+     *
+     * @throws \RedisException
+     */
+    public function cleanTags(string $key): void
+    {
+        // Retrieve all tags associated with the key
+        $tags = $this->getTagsForKey($key);
+
+        // Iterate over each tag and remove the key from the tag set
+        foreach ($tags as $tag) {
+            $this->client->sRem($tag, $key);
+
+            // Check if the tag set is now empty and remove it if it is
+            if ($this->client->sCard($tag) == 0) {
+                $this->client->del($tag);
+            }
+        }
+    }
+
+    /**
+     * Get tags for a key
+     *
+     * @param string $key
+     *
+     * @return array
+     * @throws \RedisException
+     */
+    private function getTagsForKey(string $key): array
+    {
+        $tags = $this->client->hGet($key, self::FIELD_TAGS);
+
+        return $tags ? json_decode($tags) : [];
+    }
+
+    /**
+     * Get keys for a tag
+     *
+     * @param string $tag
+     *
+     * @return array
+     * @throws \RedisException
+     */
+    public function getKeysForTag(string $tag): array
+    {
+        // Get all keys associated with the tag
+        return $this->client->sMembers($tag);
     }
 }
