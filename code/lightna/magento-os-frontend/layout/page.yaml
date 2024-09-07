@@ -22,46 +22,58 @@ template: page.phtml
   .usp:
     template: page/usp.phtml
   .header:
-    template: page/header.phtml
-    .logo:
-      template: page/header/logo.phtml
-    .minicart:
-      id: minicart
-      template: page/header/minicart.phtml
-      .content:
-        template: page/header/minicart/content.phtml
-        .empty:
-          template: page/header/minicart/empty.phtml
-        .products:
-          template: page/header/minicart/products-list.phtml
-          .item:
-            container: li
-            attributes:
-              class:
-                - products-list__item
-            .image:
-              template: page/header/minicart/product-item/image.phtml
-            .info:
-              container: div
-              attributes:
-                class:
-                  - products-list__item__info
-              .name:
-                template: page/header/minicart/product-item/name.phtml
-              .sku:
-                template: page/header/minicart/product-item/sku.phtml
-              .quantity:
-                template: page/header/minicart/product-item/quantity.phtml
-              .price:
-                template: page/header/minicart/product-item/price.phtml
-            .remove:
-              template: page/header/minicart/product-item/remove.phtml
-        .footer:
-          template: page/header/minicart/footer.phtml
-    .menu:
-      template: page/menu.phtml
-      .item:
-        template: page/menu/item.phtml
+    container: header
+    .inner:
+      container: div
+      attributes:
+        class:
+          - header__container
+      .mobile-menu-toggle:
+        template: page/header/mobile-menu-toggle.phtml
+      .logo:
+        template: page/header/logo.phtml
+      .menu:
+        template: page/menu.phtml
+        .item:
+          template: page/menu/item.phtml
+      .header-right:
+        container: div
+        attributes:
+          class:
+            - header__right
+        .minicart:
+          id: minicart
+          template: page/header/minicart.phtml
+          .content:
+            template: page/header/minicart/content.phtml
+            .empty:
+              template: page/header/minicart/empty.phtml
+            .products:
+              template: page/header/minicart/products-list.phtml
+              .item:
+                container: li
+                attributes:
+                  class:
+                    - products-list__item
+                .image:
+                  template: page/header/minicart/product-item/image.phtml
+                .info:
+                  container: div
+                  attributes:
+                    class:
+                      - products-list__item__info
+                  .name:
+                    template: page/header/minicart/product-item/name.phtml
+                  .sku:
+                    template: page/header/minicart/product-item/sku.phtml
+                  .quantity:
+                    template: page/header/minicart/product-item/quantity.phtml
+                  .price:
+                    template: page/header/minicart/product-item/price.phtml
+                .remove:
+                  template: page/header/minicart/product-item/remove.phtml
+            .footer:
+              template: page/header/minicart/footer.phtml
   .main:
     container: div
     attributes:
