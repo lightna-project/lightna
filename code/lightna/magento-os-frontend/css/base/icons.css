@@ -66,6 +66,16 @@
             center / contain no-repeat;
     }
 
+    .user__outline {
+        background: url('../../magento-os-frontend/image/icon/user.svg')
+            center / contain no-repeat;
+    }
+
+    .user__filled {
+        background: url('../../magento-os-frontend/image/icon/user-filled.svg')
+            center / contain no-repeat;
+    }
+
     .counter {
         @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main text-xs font-normal text-white;
     }

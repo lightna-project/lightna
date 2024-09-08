@@ -4,7 +4,7 @@
     }
 
     .header__container {
-        @apply page-container flex flex-wrap items-center justify-between gap-3 py-4 md:grid md:grid-cols-5 md:flex-nowrap md:py-0;
+        @apply page-container grid grid-cols-3 items-center gap-3 py-4 md:grid md:grid-cols-5 md:py-0;
     }
 
     .header__open-menu {
@@ -12,7 +12,21 @@
     }
 
     .header__right {
-        @apply flex items-center justify-end;
+        @apply flex items-center justify-end gap-5;
+    }
+
+    .header__icon {
+        @apply flex flex-col items-center gap-1 cursor-pointer;
+    }
+
+    .header__icon--hover {
+        @apply md:pointer-events-none;
+    }
+
+    @media (hover: hover) {
+        .header__icon--hover {
+            @apply md:pointer-events-auto;
+        }
     }
 
     .logo__container {

@@ -1,0 +1,46 @@
+@layer components {
+    .dropdown {
+        @apply relative;
+    }
+
+    .dropdown:hover .dropdown__wrap {
+        @apply max-h-[300px];
+    }
+
+    .dropdown__wrap {
+        @apply hidden md:block overflow-hidden max-h-0 absolute top-[calc(100%+10px)] transition-[max-height] duration-300 ease-in-out z-10 -right-4;
+    }
+
+    .dropdown__content {
+        @apply bg-white border rounded-sm p-4 mt-3 w-[225px];
+    }
+
+    .dropdown__content:before {
+        content: '';
+        @apply block w-4 h-4 border-t border-r bg-white absolute top-1 right-5 -rotate-45;
+    }
+
+    .dropdown__content--account li {
+        @apply mb-2;
+    }
+
+    .dropdown__content--account li:last-child {
+        @apply mb-0 mt-4 pt-2 border-t;
+    }
+
+    .dropdown__content--guest {
+        @apply w-[300px];
+    }
+
+    .dropdown__content--guest p {
+        @apply text-center mb-5;
+    }
+
+    .dropdown__buttons {
+        @apply grid grid-cols-2 gap-3;
+    }
+
+    .dropdown__buttons .btn {
+        @apply mb-0;
+    }
+}

@@ -41,6 +41,25 @@ template: page.phtml
         attributes:
           class:
             - header__right
+        .account:
+          template: page/header/account.phtml
+          .guest:
+            template: page/header/account/dropdown-guest.phtml
+          .customer:
+            template: page/header/account/dropdown-customer.phtml
+            links:
+              overview:
+                url: /customer/account
+                label: My Account
+              orders:
+                url: /sales/order/history
+                label: My Orders
+              wishlist:
+                url: /wishlist
+                label: My Wishlist
+              logout:
+                url: /customer/account/logout
+                label: Logout
         .minicart:
           id: minicart
           template: page/header/minicart.phtml
