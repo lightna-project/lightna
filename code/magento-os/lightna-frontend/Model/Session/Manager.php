@@ -41,7 +41,7 @@ class Manager
         $this->updateSectionData(
             'user',
             [
-                'groupId' => (int)$this->customerSession->getCustomerId(),
+                'groupId' => (int)$this->customerSession->getCustomerGroupId(),
             ],
         );
     }
