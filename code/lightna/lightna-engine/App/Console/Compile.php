@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console;
 
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Compiler\Asset as AssetCompiler;
 use Lightna\Engine\App\Compiler\ClassMap as ClassMapCompiler;
 use Lightna\Engine\App\Compiler\Config as ConfigCompiler;
-use Lightna\Engine\App\Compiler\Font as FontCompiler;
-use Lightna\Engine\App\Compiler\Image as ImageCompiler;
 use Lightna\Engine\App\Compiler\Layout as LayoutCompiler;
 use Lightna\Engine\App\Compiler\ObjectSchema as ObjectSchemaCompiler;
 use Lightna\Engine\App\Compiler\Plugin as PluginCompiler;
@@ -70,12 +69,8 @@ class Compile extends CompileA
                 'compiler' => getobj(LayoutCompiler::class),
             ],
             [
-                'message' => 'make images',
-                'compiler' => getobj(ImageCompiler::class),
-            ],
-            [
-                'message' => 'make fonts',
-                'compiler' => getobj(FontCompiler::class),
+                'message' => 'make assets',
+                'compiler' => getobj(AssetCompiler::class),
             ],
         ]);
     }
