@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-class Font extends CompilerA
+class Asset extends CompilerA
 {
     /** @AppConfig(asset_dir) */
     protected string $dir;
@@ -20,10 +20,10 @@ class Font extends CompilerA
     public function make(): void
     {
         $this->walkFilesInModules(
-            'font',
+            'asset',
             [],
             function ($subPath, $file, $moduleName) {
-                file_copy($file, $this->dir . $moduleName . '/font/' . $subPath);
+                file_copy($file, $this->dir . $moduleName . '/' . $subPath);
             }
         );
     }
