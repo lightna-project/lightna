@@ -7,14 +7,12 @@ namespace Lightna\Session\App\Handler;
 use Exception;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
-use Lightna\Engine\Data\Request;
 use Throwable;
 
 class File extends ObjectA implements HandlerInterface
 {
     protected array $options;
     protected Context $context;
-    protected Request $request;
 
     protected function init(array $options): void
     {
@@ -52,35 +50,11 @@ class File extends ObjectA implements HandlerInterface
             return;
         }
 
-        $lt = $this->options['cookie']['lifetime'];
-        setcookie(
-            $cName,
-            $_COOKIE[$cName],
-            [
-                'expires' => $lt > 0 ? time() + $lt : 0,
-                'path' => '/',
-                'domain' => $_SERVER['HTTP_HOST'],
-                'secure' => $this->getIsCookieSecure(),
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ],
-        );
-
         @touch($this->getFilename($_COOKIE[$cName]));
     }
 
     protected function getFilename(string $id): string
     {
         return $this->options['path'] . '/' . $this->options['prefix'] . $id;
-    }
-
-    protected function getIsCookieSecure(): bool
-    {
-        $secure = $this->request->isSecure;
-        if (!$secure && !IS_DEV_MODE) {
-            throw new Exception('Can\'t set unsecure session cookie');
-        }
-
-        return $secure;
     }
 }

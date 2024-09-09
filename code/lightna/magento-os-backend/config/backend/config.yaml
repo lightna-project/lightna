@@ -5,3 +5,5 @@ plugin:
     - Lightna\Magento\App\Plugin\App\Scope
   Lightna\Engine\App\Index\Changelog\Handler:
     - Lightna\Magento\App\Plugin\App\Index\Changelog\Handler
+  Lightna\Session\App\Session\Cookie:
+    - Lightna\Magento\App\Plugin\App\Session\Cookie

@@ -8,6 +8,6 @@ use Lightna\Engine\Data\DataA;
 
 class Entity extends DataA
 {
-    public string $type;
+    public string $type = 'page';
     public string|int|null $id;
 }
