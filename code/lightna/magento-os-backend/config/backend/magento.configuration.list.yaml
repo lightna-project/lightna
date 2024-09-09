@@ -12,3 +12,4 @@ magento.configuration.list:
   currency/default: currency/options/default
   ga/active: google/analytics/active
   ga/account: google/analytics/account
+  session/cookie/lifetime: web/cookie/cookie_lifetime
