@@ -6,7 +6,7 @@ namespace Lightna\AmastyLabel\Plugin\Index\Product;
 
 use Closure;
 use Lightna\AmastyLabel\App\Query\Label;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Engine\App\ObjectA;
 
 class Batch extends ObjectA

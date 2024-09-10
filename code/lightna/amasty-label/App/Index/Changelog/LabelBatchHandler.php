@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\AmastyLabel\App\Index\Changelog;
 
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
 
 class LabelBatchHandler extends BatchHandlerAbstract

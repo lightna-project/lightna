@@ -6,7 +6,7 @@ namespace Lightna\AmastyLabel\App\Query;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Context;
-use Lightna\Engine\App\Database;
+use Lightna\Engine\App\Project\Database;
 use Lightna\Engine\App\ObjectA;
 
 class Label extends ObjectA
