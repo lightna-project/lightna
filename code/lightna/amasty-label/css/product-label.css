@@ -1,0 +1,9 @@
+@layer components {
+    .product-item__top {
+        @apply relative;
+    }
+
+    .product-label {
+        @apply absolute top-0 right-0 z-20;
+    }
+}
