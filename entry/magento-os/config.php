@@ -14,8 +14,10 @@ return [
         'Lightna\Redis' => '../../code/lightna/lightna-redis',
         'Lightna\Session' => '../../code/lightna/lightna-session',
         'Lightna\Elasticsearch' => '../../code/lightna/lightna-elasticsearch',
+        'Lightna\Tailwind' => '../../code/lightna/lightna-tailwind',
         'Lightna\Magento' => '../../code/lightna/magento-os-backend',
         'Lightna\Magento\Frontend' => '../../code/lightna/magento-os-frontend',
+        'Lightna\Magento\Frontend\Semi' => '../../code/lightna/magento-os-frontend-semi',
         'Lightna\Magento\Demo' => '../../code/lightna/magento-os-demo',
     ],
     'libs' => [
@@ -23,9 +25,9 @@ return [
         'Laminas\Stdlib' => 'vendor/laminas/laminas-stdlib/src',
     ],
     'compiler' => [
-        'dir' => '../../opcache/magento-os/compiled',
+        'dir' => '../../generated/magento-os/compiled',
     ],
     'opcache' => [
-        'dir' => '../../opcache/magento-os/storage',
+        'dir' => '../../generated/magento-os/storage',
     ]
 ];

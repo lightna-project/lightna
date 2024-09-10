@@ -16,13 +16,17 @@ class CompilerA extends ObjectA
     /** @AppConfig(modules) */
     protected ?array $modules;
 
+    protected function getModules(): array
+    {
+        return merge(['Lightna\Engine' => LIGHTNA_SRC], $this->modules ?? []);
+    }
+
     protected function walkFilesInModules(string $subDir, array $fileExtensions, Closure $callback): void
     {
-        $folders = merge(['Lightna\Engine' => LIGHTNA_SRC], $this->modules ?? []);
         $subDir = $subDir . '/';
         $root = realpath(LIGHTNA_ENTRY) . '/';
 
-        foreach ($folders as $ns => $folder) {
+        foreach ($this->getModules() as $folder) {
             $folder = rtrim(($folder[0] !== '/' ? LIGHTNA_ENTRY . $folder : $folder), '/') . '/';
 
             if (!is_dir($folder . $subDir)) {
