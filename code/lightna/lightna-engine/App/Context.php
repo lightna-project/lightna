@@ -11,6 +11,7 @@ class Context extends DataA
 {
     public int $scope;
     public Entity $entity;
+    public string $mode = '';
 
     protected function init(array $data = []): void
     {

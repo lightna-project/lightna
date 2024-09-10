@@ -1,9 +1,12 @@
 const path = require('path');
 
 const config = {
-    entry: '../../code/lightna/magento-os-frontend/js/index.js',
+    entry: {
+        common: '../../code/lightna/magento-os-frontend/js/index.js',
+        semi: '../../code/lightna/magento-os-frontend/js/index-semi.js',
+    },
     output: {
-        filename: 'common.js',
+        filename: '[name].js',
         path: path.resolve(__dirname, '../../project/magento-os/pub/static/lightna/compiled/js'),
     },
     mode: 'production'

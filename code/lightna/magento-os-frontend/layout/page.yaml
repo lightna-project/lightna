@@ -14,7 +14,7 @@ template: page.phtml
     .font:
       template: page/head/link/font.phtml
     .stylesheet:
-      template: page/head/link/style-common.phtml
+      template: page/head/link/style/common.phtml
   .script:
     template: page/head/js/common.phtml
   .context:

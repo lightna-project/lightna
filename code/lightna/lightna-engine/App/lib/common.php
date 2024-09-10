@@ -136,6 +136,11 @@ function json(mixed $var): string
     return json_encode($var, JSON_UNESCAPED_UNICODE);
 }
 
+function json_pretty(mixed $var): string
+{
+    return json_encode($var, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+}
+
 function phrase(string $phrase): string
 {
     return escape(_phrase($phrase));

@@ -2,6 +2,7 @@
     "name": "lightna-magento-frontend",
     "private": true,
     "devDependencies": {
+        "deepmerge": "^4.3.1",
         "postcss-import": "^16.1.0",
         "prettier": "^3.3.3",
         "prettier-plugin-tailwindcss": "^0.6.5",
@@ -10,10 +11,12 @@
         "webpack-cli": "^5.1.4"
     },
     "scripts": {
-        "buildjs": "webpack",
-        "buildcss": "npx tailwindcss -i ../../code/lightna/magento-os-frontend/css/common.css -o ../../project/magento-os/pub/static/lightna/compiled/style/common.css",
-        "build": "webpack && npm run buildcss -- --minify && ./cli deploy:asset:sign",
-        "watchjs": "webpack --mode=development",
-        "watchcss": "npm run buildcss -- --watch --verbose"
+        "build-js": "webpack",
+        "build-css": "npm run build-common-css && npm run build-semi-css",
+        "build-common-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/common.css -o ../../project/magento-os/pub/static/lightna/compiled/style/common.css",
+        "build-semi-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/semi.css -o ../../project/magento-os/pub/static/lightna/compiled/style/semi.css",
+        "build": "webpack && npm run build-common-css -- --minify && npm run build-semi-css -- --minify && ./cli deploy:asset:sign",
+        "watch-js": "webpack --mode=development",
+        "watch-css": "npm run build-common-css -- --watch --verbose && npm run build-semi-css -- --watch --verbose"
     }
 }

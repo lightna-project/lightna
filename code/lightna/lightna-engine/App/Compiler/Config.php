@@ -41,13 +41,13 @@ class Config extends CompilerA implements ObjectManagerIgnore
         foreach ($folders as $folder) {
             $folder = $this->alignFolder($folder);
             $files = merge($files, $this->getYamlSubFiles($folder, $scope));
-            $files = merge($files, $this->getYamlRootFiles($folder));
+            $files = merge($files, $this->getYamlRootFiles($folder, $scope));
         }
 
         return $files;
     }
 
-    protected function getYamlSubFiles(string $moduleFolder, string $scope = '*'): array
+    protected function getYamlSubFiles(string $moduleFolder, string $scope): array
     {
         if (!is_dir($configFolder = $moduleFolder . '/config/')) {
             return [];
@@ -63,7 +63,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
         return $files;
     }
 
-    protected function getYamlRootFiles(string $moduleFolder): array
+    protected function getYamlRootFiles(string $moduleFolder, string $scope): array
     {
         $files = [];
         foreach (['/config.yaml', '/config/*.yaml'] as $pattern) {
@@ -71,6 +71,13 @@ class Config extends CompilerA implements ObjectManagerIgnore
                 $files,
                 array_filter(glob($moduleFolder . $pattern), 'is_file')
             );
+        }
+
+        foreach ($files as $i => $file) {
+            $name = preg_replace('~\.yaml$~', '', basename($file));
+            if (in_array($name, LIGHTNA_AREAS) && $name !== $scope) {
+                unset($files[$i]);
+            }
         }
 
         return $files;

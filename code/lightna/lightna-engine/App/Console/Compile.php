@@ -77,6 +77,8 @@ class Compile extends CommandA
                 'compiler' => getobj(AssetCompiler::class),
             ],
         ]);
+
+        $this->runCustomCompilers();
     }
 
     protected function init(): void
@@ -102,5 +104,14 @@ class Compile extends CommandA
         $compiler = is_object($item['compiler']) ? $item['compiler'] : getobj($item['compiler']);
         $compiler->make();
         $this->printEnd();
+    }
+
+    protected function runCustomCompilers(): void
+    {
+        if (!$pool = getobj(AppConfig::class)->get('compiler/pool')) {
+            return;
+        }
+
+        $this->runSequence($pool);
     }
 }

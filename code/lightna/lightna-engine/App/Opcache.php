@@ -8,6 +8,11 @@ abstract class Opcache extends ObjectA
 {
     protected string $dir;
 
+    public function getDir(): string
+    {
+        return $this->dir;
+    }
+
     public function load(string $name): mixed
     {
         return require $this->dir . $name . '.php';

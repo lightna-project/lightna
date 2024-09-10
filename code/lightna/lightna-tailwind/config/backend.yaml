@@ -1,0 +1,5 @@
+compiler:
+  pool:
+    tailwind:
+      message: make tailwind
+      compiler: Lightna\Tailwind\App\Compiler\Tailwind
