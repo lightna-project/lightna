@@ -71,7 +71,10 @@ class ObjectSchema implements ObjectManagerIgnore
     {
         $properties = [];
         foreach ($refClass->getProperties() as $property) {
-            if ($this->isPropertyInjectable($property)) {
+            if ($property->hasLazyDefiner) {
+                // Lazy property with own definer
+                $properties[$property->name] = ['l', ''];
+            } elseif ($this->isPropertyInjectable($property)) {
                 // Object
                 $properties[$property->name] = ['o', $property->type];
             } elseif ($numericType = $this->parseNumericType($property)) {
@@ -80,9 +83,6 @@ class ObjectSchema implements ObjectManagerIgnore
             } elseif ($path = $this->parseAppConfigPath($property)) {
                 // Config
                 $properties[$property->name] = ['c', $path];
-            } elseif ($property->hasLazyDefiner) {
-                // Lazy property with own definer
-                $properties[$property->name] = ['l', ''];
             }
 
             if (isset($properties[$property->name])) {

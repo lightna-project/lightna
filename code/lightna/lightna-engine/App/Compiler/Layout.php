@@ -16,10 +16,23 @@ class Layout extends ObjectA
     protected array $layouts;
     protected array $templateMap;
 
-    public function make(): void
+    protected function defineTemplateMap(): void
     {
         $this->templateMap = $this->compiled->load('template/map');
+    }
 
+    public function make(): void
+    {
+        $this->collectFiles();
+        $this->parseFiles();
+        $this->extend();
+        $this->applyDirectives();
+        $this->indexBlockIds();
+        $this->save();
+    }
+
+    protected function collectFiles(): void
+    {
         $directories = [LIGHTNA_SRC];
         if (($modules = $this->modules) && is_array($modules)) {
             foreach ($modules as $dir) {
@@ -37,7 +50,10 @@ class Layout extends ObjectA
             $key = preg_replace(['~^.+?/layout/~', '~\.yaml$~'], '', $file);
             $this->layouts[$key]['files'][] = $file;
         }
+    }
 
+    protected function parseFiles(): void
+    {
         foreach ($this->layouts as $key => $value) {
             $final = [];
             foreach ($value['files'] as $file) {
@@ -46,19 +62,6 @@ class Layout extends ObjectA
                 $final = merge($final, $layout);
             }
             $this->layouts[$key]['data'] = $final;
-        }
-
-        $this->extend();
-
-        foreach ($this->layouts as $name => $layout) {
-            $layoutData = $this->alignValues($layout['data']);
-            LayoutDirectives::apply($layoutData);
-            $this->layouts[$name]['data'] = $layoutData;
-
-            $this->compiled->save(
-                'layout/' . $name,
-                $this->layouts[$name]['data']
-            );
         }
     }
 
@@ -109,6 +112,25 @@ class Layout extends ObjectA
         }
     }
 
+    protected function applyDirectives(): void
+    {
+        foreach ($this->layouts as $name => $layout) {
+            $layoutData = $this->alignValues($layout['data']);
+            LayoutDirectives::apply($layoutData);
+            $this->layouts[$name]['data'] = $layoutData;
+        }
+    }
+
+    protected function save(): void
+    {
+        foreach ($this->layouts as $name => $layout) {
+            $this->compiled->save(
+                'layout/' . $name,
+                $this->layouts[$name]['data']
+            );
+        }
+    }
+
     protected function getExtends(string $key): array
     {
         $extends = [];
@@ -135,7 +157,12 @@ class Layout extends ObjectA
         if (preg_match('~\w+/\w+/[.]$~', $path)) {
             throw new Exception('Unexpected "." node in "' . ltrim($path, '/') . '"');
         }
+
         $aligned = [];
+        if ($path === '' && !isset($aligned['.'])) {
+            $aligned['.'] = [];
+        }
+
         foreach ($layout as $key => $value) {
             if (is_array($value)) {
                 $aligned[$key] = $this->alignValues($value, $key === '.', $path . '/' . $key);
@@ -154,5 +181,26 @@ class Layout extends ObjectA
         }
 
         return $aligned;
+    }
+
+    protected function indexBlockIds(): void
+    {
+        foreach ($this->layouts as $name => $layout) {
+            $ids = $this->indexBlockIdsRecursive($layout['data']);
+            $this->layouts[$name]['data']['blockById'] = $ids;
+        }
+    }
+
+    protected function indexBlockIdsRecursive(array $layout, string $path = ''): array
+    {
+        $ids = [];
+        foreach ($layout['.'] as $key => $block) {
+            if (isset($block['id'])) {
+                $ids[$block['id']] = $path . '/' . $key;
+            }
+            $ids = merge($ids, $this->indexBlockIdsRecursive($block, $path . '/' . $key));
+        }
+
+        return $ids;
     }
 }

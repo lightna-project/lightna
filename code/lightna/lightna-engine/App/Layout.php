@@ -8,35 +8,33 @@ use Exception;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityA;
-use Lightna\Engine\Data\Request;
 
 class Layout extends ObjectA
 {
     protected Compiled $compiled;
     protected Templating $templating;
-    protected Request $request;
+    protected Context $context;
     protected array $layout;
-    protected array $current;
+    protected array $current = [];
     protected bool $isMainCurrent;
     /** @AppConfig(entity) */
     protected array $entities;
     protected string $entityType;
 
-    public function render(string $entityType): void
+    protected function defineEntityType(): void
     {
-        $this->entityType = $entityType;
-        $this->load();
-        $this->isMainCurrent = true;
-
-        if ($block = $this->request->block) {
-            $this->renderSingleBlock($block);
-        } else {
-            $this->renderPage();
-        }
+        $this->entityType = $this->context->entity->type;
     }
 
-    protected function renderPage(): void
+    protected function defineLayout(): void
     {
+        $layoutName = $this->entities[$this->entityType]['layout'];
+        $this->layout = $this->compiled->load('layout/' . $layoutName);
+    }
+
+    public function page(): void
+    {
+        $this->isMainCurrent = true;
         $this->current = [];
         $this->block();
     }
@@ -59,6 +57,25 @@ class Layout extends ObjectA
     }
 
     protected function resolveBlock(string $blockName): ?array
+    {
+        if (str_starts_with($blockName, '#')) {
+            return $this->resolveBlockId(substr($blockName, 1));
+        } else {
+            return $this->resolveBlockName($blockName);
+        }
+    }
+
+    protected function resolveBlockId(string $blockId): array
+    {
+        if (!$blockPath = $this->layout['blockById'][$blockId] ?? null) {
+            throw new Exception('Block id "' . $blockId . '" not found');
+        }
+        list($child, $parent) = $this->parseBlockPath($blockPath);
+
+        return array_path_get($this->layout, $parent . '/./' . $child);
+    }
+
+    protected function resolveBlockName(string $blockName): array
     {
         $current = end($this->current);
         if ($blockName !== '') {
@@ -100,12 +117,6 @@ class Layout extends ObjectA
             $template,
             $this->getTemplateVars($template, $vars)
         );
-    }
-
-    protected function load(): void
-    {
-        $layoutName = $this->entities[$this->entityType]['layout'];
-        $this->layout = $this->compiled->load('layout/' . $layoutName);
     }
 
     protected function renderBlockTemplate(array $block, array $vars = []): void
@@ -169,20 +180,9 @@ class Layout extends ObjectA
         return $vars;
     }
 
-    protected function renderSingleBlock(string $blockName): void
+    protected function parseBlockPath(string $path): array
     {
-        list($child, $parent) = $this->parseBlockName($blockName);
-        if (!$node = array_path_get($this->layout, $parent)) {
-            throw new Exception('Block "' . $blockName . '" not found');
-        }
-
-        $this->current[] = $node;
-        $this->block($child);
-    }
-
-    protected function parseBlockName(string $block): array
-    {
-        $path = explode('.', $block);
+        $path = explode('/', $path);
         $child = array_pop($path);
         $parent = implode('/./', $path);
 

@@ -14,7 +14,7 @@ use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\InterpretationMediator;
 
-class LightnaResponse
+class Response
 {
     public function __construct(
         protected ResultJsonFactory $resultJsonFactory,

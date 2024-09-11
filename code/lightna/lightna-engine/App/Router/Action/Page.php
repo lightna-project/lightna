@@ -7,11 +7,13 @@ namespace Lightna\Engine\App\Router\Action;
 use Lightna\Engine\App\Layout;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\Data\Request;
 
 class Page extends ObjectA
 {
     protected Layout $layout;
     protected Context $context;
+    protected Request $request;
 
     protected function init($params): void
     {
@@ -21,8 +23,10 @@ class Page extends ObjectA
 
     public function process()
     {
-        $this->layout->render(
-            $this->context->entity->type
-        );
+        if ($blockId = $this->request->param->blockId) {
+            $this->layout->block('#' . $blockId);
+        } else {
+            $this->layout->page();
+        }
     }
 }

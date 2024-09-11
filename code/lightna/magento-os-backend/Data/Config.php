@@ -10,6 +10,7 @@ use Lightna\Magento\Data\Config\Currency;
 use Lightna\Magento\Data\Config\Favicon;
 use Lightna\Magento\Data\Config\GoogleAnalytics;
 use Lightna\Magento\Data\Config\Logo;
+use Lightna\Magento\Data\Config\Session;
 
 /**
  * @method string copyright(string $escapeMethod = null)
@@ -22,6 +23,7 @@ class Config extends DataA
     public GoogleAnalytics $ga;
     public Locale $locale;
     public Logo $logo;
+    public Session $session;
     public int $noRoutePageId;
     public string $copyright;
 

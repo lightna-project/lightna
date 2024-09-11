@@ -63,10 +63,10 @@ class Search extends DataA
     {
         $must = &$query['query']['bool']['must'];
         foreach ($this->categoryContent->filterableAttributes as $attribute) {
-            if ($this->request->{$attribute->code} === null) {
+            if ($this->request->param->{$attribute->code} === null) {
                 continue;
             }
-            $values = explode('_', $this->request->{$attribute->code});
+            $values = explode('_', $this->request->param->{$attribute->code});
             foreach ($values as $value) {
                 $must[] = ['term' => [$attribute->code => $value]];
             }
@@ -181,7 +181,7 @@ class Search extends DataA
             return;
         }
 
-        $q = $this->request->{$facet['code']} ?? '';
+        $q = $this->request->param->{$facet['code']} ?? '';
         $q = $q !== '' ? array_flip(explode('_', $q)) : [];
 
         foreach ($facet['options'] as $i => $option) {

@@ -50,19 +50,6 @@ class File extends ObjectA implements HandlerInterface
             return;
         }
 
-        $lt = $this->options['cookie']['lifetime'];
-        setcookie(
-            $cName,
-            $_COOKIE[$cName],
-            [
-                'expires' => $lt > 0 ? time() + $lt : 0,
-                'path' => '/',
-                'secure' => $this->options['cookie']['secure'],
-                'httponly' => true,
-                'samesite' => 'Lax',
-            ],
-        );
-
         @touch($this->getFilename($_COOKIE[$cName]));
     }
 
