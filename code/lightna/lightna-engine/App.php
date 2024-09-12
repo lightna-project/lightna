@@ -22,7 +22,7 @@ class App extends ObjectA
 
     public function run(): void
     {
-        ob_start();
+        $this->startRendering();
         try {
             try {
                 $this->action = $this->router->process();
@@ -36,11 +36,26 @@ class App extends ObjectA
                 $this->process();
             }
         } catch (Throwable $e) {
-            ob_end_clean();
+            $this->cleanRendering();
             $this->renderError500($e);
         }
 
-        ob_end_flush();
+        $this->finishRendering();
+    }
+
+    protected function startRendering(): void
+    {
+        !IS_PROGRESSIVE_RENDERING && ob_start();
+    }
+
+    protected function cleanRendering(): void
+    {
+        !IS_PROGRESSIVE_RENDERING && ob_end_clean();
+    }
+
+    protected function finishRendering(): void
+    {
+        !IS_PROGRESSIVE_RENDERING && ob_end_flush();
     }
 
     protected function createAction(): object

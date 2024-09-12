@@ -6,6 +6,6 @@ $cart = $session->cart;
 ?>
 <ul class="products-list--minicart">
     <?php foreach ($cart->items as $id => $item): ?>
-        <?php block('item', compact('id', 'item')) ?>
+        <?= block('item', compact('id', 'item')) ?>
     <?php endforeach; ?>
 </ul>

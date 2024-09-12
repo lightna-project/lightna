@@ -8,8 +8,8 @@ $iconClass = $isLoggedIn ? 'user__filled' : 'user__outline';
         <a href="/customer/account" class="icon <?= $iconClass ?>"></a>
     </div>
     <?php if ($isLoggedIn): ?>
-        <?php block('customer') ?>
+        <?= block('customer') ?>
     <?php else: ?>
-        <?php block('guest') ?>
+        <?= block('guest') ?>
     <?php endif; ?>
 </div>

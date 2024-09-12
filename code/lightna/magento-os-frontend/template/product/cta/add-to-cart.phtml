@@ -3,7 +3,7 @@
 /** @var Lightna\Magento\Data\Product $product */
 ?>
 <div <?= $block->attributes() ?> data-product-id="<?= $product->entityId() ?>">
-    <?php block('options') ?>
+    <?= block('options') ?>
     <button type="button" class="btn-cart" data-action="add-to-cart">
         <span><?= phrase('Add to Cart') ?></span>
     </button>

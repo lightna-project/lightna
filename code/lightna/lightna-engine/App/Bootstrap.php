@@ -29,6 +29,7 @@ class Bootstrap
         $env = require LIGHTNA_ENTRY . 'env.php';
         define("IS_DEV_MODE", $env['mode'] === 'dev');
         define("IS_PROD_MODE", $env['mode'] === 'prod');
+        define("IS_PROGRESSIVE_RENDERING", $env['progressive_rendering'] ?? false);
     }
 
     public static function autoload(): void

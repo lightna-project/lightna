@@ -7,7 +7,7 @@
     <?php } else { ?>
         <ul class="products-grid">
             <?php foreach ($search->result as $index => $product) { ?>
-                <?php block('item', compact('index', 'product')) ?>
+                <?= block('item', compact('index', 'product')) ?>
             <?php } ?>
         </ul>
         <div class="toolbar">
