@@ -8,6 +8,7 @@ use Exception;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityA;
+use Throwable;
 
 class Layout extends ObjectA
 {
@@ -39,21 +40,31 @@ class Layout extends ObjectA
         $this->block();
     }
 
-    public function block(string $blockName = '', array $vars = []): void
+    /**
+     * Return is always empty string but declared return type "string" allows to use <?=
+     */
+    public function block(string $blockName = '', array $vars = []): string
     {
         $this->current[] = $block = $this->resolveBlock($blockName);
 
-        $this->beforeBlock($block, $vars);
-        if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
-            $this->isMainCurrent = false;
-            $this->renderBlockTemplate($block, $vars);
-        } else {
-            $this->isMainCurrent = false;
-            $this->renderBlockContent($block, $vars);
+        try {
+            $this->beforeBlock($block, $vars);
+            if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
+                $this->isMainCurrent = false;
+                $this->renderBlockTemplate($block, $vars);
+            } else {
+                $this->isMainCurrent = false;
+                $this->renderBlockContent($block, $vars);
+            }
+            $this->afterBlock($block, $vars);
+        } catch (Throwable $e) {
+            $this->handleBlockError($e);
         }
-        $this->afterBlock($block, $vars);
 
         array_pop($this->current);
+        $this->flushRendering();
+
+        return '';
     }
 
     protected function resolveBlock(string $blockName): ?array
@@ -175,5 +186,20 @@ class Layout extends ObjectA
         $parent = implode('/./', $path);
 
         return [$child, $parent];
+    }
+
+    protected function flushRendering(): void
+    {
+        IS_PROGRESSIVE_RENDERING && ob_get_level() === 1 && ob_flush();
+    }
+
+    protected function handleBlockError(Throwable $exception): void
+    {
+        if (!IS_PROGRESSIVE_RENDERING) {
+            throw $exception;
+        }
+
+        error_log(($logId = uniqid()) . ' BLOCK ERROR: ' . $exception);
+        echo "[BLOCK ERROR $logId]";
     }
 }

@@ -14,10 +14,10 @@ $cart = $session->cart;
         <div class="icon" data-action="close-minicart"></div>
     </div>
     <?php if ($cart->qty === 0): ?>
-        <?php block('empty') ?>
+        <?= block('empty') ?>
     <?php else: ?>
-        <?php block('products') ?>
-        <?php block('footer') ?>
+        <?= block('products') ?>
+        <?= block('footer') ?>
     <?php endif; ?>
 </div>
 <div class="minicart__overlay" data-action="close-minicart"></div>
