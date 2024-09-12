@@ -9,8 +9,8 @@ use Lightna\Magento\Data\Session\Cart\Item;
 
 /**
  * @property Item[] $items
- * @method qty(string $escapeMethod = null)
- * @method grandTotal(string $escapeMethod = null)
+ * @method string qty(string $escapeMethod = null)
+ * @method string grandTotal(string $escapeMethod = null)
  */
 class Cart extends DataA
 {

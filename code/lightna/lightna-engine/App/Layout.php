@@ -190,7 +190,9 @@ class Layout extends ObjectA
 
     protected function flushRendering(): void
     {
-        IS_PROGRESSIVE_RENDERING && ob_get_level() === 1 && ob_flush();
+        if (IS_PROGRESSIVE_RENDERING && ob_get_level() === 1) {
+            ob_flush();
+        }
     }
 
     protected function handleBlockError(Throwable $exception): void

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Gen;
+namespace Lightna\Magento\Producer;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;

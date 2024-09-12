@@ -8,10 +8,10 @@ use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Data\Session;
 
 /**
- * @method float regular(string $escapeMethod = null)
- * @method float final(string $escapeMethod = null)
- * @method float discount(string $escapeMethod = null)
- * @method float discountPercent(string $escapeMethod = null)
+ * @method string regular(string $escapeMethod = null)
+ * @method string final(string $escapeMethod = null)
+ * @method string discount(string $escapeMethod = null)
+ * @method string discountPercent(string $escapeMethod = null)
  */
 class Price extends DataA
 {
