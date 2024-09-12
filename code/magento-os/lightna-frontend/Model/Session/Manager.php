@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Frontend\Model\Session;
 
 use Lightna\Frontend\Model\Session as LightnaSession;
-use Lightna\Magento\Gen\Cart as LightnaCart;
+use Lightna\Magento\Producer\Cart as LightnaCart;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Store\Model\StoreManagerInterface;

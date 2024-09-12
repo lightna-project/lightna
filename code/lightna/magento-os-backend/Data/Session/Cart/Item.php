@@ -7,11 +7,11 @@ namespace Lightna\Magento\Data\Session\Cart;
 use Lightna\Engine\Data\DataA;
 
 /**
- * @method productId(string $escapeMethod = null)
- * @method sku(string $escapeMethod = null)
- * @method name(string $escapeMethod = null)
- * @method qty(string $escapeMethod = null)
- * @method price(string $escapeMethod = null)
+ * @method string productId(string $escapeMethod = null)
+ * @method string sku(string $escapeMethod = null)
+ * @method string name(string $escapeMethod = null)
+ * @method string qty(string $escapeMethod = null)
+ * @method string price(string $escapeMethod = null)
  */
 class Item extends DataA
 {

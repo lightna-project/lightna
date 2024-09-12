@@ -32,11 +32,7 @@ class HttpClient {
 
             this.lock = false;
 
-            if (response.headers.get('Content-Type') === 'application/json') {
-                return await this.handleJson(response, onSuccess, onError);
-            } else {
-                return await this.handleText(response, onSuccess, onError);
-            }
+            return await this.handleJson(response, onSuccess, onError);
         } catch (error) {
             this.lock = false;
             onError(error);
@@ -44,7 +40,17 @@ class HttpClient {
     }
 
     async handleJson(response, onSuccess, onError) {
-        const responseJson = await response.json();
+        if (response.headers.get('Content-Type') !== 'application/json') {
+            throw new Error('JSON expected');
+        }
+
+        let responseJson;
+        try {
+            responseJson = await response.clone().json();
+        } catch (e) {
+            let text = await response.clone().text();
+            throw new Error('Invalid response JSON received: "' + text + '"');
+        }
 
         if (response.ok) {
             onSuccess(responseJson);
@@ -57,18 +63,6 @@ class HttpClient {
         }
 
         return responseJson;
-    }
-
-    async handleText(response, onSuccess, onError) {
-        const responseText = await response.text();
-
-        if (response.ok) {
-            onSuccess(responseText);
-        } else {
-            onError(responseText);
-        }
-
-        return responseText;
     }
 
     get(url, options = {}) {
@@ -90,7 +84,8 @@ class HttpClient {
         });
     }
 
-    onSuccess(response) {}
+    onSuccess(response) {
+    }
 
     onError(error) {
         throw error;

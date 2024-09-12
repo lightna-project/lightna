@@ -45,7 +45,9 @@ class App extends ObjectA
 
     protected function startRendering(): void
     {
-        !IS_PROGRESSIVE_RENDERING && ob_start();
+        if (!IS_PROGRESSIVE_RENDERING) {
+            ob_start();
+        }
     }
 
     protected function cleanRendering(): void

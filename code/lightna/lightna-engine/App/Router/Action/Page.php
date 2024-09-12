@@ -24,9 +24,15 @@ class Page extends ObjectA
     public function process()
     {
         if ($blockId = $this->request->param->blockId) {
-            $this->layout->block('#' . $blockId);
+            $this->renderBlock($blockId);
         } else {
             $this->layout->page();
         }
+    }
+
+    protected function renderBlock(string $blockId): void
+    {
+        header('Content-type: application/json');
+        echo json(blockhtml('#' . $blockId));
     }
 }
