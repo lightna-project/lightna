@@ -36,7 +36,7 @@ class Response
         if (!$result instanceof ResultJson) {
             $data = [];
             if ($messages = $this->prepareMessages()) {
-                $data['messagesHtml'] = templateHtml('page/messages.phtml', compact('messages'));
+                $data['messagesHtml'] = blockhtml('#messages', compact('messages'));
             }
             $result = $this->resultJsonFactory->create()->setData($data);
         }

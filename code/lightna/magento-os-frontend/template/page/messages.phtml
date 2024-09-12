@@ -1,5 +1,9 @@
 <?php
+/** @var Lightna\Engine\Data\Request $request */
 /** @var array $messages */
+if (!$request->isPost) {
+    return;
+}
 ?>
 <?php foreach ($messages as $message): ?>
     <div class="message <?= escape($message['type']) ?> fade-in">
