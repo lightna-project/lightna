@@ -107,18 +107,6 @@ class Layout extends ObjectA
         }
     }
 
-    public function template(string $template, array $vars = []): void
-    {
-        if (IS_DEV_MODE && !empty($this->current)) {
-            throw new Exception("The template() method call is not intended for use within blocks.");
-        }
-
-        $this->templating->render(
-            $template,
-            $this->getTemplateVars($template, $vars)
-        );
-    }
-
     protected function renderBlockTemplate(array $block, array $vars = []): void
     {
         $this->templating->render(

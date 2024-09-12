@@ -11,7 +11,7 @@ class Layout extends MagentoLayout
     public function renderElement($name, $useCache = true): string
     {
         if ($lightnaBlockId = $this->getLightnaBlockId($name)) {
-            return $this->renderLightnaBlock($lightnaBlockId);
+            return blockhtml('#' . $lightnaBlockId);
         } else {
             return parent::renderElement($name, $useCache);
         }
@@ -24,13 +24,5 @@ class Layout extends MagentoLayout
             && ($lightnaBlockId = $block->getLightnaBlockId());
 
         return $isLightnaBlock ? $lightnaBlockId : null;
-    }
-
-    protected function renderLightnaBlock(string $blockId): string
-    {
-        ob_start();
-        block('#' . $blockId);
-
-        return ob_get_clean();
     }
 }

@@ -27,19 +27,10 @@ function block(string $blockName = '', array $vars = []): void
     $layout->block($blockName, $vars);
 }
 
-function template(string $template, array $vars = []): void
-{
-    /** @var Layout $layout */
-    static $layout;
-    $layout ??= getobj(Layout::class);
-
-    $layout->template($template, $vars);
-}
-
-function templateHtml(string $template, array $vars = []): string
+function blockhtml(string $blockName = '', array $vars = []): string
 {
     ob_start();
-    template($template, $vars);
+    block($blockName, $vars);
 
     return ob_get_clean();
 }
