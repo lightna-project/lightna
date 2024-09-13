@@ -16,7 +16,7 @@ class Favicon extends DataA
 
     protected Url $url;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         parent::init($data);
 

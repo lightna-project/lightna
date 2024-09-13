@@ -19,7 +19,7 @@ class Image extends DataA
     public string $thumbnail;
     public string $max;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         foreach ($this->getCachedUrlFields() as $field) {
             $data[$field] = $this->cachedUrl($data[$field]);

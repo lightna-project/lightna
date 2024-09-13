@@ -11,7 +11,7 @@ class Session extends DataA
 {
     protected AppSession $appSession;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         $data = $this->appSession->read();
         parent::init($data);

@@ -22,7 +22,7 @@ class Price extends DataA
 
     protected Session $session;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         $group = $this->session->user->groupId;
         $priceGroup = isset($data['finalPrices'][$group]) ? $group : 0;

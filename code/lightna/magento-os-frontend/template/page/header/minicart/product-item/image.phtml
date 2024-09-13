@@ -4,5 +4,7 @@ $product = $item->product;
 $mainImage = reset($product->gallery);
 ?>
 <div class="products-list__item__image">
-    <img src="<?= $mainImage->thumbnail() ?>" alt="<?= $product->name() ?>">
+    <a href="<?= $product->url() ?>">
+        <img src="<?= $mainImage->thumbnail() ?>" alt="<?= $product->name() ?>">
+    </a>
 </div>

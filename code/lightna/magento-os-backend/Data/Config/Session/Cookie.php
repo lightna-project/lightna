@@ -10,7 +10,7 @@ class Cookie extends DataA
 {
     public int $lifetime;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         settype($data['lifetime'], 'int');
 
