@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Magento\Data\Session\Cart;
 
 use Lightna\Engine\Data\DataA;
+use Lightna\Magento\Data\Product as ProductData;
 
 /**
  * @method string productId(string $escapeMethod = null)
@@ -15,9 +16,19 @@ use Lightna\Engine\Data\DataA;
  */
 class Item extends DataA
 {
-    public string|int $productId;
+    public ProductData $product;
+    public int $productId;
     public string $sku;
     public string $name;
     public int|float $qty;
     public string $price;
+
+    /** @AppConfig(entity/product/entity) */
+    protected string $productEntity;
+
+    protected function defineProduct(): void
+    {
+        $data = getobj($this->productEntity)->get($this->productId);
+        $this->product = newobj(ProductData::class, $data);
+    }
 }
