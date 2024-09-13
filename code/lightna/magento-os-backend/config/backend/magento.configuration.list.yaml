@@ -13,3 +13,4 @@ magento.configuration.list:
   ga/active: google/analytics/active
   ga/account: google/analytics/account
   session/cookie/lifetime: web/cookie/cookie_lifetime
+  product/listing/defaultPageSize: catalog/frontend/grid_per_page

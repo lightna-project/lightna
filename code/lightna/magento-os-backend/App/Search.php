@@ -10,18 +10,25 @@ use Lightna\Elasticsearch\App\Client as ElasticClient;
 use Lightna\Engine\Data\Request;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
 use Lightna\Magento\Data\Category;
+use Lightna\Magento\Data\Config;
 use Lightna\Magento\Data\Content\Category as CategoryContent;
 use Lightna\Magento\Data\Session;
 
 class Search extends DataA
 {
-    public const PAGE_SIZE = 20;
+    protected Config $config;
     protected ElasticClient $client;
     protected Context $context;
     protected Category $category;
     protected Session $session;
     protected CategoryContent $categoryContent;
     protected Request $request;
+    protected int $pageSize;
+
+    protected function definePageSize(): void
+    {
+        $this->pageSize = $this->config->product->listing->defaultPageSize;
+    }
 
     public function search(): array
     {
@@ -47,7 +54,7 @@ class Search extends DataA
 
         return [
             'from' => 0,
-            'size' => static::PAGE_SIZE,
+            'size' => $this->pageSize,
             'stored_fields' => '_none_',
             'docvalue_fields' => ['_id', '_score'],
             'sort' => [['position_category_' . $categoryId => ['order' => 'asc']]],
@@ -98,7 +105,7 @@ class Search extends DataA
     {
         return [
             'total' => $result['hits']['total']['value'],
-            'pageSize' => static::PAGE_SIZE,
+            'pageSize' => $this->pageSize,
             'result' => $this->parseResultItems($result),
             'facets' => $this->parseResultFacets($result),
         ];

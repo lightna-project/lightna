@@ -45,7 +45,7 @@ class Product extends EntityA
     protected string $productEntity;
     protected Context $context;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         parent::init($this->getData($data));
         $this->title = $this->name;

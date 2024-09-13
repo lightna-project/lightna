@@ -15,7 +15,7 @@ class Page extends ObjectA
     protected Context $context;
     protected Request $request;
 
-    protected function init($params): void
+    protected function init(array $params): void
     {
         $this->context->entity->type = $params['type'];
         $this->context->entity->id = $params['id'] ?? null;

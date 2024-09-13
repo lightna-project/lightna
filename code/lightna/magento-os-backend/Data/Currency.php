@@ -12,7 +12,7 @@ class Currency extends DataA
     protected Config $config;
     protected NumberFormatter $numberFormatter;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         parent::init($data);
 

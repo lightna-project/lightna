@@ -10,6 +10,7 @@ use Lightna\Magento\Data\Config\Currency;
 use Lightna\Magento\Data\Config\Favicon;
 use Lightna\Magento\Data\Config\GoogleAnalytics;
 use Lightna\Magento\Data\Config\Logo;
+use Lightna\Magento\Data\Config\Product;
 use Lightna\Magento\Data\Config\Session;
 
 /**
@@ -23,6 +24,7 @@ class Config extends DataA
     public GoogleAnalytics $ga;
     public Locale $locale;
     public Logo $logo;
+    public Product $product;
     public Session $session;
     public int $noRoutePageId;
     public string $copyright;
@@ -31,7 +33,7 @@ class Config extends DataA
     protected string $configEntity;
     protected Context $context;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         parent::init($this->getEntityData());
     }

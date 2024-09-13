@@ -12,7 +12,7 @@ class Context extends DataA
     public int $scope;
     public Entity $entity;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         parent::init($data);
         $this->resolve();
