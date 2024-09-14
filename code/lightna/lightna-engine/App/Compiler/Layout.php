@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Exception;
-use Lightna\Engine\App\Compiled;
-use Lightna\Engine\App\ObjectA;
 
-class Layout extends ObjectA
+class Layout extends CompilerA
 {
-    protected Compiled $compiled;
     /** @AppConfig(modules) */
     protected ?array $modules;
     protected array $layouts;

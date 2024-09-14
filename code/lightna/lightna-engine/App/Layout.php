@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\App;
 
 use Exception;
+use Lightna\Engine\App\Opcache\Compiled;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityA;

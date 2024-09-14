@@ -7,15 +7,14 @@ namespace Lightna\Engine\App\Compiler;
 use Exception;
 use Lightna\Engine\App\Autoloader;
 use Lightna\Engine\App\Bootstrap;
-use Lightna\Engine\App\Compiled;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\ObjectManager;
 use Lightna\Engine\App\ObjectManagerIgnore;
+use Lightna\Engine\App\Opcache\Compiled;
 use Lightna\Engine\Data\DataA;
 
-class ObjectSchema implements ObjectManagerIgnore
+class ObjectSchema extends CompilerA implements ObjectManagerIgnore
 {
-    protected Compiled $compiled;
     protected array $config;
     protected array $ignoredClasses = [
         Bootstrap::class => 1,

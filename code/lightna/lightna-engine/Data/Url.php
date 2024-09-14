@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\Data;
 
 use Exception;
-use Lightna\Engine\App\Compiled;
+use Lightna\Engine\App\Opcache\Compiled;
 
 class Url extends DataA
 {
@@ -14,7 +14,7 @@ class Url extends DataA
     /** @AppConfig(asset_base) */
     protected string $assetBase;
 
-    protected function init(array $data = []): void
+    protected function defineAssetHashes(): void
     {
         $this->assetHashes = $this->compiled->load('asset/hashes');
     }
@@ -22,12 +22,12 @@ class Url extends DataA
     public function asset(string $url, bool $escape = true): string
     {
         $url = $this->parseAssetUrl($url);
-        if (!isset($this->assetHashes[$url->key])) {
+        if (!isset($this->assetHashes[$url->path])) {
             throw new Exception('Incorrect asset URL "' . $url->orig . '", make sure it contains path to the module and is relative"');
         }
-        $assetUrl = $this->assetBase . $url->key . '?';
-        $assetUrl .= $url->params !== '' ? $url->params . '&' : '';
-        $assetUrl .= 'ch=' . $this->assetHashes[$url->key];
+
+        $url->params['ch'] = $this->assetHashes[$url->path];
+        $assetUrl = $this->assetBase . $this->buildAssetUrl($url);
 
         return $escape ? escape($assetUrl) : $assetUrl;
     }
@@ -36,11 +36,22 @@ class Url extends DataA
     {
         $url = ltrim($assetUrl, '/.');
         $parts = explode('?', $url);
+        parse_str($parts[1] ?? '', $params);
 
         return (object)[
-            'key' => $parts[0],
-            'params' => $parts[1] ?? '',
+            'path' => $parts[0],
+            'params' => $params,
             'orig' => $assetUrl,
         ];
+    }
+
+    protected function buildAssetUrl(object $url): string
+    {
+        $result = $url->path;
+        if ($url->params) {
+            $result .= '?' . http_build_query($url->params);
+        }
+
+        return $result;
     }
 }

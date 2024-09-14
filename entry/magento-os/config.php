@@ -23,10 +23,9 @@ return [
         'Laminas\Stdlib' => 'vendor/laminas/laminas-stdlib/src',
     ],
     'compiler' => [
-        /**
-         * Directory where PHP files will be generated
-         * ! (Can be defined in config.php only)
-         */
-        'code_dir' => '../../compiled/magento-os',
+        'dir' => '../../opcache/magento-os/compiled',
     ],
+    'opcache' => [
+        'dir' => '../../opcache/magento-os/storage',
+    ]
 ];

@@ -22,9 +22,9 @@ function cli_init_compiler_without_autoload(): void
         'ObjectManagerIgnore',
         'ArrayDirectives',
         'ObjectA',
-        'Compiled',
+        'Opcache',
+        'Opcache/Compiled',
         'Console/CommandA',
-        'Console/CompileA',
         'Console/Compile',
     ];
     foreach ($requires as $require) {

@@ -18,8 +18,8 @@ class ObjectManager
         if (!class_exists(ObjectA::class)) {
             throw new \Exception(ObjectA::class . ' needs to be defined');
         }
-        static::$schema = require LIGHTNA_CODE . 'object/schema.php';
-        static::$extended = require LIGHTNA_CODE . 'object/extended.php';
+        static::$schema = require COMPILED_DIR . 'object/schema.php';
+        static::$extended = require COMPILED_DIR . 'object/extended.php';
         static::$config = getobj(AppConfig::class);
     }
 

@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Lightna\Engine\App\Compiled;
-use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Opcache\Compiled;
 use ReflectionClass;
 
-class Plugin extends ObjectA
+class Plugin extends CompilerA
 {
     public const EXTENDED_CLASS_SUFFIX = 'Extended';
 
-    protected Compiled $compiled;
     protected array $config;
     protected array $classMap;
     protected array $plugins = [];
@@ -167,7 +165,7 @@ class Plugin extends ObjectA
     {
         $extendedClass = $class . static::EXTENDED_CLASS_SUFFIX;
         $file = 'class/' . $this->classToFile($extendedClass);
-        $autoloadFile = rtrim($this->config['compiler']['code_dir'], '/') . '/build/' . $file;
+        $autoloadFile = rtrim($this->config['compiler']['dir'], '/') . '/build/' . $file;
 
         $this->compiled->putFile($file, $this->createExtendDefinition($class));
         $this->classMap[$extendedClass] = $autoloadFile;

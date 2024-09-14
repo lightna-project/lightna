@@ -4,12 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Lightna\Engine\App\Compiled;
-use Lightna\Engine\App\ObjectA;
-
-class Preload extends ObjectA
+class Preload extends CompilerA
 {
-    protected Compiled $compiled;
     protected array $files = [];
     protected string $preload;
 
@@ -39,6 +35,6 @@ class Preload extends ObjectA
 
     protected function save(): void
     {
-        $this->compiled->putFile('opcache/preload.php', $this->preload);
+        $this->compiled->putFile('preload.php', $this->preload);
     }
 }
