@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Lightna\Engine\App\Compiled;
 use Lightna\Engine\App\ObjectManagerIgnore;
+use Lightna\Engine\App\Opcache\Compiled;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-class ClassMap implements ObjectManagerIgnore
+class ClassMap extends CompilerA implements ObjectManagerIgnore
 {
-    protected Compiled $compiled;
-
     public function make(): void
     {
         $this->compiled = new Compiled();

@@ -6,13 +6,11 @@ namespace Lightna\Engine\App\Compiler;
 
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
-use Lightna\Engine\App\Compiled;
 use Lightna\Engine\App\ObjectManagerIgnore;
+use Lightna\Engine\App\Opcache\Compiled;
 
-class Config implements ObjectManagerIgnore
+class Config extends CompilerA implements ObjectManagerIgnore
 {
-    protected Compiled $compiled;
-
     public function make(): void
     {
         $this->compiled = new Compiled();

@@ -1,5 +1,5 @@
 /.idea
-/compiled
+/opcache
 /entry/*/auth.json
 /entry/*/env.php
 /entry/*/node_modules

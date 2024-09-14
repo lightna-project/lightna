@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Lightna\Engine\App\Compiled;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\Data\Url;
 
-class AssetSign extends ObjectA
+class AssetSign extends CompilerA
 {
-    protected Compiled $compiled;
     /** @AppConfig(asset_dir) */
     protected string $assetDir;
     /** @AppConfig(asset_base) */
@@ -23,7 +20,7 @@ class AssetSign extends ObjectA
         $this->generateHashes();
         $this->applyHashesToCss();
 
-        // Update hashes for final CSS
+        // Update hashes for final CSS so that it's same and correct in different cases
         $this->generateHashes();
     }
 

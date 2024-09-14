@@ -14,15 +14,19 @@ use Lightna\Engine\App\Compiler\Plugin as PluginCompiler;
 use Lightna\Engine\App\Compiler\Preload as PreloadCompiler;
 use Lightna\Engine\App\Compiler\Template as TemplateCompiler;
 use Lightna\Engine\App\Config as AppConfig;
+use Lightna\Engine\App\Opcache\Compiled;
 
-class Compile extends CompileA
+class Compile extends CommandA
 {
+    protected array $config;
+    protected Compiled $compiled;
+
     public function run(): void
     {
         $this->init();
 
         $this->printStart('clean compiled');
-        rcleandir(LIGHTNA_CODE);
+        $this->compiled->clean();
         $this->printEnd();
 
         $this->runItem([
@@ -73,5 +77,30 @@ class Compile extends CompileA
                 'compiler' => getobj(AssetCompiler::class),
             ],
         ]);
+    }
+
+    protected function init(): void
+    {
+        $config = require LIGHTNA_ENTRY . 'config.php';
+        foreach (['App/Bootstrap.php', 'App/Compiler/CompilerA.php', 'App/Compiler/ClassMap.php'] as $file) {
+            require LIGHTNA_ENTRY . $config['src_dir'] . '/' . $file;
+        }
+        Bootstrap::declaration($config);
+        $this->compiled = new Compiled();
+    }
+
+    protected function runSequence(array $sequence): void
+    {
+        foreach ($sequence as $item) {
+            $this->runItem($item);
+        }
+    }
+
+    protected function runItem(array $item): void
+    {
+        $this->printStart($item['message']);
+        $compiler = is_object($item['compiler']) ? $item['compiler'] : getobj($item['compiler']);
+        $compiler->make();
+        $this->printEnd();
     }
 }

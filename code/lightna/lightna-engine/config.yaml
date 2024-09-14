@@ -4,8 +4,7 @@ asset_dir: null
 storage:
   opcache:
     adapter: Lightna\Engine\App\Storage\Opcache
-    options:
-      dir: opcache
+    options: [ ]
 router:
   # List of router custom actions (name: class)
   action:

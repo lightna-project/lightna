@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Closure;
-use Lightna\Engine\App\Compiled;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Opcache\Compiled;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 class CompilerA extends ObjectA
 {
+    protected Compiled $compiled;
     /** @AppConfig(modules) */
     protected ?array $modules;
-    protected Compiled $compiled;
 
     protected function walkFilesInModules(string $subDir, array $fileExtensions, Closure $callback): void
     {

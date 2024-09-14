@@ -5,36 +5,31 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Storage;
 
 use Exception;
-use Lightna\Engine\App\Compiled;
-use Lightna\Engine\App\ObjectA;
 
-class Opcache extends ObjectA implements StorageInterface
+class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 {
-    protected Compiled $compiled;
-    protected array $options;
-    /** @AppConfig(storage/opcache/options/dir) */
+    /** @AppConfig(opcache/dir) */
     protected string $dir;
 
-    protected function init(array $options): void
+    protected function init(): void
     {
-        $this->options = $options;
-        $this->dir = $this->dir . '/';
+        $this->dir = LIGHTNA_ENTRY . rtrim($this->dir, '/') . '/';
     }
 
     public function set(string $key, mixed $value): void
     {
-        $this->compiled->save($this->dir . $this->getFileName($key), $value);
+        parent::save($this->getFileName($key), $value);
     }
 
     public function unset(string $key): void
     {
-        $this->compiled->delete($this->dir . $this->getFileName($key));
+        parent::delete($this->getFileName($key));
     }
 
     public function get(string $key): string|array
     {
         try {
-            return require LIGHTNA_CODE . $this->dir . $this->getFileName($key) . '.php';
+            return parent::load($this->getFileName($key));
         } catch (Exception $e) {
             return [];
         }
@@ -55,7 +50,7 @@ class Opcache extends ObjectA implements StorageInterface
         return implode('/', str_split(substr(sha1($key), 0, 6), 2)) . '/' . $key;
     }
 
-    public function clean(array $tags): void
+    public function clean(array $tags = []): void
     {
         // TODO: Implement clean() method.
     }
