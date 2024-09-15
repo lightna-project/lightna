@@ -14,10 +14,16 @@ class Gallery extends ObjectA
     protected Database $db;
     protected MagentoConfig $magentoConfig;
     protected string $cryptKey;
+    protected string $imageQuality;
 
-    protected function init(): void
+    protected function defineCryptKey(): void
     {
-        $this->cryptKey = $this->magentoConfig->get()['crypt']['key'];
+        $this->cryptKey = $this->magentoConfig->getValue('crypt/key');
+    }
+
+    protected function defineImageQuality(): void
+    {
+        $this->imageQuality = $this->magentoConfig->getValue('system/upload_configuration/jpeg_quality');
     }
 
     public function getItems(array $entityIds): array
@@ -58,7 +64,7 @@ class Gallery extends ObjectA
     {
         return hash_hmac(
             'md5',
-            "h:{$h}_w:{$w}_rgb255,255,255_r:empty_q:90_proportional_frame_transparency_doconstrainonly",
+            "h:{$h}_w:{$w}_rgb255,255,255_r:empty_q:{$this->imageQuality}_proportional_frame_transparency_doconstrainonly",
             $this->cryptKey,
             false
         );

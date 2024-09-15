@@ -15,7 +15,7 @@ class Page extends ObjectA
     protected Context $context;
     protected Request $request;
 
-    protected function init($params): void
+    protected function init(array $params): void
     {
         $this->context->entity->type = $params['type'];
         $this->context->entity->id = $params['id'] ?? null;
@@ -24,9 +24,15 @@ class Page extends ObjectA
     public function process()
     {
         if ($blockId = $this->request->param->blockId) {
-            $this->layout->block('#' . $blockId);
+            $this->renderBlock($blockId);
         } else {
             $this->layout->page();
         }
+    }
+
+    protected function renderBlock(string $blockId): void
+    {
+        header('Content-type: application/json');
+        echo json(blockhtml('#' . $blockId));
     }
 }

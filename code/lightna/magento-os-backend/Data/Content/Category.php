@@ -19,7 +19,7 @@ class Category extends DataA
     protected string $contentCategoryEntity;
     protected Context $context;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         parent::init($this->getEntityData());
     }

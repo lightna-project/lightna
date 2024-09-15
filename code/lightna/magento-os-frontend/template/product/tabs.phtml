@@ -14,7 +14,7 @@ $tabs = $block->{'.'};
     <?php foreach ($tabs as $name => $tab): ?>
         <div class="cjs-tab tab-content <?= $tab->active ? 'active' : '' ?>"
              data-tab="<?= escape($name) ?>">
-            <?php block($name) ?>
+            <?= block($name) ?>
         </div>
     <?php endforeach; ?>
 </div>

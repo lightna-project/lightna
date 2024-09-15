@@ -18,28 +18,23 @@ function escape_html(string $var): string
     return htmlspecialchars($var, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
 }
 
-function block(string $blockName = '', array $vars = []): void
+/**
+ * Return is always empty string but declared return type "string" allows to use <?=
+ * To get html see function blockhtml
+ */
+function block(string $blockName = '', array $vars = []): string
 {
     /** @var Layout $layout */
     static $layout;
     $layout ??= getobj(Layout::class);
 
-    $layout->block($blockName, $vars);
+    return $layout->block($blockName, $vars);
 }
 
-function template(string $template, array $vars = []): void
-{
-    /** @var Layout $layout */
-    static $layout;
-    $layout ??= getobj(Layout::class);
-
-    $layout->template($template, $vars);
-}
-
-function templateHtml(string $template, array $vars = []): string
+function blockhtml(string $blockName = '', array $vars = []): string
 {
     ob_start();
-    template($template, $vars);
+    block($blockName, $vars);
 
     return ob_get_clean();
 }

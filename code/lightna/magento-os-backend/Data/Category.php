@@ -23,7 +23,7 @@ class Category extends EntityA
     protected string $categoryEntity;
     protected Context $context;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         if (!$data) {
             parent::init($this->getEntityData());

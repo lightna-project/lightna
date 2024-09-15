@@ -15,7 +15,7 @@ class GoogleAnalytics extends DataA
     public bool $active;
     public string $account;
 
-    protected function init($data = []): void
+    protected function init(array $data = []): void
     {
         settype($data['active'], 'bool');
 

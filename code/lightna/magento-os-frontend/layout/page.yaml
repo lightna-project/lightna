@@ -109,3 +109,6 @@ template: page.phtml
     attributes:
       class:
         - page-messages
+    .messages:
+      id: messages
+      template: page/messages.phtml

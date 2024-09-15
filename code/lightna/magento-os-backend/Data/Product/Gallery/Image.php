@@ -6,6 +6,12 @@ namespace Lightna\Magento\Data\Product\Gallery;
 
 use Lightna\Engine\Data\DataA;
 
+/**
+ * @method string tile(string $escapeMethod = null)
+ * @method string preview(string $escapeMethod = null)
+ * @method string thumbnail(string $escapeMethod = null)
+ * @method string max(string $escapeMethod = null)
+ */
 class Image extends DataA
 {
     public string $tile;
@@ -13,24 +19,18 @@ class Image extends DataA
     public string $thumbnail;
     public string $max;
 
-    public function tile(string $escapeMethod = null): string
+    protected function init(array $data = []): void
     {
-        return escape($this->cachedUrl($this->tile), $escapeMethod);
+        foreach ($this->getCachedUrlFields() as $field) {
+            $data[$field] = $this->cachedUrl($data[$field]);
+        }
+
+        parent::init($data);
     }
 
-    public function preview(string $escapeMethod = null): string
+    protected function getCachedUrlFields(): array
     {
-        return escape($this->cachedUrl($this->preview), $escapeMethod);
-    }
-
-    public function thumbnail(string $escapeMethod = null): string
-    {
-        return escape($this->cachedUrl($this->thumbnail), $escapeMethod);
-    }
-
-    public function max(string $escapeMethod = null): string
-    {
-        return escape($this->max ? '/media/catalog/product/' . $this->max : '', $escapeMethod);
+        return ['tile', 'preview', 'thumbnail', 'max'];
     }
 
     protected function cachedUrl(?string $path): string

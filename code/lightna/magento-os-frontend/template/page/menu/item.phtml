@@ -16,7 +16,7 @@
         <div class="<?= $cssLevel . '__children-container' ?>">
             <div class="<?= $cssLevel . '__children' ?>">
                 <?php foreach ($item->children as $child) { ?>
-                    <?php block('self', ['item' => $child]) ?>
+                    <?= block('self', ['item' => $child]) ?>
                 <?php } ?>
             </div>
             <?php if ($item->level === 1) { ?>

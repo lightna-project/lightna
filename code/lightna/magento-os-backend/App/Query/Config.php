@@ -114,14 +114,15 @@ class Config extends ObjectA
 
     public function get(): array
     {
-        if (!isset($this->configResult)) {
-            $this->load();
-        }
-
         return $this->configResult;
     }
 
-    protected function load(): void
+    public function getValue(string $path): mixed
+    {
+        return array_path_get($this->configResult, $path);
+    }
+
+    protected function defineConfigResult(): void
     {
         $this->configResult = merge(
             $this->defaultConfig,
