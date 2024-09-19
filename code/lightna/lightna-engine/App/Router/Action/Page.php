@@ -21,18 +21,16 @@ class Page extends ObjectA
         $this->context->entity->id = $params['id'] ?? null;
     }
 
-    public function process()
+    public function process(): void
     {
-        if ($blockId = $this->request->param->blockId) {
-            $this->renderBlock($blockId);
-        } else {
-            $this->layout->page();
-        }
+        $this->validateRequest();
+        $this->layout->page();
     }
 
-    protected function renderBlock(string $blockId): void
+    protected function validateRequest(): void
     {
-        header('Content-type: application/json');
-        echo json(blockhtml('#' . $blockId));
+        if (!$this->request->isGet) {
+            throw new \Exception('Page request method must be GET');
+        }
     }
 }

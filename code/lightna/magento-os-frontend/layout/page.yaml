@@ -17,6 +17,11 @@ template: page.phtml
       template: page/head/link/style-common.phtml
   .script:
     template: page/head/js/common.phtml
+  .context:
+    id: page-context
+    template: page/context.phtml
+  .google-analytics:
+    template: page/head/google-analytics.phtml
 .body:
   container: body
   .usp:
