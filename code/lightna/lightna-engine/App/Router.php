@@ -11,25 +11,18 @@ use const FILTER_SANITIZE_URL;
 
 class Router extends ObjectA
 {
-    protected string $urlPath;
     /** @AppConfig(router/bypass) */
     protected ?array $bypass;
+    /** @AppConfig(router/routes) */
+    protected array $routes;
     protected Route $route;
     protected Request $request;
-
-    protected function init(): void
-    {
-        $url = $this->request->uri;
-        $qi = strpos($url, '?');
-
-        $this->urlPath = substr($url, 1, $qi !== false ? $qi - 1 : null);
-    }
 
     public function process(): ?array
     {
         $this->processBypassBeforeRouting();
 
-        $route = $this->route->get($this->urlPath);
+        $route = $this->resolveRoute();
         $customAction = null;
 
         if ($route) {
@@ -69,13 +62,35 @@ class Router extends ObjectA
         }
     }
 
+    protected function resolveRoute(): ?array
+    {
+        return $this->resolveHardRoute() ?? $this->resolveSoftRoute();
+    }
+
+    protected function resolveHardRoute(): ?array
+    {
+        if (isset($this->routes[$this->request->uriPath])) {
+            return [
+                'action' => Route::ACTION_CUSTOM,
+                'params' => [$this->routes[$this->request->uriPath], []],
+            ];
+        }
+
+        return null;
+    }
+
+    protected function resolveSoftRoute(): ?array
+    {
+        return $this->route->get($this->request->uriPath);
+    }
+
     protected function processBypass(): void
     {
         $bypass =
             ($fallback = $this->bypass['file'] ?? false)
             && ($bypassUrls = $this->bypass['rules']['url_starts_with'] ?? false)
             && is_array($bypassUrls) && count($bypassUrls)
-            && preg_match('~^(' . implode('|', $bypassUrls) . ')~', $this->urlPath);
+            && preg_match('~^(' . implode('|', $bypassUrls) . ')~', $this->request->uriPath);
 
         $bypass =
             $bypass || (

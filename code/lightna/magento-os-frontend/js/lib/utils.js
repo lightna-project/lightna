@@ -83,9 +83,11 @@ export function isTouchDevice() {
 }
 
 export function getBlockHtml(blockId, data = {}) {
-    const url = `${document.location.pathname}?blockId=${blockId}`;
+    data.blockId = blockId;
+    data.entityType = pageContext.entity.type;
+    data.entityId = pageContext.entity.id;
 
-    return request.post(url, data);
+    return request.post('/lightna/block', data);
 }
 
 Object.prototype.foreach = function (cb) {

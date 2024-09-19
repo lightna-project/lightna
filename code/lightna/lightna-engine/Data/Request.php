@@ -12,6 +12,7 @@ class Request extends DataA
     public bool $isGet;
     public bool $isSecure;
     public string $uri;
+    public string $uriPath;
     public Param $param;
 
     protected function defineIsPost(): void
@@ -32,5 +33,11 @@ class Request extends DataA
     protected function defineUri(): void
     {
         $this->uri = $_SERVER['REQUEST_URI'];
+    }
+
+    protected function defineUriPath(): void
+    {
+        $qi = strpos($this->uri, '?');
+        $this->uriPath = substr($this->uri, 1, $qi !== false ? $qi - 1 : null);
     }
 }
