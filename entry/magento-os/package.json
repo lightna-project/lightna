@@ -13,7 +13,7 @@
         "buildjs": "webpack",
         "buildcss": "npx tailwindcss -i ../../code/lightna/magento-os-frontend/css/common.css -o ../../project/magento-os/pub/static/lightna/compiled/style/common.css",
         "build": "webpack && npm run buildcss -- --minify && ./cli deploy:asset:sign",
-        "watchjs": "webpack --config webpack.config.dev.js",
+        "watchjs": "webpack --mode=development",
         "watchcss": "npm run buildcss -- --watch --verbose"
     }
 }
