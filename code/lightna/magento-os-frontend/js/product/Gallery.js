@@ -1,4 +1,4 @@
-import { $, $$ } from '../lib/utils';
+import { $, $$ } from '../lib/utils/dom';
 import { XSwipeHandler } from '../lib/XSwipeHandler';
 
 export class Gallery {

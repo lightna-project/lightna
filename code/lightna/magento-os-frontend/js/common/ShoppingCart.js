@@ -1,5 +1,6 @@
 import request from '../lib/HttpClient';
-import { $, $$, getBlockHtml } from '../lib/utils';
+import { $, $$ } from '../lib/utils/dom';
+import { getBlockHtml } from '../lib/utils/getBlockHtml';
 
 export class ShoppingCart {
     blockId = 'minicart';
@@ -21,15 +22,15 @@ export class ShoppingCart {
     }
 
     bindCartActionsEvents() {
-        $$('[data-action="open-minicart"]').foreach((i, trigger) => {
+        $$('[data-action="open-minicart"]').forEach((trigger) => {
             trigger.addEventListener('click', this.open.bind(this));
         });
 
-        $$('[data-action="close-minicart"]').foreach((i, trigger) => {
+        $$('[data-action="close-minicart"]').forEach((trigger) => {
             trigger.addEventListener('click', this.close.bind(this));
         });
 
-        $$('[data-action="remove-product"]').foreach((i, trigger) => {
+        $$('[data-action="remove-product"]').forEach((trigger) => {
             const itemId = trigger.getAttribute('data-item-id');
             trigger.addEventListener('click', () => {
                 this.removeProduct(itemId);

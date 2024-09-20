@@ -1,4 +1,4 @@
-import { $ } from './lib/utils';
+import { $ } from './lib/utils/dom';
 import { AddToCart } from './common/AddToCart';
 import { ShoppingCart } from './common/ShoppingCart';
 import { Menu } from './common/Menu';

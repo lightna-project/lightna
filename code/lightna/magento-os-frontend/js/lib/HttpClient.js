@@ -1,6 +1,6 @@
 import { FormKey } from './FormKey';
 import { PageMessage } from '../common/PageMessage';
-import { objectToQuery } from './utils';
+import { objectToQuery } from './utils/objectToQuery';
 
 class HttpClient {
     headers = {

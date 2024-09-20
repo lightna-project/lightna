@@ -1,7 +1,7 @@
 import { Cookie } from '../lib/Cookie';
 import { UserInput } from '../lib/UserInput';
 import request from '../lib/HttpClient';
-import { $, $$ } from "../lib/utils";
+import { $, $$ } from "../lib/utils/dom";
 
 export class AddToCart {
     components = [];
@@ -17,7 +17,7 @@ export class AddToCart {
     }
 
     bindEvents() {
-        this.components.foreach((i, component) => {
+        this.components.forEach((component) => {
             const actionTrigger = $('[data-action="add-to-cart"]', component);
             actionTrigger.addEventListener('click', () => {
                 this.addProduct(component, actionTrigger);

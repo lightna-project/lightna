@@ -1,4 +1,5 @@
-import { $, $$, getBlockHtml } from '../lib/utils';
+import { $, $$ } from '../lib/utils/dom';
+import { getBlockHtml } from '../lib/utils/getBlockHtml';
 import { UserInput } from '../lib/UserInput';
 
 export class ProductOptions {
@@ -15,7 +16,7 @@ export class ProductOptions {
     }
 
     bindEvents() {
-        $$('[data-option]', this.component).foreach((i, element) => {
+        $$('[data-option]', this.component).forEach((element) => {
             if (element.classList.contains('disabled')) {
                 return;
             }

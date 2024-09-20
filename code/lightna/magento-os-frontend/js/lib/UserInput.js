@@ -1,4 +1,4 @@
-import { $ } from './utils';
+import { $ } from './utils/dom';
 
 export class UserInput {
     static collect(container, skipIfNotDisplayed) {

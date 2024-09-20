@@ -1,4 +1,4 @@
-import { $ } from './utils';
+import { $ } from './utils/dom';
 export class XSwipeHandler {
     #xDown = null;
     #yDown = null;

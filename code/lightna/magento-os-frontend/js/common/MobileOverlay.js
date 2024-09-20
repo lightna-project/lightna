@@ -1,4 +1,4 @@
-import { $, $$ } from '../lib/utils';
+import { $, $$ } from '../lib/utils/dom';
 
 export class MobileOverlay {
     mobileOverlayTriggers;
@@ -9,7 +9,7 @@ export class MobileOverlay {
     }
 
     bindEvents() {
-        this.mobileOverlayTriggers.foreach((i, trigger) => {
+        this.mobileOverlayTriggers.forEach((trigger) => {
             trigger.addEventListener('click', () => {
                 this.toggleMobileOverlay(trigger.dataset.overlay);
             });
