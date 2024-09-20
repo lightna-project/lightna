@@ -1,5 +1,5 @@
 import { Cookie } from './Cookie';
-import { randomString } from './utils';
+import { randomString } from './utils/randomString';
 
 export class FormKey {
     static get() {

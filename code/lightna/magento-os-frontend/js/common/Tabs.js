@@ -1,4 +1,4 @@
-import { $, $$ } from '../lib/utils';
+import { $, $$ } from '../lib/utils/dom';
 
 export class Tabs {
     constructor(scope) {
