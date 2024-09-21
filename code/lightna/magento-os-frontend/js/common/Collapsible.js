@@ -1,4 +1,6 @@
-import { $$, isElementInViewport } from '../lib/utils/dom';
+import { $$ } from '../lib/utils/dom';
+import { isElementInViewport } from '../lib/utils/isElementInViewport';
+
 export class Collapsible {
     items = [];
 
