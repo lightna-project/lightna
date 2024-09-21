@@ -25,7 +25,7 @@ class App extends ObjectA
                 ],
             ];
 
-            $this->runAction();
+            $this->processAction();
         };
     }
 }

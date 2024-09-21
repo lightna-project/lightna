@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Exception;
 use Lightna\Engine\App\Entity\Route;
-use Lightna\Engine\App\Router\PassedException;
+use Lightna\Engine\App\Router\BypassedException;
+use Lightna\Engine\App\Router\NoRouteException;
+use Lightna\Engine\App\Router\RedirectedException;
 use Lightna\Engine\Data\Request;
 use const FILTER_SANITIZE_URL;
 
@@ -18,53 +21,41 @@ class Router extends ObjectA
     protected Route $route;
     protected Request $request;
 
-    public function process(): ?array
+    public function process(): array
     {
-        $this->processBypassBeforeRouting();
+        $this->processBypass();
 
-        $route = $this->resolveRoute();
-        $customAction = null;
-
-        if ($route) {
-            $action = $route['action'];
-            $params = $route['params'];
-
-            if ($action == Route::ACTION_302) {
-                $this->redirect(302, $params[0]);
-            } elseif ($action == Route::ACTION_301) {
-                $this->redirect(301, $params[0]);
-            } elseif ($action == Route::ACTION_CUSTOM) {
-                $customAction = ['name' => $params[0], 'params' => $params[1]];
-            } else {
-                throw new \Exception('Unknown router action "' . $action . '"');
-            }
-        } else {
-            $this->processBypassAfterRouting();
-
-            // If no bypass then 404
-            throw new NotFoundException();
-        }
-
-        return $customAction;
+        return $this->resolveAction();
     }
 
-    protected function processBypassBeforeRouting(): void
+    protected function resolveAction(): array
     {
-        if (!$this->bypass['process_after_routing']) {
-            $this->processBypass();
+        if (!$route = $this->resolveRoute()) {
+            $this->processNoRouteRule();
         }
-    }
 
-    protected function processBypassAfterRouting(): void
-    {
-        if ($this->bypass['process_after_routing']) {
-            $this->processBypass();
-        }
+        return $this->resolveRouteAction($route);
     }
 
     protected function resolveRoute(): ?array
     {
         return $this->resolveHardRoute() ?? $this->resolveSoftRoute();
+    }
+
+    protected function resolveRouteAction(array $route): array
+    {
+        $action = null;
+        if ($route['action'] == Route::ACTION_302) {
+            $this->redirect(302, $route['params'][0]);
+        } elseif ($route['action'] == Route::ACTION_301) {
+            $this->redirect(301, $route['params'][0]);
+        } elseif ($route['action'] == Route::ACTION_CUSTOM) {
+            $action = ['name' => $route['params'][0], 'params' => $route['params'][1]];
+        } else {
+            throw new Exception('Unknown router action "' . $route['action'] . '"');
+        }
+
+        return $action;
     }
 
     protected function resolveHardRoute(): ?array
@@ -86,8 +77,25 @@ class Router extends ObjectA
 
     protected function processBypass(): void
     {
+        $this->isBypass() && $this->bypass();
+    }
+
+    protected function processNoRouteRule(): void
+    {
+        $rule = $this->bypass['rules']['no_route'] ?? '';
+        if ($rule == 404) {
+            throw new NoRouteException();
+        } elseif ($rule === 'bypass') {
+            $this->bypass();
+        } else {
+            throw new Exception('Unknown rule for router.bypass.rules.no_route = "' . $rule . '"');
+        }
+    }
+
+    protected function isBypass(): bool
+    {
         $bypass =
-            ($fallback = $this->bypass['file'] ?? false)
+            ($this->bypass['file'] ?? false)
             && ($bypassUrls = $this->bypass['rules']['url_starts_with'] ?? false)
             && is_array($bypassUrls) && count($bypassUrls)
             && preg_match('~^(' . implode('|', $bypassUrls) . ')~', $this->request->uriPath);
@@ -98,12 +106,15 @@ class Router extends ObjectA
                 && ($_COOKIE[$this->bypass['cookie']['name']] ?? null)
             );
 
-        if ($bypass) {
-            Bootstrap::unregister();
-            require LIGHTNA_ENTRY . $fallback;
+        return $bypass;
+    }
 
-            throw new PassedException();
-        }
+    protected function bypass(): void
+    {
+        Bootstrap::unregister();
+        require LIGHTNA_ENTRY . $this->bypass['file'];
+
+        throw new BypassedException();
     }
 
     protected function redirect(int $type, string $to): void
@@ -114,5 +125,7 @@ class Router extends ObjectA
         }
 
         header('Location: ' . filter_var($to, FILTER_SANITIZE_URL), true, $type);
+
+        throw new RedirectedException();
     }
 }

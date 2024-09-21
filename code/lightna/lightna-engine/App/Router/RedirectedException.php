@@ -7,6 +7,6 @@ namespace Lightna\Engine\App\Router;
 use Exception;
 use Lightna\Engine\App\ObjectManagerIgnore;
 
-class PassedException extends Exception implements ObjectManagerIgnore
+class RedirectedException extends Exception implements ObjectManagerIgnore
 {
 }
