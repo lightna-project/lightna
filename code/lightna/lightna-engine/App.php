@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Lightna\Engine;
 
-use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Router;
-use Lightna\Engine\App\Router\PassedException as RouterPassedException;
-use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Router\BypassedException;
+use Lightna\Engine\App\Router\NoRouteException;
+use Lightna\Engine\App\Router\RedirectedException;
 use Throwable;
 
 class App extends ObjectA
@@ -17,6 +18,7 @@ class App extends ObjectA
     protected Context $context;
     protected ?array $action;
     protected bool $noRoute = false;
+    protected bool $redirected = false;
     /** @AppConfig(router/action) */
     protected array $actions;
 
@@ -26,15 +28,13 @@ class App extends ObjectA
         try {
             try {
                 $this->action = $this->router->process();
-            } catch (NotFoundException) {
+            } catch (NoRouteException) {
                 $this->noRoute = true;
-            } catch (RouterPassedException) {
-                // Router bypassed, no error handling required
+            } catch (BypassedException|RedirectedException) {
+                return;
             }
 
-            if (isset($this->action) || $this->noRoute) {
-                $this->process();
-            }
+            $this->process();
         } catch (Throwable $e) {
             $this->cleanRendering();
             $this->renderError500($e);
@@ -45,9 +45,7 @@ class App extends ObjectA
 
     protected function startRendering(): void
     {
-        if (!IS_PROGRESSIVE_RENDERING) {
-            ob_start();
-        }
+        !IS_PROGRESSIVE_RENDERING && ob_start();
     }
 
     protected function cleanRendering(): void
@@ -74,10 +72,9 @@ class App extends ObjectA
         $this->sendHeaders();
 
         if ($this->noRoute) {
-            http_response_code(404);
-            $this->renderNoRoute();
-        } else {
-            $this->runAction();
+            $this->processNoRoute();
+        } elseif (isset($this->action)) {
+            $this->processAction();
         }
     }
 
@@ -86,9 +83,15 @@ class App extends ObjectA
         header('Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private');
     }
 
-    protected function runAction(): void
+    protected function processAction(): void
     {
         $this->createAction()->process();
+    }
+
+    protected function processNoRoute(): void
+    {
+        http_response_code(404);
+        $this->renderNoRoute();
     }
 
     protected function renderNoRoute(): void
@@ -98,7 +101,7 @@ class App extends ObjectA
             'params' => ['type' => 'no-route'],
         ];
 
-        $this->runAction();
+        $this->processAction();
     }
 
     protected function renderError500(Throwable $e): void
