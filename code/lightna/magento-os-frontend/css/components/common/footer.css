@@ -15,6 +15,14 @@
         @apply flex flex-col gap-2;
     }
 
+    .footer-columns li {
+        @apply m-0;
+    }
+
+    .footer-columns a {
+        @apply hover:no-underline;
+    }
+
     .copyright {
         @apply py-4 text-center text-xs;
     }

@@ -4,7 +4,7 @@
     }
 
     .main-navigation a {
-        @apply text-primary-text;
+        @apply text-primary-text hover:no-underline;
     }
 
     .main-navigation .hover .level-1__title a {
