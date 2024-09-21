@@ -10,7 +10,7 @@
     }
 
     .mobile-overlay__title__container .icon {
-        @apply close cursor-pointer;
+        @apply icon-close cursor-pointer;
     }
 
     @media screen and (max-width: 767px) {

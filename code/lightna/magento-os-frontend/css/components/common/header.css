@@ -8,7 +8,7 @@
     }
 
     .header__open-menu {
-        @apply icon burger-menu md:hidden;
+        @apply icon icon-burger-menu md:hidden;
     }
 
     .header__right {

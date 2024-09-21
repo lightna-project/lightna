@@ -12,7 +12,7 @@
     }
 
     .usp li {
-        @apply w-full shrink-0 py-1;
+        @apply w-full shrink-0 py-1 m-0;
     }
 
     .product-usp {
@@ -29,7 +29,7 @@
 
     .product-usp li:before {
         content: '';
-        @apply icon-sm checkmark absolute left-0 top-[5px] mr-2 block shrink-0;
+        @apply icon-sm icon-checkmark absolute left-0 top-[5px] mr-2 block shrink-0;
     }
 }
 

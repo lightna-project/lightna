@@ -7,7 +7,7 @@
         @apply block;
     }
 
-    .collapsible--active .chevron-down {
+    .collapsible--active .icon-chevron-down {
         @apply -scale-y-100;
     }
 }

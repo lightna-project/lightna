@@ -7,76 +7,77 @@
         @apply h-4 w-4;
     }
 
-    .cart {
+    .icon-cart {
         background: url('../../magento-os-frontend/image/icon/cart.svg')
             center / contain no-repeat;
     }
 
-    .close {
+    .icon-close {
         background: url('../../magento-os-frontend/image/icon/cross-small.svg')
             center / contain no-repeat;
     }
 
-    .close-xs {
+    .icon-close-xs {
         @apply bg-[length:20px_20px];
     }
 
-    .burger-menu {
+    .icon-burger-menu {
         background: url('../../magento-os-frontend/image/icon/menu-burger.svg')
             center / contain no-repeat;
     }
 
-    .settings {
+    .icon-settings {
         background: url('../../magento-os-frontend/image/icon/settings.svg')
             center / contain no-repeat;
     }
 
-    .filter {
+    .icon-filter {
         background: url('../../magento-os-frontend/image/icon/bars-filter.svg')
             center / contain no-repeat;
     }
 
-    .chevron-down {
+    .icon-chevron-down {
         background: url('../../magento-os-frontend/image/icon/angle-small-down.svg')
             center / contain no-repeat;
     }
 
-    .chevron-up {
+    .icon-chevron-up {
         background: url('../../magento-os-frontend/image/icon/angle-small-down.svg')
             center / contain no-repeat;
         transform: scaleY(-1);
     }
 
-    .arrow-left {
+    .icon-arrow-left {
         background: url('../../magento-os-frontend/image/icon/arrow-small-left.svg')
             center / contain no-repeat;
     }
 
-    .arrow-right {
-        @apply arrow-left -scale-100;
+    .icon-arrow-right {
+        @apply icon-arrow-left -scale-100;
     }
 
-    .checkmark {
+    .icon-checkmark {
         background: url('../../magento-os-frontend/image/icon/check.svg')
             center / contain no-repeat;
     }
 
-    .checkmark-green {
+    .icon-checkmark-green {
         background: url('../../magento-os-frontend/image/icon/check-green.svg')
             center / contain no-repeat;
     }
 
-    .user__outline {
+    .icon-user__outline {
         background: url('../../magento-os-frontend/image/icon/user.svg')
             center / contain no-repeat;
     }
 
-    .user__filled {
+    .icon-user__filled {
         background: url('../../magento-os-frontend/image/icon/user-filled.svg')
             center / contain no-repeat;
     }
 
     .counter {
-        @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main text-xs font-normal text-white;
+        @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main
+        text-xs font-normal text-white;
     }
 }

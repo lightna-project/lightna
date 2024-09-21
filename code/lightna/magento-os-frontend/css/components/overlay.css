@@ -8,6 +8,6 @@
     }
 
     .overlay__title__container .icon {
-        @apply close cursor-pointer;
+        @apply icon-close cursor-pointer;
     }
 }
