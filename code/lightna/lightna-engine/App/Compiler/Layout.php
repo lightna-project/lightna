@@ -11,6 +11,7 @@ class Layout extends CompilerA
     /** @AppConfig(modules) */
     protected ?array $modules;
     protected array $layouts;
+    protected array $modes;
     protected array $templateMap;
 
     protected function defineTemplateMap(): void
@@ -21,6 +22,7 @@ class Layout extends CompilerA
     public function make(): void
     {
         $this->collectFiles();
+        $this->applyModes();
         $this->parseFiles();
         $this->extend();
         $this->applyDirectives();
@@ -43,9 +45,38 @@ class Layout extends CompilerA
         }
 
         $this->layouts = [];
+        $this->modes = [];
         foreach ($files as $file) {
             $key = preg_replace(['~^.+?/layout/~', '~\.yaml$~'], '', $file);
-            $this->layouts[$key]['files'][] = $file;
+            if (str_starts_with($key, 'mode/')) {
+                $parts = explode('/', $key);
+                array_shift($parts);
+                $mode = array_shift($parts);
+                $layoutKey = implode('/', $parts);
+                $this->modes[$layoutKey][$mode][] = $file;
+            } else {
+                $this->layouts[$key]['files'][] = $file;
+            }
+        }
+    }
+
+    protected function applyModes(): void
+    {
+        foreach ($this->modes as $layoutKey => $modes) {
+            if (!isset($this->layouts[$layoutKey])) {
+                continue;
+            }
+
+            $proto = $this->layouts[$layoutKey];
+            foreach (array_combinations(array_keys($modes)) as $combo) {
+                $key = $layoutKey;
+                $files = $proto['files'];
+                foreach ($combo as $mode) {
+                    $key .= '+' . $mode;
+                    $files = merge($files, $modes[$mode]);
+                }
+                $this->layouts[$key]['files'] = $files;
+            }
         }
     }
 

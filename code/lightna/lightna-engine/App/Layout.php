@@ -31,6 +31,10 @@ class Layout extends ObjectA
     protected function defineLayout(): void
     {
         $layoutName = $this->entities[$this->entityType]['layout'];
+        if ($modes = $this->context->mode) {
+            sort($modes);
+            $layoutName .= '+' . implode('+', $modes);
+        }
         $this->layout = $this->compiled->load('layout/' . $layoutName);
     }
 

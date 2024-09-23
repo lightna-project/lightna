@@ -94,3 +94,32 @@ function filter_extra_spaces(string $str): string
 {
     return trim(preg_replace('~\s+~', ' ', $str));
 }
+
+/**
+ * Generate all possible combinations of an array's elements where the order doesn't matter
+ */
+function array_combinations($array): array
+{
+    $results = [];
+    $array = array_values($array);
+    $arraySize = count($array);
+
+    // The total number of combinations is 2^n, excluding the empty set
+    $totalCombinations = pow(2, $arraySize) - 1;
+
+    for ($i = 1; $i <= $totalCombinations; $i++) {
+        $combination = [];
+        for ($j = 0; $j < $arraySize; $j++) {
+            // Check if j-th element of array should be included
+            if ($i & (1 << $j)) {
+                $combination[] = $array[$j];
+            }
+        }
+        // Sort the combination to avoid permutations with the same elements
+        sort($combination);
+        $results[join(',', $combination)] = $combination;
+    }
+
+    // Return values only without the keys that were used to avoid duplicates
+    return array_values($results);
+}
