@@ -1,4 +1,3 @@
-import { $ } from './lib/utils/dom';
 import { AddToCart } from './common/AddToCart';
 import { ShoppingCart } from './common/ShoppingCart';
 import { Menu } from './common/Menu';
@@ -15,6 +14,6 @@ new Menu();
 new MobileOverlay();
 new ProductOptions();
 new Facets();
-new Gallery({ offset: 1, gallery: '.cjs-gallery' });
-new Collapsible($('.cjs-facets'));
-new Tabs($('.cjs-product-info-tabs'));
+new Gallery();
+new Collapsible();
+new Tabs();

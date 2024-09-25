@@ -2,17 +2,18 @@
 /** @var Lightna\Engine\Data\Block $block */
 $tabs = $block->{'.'};
 ?>
-<div class="cjs-product-info-tabs tabs">
+<div class="cjs-tabs tabs">
     <div class="tabs__headings-container">
         <?php foreach ($tabs as $name => $tab): ?>
-            <div class="cjs-tab-trigger tab-trigger <?= $tab->active ? 'active' : '' ?>"
+            <div class="tab-trigger <?= $tab->active ? 'active' : '' ?>"
+                 data-action="open-tab"
                  data-tab-index="<?= escape($name) ?>">
                 <?= phrase($tab->title) ?>
             </div>
         <?php endforeach; ?>
     </div>
     <?php foreach ($tabs as $name => $tab): ?>
-        <div class="cjs-tab tab-content <?= $tab->active ? 'active' : '' ?>"
+        <div class="tab-content <?= $tab->active ? 'active' : '' ?>"
              data-tab="<?= escape($name) ?>">
             <?= block($name) ?>
         </div>
