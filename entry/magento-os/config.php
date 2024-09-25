@@ -17,6 +17,8 @@ return [
         'Lightna\Magento' => '../../code/lightna/magento-os-backend',
         'Lightna\Magento\Frontend' => '../../code/lightna/magento-os-frontend',
         'Lightna\Magento\Demo' => '../../code/lightna/magento-os-demo',
+        'Lightna\Magento\FirstExtend' => '../../code/lightna/extend-js-here',
+        'Lightna\Magento\SecondExtend' => '../../code/lightna/extend-js-here-and-here',
     ],
     'libs' => [
         'Laminas\Db' => 'vendor/laminas/laminas-db/src',

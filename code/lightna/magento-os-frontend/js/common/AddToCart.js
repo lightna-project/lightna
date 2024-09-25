@@ -27,6 +27,7 @@ export class AddToCart {
     }
 
     async addProduct(component, actionTrigger) {
+        console.log('addProduct called from AddToCart.js');
         const data = {
             ...UserInput.collect(component),
             product: component.getAttribute('data-product-id'),
