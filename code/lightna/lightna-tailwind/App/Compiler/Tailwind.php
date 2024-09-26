@@ -15,14 +15,14 @@ class Tailwind extends CompilerA
 
     public function make(): void
     {
-        $this->makeModulesConfig();
+        $this->collectModulesConfig();
         $this->saveModulesConfig();
         $this->indexImports();
         $this->makeEntries();
         $this->makeMainConfig();
     }
 
-    protected function makeModulesConfig(): void
+    protected function collectModulesConfig(): void
     {
         $this->twConfig = [];
         foreach ($this->getModules() as $folder) {
@@ -50,7 +50,7 @@ class Tailwind extends CompilerA
 
     protected function addModuleContent(string $moduleFolder, array &$config): void
     {
-        $config['config']['content'] = [
+        $config['tailwind']['content'] = [
             $moduleFolder . '/template/**/*.phtml',
             $moduleFolder . '/layout/*.yaml',
             $moduleFolder . '/js/*.js',
@@ -61,7 +61,7 @@ class Tailwind extends CompilerA
     {
         $this->compiled->putFile(
             'tailwind/config.json',
-            json_pretty($this->twConfig['config']),
+            json_pretty($this->twConfig['tailwind']),
         );
     }
 
@@ -110,7 +110,7 @@ class Tailwind extends CompilerA
         } else {
             $moduleImport = $this->importsIndex[$import] ?? '';
             if (!$moduleImport) {
-                throw new Exception("Import [$import] not found.");
+                throw new Exception("Tailwind compiler: Import [$import] not found.");
             }
 
             return '~/' . $moduleImport;

@@ -1,0 +1,6 @@
+entry:
+  semi:
+    component:
+      Menu: common/Menu
+      MobileOverlay: common/MobileOverlay
+      ShoppingCart: common/ShoppingCart

@@ -1,16 +1,14 @@
 const path = require('path');
+const deepmerge = require('deepmerge');
+const modulesConfig = require('../../generated/magento-os/compiled/build/webpack/webpack.config.js');
 
-const config = {
-    entry: {
-        common: '../../code/lightna/magento-os-frontend/js/index.js',
-        semi: '../../code/lightna/magento-os-frontend/js/index-semi.js',
-    },
+let config = deepmerge(modulesConfig, {
     output: {
         filename: '[name].js',
         path: path.resolve(__dirname, '../../project/magento-os/pub/static/lightna/compiled/js'),
     },
     mode: 'production'
-};
+});
 
 module.exports = (env, argv) => {
     if (argv.mode === 'development') {

@@ -20,7 +20,7 @@ entry:
       - components/listing/import.css
       - components/product/import.css
       - tailwindcss/utilities
-config:
+tailwind:
   theme:
     borderRadius:
       none: 0

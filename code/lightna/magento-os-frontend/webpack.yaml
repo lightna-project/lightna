@@ -1,0 +1,12 @@
+entry:
+  common:
+    component:
+      Menu: common/Menu
+      MobileOverlay: common/MobileOverlay
+      ShoppingCart: common/ShoppingCart
+      AddToCart: common/AddToCart
+      Collapsible: common/Collapsible
+      Tabs: common/Tabs
+      ProductOptions: product/Options
+      Gallery: product/Gallery
+      Facets: listing/Facets
