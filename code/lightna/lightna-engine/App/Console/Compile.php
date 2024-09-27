@@ -78,7 +78,7 @@ class Compile extends CommandA
             ],
         ]);
 
-        $this->runCustomCompilers();
+        $this->runCompilersInModules();
     }
 
     protected function init(): void
@@ -106,7 +106,7 @@ class Compile extends CommandA
         $this->printEnd();
     }
 
-    protected function runCustomCompilers(): void
+    protected function runCompilersInModules(): void
     {
         if (!$pool = getobj(AppConfig::class)->get('compiler/pool')) {
             return;

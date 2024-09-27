@@ -1,0 +1,3 @@
+plugin:
+  Lightna\Engine\App\Router:
+    - Lightna\Magento\Demo\App\Plugin\Router

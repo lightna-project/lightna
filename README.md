@@ -85,12 +85,6 @@ composer lightna:build
 ```
 
 
-### Setup Lightna indexer schema
-```
-./cli indexer:schema:update
-```
-
-
 ### Schedule Lightna indexer
 ```
 * * * * * { cd [abs_path_to_repo]/entry/magento-os && ./cli indexer:process; } 2>&1 >> [abs_path_to_logs]/lightna-indexer.log
