@@ -1,0 +1,4 @@
+component:
+  extend:
+    AddToCart:
+      - lightna/extend-2/AddToCartExtended
