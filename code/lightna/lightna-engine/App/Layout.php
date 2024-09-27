@@ -49,7 +49,10 @@ class Layout extends ObjectA
         $this->current[] = $block = $this->resolveBlock($blockName);
 
         try {
-            $this->beforeBlock($block, $vars);
+            $before = $this->fetchBeforeBlock($block);
+            $after = $this->fetchAfterBlock($block);
+            $before && $this->block('before', $vars);
+
             if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
                 $this->isMainCurrent = false;
                 $this->renderBlockTemplate($block, $vars);
@@ -57,7 +60,9 @@ class Layout extends ObjectA
                 $this->isMainCurrent = false;
                 $this->renderBlockContent($block, $vars);
             }
-            $this->afterBlock($block, $vars);
+
+            $after && $this->block('after', $vars);
+
         } catch (Throwable $e) {
             $this->handleBlockError($e);
         }
@@ -103,20 +108,26 @@ class Layout extends ObjectA
         return $block;
     }
 
-    protected function beforeBlock(array &$block, array $vars): void
+    protected function fetchBeforeBlock(array &$block): ?array
     {
+        $before = null;
         if (isset($block['.']['before'])) {
-            block('before', $vars);
+            $before = $block['.']['before'];
             unset($block['.']['before']);
         }
+
+        return $before;
     }
 
-    protected function afterBlock(array &$block, array $vars): void
+    protected function fetchAfterBlock(array &$block): ?array
     {
+        $after = null;
         if (isset($block['.']['after'])) {
-            block('after', $vars);
+            $after = $block['.']['after'];
             unset($block['.']['after']);
         }
+
+        return $after;
     }
 
     protected function renderBlockTemplate(array $block, array $vars = []): void

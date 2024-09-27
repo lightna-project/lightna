@@ -6,8 +6,10 @@ $elasticTime = round(Lightna\Elasticsearch\App\Client::$timeSpent * 1000, 2);
     const serverTime = <?= escape($serverTime, 'json-js') ?>;
     const elasticTime = <?= escape($elasticTime, 'json-js') ?>;
     const el = document.getElementById('serverTime');
+    const mode = window.pageContext?.mode;
+    const modeText = mode === '' ? 'Lightna' : window.pageContext.semiDemoMode;
 
-    el.innerHTML = 'Server rendering time: ' + serverTime + 'ms';
+    el.innerHTML = '[' + modeText + '] Server rendering time: ' + serverTime + 'ms';
     if (elasticTime) {
         el.innerHTML += ' (incl. Elasticsearch: ' + elasticTime + 'ms)';
     }
