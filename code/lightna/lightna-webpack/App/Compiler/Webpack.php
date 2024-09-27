@@ -129,7 +129,9 @@ class Webpack extends CompilerA
         $js = '';
         foreach ($components as $name => $import) {
             $js .= "\n" . 'import { ' . $name . ' } from ' . json_pretty($this->getImport($import)) . ';';
+            $js .= $this->getComponentExtendsJs($name);
             $js .= "\n" . 'new ' . $name . '();';
+            $js .= "\n";
         }
 
         return $js;
@@ -142,6 +144,17 @@ class Webpack extends CompilerA
         }
 
         return $this->importsIndex[$import];
+    }
+
+    protected function getComponentExtendsJs(string $component): string
+    {
+        $extends = $this->modulesConfig['component']['extend'][$component] ?? [];
+        $js = '';
+        foreach ($extends as $extend) {
+            $js .= "\n$component = require(" . json_pretty($extend) . ").extend($component);";
+        }
+
+        return $js;
     }
 
     protected function saveEntryJs(string $name, string $js): void

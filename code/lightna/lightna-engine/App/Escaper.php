@@ -20,11 +20,31 @@ class Escaper extends ObjectA
     protected function escapeValue(mixed $var, ?string $method = 'html'): ?string
     {
         return match ($method) {
-            null, 'html' => escape_html((string)$var),
-            'json-js' => json($var),
-            'json-html' => escape_html(json($var)),
-            'url-param' => urlencode($var),
+            null, 'html' => $this->escapeHtml((string)$var),
+            'json-js' => $this->escapeJsonJs($var),
+            'json-html' => $this->escapeJsonHtml($var),
+            'url-param' => $this->escapeUrlParam((string)$var),
             default => null,
         };
+    }
+
+    protected function escapeHtml(string $var): string
+    {
+        return htmlspecialchars($var, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
+    }
+
+    protected function escapeJsonJs(mixed $var): string
+    {
+        return json($var);
+    }
+
+    protected function escapeJsonHtml(mixed $var): string
+    {
+        return $this->escapeHtml(json($var));
+    }
+
+    protected function escapeUrlParam(string $var): string
+    {
+        return urlencode($var);
     }
 }

@@ -13,11 +13,6 @@ function escape(mixed $var, ?string $method = 'html'): string
     return $escaper->escape($var, $method);
 }
 
-function escape_html(string $var): string
-{
-    return htmlspecialchars($var, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8', false);
-}
-
 /**
  * Return is always empty string but declared return type "string" allows to use <?=
  * To get html see function blockhtml
