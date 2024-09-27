@@ -1,0 +1,5 @@
+extend:
+  lightna/lightna-engine/lib/UserInput:
+    - lightna/extend-2/lib/UserInput
+  lightna/magento-os-frontend/common/AddToCart:
+    - lightna/extend-2/AddToCartExtended
