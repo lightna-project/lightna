@@ -49,12 +49,14 @@ cd ../..
 
 
 ### Integrate Lightna and Magento
-* Symlink Lightna module and theme:
+* Symlink Lightna modules and themes:
 ```
 mkdir -p project/magento-os/app/code/Lightna && \
 mkdir -p project/magento-os/app/design/frontend/Lightna && \
 ln -s ../../../../../code/magento-os/lightna-frontend project/magento-os/app/code/Lightna/Frontend && \
+ln -s ../../../../../code/magento-os/lightna-demo project/magento-os/app/code/Lightna/Demo && \
 ln -s ../../../../../../code/magento-os/lightna-theme project/magento-os/app/design/frontend/Lightna/Lightna && \
+ln -s ../../../../../../code/magento-os/lightna-semi-theme project/magento-os/app/design/frontend/Lightna/Semi
 ```
 
 * Redirect Magento index.php to Lightna:
