@@ -1,0 +1,9 @@
+select {
+    padding: 4px 24px 6px 12px;
+}
+
+.product-item-info,
+.swatch-option.text,
+.product.data.items .switch {
+    box-sizing: content-box;
+}

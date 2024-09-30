@@ -1,5 +1,5 @@
 @layer components {
-    header {
+    .page-header {
         @apply sticky top-0 z-[45] bg-white shadow-lg shadow-primary-main/5;
     }
 
