@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Compiler;
 
 use Lightna\Engine\App\Opcache\Compiled;
 use ReflectionClass;
+use ReflectionNamedType;
 
 class Plugin extends CompilerA
 {
@@ -106,40 +107,22 @@ class Plugin extends CompilerA
             }
 
             if ($match) {
+                $typeName =
+                    $method->getReturnType() && instance_of($method->getReturnType(), ReflectionNamedType::class)
+                        ? $method->getReturnType()->getName() : 'other';
                 $m = [
                     'name' => $method->getName(),
-                    'returnVoid' => $method->getReturnType()?->getName() === 'void',
-                    'returnClosure' => $method->getReturnType()?->getName() === 'Closure',
+                    'returnVoid' => $typeName === 'void',
+                    'returnClosure' => $typeName === 'Closure',
                 ];
-                $parseDeclaration && $m['declaration'] = $this->getMethodDeclaration($method);
+
+                $parseDeclaration && $m['declaration'] = LightnaReflectionClass::getMethodDeclaration($method);
                 $parseParams && $m['params'] = $this->getMethodParams($method);
                 $methods[strtolower($method->getName())] = $m;
             }
         }
 
         return $methods;
-    }
-
-    protected function getMethodDeclaration(\ReflectionMethod $method): string
-    {
-        static $className, $classContent;
-
-        if ($className !== $method->class) {
-            $className = $method->class;
-            $classContent = file($method->getFileName());
-        }
-
-        $methodSource = implode("", array_slice(
-            $classContent,
-            $method->getStartLine() - 1,
-            $method->getEndLine() - ($method->getStartLine() - 1)
-        ));
-
-        if (!preg_match('~^\s*(.+?)\s*\\{\\n~m', $methodSource, $matches)) {
-            throw new \Exception('Can\'t parse method declaration for ' . $method->getDeclaringClass() . '::' . $method->getName());
-        }
-
-        return $matches[1];
     }
 
     protected function getMethodParams(\ReflectionMethod $method): string
@@ -178,7 +161,8 @@ class Plugin extends CompilerA
         $className = $this->parseClassName($class);
 
         $def = "<?php\n\ndeclare(strict_types=1);"
-            . "\n\nnamespace {$className['namespace']};\n\nclass "
+            . "\n\nnamespace {$className['namespace']};"
+            . "\n\nclass "
             . $className['short'] . static::EXTENDED_CLASS_SUFFIX . " extends \\$class\n{";
 
         $t = '    ';

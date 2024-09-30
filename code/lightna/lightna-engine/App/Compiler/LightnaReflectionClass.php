@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use ReflectionClass;
+use ReflectionMethod;
+use ReflectionNamedType;
+use ReflectionParameter;
 use ReflectionProperty;
+use ReflectionType;
+use ReflectionUnionType;
 
 class LightnaReflectionClass
 {
@@ -222,7 +227,7 @@ class LightnaReflectionClass
         $uses[] = $this->getName();
 
         $content = file_get_contents($this->reflectionClass->getFileName());
-        if (!preg_match('~(.+?)\\nclass\s~ism', $content, $ms)) {
+        if (!preg_match('~(.+?)\\n(abstract\s*)?class\s~ism', $content, $ms)) {
             return;
         }
         $head = $ms[1];
@@ -242,5 +247,77 @@ class LightnaReflectionClass
             }
             $this->uses[$as] = $use;
         }
+    }
+
+    public static function getMethodDeclaration(ReflectionMethod $method): string
+    {
+        $dcl = '';
+        $method->isPublic() && $dcl .= 'public ';
+        $method->isProtected() && $dcl .= 'protected ';
+        $method->isPrivate() && $dcl .= 'private ';
+        $method->isStatic() && $dcl .= 'static ';
+        $dcl .= 'function ' . $method->getName() . '(' . static::renderMethodParams($method) . ')';
+        $method->hasReturnType() && $dcl .= ': ' . static::renderType($method->getReturnType());
+
+        return $dcl;
+    }
+
+    protected static function renderMethodParams(ReflectionMethod $method): string
+    {
+        $dcl = $sep = '';
+        foreach ($method->getParameters() as $param) {
+            $dcl .= $sep . ($type = static::renderParamType($param));
+            $sep = ', ';
+            !empty($type) && $dcl .= ' ';
+            $dcl .= static::renderParam($param);
+        }
+
+        return $dcl;
+    }
+
+    protected static function renderParam(ReflectionParameter $param): string
+    {
+        $dcl = '';
+        $param->isPassedByReference() && $dcl .= '&';
+        $dcl .= '$' . $param->getName();
+        if ($param->isDefaultValueAvailable()) {
+            $dcl .= ' = ';
+            if ($param->isDefaultValueConstant()) {
+                $dcl .= '\\' . $param->getDefaultValueConstantName();
+            } else {
+                $dcl .= var_export($param->getDefaultValue(), true);
+            }
+        }
+
+        return $dcl;
+    }
+
+    protected static function renderParamType(ReflectionParameter $param): string
+    {
+        if (!$param->hasType()) {
+            return '';
+        }
+
+        $dcl = '';
+        $param->hasType() && $dcl .= static::renderType($param->getType());
+
+        return $dcl;
+    }
+
+    protected static function renderType(ReflectionType $type): string
+    {
+        $dcl = '';
+        ((string)$type)[0] === '?' && $dcl .= '?';
+        if (instance_of($type, ReflectionNamedType::class)) {
+            $dcl .= (!$type->isBuiltin() ? '\\' : '') . $type->getName();
+        } elseif (instance_of($type, ReflectionUnionType::class)) {
+            $sep = '';
+            foreach ($type->getTypes() as $type) {
+                $dcl .= $sep . static::renderType($type);
+                $sep = '|';
+            }
+        }
+
+        return $dcl;
     }
 }
