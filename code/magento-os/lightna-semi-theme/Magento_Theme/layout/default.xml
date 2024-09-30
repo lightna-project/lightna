@@ -43,6 +43,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="main.content" htmlClass="page-main page-container"/>
+        <move element="page.top" destination="page.wrapper" after="lightna.header"/>
         <referenceBlock name="navigation.sections" remove="true"/>
         <referenceContainer name="header.container" remove="true"/>
         <referenceContainer name="footer-container" remove="true"/>

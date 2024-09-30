@@ -28,6 +28,9 @@ template: page.phtml
     template: page/usp.phtml
   .header:
     container: header
+    attributes:
+      class:
+        - page-header
     .inner:
       container: div
       attributes:

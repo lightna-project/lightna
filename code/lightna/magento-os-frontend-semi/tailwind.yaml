@@ -2,6 +2,7 @@ entry:
   semi:
     import:
       - tailwindcss/base
+      - base/reset.css
       - base/animation.css
       - base/buttons.css
       - base/icons.css

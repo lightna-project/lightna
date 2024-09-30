@@ -76,7 +76,7 @@
             center / contain no-repeat;
     }
 
-    .counter {
+    .icon-counter {
         @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main
         text-xs font-normal text-white;
     }
