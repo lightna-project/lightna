@@ -131,8 +131,8 @@ class Config extends CompilerA implements ObjectManagerIgnore
 
     protected function defineAssetBase(array &$config): void
     {
-        if (!$docDir = realpath(LIGHTNA_ENTRY . $config['doc_dir'])) {
-            throw new Exception('Invalid doc_dir');
+        if (!$docDir = realpath($docDirConfig = LIGHTNA_ENTRY . $config['doc_dir'])) {
+            throw new Exception('Invalid doc_dir [' . $docDirConfig . ']');
         }
         if (!$assetDir = realpath(LIGHTNA_ENTRY . $config['asset_dir'])) {
             try {
