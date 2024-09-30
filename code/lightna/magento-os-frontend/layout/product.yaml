@@ -18,9 +18,14 @@ extends:
           - md:gap-8
           - md:grid-cols-[auto_40%]
           - items-start
-      .gallery:
-        template: product/gallery.phtml
-      .main:
+      .left-container:
+        container: div
+        attributes:
+          class:
+            - relative
+        .gallery:
+          template: product/gallery.phtml
+      .right-container:
         container: div
         attributes:
           class:
