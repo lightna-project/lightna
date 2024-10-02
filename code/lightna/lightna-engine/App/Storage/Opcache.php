@@ -54,4 +54,14 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     {
         // TODO: Implement clean() method.
     }
+
+    public function batch(): void
+    {
+        // Not needed
+    }
+
+    public function flush(): void
+    {
+        // Not needed
+    }
 }

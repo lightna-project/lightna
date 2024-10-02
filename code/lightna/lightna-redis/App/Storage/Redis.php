@@ -12,6 +12,9 @@ class Redis extends ObjectA implements StorageInterface
 {
     protected ?RedisClient $client;
     protected array $connection;
+    protected bool $batch = false;
+    protected array $batchSet = [];
+    protected array $batchUnset = [];
 
     protected function init(array $connection): void
     {
@@ -40,12 +43,20 @@ class Redis extends ObjectA implements StorageInterface
 
     public function set(string $key, mixed $value): void
     {
-        $this->client->set($key, $value);
+        if ($this->batch) {
+            $this->batchSet[$key] = $value;
+        } else {
+            $this->client->set($key, $value);
+        }
     }
 
     public function unset(string $key): void
     {
-        $this->client->del($key);
+        if ($this->batch) {
+            $this->batchUnset[$key] = 1;
+        } else {
+            $this->client->del($key);
+        }
     }
 
     public function get(string $key): string|array
@@ -70,5 +81,20 @@ class Redis extends ObjectA implements StorageInterface
     public function clean(array $tags): void
     {
         // TODO: Implement clean() method.
+    }
+
+    public function batch(): void
+    {
+        $this->batch = true;
+    }
+
+    public function flush(): void
+    {
+        $this->client->mSet($this->batchSet);
+        $this->client->del(array_keys($this->batchUnset));
+
+        $this->batch = false;
+        $this->batchSet = [];
+        $this->batchUnset = [];
     }
 }

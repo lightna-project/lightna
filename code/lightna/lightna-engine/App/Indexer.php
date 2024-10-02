@@ -13,6 +13,7 @@ use Lightna\Magento\App\Index\ScopeIndexAbstract;
 class Indexer extends ObjectA
 {
     public const LOCK_NAME = 'lightna_indexer';
+    public array $stats;
 
     /** @AppConfig(entity) */
     protected array $entities;
@@ -22,13 +23,33 @@ class Indexer extends ObjectA
     protected QueueHandler $queueHandler;
     protected Database $db;
 
-    public function reindex(string $entity): void
+    public function reindex(string $entity, ?int $onlyScope = null): void
     {
+        $this->resetStats();
+
         $index = $this->getEntityIndex($entity);
         foreach ($this->scope->getList() as $scope) {
+            if ($onlyScope && $onlyScope !== $scope) {
+                continue;
+            }
             $this->context->scope = $scope;
             $this->refreshAll($index);
         }
+
+        $this->completeStats();
+    }
+
+    protected function resetStats(): void
+    {
+        $this->stats = [
+            'count' => 0,
+            'start_time' => microtime(true),
+        ];
+    }
+
+    protected function completeStats(): void
+    {
+        $this->stats['time'] = (int)(microtime(true) - $this->stats['start_time']);
     }
 
     protected function refreshAll(IndexInterface $index): void
@@ -37,6 +58,7 @@ class Indexer extends ObjectA
         while ($ids = $index->scan($lastId)) {
             $index->refresh($ids);
             $lastId = end($ids);
+            $this->stats['count'] += count($ids);
         }
     }
 

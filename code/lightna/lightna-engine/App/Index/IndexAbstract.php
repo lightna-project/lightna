@@ -10,6 +10,8 @@ abstract class IndexAbstract extends ObjectA implements IndexInterface
 {
     public function refresh(array $ids): void
     {
+        $this->entity->batch();
+
         $data = $this->getBatchData($ids);
         foreach ($data as $id => $item) {
             $this->updateItem($id, $item);
@@ -19,6 +21,8 @@ abstract class IndexAbstract extends ObjectA implements IndexInterface
         foreach ($remove as $id) {
             $this->removeItem($id);
         }
+
+        $this->entity->flush();
     }
 
     protected function updateItem(string|int $id, array $data): void

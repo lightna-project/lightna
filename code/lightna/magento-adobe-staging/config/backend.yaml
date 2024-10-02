@@ -1,0 +1,30 @@
+plugin:
+  Lightna\Engine\App\Project\Database:
+    - Lightna\Magento\AdobeStaging\App\Plugin\Project\Database
+staging:
+  tables:
+    cms_page:
+      entity_id: page_id
+      relations:
+        cms_page_store: page_id
+    cms_block:
+      entity_id: block_id
+      relations:
+        cms_block_store: null
+    catalog_product_entity:
+      entity_id: entity_id
+      relations:
+        catalog_product_entity_datetime: null
+        catalog_product_entity_decimal: null
+        catalog_product_entity_int: null
+        catalog_product_entity_text: null
+        catalog_product_entity_varchar: null
+        catalog_product_entity_media_gallery_value_to_entity: null
+    catalog_category_entity:
+      entity_id: entity_id
+      relations:
+        catalog_category_entity_datetime: null
+        catalog_category_entity_decimal: null
+        catalog_category_entity_int: null
+        catalog_category_entity_text: null
+        catalog_category_entity_varchar: null

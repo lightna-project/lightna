@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
+use Exception;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -54,11 +55,14 @@ class LightnaReflectionClass
         $methods = $this->getMethods();
 
         foreach ($this->reflectionClass->getProperties() as $property) {
-            $doc = $this->currPropertyDoc = $this->getPropertyDoc($property);
+            if (!$property->getType()) {
+                throw new Exception('Property ' . $property->getDeclaringClass()->getName()
+                    . '::' . $property->getName() . ' must have a type. If there is no specific type, use "mixed".');
+            }
 
             $this->properties[$property->getName()] = a2o(
                 [
-                    'doc' => $doc,
+                    'doc' => $this->getPropertyDoc($property),
                     'name' => $property->getName(),
                     'class' => $this->getName(),
                     'visibility' => $property->isPublic() ? 'pb' : ($property->isProtected() ? 'pt' : ($property->isPrivate() ? 'pv' : null)),
