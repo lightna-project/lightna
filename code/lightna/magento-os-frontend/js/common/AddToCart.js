@@ -1,10 +1,8 @@
-import { Cookie } from 'lightna/lightna-engine/lib/Cookie';
 import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
 import request from 'lightna/lightna-engine/lib/HttpClient';
-import { $, $$ } from "lightna/lightna-engine/lib/utils/dom";
+import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 
 export class AddToCart {
-    components = [];
     addToCartUrl = '/checkout/cart/add';
     classes = {
         loading: 'loading',
@@ -12,60 +10,60 @@ export class AddToCart {
     };
 
     constructor() {
-        this.components = $$('.cjs-add-to-cart');
+        this.component = '.cjs-add-to-cart';
+        this.trigger = '[data-action="add-to-cart"]';
         this.bindEvents();
     }
 
     bindEvents() {
-        this.components.forEach((component) => {
-            const actionTrigger = $('[data-action="add-to-cart"]', component);
-            actionTrigger.addEventListener('click', () => {
-                this.addProduct(component, actionTrigger);
-                this.toggleAnimation(actionTrigger, true);
-            });
+        $('body').addEventListener('click', (event) => {
+            const trigger = this.getAddToCartTrigger(event.target);
+            if (trigger) {
+                const component = trigger.closest(this.component);
+                this.onAddProduct(component);
+            }
         });
     }
 
-    async addProduct(component, actionTrigger) {
+    getAddToCartTrigger(element) {
+        return element.closest(this.trigger);
+    }
+
+    async onAddProduct(component) {
+        this.beforeAddProduct(component);
+        await this.addProduct(component);
+        this.afterAddProduct(component);
+    }
+
+    async addProduct(component) {
         const data = {
             ...UserInput.collect(component),
-            product: component.getAttribute('data-product-id'),
+            product: component.dataset.productId,
             noSuccessMessages: true,
         };
 
         await request.post(this.addToCartUrl, data, {
-            onSuccess: this.onAddProductSuccess.bind(this)
+            onSuccess: this.addProductSuccess.bind(this)
         })
-
-        this.toggleAnimation(actionTrigger, false);
     }
 
-    onAddProductSuccess(response) {
+    beforeAddProduct(component) {
+        this.toggleAnimation($(this.trigger, component), true);
+    }
+
+    addProductSuccess(response) {
         if (response.messagesHtml) {
             return;
         }
         document.dispatchEvent(new CustomEvent('add-to-cart'));
-        this.updateMagentoCartSectionId();
     }
 
-    updateMagentoCartSectionId() {
-        let sids = Cookie.get('section_data_ids');
-        sids = sids ? JSON.parse(decodeURIComponent(sids)) : {};
-        sids.cart = sids.cart ? sids.cart + 1000 : 1;
-
-        Cookie.set(
-            'section_data_ids',
-            encodeURIComponent(JSON.stringify(sids)),
-        );
+    afterAddProduct(component) {
+        this.toggleAnimation($(this.trigger, component), false);
     }
 
     toggleAnimation(element, isLoading) {
         element.classList.toggle(this.classes.loading, isLoading);
         element.classList.toggle(this.classes.disabled, isLoading);
-    }
-
-    reload() {
-        this.components = $$('.cjs-add-to-cart');
-        this.bindEvents();
     }
 }
