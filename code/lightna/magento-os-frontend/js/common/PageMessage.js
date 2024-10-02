@@ -27,6 +27,6 @@ export class PageMessage {
             return;
         }
         this.message.classList.add('fade-out');
-        setTimeout(() => this.message.remove(), 200);
+        setTimeout(() => this.message.remove(), 400);
     }
 }

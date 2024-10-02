@@ -1,3 +1,5 @@
+@import "../base/animation.css";
+
 @layer components {
     .usp {
         @apply overflow-hidden bg-primary-bg px-5 md:px-6;
