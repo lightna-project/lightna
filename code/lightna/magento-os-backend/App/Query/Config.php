@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App\Query;
 
+use Exception;
 use Laminas\Db\Sql\Expression;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
@@ -34,6 +35,9 @@ class Config extends ObjectA
         $allModules = $this->getAllModules();
         $enabledModules = $this->getEnabledModules();
         foreach ($enabledModules as $name) {
+            if (!isset($allModules[$name])) {
+                throw new Exception("Module source for '{$name}' not resolved");
+            }
             $this->modules[$name] = $allModules[$name];
         }
     }
@@ -49,12 +53,18 @@ class Config extends ObjectA
     protected function getVendorModules(): array
     {
         $modules = [];
-        $cLock = json_decode(file_get_contents($this->projectSrc . 'composer.lock'));
-        foreach ($cLock->packages as $package) {
+        foreach ($this->getVendorPackages() as $package) {
             $modules = merge($modules, $this->getPackageModules($package));
         }
 
         return $modules;
+    }
+
+    protected function getVendorPackages(): array
+    {
+        $lock = json_decode(file_get_contents($this->projectSrc . 'composer.lock'));
+
+        return array_merge($lock->packages, $lock->{'packages-dev'});
     }
 
     protected function getPackageModules(stdClass $package): array

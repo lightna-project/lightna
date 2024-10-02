@@ -146,27 +146,12 @@ abstract class EavAbstract extends ObjectA
         }
 
         $union = [];
-        foreach ($attributeByType as $type => $attrIds) {
-            if ($type === 'static' || empty($attrIds)) {
+        foreach ($attributeByType as $type => $attributeIds) {
+            if ($type === 'static' || empty($attributeIds)) {
                 continue;
             }
 
-            $typeSelect = $this->db
-                ->select(['av' => $this::ENTITY_TABLE . '_' . $type])
-                ->join(
-                    ['a' => 'eav_attribute'],
-                    'a.attribute_id = av.attribute_id',
-                    ['attribute_code']
-                )
-                // 0 (default) first
-                ->order('store_id');
-
-            $typeSelect->where
-                ->in('a.attribute_id', $attrIds)
-                ->in('av.store_id', [0, $this->context->scope])
-                ->in('av.entity_id', $ids);
-
-            $union[] = $typeSelect;
+            $union[] = $this->getTypeAttributeValuesSelect($type, $attributeIds, $ids);
         }
 
         $mainSelect = new Combine();
@@ -175,6 +160,33 @@ abstract class EavAbstract extends ObjectA
         }
 
         return $mainSelect;
+    }
+
+    protected function getTypeAttributeValuesSelect(
+        string $type,
+        array $attributeIds,
+        array $entityIds,
+    ): AbstractPreparableSql {
+        $select = $this->db
+            ->select(['entity' => $this::ENTITY_TABLE])
+            ->columns(['entity_id'])
+            ->join(
+                ['av' => $this::ENTITY_TABLE . '_' . $type],
+                'av.entity_id = entity.entity_id',
+                ['attribute_id', 'store_id', 'value'])
+            ->join(
+                ['a' => 'eav_attribute'],
+                'a.attribute_id = av.attribute_id',
+                ['attribute_code'])
+            // 0 (default) must be first
+            ->order('store_id');
+
+        $select->where
+            ->in('a.attribute_id', $attributeIds)
+            ->in('av.store_id', [0, $this->context->scope])
+            ->in('entity.entity_id', $entityIds);
+
+        return $select;
     }
 
     public function joinAttribute(string $code, Select $select): string
