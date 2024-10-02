@@ -53,7 +53,7 @@ class Tailwind extends CompilerA
         $config['tailwind']['content'] = [
             $moduleFolder . '/template/**/*.phtml',
             $moduleFolder . '/layout/*.yaml',
-            $moduleFolder . '/js/*.js',
+            $moduleFolder . '/js/**/*.js',
         ];
     }
 
@@ -125,6 +125,5 @@ class Tailwind extends CompilerA
     protected function makeMainConfig(): void
     {
         file_copy(__DIR__ . '/../../tailwind.config.js', $this->compiled->getDir() . 'tailwind/tailwind.config.js');
-        file_copy(__DIR__ . '/../../animations.js', $this->compiled->getDir() . 'tailwind/animations.js');
     }
 }

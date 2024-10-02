@@ -1,9 +1,174 @@
 @layer base {
+    .animate-fade-in {
+        animation: fade-in .2s ease-in-out forwards;
+    }
+
+    .animate-fade-out {
+        animation: fade-out .4s ease-in-out forwards;
+    }
+
+    .animate-slide-2 {
+        animation: slide-2 6s ease-in-out infinite;
+    }
+
+    .animate-slide-3 {
+        animation: slide-3 9s ease-in-out infinite;
+    }
+
+    .animate-slide-4 {
+        animation: slide-4 12s ease-in-out infinite;
+    }
+
+    .animate-slide-5 {
+        animation: slide-5 15s ease-in-out infinite;
+    }
+
     .fade-in {
         @apply animate-fade-in;
     }
 
     .fade-out {
         @apply animate-fade-out;
+    }
+
+}
+
+@keyframes fade-in {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1
+    }
+
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes slide-2 {
+    0% {
+        transform: translateX(0)
+    }
+
+    33.333333333333336% {
+        transform: translateX(0)
+    }
+
+    66.66666666666667% {
+        transform: translateX(-100%)
+    }
+
+    to {
+        transform: translateX(-100%)
+    }
+}
+
+@keyframes slide-3 {
+    0% {
+        transform: translateX(0)
+    }
+
+    20% {
+        transform: translateX(0)
+    }
+
+    40% {
+        transform: translateX(-100%)
+    }
+
+    60% {
+        transform: translateX(-100%)
+    }
+
+    80% {
+        transform: translateX(-200%)
+    }
+
+    to {
+        transform: translateX(-200%)
+    }
+}
+
+@keyframes slide-4 {
+    0% {
+        transform: translateX(0)
+    }
+
+    14.285714285714286% {
+        transform: translateX(0)
+    }
+
+    28.571428571428573% {
+        transform: translateX(-100%)
+    }
+
+    42.85714285714286% {
+        transform: translateX(-100%)
+    }
+
+    57.142857142857146% {
+        transform: translateX(-200%)
+    }
+
+    71.42857142857143% {
+        transform: translateX(-200%)
+    }
+
+    85.71428571428572% {
+        transform: translateX(-300%)
+    }
+
+    to {
+        transform: translateX(-300%)
+    }
+}
+
+@keyframes slide-5 {
+    0% {
+        transform: translateX(0)
+    }
+
+    11.11111111111111% {
+        transform: translateX(0)
+    }
+
+    22.22222222222222% {
+        transform: translateX(-100%)
+    }
+
+    33.33333333333333% {
+        transform: translateX(-100%)
+    }
+
+    44.44444444444444% {
+        transform: translateX(-200%)
+    }
+
+    55.55555555555556% {
+        transform: translateX(-200%)
+    }
+
+    66.66666666666666% {
+        transform: translateX(-300%)
+    }
+
+    77.77777777777777% {
+        transform: translateX(-300%)
+    }
+
+    88.88888888888889% {
+        transform: translateX(-400%)
+    }
+
+    to {
+        transform: translateX(-400%)
     }
 }
