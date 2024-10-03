@@ -7,6 +7,7 @@ namespace Lightna\Redis\App\Storage;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\StorageInterface;
 use Redis as RedisClient;
+use RedisException;
 
 class Redis extends ObjectA implements StorageInterface
 {
@@ -18,9 +19,6 @@ class Redis extends ObjectA implements StorageInterface
 
     protected array $connection;
 
-    /**
-     * @throws \RedisException
-     */
     protected function init(array $connection): void
     {
         $this->connection = $connection;
@@ -28,9 +26,6 @@ class Redis extends ObjectA implements StorageInterface
         $this->connect();
     }
 
-    /**
-     * @throws \RedisException
-     */
     protected function connect(): self
     {
         $connType = ($this->connection['persistent'] ?? null) ? 'pconnect' : 'connect';
@@ -49,9 +44,6 @@ class Redis extends ObjectA implements StorageInterface
         return $this;
     }
 
-    /**
-     * @throws \RedisException
-     */
     public function set(string $key, mixed $value, array $tags = []): void
     {
         $this->multi();
@@ -61,52 +53,31 @@ class Redis extends ObjectA implements StorageInterface
             $this->createTags($key, $tags);
 
             $this->exec();
-        } catch (\RedisException $e) {
+        } catch (RedisException $e) {
             $this->discard();
 
-            throw new \RedisException("Could not set key: $key");
+            throw new RedisException("Could not set key: $key");
         }
     }
 
-    /**
-     * Enable multimode to ensure that all operations are atomic
-     *
-     * @throws \RedisException
-     */
-    private function multi(): void
+    protected function multi(): void
     {
         $this->client->multi();
     }
 
-    /**
-     * Set key value.
-     *
-     * @param string $key
-     * @param mixed $value
-     *
-     * @throws \RedisException
-     */
-    private function setKeyValue(string $key, mixed $value): void
+    protected function setKeyValue(string $key, mixed $value): void
     {
-        $result = $this->client->hSet($key, self::FIELD_VALUE, $value);
+        $result = $this->client->hSet($key, static::FIELD_VALUE, $value);
         if (!$result) {
-            throw new \RedisException("Could not set value for key: $key");
+            throw new RedisException("Could not set value for key: $key");
         }
     }
 
-    /**
-     * Create tags for a key
-     *
-     * @param string $key
-     * @param array $tags
-     *
-     * @throws \RedisException
-     */
-    private function createTags(string $key, array $tags): void
+    protected function createTags(string $key, array $tags): void
     {
-        $result = $this->client->hSet($key, self::FIELD_TAGS, json_encode($tags));
+        $result = $this->client->hSet($key, static::FIELD_TAGS, json_encode($tags));
         if (!$result) {
-            throw new \RedisException("Could not set tag for key: $key");
+            throw new RedisException("Could not set tag for key: $key");
         }
 
         // Store the tags associated with the key
@@ -116,18 +87,12 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    /**
-     * Execute queued commands
-     *
-     * @return void
-     * @throws \RedisException
-     */
-    private function exec(): void
+    protected function exec(): void
     {
         $result = $this->client->exec();
 
         if ($result === false) {
-            throw new \RedisException("Exec failed");
+            throw new RedisException("Exec failed");
         }
 
         // It's important to note that even when a command fails, all the other commands in the queue are processed
@@ -135,19 +100,11 @@ class Redis extends ObjectA implements StorageInterface
         /** @TODO: Analyze result and throw exception in case of partial exec */
     }
 
-    /**
-     * Flush queued commands
-     *
-     * @throws \RedisException
-     */
-    private function discard(): void
+    protected function discard(): void
     {
         $this->client->discard();
     }
 
-    /**
-     * @throws \RedisException
-     */
     public function unset(string $key): void
     {
         $this->watch($key);
@@ -158,38 +115,25 @@ class Redis extends ObjectA implements StorageInterface
             $this->client->del($key);
 
             $this->exec();
-        } catch (\RedisException $e) {
+        } catch (RedisException $e) {
             $this->discard();
 
-            throw new \RedisException("Could not unset key: $key");
+            throw new RedisException("Could not unset key: $key");
         }
     }
 
-    /**
-     * Watch a key. Ensures that the key has not been modified since the watch
-     *
-     * @param string $key
-     *
-     * @throws \RedisException
-     */
     public function watch(string $key): void
     {
         $this->client->watch($key);
     }
 
-    /**
-     * @throws \RedisException
-     */
     public function get(string $key): string|array
     {
-        $result = $this->client->hGet($key, self::FIELD_VALUE);
+        $result = $this->client->hGet($key, static::FIELD_VALUE);
 
         return is_array($result) ? $result : (string)$result;
     }
 
-    /**
-     * @throws \RedisException
-     */
     public function getList(array $keys): array
     {
         $result = [];
@@ -205,9 +149,6 @@ class Redis extends ObjectA implements StorageInterface
         return $return;
     }
 
-    /**
-     * @throws \RedisException
-     */
     public function clean(array $tags): void
     {
         foreach ($tags as $tag) {
@@ -217,15 +158,7 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    /**
-     * Clean tags
-     *
-     * @param string $key
-     * @param array $tags
-     *
-     * @throws \RedisException
-     */
-    private function cleanTags(string $key, array $tags): void
+    protected function cleanTags(string $key, array $tags): void
     {
         // Iterate over each tag and remove the key from the tag set
         foreach ($tags as $tag) {
@@ -238,31 +171,15 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    /**
-     * Get tags for a key
-     *
-     * @param string $key
-     *
-     * @return array
-     * @throws \RedisException
-     */
-    private function getTagsForKey(string $key): array
+    protected function getTagsForKey(string $key): array
     {
         // Get string from redis
-        $tags = $this->client->hGet($key, self::FIELD_TAGS);
+        $tags = $this->client->hGet($key, static::FIELD_TAGS);
 
         return $tags ? json_decode((string)$tags) : [];
     }
 
-    /**
-     * Get keys for a tag
-     *
-     * @param string $tag
-     *
-     * @return array
-     * @throws \RedisException
-     */
-    private function getKeysForTag(string $tag): array
+    protected function getKeysForTag(string $tag): array
     {
         // Get all keys associated with the tag
         return $this->client->sMembers($tag);
