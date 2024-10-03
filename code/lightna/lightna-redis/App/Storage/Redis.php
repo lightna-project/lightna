@@ -46,38 +46,23 @@ class Redis extends ObjectA implements StorageInterface
 
     public function set(string $key, mixed $value, array $tags = []): void
     {
-        $this->multi();
-
-        try {
-            $this->setKeyValue($key, $value);
-            $this->createTags($key, $tags);
-
-            $this->exec();
-        } catch (RedisException $e) {
-            $this->discard();
-
-            throw new RedisException("Could not set key: $key");
-        }
-    }
-
-    protected function multi(): void
-    {
-        $this->client->multi();
+        $this->setKeyValue($key, $value);
+        $this->createTags($key, $tags);
     }
 
     protected function setKeyValue(string $key, mixed $value): void
     {
         $result = $this->client->hSet($key, static::FIELD_VALUE, $value);
-        if (!$result) {
-            throw new RedisException("Could not set value for key: $key");
+        if ($result === false) {
+            throw new RedisException("Could not set value for key: $key => " . json_encode($value));
         }
     }
 
     protected function createTags(string $key, array $tags): void
     {
         $result = $this->client->hSet($key, static::FIELD_TAGS, json_encode($tags));
-        if (!$result) {
-            throw new RedisException("Could not set tag for key: $key");
+        if ($result === false) {
+            throw new RedisException("Could not set tag for key: $key => " . json_encode($tags));
         }
 
         // Store the tags associated with the key
@@ -87,44 +72,10 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    protected function exec(): void
-    {
-        $result = $this->client->exec();
-
-        if ($result === false) {
-            throw new RedisException("Exec failed");
-        }
-
-        // It's important to note that even when a command fails, all the other commands in the queue are processed
-        // Redis will not stop the processing of commands
-        /** @TODO: Analyze result and throw exception in case of partial exec */
-    }
-
-    protected function discard(): void
-    {
-        $this->client->discard();
-    }
-
     public function unset(string $key): void
     {
-        $this->watch($key);
-        $tags = $this->getTagsForKey($key);
-        $this->multi();
-        try {
-            $this->cleanTags($key, $tags);
-            $this->client->del($key);
-
-            $this->exec();
-        } catch (RedisException $e) {
-            $this->discard();
-
-            throw new RedisException("Could not unset key: $key");
-        }
-    }
-
-    public function watch(string $key): void
-    {
-        $this->client->watch($key);
+        $this->cleanTags($key);
+        $this->client->del($key);
     }
 
     public function get(string $key): string|array
@@ -158,8 +109,10 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    protected function cleanTags(string $key, array $tags): void
+    protected function cleanTags(string $key): void
     {
+        $tags = $this->getTagsForKey($key);
+
         // Iterate over each tag and remove the key from the tag set
         foreach ($tags as $tag) {
             $this->client->sRem($tag, $key);
