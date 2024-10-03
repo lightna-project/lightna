@@ -16,7 +16,7 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         $this->dir = LIGHTNA_ENTRY . rtrim($this->dir, '/') . '/';
     }
 
-    public function set(string $key, mixed $value): void
+    public function set(string $key, mixed $value, array $tags = []): void
     {
         parent::save($this->getFileName($key), $value);
     }
