@@ -8,11 +8,14 @@
 
 <p align="center">
 We develop Lightna Engine and MVP for Magento 2 Storefront.<br>
-Readiness - 75%.
+Readiness of Lightna and Semi Lightna - 90%.<br>
+Readiness of MVP for Magento 2 - 75%.
 </p>
 
 <p align="center">
-<a href="https://lightna.com">About Lightna</a>
+<a href="https://lightna.com">Website</a>
+ | <a href="https://lightna.com/lightna-engine.html">Lightna Engine</a>
+ | <a href="https://lightna.com/lightna-semi.html">Semi Lightna</a>
  | <a href="https://lightna.com/magento.html">Magento 2 MVP</a>
  | <a href="https://lightna.com/benchmark.html">Benchmark</a>
  | <a href="https://lightna.com/contact.html">Contact</a>
