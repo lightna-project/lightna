@@ -46,8 +46,17 @@ class Redis extends ObjectA implements StorageInterface
 
     public function set(string $key, mixed $value, array $tags = []): void
     {
+        $this->client->pipeline();
+        $this->setAtomic($key, $value, $tags);
+        $this->exec();
+    }
+
+    protected function setAtomic(string $key, mixed $value, array $tags = []): void
+    {
+        $this->client->multi();
         $this->setKeyValue($key, $value);
         $this->createTags($key, $tags);
+        $this->exec();
     }
 
     protected function setKeyValue(string $key, mixed $value): void
@@ -72,10 +81,43 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
+    /**
+     * Execute queued commands. Analyze result and throw exception in case of errors or partial exec.
+     */
+    private function exec()
+    {
+        $result = $this->client->exec();
+
+        if ($result === false) {
+            throw new \RedisException("Exec failed");
+        }
+
+        // It's important to note that even when a command fails, all the other commands in the queue are processed
+        // Redis will not stop the processing of commands
+
+        /** @TODO: Analyze result and throw exception in case of partial exec */
+
+        return $result;
+    }
+
     public function unset(string $key): void
     {
-        $this->cleanTags($key);
+        $this->client->watch($key);
+        $tags = $this->getTagsForKey($key);
+
+        $this->client->pipeline();
+        $this->unsetAtomic($key, $tags);
+        $this->exec();
+
+        $this->pruneTags($tags);
+    }
+
+    protected function unsetAtomic(string $key, array $tags): void
+    {
+        $this->client->multi();
+        $this->cleanTags($key, $tags);
         $this->client->del($key);
+        $this->exec();
     }
 
     public function get(string $key): string|array
@@ -87,10 +129,17 @@ class Redis extends ObjectA implements StorageInterface
 
     public function getList(array $keys): array
     {
-        $result = [];
-        foreach ($keys as $key) {
-            $result[] = $this->get($key);
+        $batches = array_chunk($keys, 10000);
+        $tempResults = [];
+        foreach ($batches as $batch) {
+            $this->client->pipeline();
+            foreach ($batch as $key) {
+                $this->client->hGet($key, static::FIELD_VALUE);
+            }
+            $tempResults[] = $this->exec();
         }
+
+        $result = array_merge(...$tempResults);
 
         $return = [];
         foreach (array_values($keys) as $i => $key) {
@@ -109,14 +158,17 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    protected function cleanTags(string $key): void
+    protected function cleanTags(string $key, array $tags): void
     {
-        $tags = $this->getTagsForKey($key);
-
         // Iterate over each tag and remove the key from the tag set
         foreach ($tags as $tag) {
             $this->client->sRem($tag, $key);
+        }
+    }
 
+    protected function pruneTags($tags): void
+    {
+        foreach ($tags as $tag) {
             // Check if the tag set is now empty and remove it if it is
             if ($this->client->sCard($tag) == 0) {
                 $this->client->del($tag);
