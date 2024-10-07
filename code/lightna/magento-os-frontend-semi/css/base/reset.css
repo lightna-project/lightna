@@ -1,3 +1,7 @@
+body {
+    height: auto;
+}
+
 select {
     padding: 4px 24px 6px 12px;
 }
