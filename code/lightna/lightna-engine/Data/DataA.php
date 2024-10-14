@@ -90,7 +90,7 @@ class DataA extends ObjectA
         if (!isset($this->{$name})) {
             return null;
         }
-        if (is_scalar($this->{$name})) {
+        if (is_scalar($this->{$name}) || is_array($this->{$name})) {
             return escape($this->{$name}, ...$arguments);
         } else {
             // Call property __invoke

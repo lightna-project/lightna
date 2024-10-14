@@ -1,4 +1,4 @@
-import { $, $$ } from '../lib/utils/dom';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 
 export class Facets {
     constructor() {

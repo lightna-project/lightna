@@ -1,6 +1,6 @@
-import request from '../lib/HttpClient';
-import { $, $$ } from '../lib/utils/dom';
-import { getBlockHtml } from '../lib/utils/getBlockHtml';
+import request from 'lightna/lightna-engine/lib/HttpClient';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 
 export class ShoppingCart {
     blockId = 'minicart';
@@ -18,13 +18,23 @@ export class ShoppingCart {
 
     bindEvents() {
         document.addEventListener('add-to-cart', this.update.bind(this));
-        $('[data-action="open-minicart"]').addEventListener('click', this.update.bind(this));
+        $('body').addEventListener('click', this.onBodyClick.bind(this));
+    }
+
+    onBodyClick(event) {
+        if (this.isOpenMinicartClick(event)) {
+            this.update(false);
+        }
+    }
+
+    isOpenMinicartClick(event) {
+        return event.target.closest('[data-action="open-minicart"]');
     }
 
     bindCartActionsEvents() {
-        $$('[data-action="open-minicart"]').forEach((trigger) => {
-            trigger.addEventListener('click', this.open.bind(this));
-        });
+        if (this.getContentElement().areEventsBound) {
+            return;
+        }
 
         $$('[data-action="close-minicart"]').forEach((trigger) => {
             trigger.addEventListener('click', this.close.bind(this));
@@ -36,16 +46,22 @@ export class ShoppingCart {
                 this.removeProduct(itemId);
             });
         });
+
+        this.getContentElement().areEventsBound = true;
     }
 
-    async update() {
-        const minicartHtml = await getBlockHtml(this.blockId);
-        this.redraw(minicartHtml);
+    getContentElement() {
+        return $('#minicart-content');
+    }
+
+    async update(forceReload = true) {
+        await this.loadContent(forceReload);
         this.open();
     }
 
-    redraw(html) {
-        $(this.shoppingCart).outerHTML = html;
+    async loadContent(forceReload = true) {
+        const reload = forceReload || !this.getContentElement();
+        reload && await Blocks.updateHtml([this.blockId]);
         this.bindCartActionsEvents();
     }
 
@@ -64,8 +80,8 @@ export class ShoppingCart {
             item_id: itemId,
         };
         const itemToRemove = $(
-          `[data-item-id="${itemId}"]`,
-          $(this.shoppingCart),
+            `[data-item-id="${itemId}"]`,
+            $(this.shoppingCart),
         ).closest('li');
 
         await request.post(this.removeFromCartUrl, data, {

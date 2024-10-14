@@ -12,6 +12,7 @@ class Context extends DataA
     public int $scope;
     public Entity $entity;
     public string $mode = '';
+    public string $visibility = 'public';
 
     protected function init(array $data = []): void
     {
