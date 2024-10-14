@@ -44,7 +44,7 @@ class Session extends ObjectA
 
     public function canRead(): bool
     {
-        return !$this->fpcCompatible || $this->context->visibility !== 'public';
+        return !$this->fpcCompatible || $this->context->visibility === 'private';
     }
 
     public function prolong(): void
