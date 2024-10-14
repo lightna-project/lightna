@@ -1,0 +1,5 @@
+.head:
+  container: head
+  .context:
+    id: page-context
+    template: page/context.phtml

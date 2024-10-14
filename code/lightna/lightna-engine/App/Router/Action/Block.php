@@ -19,12 +19,13 @@ class Block extends ObjectA
     {
         $this->context->entity->type = $this->request->param->entityType;
         $this->context->entity->id = $this->request->param->entityId;
+        $this->context->visibility = 'private';
     }
 
     public function process(): void
     {
         $this->validateRequest();
-        $this->renderBlock();
+        $this->render();
     }
 
     protected function validateRequest(): void
@@ -32,14 +33,36 @@ class Block extends ObjectA
         if (!$this->request->isPost) {
             throw new \Exception('Block request method must be POST');
         }
-        if (!$this->request->param->blockId) {
-            throw new \Exception('blockId is missing in request');
+        if (!$this->request->param->blockIds) {
+            throw new \Exception('blockIds parameter is missing in request');
         }
     }
 
-    protected function renderBlock(): void
+    protected function render(): void
     {
         header('Content-type: application/json');
-        echo json(blockhtml('#' . $this->request->param->blockId));
+        echo json($this->getBlocksHtmlData());
+    }
+
+    protected function getBlocksHtmlData(): mixed
+    {
+        $blockIds = $this->request->param->blockIds;
+
+        return is_string($blockIds) ? $this->getBlockHtml($blockIds) : $this->getBlocksHtml($blockIds);
+    }
+
+    protected function getBlockHtml(string $blockId): string
+    {
+        return blockhtml('#' . $blockId);
+    }
+
+    protected function getBlocksHtml(array $blockIds): array
+    {
+        $blocks = [];
+        foreach ($blockIds as $blockId) {
+            $blocks[$blockId] = $this->getBlockHtml($blockId);
+        }
+
+        return $blocks;
     }
 }

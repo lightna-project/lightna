@@ -1,4 +1,4 @@
-import { $ } from './utils/dom';
+import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 export class XSwipeHandler {
     #xDown = null;
     #yDown = null;

@@ -1,5 +1,5 @@
-import { $$ } from '../lib/utils/dom';
-import { isElementInViewport } from '../lib/utils/isElementInViewport';
+import { $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { isElementInViewport } from 'lightna/lightna-engine/lib/utils/isElementInViewport';
 
 export class Collapsible {
     items = [];

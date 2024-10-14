@@ -1,5 +1,5 @@
-import { $, $$ } from '../lib/utils/dom';
-import { isTouchDevice } from '../lib/utils/isTouchDevice';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { isTouchDevice } from 'lightna/lightna-engine/lib/utils/isTouchDevice';
 
 export class Menu {
     menuContainer;

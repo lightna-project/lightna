@@ -1,7 +1,7 @@
-import { Cookie } from '../lib/Cookie';
-import { UserInput } from '../lib/UserInput';
-import request from '../lib/HttpClient';
-import { $, $$ } from "../lib/utils/dom";
+import { Cookie } from 'lightna/lightna-engine/lib/Cookie';
+import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
+import request from 'lightna/lightna-engine/lib/HttpClient';
+import { $, $$ } from "lightna/lightna-engine/lib/utils/dom";
 
 export class AddToCart {
     components = [];

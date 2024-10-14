@@ -1,6 +1,5 @@
 template: page.phtml
 .head:
-  container: head
   .meta:
     .encoding:
       template: page/head/meta/encoding.phtml
@@ -17,9 +16,6 @@ template: page.phtml
       template: page/head/link/style/common.phtml
   .script:
     template: page/head/js/common.phtml
-  .context:
-    id: page-context
-    template: page/context.phtml
   .google-analytics:
     template: page/head/google-analytics.phtml
 .body:
@@ -50,6 +46,8 @@ template: page.phtml
           class:
             - header__right
         .account:
+          id: account
+          private: true
           template: page/header/account.phtml
           .guest:
             template: page/header/account/dropdown-guest.phtml
@@ -70,6 +68,7 @@ template: page.phtml
                 label: Logout
         .minicart:
           id: minicart
+          private: true
           template: page/header/minicart.phtml
           .content:
             template: page/header/minicart/content.phtml

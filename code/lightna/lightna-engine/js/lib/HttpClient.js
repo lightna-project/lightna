@@ -1,6 +1,6 @@
-import { FormKey } from './FormKey';
-import { PageMessage } from '../common/PageMessage';
-import { objectToQuery } from './utils/objectToQuery';
+import { FormKey } from 'lightna/lightna-engine/lib/FormKey';
+import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
+import { objectToQuery } from 'lightna/lightna-engine/lib/utils/objectToQuery';
 
 class HttpClient {
     headers = {

@@ -173,7 +173,7 @@ class Webpack extends CompilerA
 
     protected function getModuleAlias(string $folder): string
     {
-        return implode('/', array_slice(explode('/', $folder), -2));
+        return implode('/', array_slice(explode('/', rtrim($folder, '/')), -2));
     }
 
     protected function saveConfig(): void

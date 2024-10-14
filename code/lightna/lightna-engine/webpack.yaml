@@ -1,0 +1,7 @@
+entry:
+  common:
+    component:
+      Fpc: Fpc
+  semi:
+    component:
+      Fpc: Fpc

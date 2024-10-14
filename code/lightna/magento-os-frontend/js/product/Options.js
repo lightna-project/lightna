@@ -1,6 +1,6 @@
-import { $, $$ } from '../lib/utils/dom';
-import { getBlockHtml } from '../lib/utils/getBlockHtml';
-import { UserInput } from '../lib/UserInput';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
+import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
 
 export class ProductOptions {
     cjs = '.cjs-product-options';
@@ -30,7 +30,7 @@ export class ProductOptions {
 
     async optionClick(element, option) {
         $('#option_' + option.attributeCode).value = option.id;
-        this.component.outerHTML = await getBlockHtml(this.blockId, UserInput.collect(this.component));
+        await Blocks.updateHtml([this.blockId], UserInput.collect(this.component));
 
         this.init();
     }
