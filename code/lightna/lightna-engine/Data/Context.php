@@ -31,6 +31,9 @@ class Context extends DataA
 
     protected function definePrivateBlocks(): void
     {
-        $this->privateBlocks = $this->isFpcCompatible ? $this->layout->getPrivateBlockIds() : [];
+        $this->privateBlocks =
+            $this->isFpcCompatible && $this->appContext->visibility === 'public'
+                ? $this->layout->getPrivateBlockIds()
+                : [];
     }
 }
