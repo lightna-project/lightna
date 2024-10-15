@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Lightna\Engine\App\Opcache\Compiled;
+
 class Templating extends ObjectA
 {
     protected Compiled $compiled;

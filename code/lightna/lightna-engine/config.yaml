@@ -4,25 +4,28 @@ asset_dir: null
 storage:
   opcache:
     adapter: Lightna\Engine\App\Storage\Opcache
-    options:
-      dir: opcache
+    options: [ ]
 router:
   # List of router custom actions (name: class)
   action:
     page: Lightna\Engine\App\Router\Action\Page
+    block: Lightna\Engine\App\Router\Action\Block
+  routes:
+    lightna/block: block
   bypass:
-    process_after_routing: 1
     rules:
       # Regular expressions for URL path, URL path excludes "/" at the beginning
       # Expression is performed after prepending "^" to avoid parsing a whole URL path
       url_starts_with: [ ]
-    # If rules aren't empty and are true, then specified file will be used to handle the request
+      # If no route in Lightna you have 2 options:
+      #   "404" - render 404 page by Lightna
+      #   "bypass" - pass request to the app
+      no_route: 404
+    # Project's index.php to handle bypass
     file: null
     cookie:
       enabled: false
       name: null
-  404:
-    action: ""
 entity:
   route:
   config:

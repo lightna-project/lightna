@@ -77,12 +77,20 @@ abstract class DatabaseA extends ObjectA
 
     public function sql(AbstractPreparableSql $sql): ResultInterface
     {
-        return $this->sql->prepareStatementForSqlObject($sql)->execute();
+        try {
+            return $this->sql->prepareStatementForSqlObject($sql)->execute();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage() . '. SQL was: ' . $this->buildSqlString($sql));
+        }
     }
 
     public function query(string $sql, array $bind = []): ResultInterface
     {
-        return $this->adapter->createStatement($sql, $bind)->execute();
+        try {
+            return $this->adapter->createStatement($sql, $bind)->execute();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage() . '. SQL was: ' . $sql);
+        }
     }
 
     public function fetch(AbstractPreparableSql $sql, string $key = null): array

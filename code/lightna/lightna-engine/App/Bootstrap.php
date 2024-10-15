@@ -17,31 +17,30 @@ class Bootstrap
             E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED
         );
 
+        $env = require LIGHTNA_ENTRY . 'env.php';
+
         define('LIGHTNA_AREAS', ['frontend', 'backend']);
         define('LIGHTNA_AREA', php_sapi_name() === 'cli' ? 'backend' : 'frontend');
-
-        require __DIR__ . '/lib/common.php';
-        require __DIR__ . '/lib/' . LIGHTNA_AREA . '.php';
-
-        define("LIGHTNA_SRC", LIGHTNA_ENTRY . $config['src_dir'] . '/');
-        define("LIGHTNA_CODE", LIGHTNA_ENTRY . $config['compiler']['code_dir'] . '/build/');
-
-        $env = require LIGHTNA_ENTRY . 'env.php';
+        define('LIGHTNA_SRC', $config['src_dir'] . '/');
+        define('COMPILED_DIR', LIGHTNA_ENTRY . $config['compiler']['dir'] . '/build/');
         define("IS_DEV_MODE", $env['mode'] === 'dev');
         define("IS_PROD_MODE", $env['mode'] === 'prod');
         define(
-            "IS_PROGRESSIVE_RENDERING",
-            ($env['progressive_rendering'] ?? false) && $_SERVER['REQUEST_METHOD'] === 'GET',
+            'IS_PROGRESSIVE_RENDERING',
+            ($env['progressive_rendering'] ?? false)
+            && LIGHTNA_AREA === 'frontend'
+            && $_SERVER['REQUEST_METHOD'] === 'GET',
         );
+
+        require __DIR__ . '/lib/common.php';
+        require __DIR__ . '/lib/' . LIGHTNA_AREA . '.php';
     }
 
     public static function autoload(): void
     {
-        require_once LIGHTNA_SRC . 'App/Autoloader.php';
+        require_once LIGHTNA_ENTRY . LIGHTNA_SRC . 'App/Autoloader.php';
 
-        Autoloader::setClasses(
-            require LIGHTNA_CODE . 'object/map.php',
-        );
+        Autoloader::setClasses(require COMPILED_DIR . 'object/map.php');
 
         if (!static::$autoloadRegistered) {
             spl_autoload_register([Autoloader::class, 'loadClass'], true, true);

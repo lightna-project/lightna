@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Exception;
-use Lightna\Engine\App\Compiled;
-use Lightna\Engine\App\ObjectA;
 
-class Layout extends ObjectA
+class Layout extends CompilerA
 {
-    protected Compiled $compiled;
     /** @AppConfig(modules) */
     protected ?array $modules;
     protected array $layouts;
@@ -28,6 +25,7 @@ class Layout extends ObjectA
         $this->extend();
         $this->applyDirectives();
         $this->indexBlockIds();
+        $this->indexPrivateBlocks();
         $this->save();
     }
 
@@ -199,6 +197,27 @@ class Layout extends ObjectA
                 $ids[$block['id']] = $path . '/' . $key;
             }
             $ids = merge($ids, $this->indexBlockIdsRecursive($block, $path . '/' . $key));
+        }
+
+        return $ids;
+    }
+
+    protected function indexPrivateBlocks(): void
+    {
+        foreach ($this->layouts as $name => $layout) {
+            $ids = $this->indexPrivateBlocksRecursive($layout['data']);
+            $this->layouts[$name]['data']['privateBlocks'] = $ids;
+        }
+    }
+
+    protected function indexPrivateBlocksRecursive(array $layout, string $path = ''): array
+    {
+        $ids = [];
+        foreach ($layout['.'] as $key => $block) {
+            if (isset($block['id']) && isset($block['private'])) {
+                $ids[$block['id']] = 1;
+            }
+            $ids = merge($ids, $this->indexPrivateBlocksRecursive($block, $path . '/' . $key));
         }
 
         return $ids;

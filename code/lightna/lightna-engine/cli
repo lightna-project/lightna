@@ -13,7 +13,7 @@ $config = require LIGHTNA_ENTRY . 'config.php';
 $command = $argv[1] ?? '';
 
 if (in_array($command, ['?', 'help', '', '-h', '--help'])) {
-    $commands = array_keys(cli_get_all_commands($config['compiler']['code_dir']));
+    $commands = array_keys(cli_get_all_commands($config['compiler']['dir']));
     echo "  Commands list:\n    " . implode("\n    ", $commands) . "\n";
     exit;
 }

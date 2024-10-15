@@ -7,3 +7,4 @@ router.bypass.rules.url_starts_with:
   - newsletter/manage/
   - vault/cards/listaction/
   - review/customer/
+  - newsletter/

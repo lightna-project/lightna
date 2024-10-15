@@ -4,9 +4,9 @@ $cart = $session->cart;
 ?>
 <div class="cjs-minicart">
     <div class="header__icon" data-action="open-minicart">
-        <div class="icon cart">
+        <div class="icon icon-cart">
             <?php if ($cart->qty() > 0) { ?>
-                <div class="counter"><?= $cart->qty() ?></div>
+                <div class="icon-counter"><?= $cart->qty() ?></div>
             <?php } ?>
         </div>
     </div>

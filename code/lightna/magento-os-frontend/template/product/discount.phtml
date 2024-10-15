@@ -4,11 +4,11 @@
 ?>
 <?php if ($product->price->discount > 0): ?>
     <?php if ($product->price->regular < 100): ?>
-        <span class="discount percent">
+        <span class="price-discount percent">
             <span class="value"><?= $product->price->discountPercent() ?></span>
             <?= phrase('off') ?>
         </span>
     <?php else: ?>
-        <span class="discount amount"><?= $currency->render($product->price->discount) ?></span>
+        <span class="price-discount amount"><?= $currency->render($product->price->discount) ?></span>
     <?php endif; ?>
 <?php endif; ?>

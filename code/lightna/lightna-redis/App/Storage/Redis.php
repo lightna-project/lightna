@@ -18,6 +18,9 @@ class Redis extends ObjectA implements StorageInterface
     protected ?RedisClient $client;
 
     protected array $connection;
+    protected bool $batch = false;
+    protected array $batchSet = [];
+    protected array $batchUnset = [];
 
     protected function init(array $connection): void
     {
@@ -46,9 +49,13 @@ class Redis extends ObjectA implements StorageInterface
 
     public function set(string $key, mixed $value, array $tags = []): void
     {
-        $this->client->pipeline();
-        $this->setAtomic($key, $value, $tags);
-        $this->exec();
+        if ($this->batch) {
+            $this->batchSet[$key] = $value;
+        } else {
+            $this->client->pipeline();
+            $this->setAtomic($key, $value, $tags);
+            $this->exec();
+        }
     }
 
     protected function setAtomic(string $key, mixed $value, array $tags = []): void
@@ -102,14 +109,18 @@ class Redis extends ObjectA implements StorageInterface
 
     public function unset(string $key): void
     {
-        $this->client->watch($key);
-        $tags = $this->getTagsForKey($key);
+        if ($this->batch) {
+            $this->batchUnset[$key] = 1;
+        } else {
+            $this->client->watch($key);
+            $tags = $this->getTagsForKey($key);
 
-        $this->client->pipeline();
-        $this->unsetAtomic($key, $tags);
-        $this->exec();
+            $this->client->pipeline();
+            $this->unsetAtomic($key, $tags);
+            $this->exec();
 
-        $this->pruneTags($tags);
+            $this->pruneTags($tags);
+        }
     }
 
     protected function unsetAtomic(string $key, array $tags): void
@@ -188,5 +199,20 @@ class Redis extends ObjectA implements StorageInterface
     {
         // Get all keys associated with the tag
         return $this->client->sMembers($tag);
+    }
+
+    public function batch(): void
+    {
+        $this->batch = true;
+    }
+
+    public function flush(): void
+    {
+        $this->client->mSet($this->batchSet);
+        $this->client->del(array_keys($this->batchUnset));
+
+        $this->batch = false;
+        $this->batchSet = [];
+        $this->batchUnset = [];
     }
 }

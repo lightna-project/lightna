@@ -39,14 +39,18 @@ class Gallery extends ObjectA
     protected function getItemsSelect(array $entityIds): Select
     {
         $select = $this->db->select()
-            ->from(['g' => 'catalog_product_entity_media_gallery'])
+            ->from(['entity' => 'catalog_product_entity'])
+            ->columns(['entity_id'])
             ->join(
-                ['e' => 'catalog_product_entity_media_gallery_value_to_entity'],
-                'e.value_id = g.value_id',
-            )
-            ->where('g.attribute_id = 90 and g.media_type = "image" and g.disabled = 0');
+                ['g2e' => 'catalog_product_entity_media_gallery_value_to_entity'],
+                'g2e.entity_id = entity.entity_id',
+                [])
+            ->join(
+                ['gallery' => 'catalog_product_entity_media_gallery'],
+                'gallery.value_id = g2e.value_id')
+            ->where('gallery.attribute_id = 90 and gallery.media_type = "image" and gallery.disabled = 0');
 
-        $select->where->in('e.entity_id', $entityIds);
+        $select->where->in('entity.entity_id', $entityIds);
 
         return $select;
     }

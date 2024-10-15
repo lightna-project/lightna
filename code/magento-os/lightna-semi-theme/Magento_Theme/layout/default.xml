@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <remove src="fonts/opensans/light/opensans-300.woff2"/>
+        <remove src="fonts/opensans/regular/opensans-400.woff2"/>
+        <remove src="fonts/opensans/semibold/opensans-600.woff2"/>
+        <remove src="fonts/opensans/bold/opensans-700.woff2"/>
+    </head>
+    <body>
+        <referenceBlock name="head.additional">
+            <block name="lightna.preload.font">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">font</argument>
+                </arguments>
+            </block>
+            <block name="lightna.style">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">style-semi</argument>
+                </arguments>
+            </block>
+            <block name="lightna.script">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">script-semi</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="page.wrapper">
+            <block name="lightna.usp" before="-">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">header-usp</argument>
+                </arguments>
+            </block>
+            <block name="lightna.header" before="main.content">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">header</argument>
+                </arguments>
+            </block>
+            <block name="lightna.footer" before="before.body.end">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">footer</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="main.content" htmlClass="page-main page-container"/>
+        <move element="page.top" destination="page.wrapper" after="lightna.header"/>
+        <referenceBlock name="navigation.sections" remove="true"/>
+        <referenceContainer name="header.container" remove="true"/>
+        <referenceContainer name="footer-container" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+    </body>
+</page>

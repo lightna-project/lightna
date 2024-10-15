@@ -6,13 +6,11 @@ namespace Lightna\Engine\App\Compiler;
 
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
-use Lightna\Engine\App\Compiled;
 use Lightna\Engine\App\ObjectManagerIgnore;
+use Lightna\Engine\App\Opcache\Compiled;
 
-class Config implements ObjectManagerIgnore
+class Config extends CompilerA implements ObjectManagerIgnore
 {
-    protected Compiled $compiled;
-
     public function make(): void
     {
         $this->compiled = new Compiled();
@@ -43,13 +41,13 @@ class Config implements ObjectManagerIgnore
         foreach ($folders as $folder) {
             $folder = $this->alignFolder($folder);
             $files = merge($files, $this->getYamlSubFiles($folder, $scope));
-            $files = merge($files, $this->getYamlRootFiles($folder));
+            $files = merge($files, $this->getYamlRootFiles($folder, $scope));
         }
 
         return $files;
     }
 
-    protected function getYamlSubFiles(string $moduleFolder, string $scope = '*'): array
+    protected function getYamlSubFiles(string $moduleFolder, string $scope): array
     {
         if (!is_dir($configFolder = $moduleFolder . '/config/')) {
             return [];
@@ -65,7 +63,7 @@ class Config implements ObjectManagerIgnore
         return $files;
     }
 
-    protected function getYamlRootFiles(string $moduleFolder): array
+    protected function getYamlRootFiles(string $moduleFolder, string $scope): array
     {
         $files = [];
         foreach (['/config.yaml', '/config/*.yaml'] as $pattern) {
@@ -73,6 +71,13 @@ class Config implements ObjectManagerIgnore
                 $files,
                 array_filter(glob($moduleFolder . $pattern), 'is_file')
             );
+        }
+
+        foreach ($files as $i => $file) {
+            $name = preg_replace('~\.yaml$~', '', basename($file));
+            if (in_array($name, LIGHTNA_AREAS) && $name !== $scope) {
+                unset($files[$i]);
+            }
         }
 
         return $files;
@@ -126,8 +131,8 @@ class Config implements ObjectManagerIgnore
 
     protected function defineAssetBase(array &$config): void
     {
-        if (!$docDir = realpath(LIGHTNA_ENTRY . $config['doc_dir'])) {
-            throw new Exception('Invalid doc_dir');
+        if (!$docDir = realpath($docDirConfig = LIGHTNA_ENTRY . $config['doc_dir'])) {
+            throw new Exception('Invalid doc_dir [' . $docDirConfig . ']');
         }
         if (!$assetDir = realpath(LIGHTNA_ENTRY . $config['asset_dir'])) {
             try {

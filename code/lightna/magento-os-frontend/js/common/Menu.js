@@ -1,4 +1,5 @@
-import { $, $$, isTouchDevice } from '../lib/utils';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { isTouchDevice } from 'lightna/lightna-engine/lib/utils/isTouchDevice';
 
 export class Menu {
     menuContainer;
@@ -38,14 +39,14 @@ export class Menu {
           { once: true },
         );
 
-        this.itemsWithChildren.foreach((i, item) => {
+        this.itemsWithChildren.forEach((item) => {
             item.addEventListener(
               'click',
               this.itemWithChildrenClick.bind(this, item),
             );
         });
 
-        this.itemsTopLevel.foreach((i, item) => {
+        this.itemsTopLevel.forEach((item) => {
             item.addEventListener(
               'mouseenter',
               this.itemTopLevelMouseEnter.bind(this, item),
@@ -60,7 +61,7 @@ export class Menu {
     preventMenuActivation() {
         if (isTouchDevice()) return;
 
-        this.itemsTopLevel.foreach((i, item) => {
+        this.itemsTopLevel.forEach((item) => {
             if (item.matches(':hover')) {
                 this.mouseEnterBlocked = true;
             }

@@ -13,7 +13,10 @@ class Session extends DataA
 
     protected function init(array $data = []): void
     {
-        $data = $this->appSession->read();
+        if ($this->appSession->canRead()) {
+            $data = $this->appSession->read();
+        }
+
         parent::init($data);
     }
 }

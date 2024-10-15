@@ -14,25 +14,28 @@ class Page extends ObjectA
     protected Layout $layout;
     protected Context $context;
     protected Request $request;
+    /** @AppConfig(entity) */
+    protected array $entities;
 
     protected function init(array $params): void
     {
-        $this->context->entity->type = $params['type'];
+        $this->context->entity->type = $entity = $params['type'];
         $this->context->entity->id = $params['id'] ?? null;
-    }
-
-    public function process()
-    {
-        if ($blockId = $this->request->param->blockId) {
-            $this->renderBlock($blockId);
-        } else {
-            $this->layout->page();
+        if ($visibility = ($this->entities[$entity]['visibility'] ?? null)) {
+            $this->context->visibility = $visibility;
         }
     }
 
-    protected function renderBlock(string $blockId): void
+    public function process(): void
     {
-        header('Content-type: application/json');
-        echo json(blockhtml('#' . $blockId));
+        $this->validateRequest();
+        $this->layout->page();
+    }
+
+    protected function validateRequest(): void
+    {
+        if (!$this->request->isGet) {
+            throw new \Exception('Page request method must be GET');
+        }
     }
 }

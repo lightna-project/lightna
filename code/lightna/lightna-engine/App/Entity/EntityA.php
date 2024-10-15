@@ -70,4 +70,14 @@ class EntityA extends ObjectA
     {
         $this->storage->clean($tags);
     }
+
+    public function batch(): void
+    {
+        $this->storage->batch();
+    }
+
+    public function flush(): void
+    {
+        $this->storage->flush();
+    }
 }

@@ -12,7 +12,7 @@
     }
 
     .facets__toggle-button .icon {
-        @apply ml-4 filter;
+        @apply ml-4 icon-filter;
     }
 
     .facets__item__container {
@@ -24,7 +24,7 @@
     }
 
     .facets__item__title .icon {
-        @apply chevron-down ml-auto;
+        @apply icon-chevron-down ml-auto;
     }
 
     .facets__item__options {

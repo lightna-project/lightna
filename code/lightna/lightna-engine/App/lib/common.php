@@ -121,7 +121,7 @@ function array_camel(array $array): array
     return $result;
 }
 
-function is_instanceof(object $object, string $class): bool
+function instance_of(object $object, string $class): bool
 {
     // instanceof must fail if $class not undefined
     if (!class_exists($class)) {
@@ -134,6 +134,11 @@ function is_instanceof(object $object, string $class): bool
 function json(mixed $var): string
 {
     return json_encode($var, JSON_UNESCAPED_UNICODE);
+}
+
+function json_pretty(mixed $var): string
+{
+    return json_encode($var, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 }
 
 function phrase(string $phrase): string

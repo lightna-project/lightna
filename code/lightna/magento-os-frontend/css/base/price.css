@@ -23,19 +23,19 @@
         @apply text-lg;
     }
 
-    .discount {
+    .price-discount {
         @apply rounded-sm bg-rose-700 px-1.5 py-1 text-xs font-normal text-white;
     }
 
-    .discount.amount:before {
+    .price-discount.amount:before {
         content: '-';
     }
 
-    .discount.percent {
+    .price-discount.percent {
         @apply uppercase;
     }
 
-    .discount.percent .value:after {
+    .price-discount.percent .value:after {
         content: '%';
     }
 }

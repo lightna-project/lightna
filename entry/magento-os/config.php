@@ -14,8 +14,11 @@ return [
         'Lightna\Redis' => '../../code/lightna/lightna-redis',
         'Lightna\Session' => '../../code/lightna/lightna-session',
         'Lightna\Elasticsearch' => '../../code/lightna/lightna-elasticsearch',
+        'Lightna\Webpack' => '../../code/lightna/lightna-webpack',
+        'Lightna\Tailwind' => '../../code/lightna/lightna-tailwind',
         'Lightna\Magento' => '../../code/lightna/magento-os-backend',
         'Lightna\Magento\Frontend' => '../../code/lightna/magento-os-frontend',
+        'Lightna\Magento\Frontend\Semi' => '../../code/lightna/magento-os-frontend-semi',
         'Lightna\Magento\Demo' => '../../code/lightna/magento-os-demo',
     ],
     'libs' => [
@@ -23,10 +26,9 @@ return [
         'Laminas\Stdlib' => 'vendor/laminas/laminas-stdlib/src',
     ],
     'compiler' => [
-        /**
-         * Directory where PHP files will be generated
-         * ! (Can be defined in config.php only)
-         */
-        'code_dir' => '../../compiled/magento-os',
+        'dir' => '../../generated/magento-os/compiled',
     ],
+    'opcache' => [
+        'dir' => '../../generated/magento-os/storage',
+    ]
 ];

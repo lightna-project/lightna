@@ -1,10 +1,13 @@
-import { $, $$ } from '../lib/utils';
-import { XSwipeHandler } from '../lib/XSwipeHandler';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { XSwipeHandler } from 'lightna/lightna-engine/lib/XSwipeHandler';
 
 export class Gallery {
-    constructor(options) {
-        this.options = options ?? {};
-        if (!this.options.gallery || !$(this.options.gallery)) return;
+    constructor() {
+        this.offset = 1;
+        this.cjs = '.cjs-gallery';
+        if (!$(this.cjs)) {
+            return;
+        }
 
         this.init();
         if (this.size > 1) {
@@ -18,19 +21,18 @@ export class Gallery {
     }
 
     init() {
-        this.scope = $(this.options.gallery);
         this.currentImage = 0;
         this.step = 0;
         this.elements = {
-            thumbnailsContainer: $('.gallery-thumbnails', this.scope),
-            thumbnails: $$('.gallery-thumbnail', this.scope),
-            dots: $$('.gallery-dot', this.scope),
-            progress: $('.gallery-progress', this.scope),
-            slider: $('.gallery-slider', this.scope),
-            arrowPrev: $('.gallery-arrow.previous', this.scope),
-            arrowNext: $('.gallery-arrow.next', this.scope),
-            thumbsArrowPrev: $('.gallery-thumbnails-arrow.previous', this.scope),
-            thumbsArrowNext: $('.gallery-thumbnails-arrow.next', this.scope),
+            thumbnailsContainer: $('.gallery-thumbnails'),
+            thumbnails: $$('.gallery-thumbnail'),
+            dots: $$('.gallery-dot'),
+            progress: $('.gallery-progress'),
+            slider: $('.gallery-slider'),
+            arrowPrev: $('.gallery-arrow.previous'),
+            arrowNext: $('.gallery-arrow.next'),
+            thumbsArrowPrev: $('.gallery-thumbnails-arrow.previous'),
+            thumbsArrowNext: $('.gallery-thumbnails-arrow.next'),
         };
         this.size = this.elements.thumbnails.length;
     }
@@ -52,7 +54,7 @@ export class Gallery {
 
     handleTouch() {
         new XSwipeHandler({
-            element: $('.gallery-preview', this.scope),
+            element: $('.gallery-preview'),
             onSwipeLeft: () => {
                 this.onSwipeLeft();
             },
@@ -134,8 +136,8 @@ export class Gallery {
     }
 
     updateTransitionStep() {
-        const slideWidth = $('.gallery-slide', this.scope).getBoundingClientRect().width;
-        this.step = slideWidth + this.options.offset ?? 0;
+        const slideWidth = $('.gallery-slide').getBoundingClientRect().width;
+        this.step = slideWidth + this.offset;
     }
 
     updateProgress() {

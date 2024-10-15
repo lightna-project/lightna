@@ -1,5 +1,5 @@
 @layer components {
-    header {
+    .page-header {
         @apply sticky top-0 z-[45] bg-white shadow-lg shadow-primary-main/5;
     }
 
@@ -8,7 +8,7 @@
     }
 
     .header__open-menu {
-        @apply icon burger-menu md:hidden;
+        @apply icon icon-burger-menu md:hidden;
     }
 
     .header__right {

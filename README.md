@@ -8,11 +8,14 @@
 
 <p align="center">
 We develop Lightna Engine and MVP for Magento 2 Storefront.<br>
-Readiness - 75%.
+Readiness of Lightna and Lightna Lane - 90%.<br>
+Readiness of MVP for Magento 2 - 75%.
 </p>
 
 <p align="center">
-<a href="https://lightna.com">About Lightna</a>
+<a href="https://lightna.com">Website</a>
+ | <a href="https://lightna.com/lightna-engine.html">Lightna Engine</a>
+ | <a href="https://lightna.com/lightna-lane.html">Lightna Lane</a>
  | <a href="https://lightna.com/magento.html">Magento 2 MVP</a>
  | <a href="https://lightna.com/benchmark.html">Benchmark</a>
  | <a href="https://lightna.com/contact.html">Contact</a>
@@ -49,12 +52,14 @@ cd ../..
 
 
 ### Integrate Lightna and Magento
-* Symlink Lightna module and theme:
+* Symlink Lightna modules and themes:
 ```
 mkdir -p project/magento-os/app/code/Lightna && \
 mkdir -p project/magento-os/app/design/frontend/Lightna && \
 ln -s ../../../../../code/magento-os/lightna-frontend project/magento-os/app/code/Lightna/Frontend && \
+ln -s ../../../../../code/magento-os/lightna-demo project/magento-os/app/code/Lightna/Demo && \
 ln -s ../../../../../../code/magento-os/lightna-theme project/magento-os/app/design/frontend/Lightna/Lightna && \
+ln -s ../../../../../../code/magento-os/lightna-semi-theme project/magento-os/app/design/frontend/Lightna/Semi
 ```
 
 * Redirect Magento index.php to Lightna:
@@ -82,12 +87,6 @@ project/magento-os/bin/magento setup:upgrade
 ```
 cd entry/magento-os && \
 composer lightna:build
-```
-
-
-### Setup Lightna indexer schema
-```
-./cli indexer:schema:update
 ```
 
 

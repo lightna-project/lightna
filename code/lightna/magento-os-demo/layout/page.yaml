@@ -1,11 +1,9 @@
-directives:
-  - position .body.server-time-container first
-  - position .body.server-time last
-.head:
-  .ga:
-    template: ga.phtml
 .body:
-  .server-time-container:
-    template: server-time-container.phtml
-  .server-time:
-    template: server-time.phtml
+  .usp.before:
+    .server-time-container:
+      id: server-time-container
+      template: server-time-container.phtml
+  .footer.after:
+    .server-time:
+      id: server-time
+      template: server-time.phtml

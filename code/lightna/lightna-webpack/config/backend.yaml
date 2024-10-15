@@ -1,0 +1,5 @@
+compiler:
+  pool:
+    webpack:
+      message: make webpack
+      compiler: Lightna\Webpack\App\Compiler\Webpack

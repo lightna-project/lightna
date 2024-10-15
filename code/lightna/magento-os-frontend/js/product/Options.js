@@ -1,5 +1,6 @@
-import { $, $$, getBlockHtml } from '../lib/utils';
-import { UserInput } from '../lib/UserInput';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
+import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
 
 export class ProductOptions {
     cjs = '.cjs-product-options';
@@ -15,7 +16,7 @@ export class ProductOptions {
     }
 
     bindEvents() {
-        $$('[data-option]', this.component).foreach((i, element) => {
+        $$('[data-option]', this.component).forEach((element) => {
             if (element.classList.contains('disabled')) {
                 return;
             }
@@ -29,7 +30,7 @@ export class ProductOptions {
 
     async optionClick(element, option) {
         $('#option_' + option.attributeCode).value = option.id;
-        this.component.outerHTML = await getBlockHtml(this.blockId, UserInput.collect(this.component));
+        await Blocks.updateHtml([this.blockId], UserInput.collect(this.component));
 
         this.init();
     }

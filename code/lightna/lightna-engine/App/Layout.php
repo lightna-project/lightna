@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\App;
 
 use Exception;
+use Lightna\Engine\App\Opcache\Compiled;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityA;
@@ -48,7 +49,10 @@ class Layout extends ObjectA
         $this->current[] = $block = $this->resolveBlock($blockName);
 
         try {
-            $this->beforeBlock($block, $vars);
+            $this->hookBlockWithId($block);
+            [$before, $after] = $this->fetchBeforeAfterBlocks($block);
+
+            $before && $this->block('before', $vars);
             if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
                 $this->isMainCurrent = false;
                 $this->renderBlockTemplate($block, $vars);
@@ -56,7 +60,7 @@ class Layout extends ObjectA
                 $this->isMainCurrent = false;
                 $this->renderBlockContent($block, $vars);
             }
-            $this->afterBlock($block, $vars);
+            $after && $this->block('after', $vars);
         } catch (Throwable $e) {
             $this->handleBlockError($e);
         }
@@ -102,20 +106,38 @@ class Layout extends ObjectA
         return $block;
     }
 
-    protected function beforeBlock(array &$block, array $vars): void
+    protected function hookBlockWithId(array $block): void
     {
-        if (isset($block['.']['before'])) {
-            block('before', $vars);
-            unset($block['.']['before']);
+        if (isset($block['id'])) {
+            echo '<div style="display: none" id="block_hook_' . escape($block['id']) . '"></div>';
         }
     }
 
-    protected function afterBlock(array &$block, array $vars): void
+    protected function fetchBeforeAfterBlocks(array &$block): array
     {
+        return [$this->fetchBeforeBlock($block), $this->fetchAfterBlock($block)];
+    }
+
+    protected function fetchBeforeBlock(array &$block): ?array
+    {
+        $before = null;
+        if (isset($block['.']['before'])) {
+            $before = $block['.']['before'];
+            unset($block['.']['before']);
+        }
+
+        return $before;
+    }
+
+    protected function fetchAfterBlock(array &$block): ?array
+    {
+        $after = null;
         if (isset($block['.']['after'])) {
-            block('after', $vars);
+            $after = $block['.']['after'];
             unset($block['.']['after']);
         }
+
+        return $after;
     }
 
     protected function renderBlockTemplate(array $block, array $vars = []): void
@@ -203,5 +225,10 @@ class Layout extends ObjectA
 
         error_log(($logId = uniqid()) . ' BLOCK ERROR: ' . $exception);
         echo "[BLOCK ERROR $logId]";
+    }
+
+    public function getPrivateBlockIds(): array
+    {
+        return array_keys($this->layout['privateBlocks']);
     }
 }

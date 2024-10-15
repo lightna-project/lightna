@@ -5,24 +5,28 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Closure;
-use Lightna\Engine\App\Compiled;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Opcache\Compiled;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 class CompilerA extends ObjectA
 {
+    protected Compiled $compiled;
     /** @AppConfig(modules) */
     protected ?array $modules;
-    protected Compiled $compiled;
+
+    protected function getModules(): array
+    {
+        return merge(['Lightna\Engine' => LIGHTNA_SRC], $this->modules ?? []);
+    }
 
     protected function walkFilesInModules(string $subDir, array $fileExtensions, Closure $callback): void
     {
-        $folders = merge(['Lightna\Engine' => LIGHTNA_SRC], $this->modules ?? []);
         $subDir = $subDir . '/';
         $root = realpath(LIGHTNA_ENTRY) . '/';
 
-        foreach ($folders as $ns => $folder) {
+        foreach ($this->getModules() as $folder) {
             $folder = rtrim(($folder[0] !== '/' ? LIGHTNA_ENTRY . $folder : $folder), '/') . '/';
 
             if (!is_dir($folder . $subDir)) {

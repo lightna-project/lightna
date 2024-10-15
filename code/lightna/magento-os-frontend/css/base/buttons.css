@@ -1,6 +1,8 @@
 @layer base {
     .btn {
-        @apply disabled:btn-disabled mb-2 inline-flex justify-center rounded-sm border border-solid border-primary-main bg-primary-main px-4 py-3 text-center font-normal text-white transition hover:bg-hover-main;
+        @apply disabled:btn-disabled mb-2 inline-flex justify-center rounded-sm
+        border border-solid border-primary-main bg-primary-main px-4 py-3 text-center font-normal text-white transition
+        hover:bg-hover-main hover:text-white visited:text-white hover:no-underline;
     }
 
     .btn-primary {
@@ -8,7 +10,8 @@
     }
 
     .btn-ghost {
-        @apply btn border border-solid border-primary-main bg-transparent text-primary-main hover:bg-transparent hover:opacity-80;
+        @apply btn border border-solid border-primary-main bg-transparent text-primary-main
+        hover:bg-transparent hover:opacity-80 hover:text-primary-main visited:text-primary-main;
     }
 
     .btn-disabled {

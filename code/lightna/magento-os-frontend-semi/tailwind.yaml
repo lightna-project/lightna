@@ -1,0 +1,21 @@
+entry:
+  semi:
+    import:
+      - tailwindcss/base
+      - base/reset.css
+      - base/animation.css
+      - base/buttons.css
+      - base/icons.css
+      - base/layout.css
+      - base/price.css
+      - base/typography.css
+      - tailwindcss/components
+      - components/dropdown.css
+      - components/mobile-overlay.css
+      - components/usp.css
+      - components/common/footer.css
+      - components/common/header.css
+      - components/common/menu.css
+      - components/common/minicart.css
+      - components/product/products-list.css
+      - tailwindcss/utilities

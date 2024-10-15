@@ -1,4 +1,4 @@
-import { $, $$ } from '../lib/utils';
+import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 
 export class Facets {
     constructor() {
@@ -7,7 +7,7 @@ export class Facets {
     }
 
     bindEvents() {
-        $$('input[type=checkbox]', this.jsc).foreach((i, element) => {
+        $$('input[type=checkbox]', this.jsc).forEach((element) => {
             element.addEventListener('change', () => {
                 this.onChange(element);
             });
