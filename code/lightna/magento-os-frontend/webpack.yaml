@@ -10,3 +10,5 @@ entry:
       - lightna/magento-os-frontend/product/Options
       - lightna/magento-os-frontend/product/Gallery
       - lightna/magento-os-frontend/listing/Facets
+    module:
+        pageMessages: lightna/magento-os-frontend/common/pageMessages
