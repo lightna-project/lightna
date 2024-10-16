@@ -1,5 +1,4 @@
 import { FormKey } from 'lightna/lightna-engine/lib/FormKey';
-import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
 import { objectToQuery } from 'lightna/lightna-engine/lib/utils/objectToQuery';
 
 class HttpClient {
@@ -56,10 +55,6 @@ class HttpClient {
             onSuccess(responseJson);
         } else {
             onError(responseJson);
-        }
-
-        if (responseJson.messagesHtml) {
-            new PageMessage(responseJson.messagesHtml);
         }
 
         return responseJson;

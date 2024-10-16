@@ -1,4 +1,5 @@
 import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
+import { PageMessage } from './PageMessage';
 import request from 'lightna/lightna-engine/lib/HttpClient';
 import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 
@@ -47,19 +48,25 @@ export class AddToCart {
         })
     }
 
+    addProductSuccess(response) {
+        if (response.messagesHtml) {
+            new PageMessage(response.messagesHtml);
+            return;
+        }
+        this.clearPageMessages();
+        document.dispatchEvent(new CustomEvent('add-to-cart'));
+    }
+
     beforeAddProduct(component) {
         this.toggleAnimation($(this.trigger, component), true);
     }
 
-    addProductSuccess(response) {
-        if (response.messagesHtml) {
-            return;
-        }
-        document.dispatchEvent(new CustomEvent('add-to-cart'));
-    }
-
     afterAddProduct(component) {
         this.toggleAnimation($(this.trigger, component), false);
+    }
+
+    clearPageMessages() {
+        $('.page-messages').innerHTML = '';
     }
 
     toggleAnimation(element, isLoading) {
