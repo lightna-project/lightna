@@ -10,3 +10,5 @@ entry:
       ProductOptions: product/Options
       Gallery: product/Gallery
       Facets: listing/Facets
+    module:
+      pageMessages: common/pageMessages

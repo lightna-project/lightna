@@ -1,5 +1,4 @@
 import { FormKey } from 'lightna/lightna-engine/lib/FormKey';
-import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
 import { objectToQuery } from 'lightna/lightna-engine/lib/utils/objectToQuery';
 
 class HttpClient {
@@ -59,7 +58,11 @@ class HttpClient {
         }
 
         if (responseJson.messagesHtml) {
-            new PageMessage(responseJson.messagesHtml);
+            document.dispatchEvent(new CustomEvent('page-messages', {
+                detail: {
+                    messagesHtml: responseJson.messagesHtml
+                },
+            }));
         }
 
         return responseJson;

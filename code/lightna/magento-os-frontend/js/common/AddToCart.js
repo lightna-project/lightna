@@ -47,15 +47,15 @@ export class AddToCart {
         })
     }
 
-    beforeAddProduct(component) {
-        this.toggleAnimation($(this.trigger, component), true);
-    }
-
     addProductSuccess(response) {
         if (response.messagesHtml) {
             return;
         }
         document.dispatchEvent(new CustomEvent('add-to-cart'));
+    }
+
+    beforeAddProduct(component) {
+        this.toggleAnimation($(this.trigger, component), true);
     }
 
     afterAddProduct(component) {
