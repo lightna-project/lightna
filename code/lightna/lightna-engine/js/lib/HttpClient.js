@@ -57,6 +57,14 @@ class HttpClient {
             onError(responseJson);
         }
 
+        if (responseJson.messagesHtml) {
+            document.dispatchEvent(new CustomEvent('page-messages', {
+                detail: {
+                    messagesHtml: responseJson.messagesHtml
+                },
+            }));
+        }
+
         return responseJson;
     }
 
