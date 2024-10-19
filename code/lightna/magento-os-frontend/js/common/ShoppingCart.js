@@ -1,4 +1,4 @@
-import request from 'lightna/lightna-engine/lib/HttpClient';
+import { HttpClient } from 'lightna/lightna-engine/lib/HttpClient';
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 
@@ -84,7 +84,7 @@ export class ShoppingCart {
             $(this.shoppingCart),
         ).closest('li');
 
-        await request.post(this.removeFromCartUrl, data, {
+        await HttpClient.post(this.removeFromCartUrl, data, {
             onSuccess: this.onProductRemove.bind(this, itemToRemove),
         });
     }

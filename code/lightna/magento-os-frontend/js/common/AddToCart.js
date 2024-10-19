@@ -1,5 +1,5 @@
 import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
-import request from 'lightna/lightna-engine/lib/HttpClient';
+import { HttpClient } from 'lightna/lightna-engine/lib/HttpClient';
 import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 
 export class AddToCart {
@@ -20,7 +20,7 @@ export class AddToCart {
             const trigger = this.getAddToCartTrigger(event.target);
             if (trigger) {
                 const component = trigger.closest(this.component);
-                this.onAddProduct(component);
+                this.onAddProduct(component).then();
             }
         });
     }
@@ -42,7 +42,7 @@ export class AddToCart {
             noSuccessMessages: true,
         };
 
-        await request.post(this.addToCartUrl, data, {
+        await HttpClient.post(this.addToCartUrl, data, {
             onSuccess: this.addProductSuccess.bind(this)
         })
     }
