@@ -11,7 +11,9 @@ class Webpack extends CompilerA
 {
     protected array $modulesConfig;
     protected array $relevantModules;
-    protected array $importsIndex;
+    protected array $importsIndex = [];
+    protected array $filesIndex = [];
+    protected array $extendAliases = [];
     protected array $wpConfig;
 
     public function make(): void
@@ -51,31 +53,21 @@ class Webpack extends CompilerA
 
     protected function indexImports(): void
     {
-        $this->importsIndex = [];
-        foreach ($this->relevantModules as $folder) {
-            $entries = $this->modulesConfig['entry'] ?? [];
-            foreach ($entries as $types) {
-                foreach ($types as $imports) {
-                    foreach ($imports as $import) {
-                        if ($this->doesModuleImportExist($folder, $import)) {
-                            $this->importsIndex[$import] = $this->getModuleAlias($folder) . '/' . $import;
-                        }
-                    }
-                }
+        $this->walkFilesInModules(
+            'js',
+            ['js'],
+            function ($subPath, $file, $modulePath, $moduleName, $moduleDir) {
+                $subPath = preg_replace('~\.js$~', '', $subPath);
+                $this->importsIndex[$moduleName . '/' . $subPath] = $moduleName . '/' . $subPath;
+                $this->filesIndex[$moduleName . '/' . $subPath] = $moduleDir . 'js/' . $subPath;
             }
-        }
-    }
-
-    protected function doesModuleImportExist(string $folder, string $import): bool
-    {
-        $file = str_ends_with($import, '.js') ? $import : $import . '.js';
-
-        return file_exists($folder . '/js/' . $file);
+        );
     }
 
     protected function makeWpConfig(): void
     {
         $this->makeEntriesConfig();
+        $this->makeExtends();
         $this->makeEntriesJs();
         $this->makeAliasesConfig();
         $this->saveConfig();
@@ -88,6 +80,36 @@ class Webpack extends CompilerA
         foreach ($entries as $name => $types) {
             $this->wpConfig['entry'][$name] = $this->compiled->getDir() . 'webpack/' . $name . '.js';
         }
+    }
+
+    protected function makeExtends(): void
+    {
+        foreach ($this->modulesConfig['extend'] ?? [] as $import => $extends) {
+            if (!count($extends)) {
+                continue;
+            }
+            $this->compiled->putFile('webpack/extend/' . $import . '.js', $this->getExtendsJs($import));
+            $this->extendAliases[$import] = $this->compiled->getDir() . './webpack/extend/' . $import . '.js';
+        }
+    }
+
+    protected function getExtendsJs(string $import): string
+    {
+        $name = preg_replace('~^.+/~', '', $import);
+        $nameOrigin = $name . 'Origin';
+        $extends = $this->modulesConfig['extend'][$import];
+
+        $js = "import { $name as $nameOrigin } from " . json_pretty(LIGHTNA_ENTRY . $this->filesIndex[$import]) . ';';
+        $extend = array_shift($extends);
+        $js .= "\nlet $name = require(" . json_pretty($extend) . ").extend($nameOrigin);";
+
+        foreach ($extends as $extend) {
+            $extend = $this->getImport($extend);
+            $js .= "\n$name = require(" . json_pretty($extend) . ").extend($name);";
+        }
+        $js .= "\n\nexport { $name };";
+
+        return $js;
     }
 
     protected function makeEntriesJs(): void
@@ -127,11 +149,14 @@ class Webpack extends CompilerA
     protected function getComponentsJs(array $components): string
     {
         $js = '';
-        foreach ($components as $name => $import) {
-            $js .= "\n" . 'import { ' . $name . ' } from ' . json_pretty($this->getImport($import)) . ';';
-            $js .= $this->getComponentExtendsJs($name);
-            $js .= "\n" . 'new ' . $name . '();';
+        $i = 1;
+        foreach ($components as $import) {
+            $name = preg_replace('~^.+/~', '', $import);
+            $as = 'C' . $i;
+            $js .= "\n" . "import { $name as $as } from " . json_pretty($this->getImport($import)) . ';';
+            $js .= "\n" . 'new ' . $as . '();';
             $js .= "\n";
+            $i++;
         }
 
         return $js;
@@ -146,17 +171,6 @@ class Webpack extends CompilerA
         return $this->importsIndex[$import];
     }
 
-    protected function getComponentExtendsJs(string $component): string
-    {
-        $extends = $this->modulesConfig['component']['extend'][$component] ?? [];
-        $js = '';
-        foreach ($extends as $extend) {
-            $js .= "\n$component = require(" . json_pretty($extend) . ").extend($component);";
-        }
-
-        return $js;
-    }
-
     protected function saveEntryJs(string $name, string $js): void
     {
         $this->compiled->putFile('webpack/' . $name . '.js', $js);
@@ -165,10 +179,17 @@ class Webpack extends CompilerA
     protected function makeAliasesConfig(): void
     {
         $aliases = &$this->wpConfig['resolve']['alias'];
+        $aliases = merge($this->extendAliases, $this->getModuleAliases());
+    }
+
+    protected function getModuleAliases(): array
+    {
         $aliases = [];
         foreach ($this->relevantModules as $folder) {
             $aliases[$this->getModuleAlias($folder)] = LIGHTNA_ENTRY . $folder . '/js';
         }
+
+        return $aliases;
     }
 
     protected function getModuleAlias(string $folder): string

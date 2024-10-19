@@ -22,8 +22,8 @@ class Asset extends CompilerA
         $this->walkFilesInModules(
             'asset',
             [],
-            function ($subPath, $file, $moduleName) {
-                file_copy($file, $this->dir . $moduleName . '/' . $subPath);
+            function ($subPath, $file, $modulePath) {
+                file_copy($file, $this->dir . $modulePath . '/' . $subPath);
             }
         );
     }
