@@ -1,12 +1,12 @@
 entry:
   common:
     component:
-      Menu: common/Menu
-      MobileOverlay: common/MobileOverlay
-      ShoppingCart: common/ShoppingCart
-      AddToCart: common/AddToCart
-      Collapsible: common/Collapsible
-      Tabs: common/Tabs
-      ProductOptions: product/Options
-      Gallery: product/Gallery
-      Facets: listing/Facets
+      - lightna/magento-os-frontend/common/Menu
+      - lightna/magento-os-frontend/common/MobileOverlay
+      - lightna/magento-os-frontend/common/ShoppingCart
+      - lightna/magento-os-frontend/common/AddToCart
+      - lightna/magento-os-frontend/common/Collapsible
+      - lightna/magento-os-frontend/common/Tabs
+      - lightna/magento-os-frontend/product/Options
+      - lightna/magento-os-frontend/product/Gallery
+      - lightna/magento-os-frontend/listing/Facets

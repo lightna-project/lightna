@@ -2,7 +2,7 @@ import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
 
-export class ProductOptions {
+export class Options {
     cjs = '.cjs-product-options';
     blockId = 'product-options';
 

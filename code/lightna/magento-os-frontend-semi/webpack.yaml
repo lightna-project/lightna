@@ -1,6 +1,6 @@
 entry:
   semi:
     component:
-      Menu: common/Menu
-      MobileOverlay: common/MobileOverlay
-      ShoppingCart: common/ShoppingCart
+      - lightna/magento-os-frontend/common/Menu
+      - lightna/magento-os-frontend/common/MobileOverlay
+      - lightna/magento-os-frontend/common/ShoppingCart

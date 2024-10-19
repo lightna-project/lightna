@@ -46,6 +46,8 @@ class CompilerA extends ObjectA
                         $subPath,
                         $relPath . $subDir . $subPath,
                         $this->getModulePath($folder),
+                        $this->getModuleName($folder),
+                        $relPath,
                     );
                 }
             }
@@ -57,5 +59,12 @@ class CompilerA extends ObjectA
         $parts = explode('/', trim($moduleBaseDir, '/'));
 
         return end($parts);
+    }
+
+    protected function getModuleName(string $moduleBaseDir): string
+    {
+        $parts = explode('/', trim($moduleBaseDir, '/'));
+
+        return implode('/', array_slice($parts, -2));
     }
 }
