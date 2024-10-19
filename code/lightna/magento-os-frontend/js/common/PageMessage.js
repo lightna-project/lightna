@@ -1,11 +1,13 @@
+import { $ } from 'lightna/lightna-engine/lib/utils/dom';
+
 export class PageMessage {
     removeTimeout = 5000;
-    static container = document.querySelector('.page-messages');
+    static container = $('.page-messages');
 
     constructor(html) {
         this.messageHtml = html;
         this.message = this.attachToDom();
-        this.closeButton = this.message.querySelector('.message__close');
+        this.closeButton = $('.message__close', this.message);
         this.addCloseListener();
         setTimeout(() => this.remove(), this.removeTimeout);
     }
@@ -23,7 +25,7 @@ export class PageMessage {
     }
 
     remove() {
-        if (this.message.querySelector('.message__content').matches(':hover')) {
+        if ($('.message__content', this.message).matches(':hover')) {
             setTimeout(() => this.remove(), this.removeTimeout);
             return;
         }
