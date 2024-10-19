@@ -1,5 +1,6 @@
 export class PageMessage {
     removeTimeout = 5000;
+    static container = document.querySelector('.page-messages');
 
     constructor(html) {
         this.messageHtml = html;
@@ -12,7 +13,7 @@ export class PageMessage {
     attachToDom() {
         const message = document.createElement('div');
         message.innerHTML = this.messageHtml;
-        document.querySelector('.page-messages').prepend(message);
+        PageMessage.container.prepend(message);
 
         return message;
     }
@@ -28,5 +29,9 @@ export class PageMessage {
         }
         this.message.classList.add('fade-out');
         setTimeout(() => this.message.remove(), 400);
+    }
+
+    static clearAll() {
+        this.container.innerHTML = '';
     }
 }

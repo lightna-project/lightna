@@ -1,6 +1,7 @@
 import { HttpClient } from 'lightna/lightna-engine/lib/HttpClient';
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
+import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
 
 export class ShoppingCart {
     blockId = 'minicart';
@@ -67,6 +68,7 @@ export class ShoppingCart {
 
     open() {
         setTimeout(() => {
+            PageMessage.clearAll();
             document.body.classList.add(this.classes.cartOpen);
         }, this.minActionDuration);
     }
