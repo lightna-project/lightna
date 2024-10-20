@@ -31,7 +31,7 @@ export class AddToCart {
 
     async onAddProduct(component) {
         this.beforeAddProduct(component);
-        await this.addProduct(component);
+        await this.addProduct(component)
         this.afterAddProduct(component);
     }
 
@@ -42,9 +42,9 @@ export class AddToCart {
             noSuccessMessages: true,
         };
 
-        await HttpClient.post(this.addToCartUrl, data, {
-            onSuccess: this.addProductSuccess.bind(this)
-        })
+        await HttpClient.post(this.addToCartUrl, data).then(
+            this.addProductSuccess.bind(this)
+        );
     }
 
     beforeAddProduct(component) {

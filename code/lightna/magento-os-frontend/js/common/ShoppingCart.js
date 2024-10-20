@@ -86,9 +86,9 @@ export class ShoppingCart {
             $(this.shoppingCart),
         ).closest('li');
 
-        await HttpClient.post(this.removeFromCartUrl, data, {
-            onSuccess: this.onProductRemove.bind(this, itemToRemove),
-        });
+        await HttpClient.post(this.removeFromCartUrl, data).then(
+            this.onProductRemove.bind(this, itemToRemove)
+        );
     }
 
     onProductRemove(item) {
