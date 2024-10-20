@@ -1,5 +1,5 @@
 import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
-import { HttpClient } from 'lightna/lightna-engine/lib/HttpClient';
+import { Request } from 'lightna/lightna-engine/lib/Request';
 import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 
 export class AddToCart {
@@ -42,7 +42,7 @@ export class AddToCart {
             noSuccessMessages: true,
         };
 
-        await HttpClient.post(this.addToCartUrl, data).then(
+        await Request.post(this.addToCartUrl, data).then(
             this.addProductSuccess.bind(this)
         );
     }

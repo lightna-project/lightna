@@ -11,5 +11,5 @@ entry:
       - lightna/magento-os-frontend/product/Gallery
       - lightna/magento-os-frontend/listing/Facets
 extend:
-  lightna/lightna-engine/lib/HttpClient:
-    - lightna/magento-os-frontend/extend/HttpClientExtend
+  lightna/lightna-engine/lib/Request:
+    - lightna/magento-os-frontend/extend/RequestExtend

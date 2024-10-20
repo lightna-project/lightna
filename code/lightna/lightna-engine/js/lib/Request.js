@@ -1,7 +1,7 @@
 import { FormKey } from 'lightna/lightna-engine/lib/FormKey';
 import { objectToQuery } from 'lightna/lightna-engine/lib/utils/objectToQuery';
 
-export class HttpClient {
+export class Request {
     static headers = {
         'Content-Type': 'application/x-www-form-urlencoded',
         'X-Request-With': 'Lightna',
@@ -30,7 +30,7 @@ export class HttpClient {
     static async fetch(url, options = {}) {
         if (options.top && this._lock) {
             throw new Error(
-                `HttpClient: Can't send new top level request for "${url}" until no response from previous`,
+                `Request: Can't send new top level request for "${url}" until no response from previous`,
             );
         }
         options.headers = { ...this.headers, ...options.headers };

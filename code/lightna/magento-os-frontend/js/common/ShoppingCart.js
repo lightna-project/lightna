@@ -1,4 +1,4 @@
-import { HttpClient } from 'lightna/lightna-engine/lib/HttpClient';
+import { Request } from 'lightna/lightna-engine/lib/Request';
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
@@ -86,7 +86,7 @@ export class ShoppingCart {
             $(this.shoppingCart),
         ).closest('li');
 
-        await HttpClient.post(this.removeFromCartUrl, data).then(
+        await Request.post(this.removeFromCartUrl, data).then(
             this.onProductRemove.bind(this, itemToRemove)
         );
     }

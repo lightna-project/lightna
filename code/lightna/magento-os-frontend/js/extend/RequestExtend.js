@@ -1,7 +1,7 @@
 import { PageMessage} from 'lightna/magento-os-frontend/common/PageMessage';
 
-export function extend(HttpClient) {
-    return class extends HttpClient {
+export function extend(Request) {
+    return class extends Request {
         static _onSuccess(response) {
            super._onSuccess(response);
 
