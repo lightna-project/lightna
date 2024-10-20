@@ -34,6 +34,8 @@ export class PageMessage {
     }
 
     static clearAll() {
-        this.container.innerHTML = '';
+        if (this.container) {
+            this.container.innerHTML = '';
+        }
     }
 }
