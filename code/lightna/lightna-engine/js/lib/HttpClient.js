@@ -33,9 +33,6 @@ export class HttpClient {
                 `HttpClient: Can't send new top level request for "${url}" until no response from previous`,
             );
         }
-
-        const onSuccess = options.onSuccess ? options.onSuccess : this._onSuccess;
-        const onError = options.onError ? options.onError : this._onError;
         options.headers = { ...this.headers, ...options.headers };
 
         try {
@@ -47,14 +44,14 @@ export class HttpClient {
             const response = await this._lock;
             this._lock = null;
 
-            return await this._handleJson(response, onSuccess, onError);
+            return await this._handleJson(response);
         } catch (error) {
             this._lock = null;
-            onError(error);
+            console.error(error.message);
         }
     }
 
-    static async _handleJson(response, onSuccess, onError) {
+    static async _handleJson(response) {
         if (response.headers.get('Content-Type') !== 'application/json') {
             throw new Error('JSON expected');
         }
@@ -64,21 +61,13 @@ export class HttpClient {
             responseJson = await response.clone().json();
         } catch (e) {
             let text = await response.clone().text();
-            throw new Error('Invalid response JSON received: "' + text + '"');
+            throw new Error(`Invalid response JSON received: "${text}"`);
         }
 
         if (response.ok) {
-            onSuccess(responseJson);
+            this._onSuccess(responseJson);
         } else {
-            onError(responseJson);
-        }
-
-        if (responseJson.messagesHtml) {
-            document.dispatchEvent(new CustomEvent('page-messages', {
-                detail: {
-                    messagesHtml: responseJson.messagesHtml
-                },
-            }));
+            this._onError(responseJson);
         }
 
         return responseJson;
@@ -87,7 +76,6 @@ export class HttpClient {
     static _onSuccess(response) {
     }
 
-    static _onError(error) {
-        throw error;
+    static _onError(response) {
     }
 }
