@@ -74,8 +74,10 @@ export class Request {
     }
 
     static _onSuccess(response) {
+        // Extension point
     }
 
     static _onError(response) {
+        // Extension point
     }
 }
