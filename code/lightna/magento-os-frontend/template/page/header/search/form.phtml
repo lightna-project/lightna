@@ -1,0 +1,24 @@
+<div class="search__wrap">
+    <div class="search__close" data-action="close-search">
+        <span class="icon icon-arrow-left"></span>
+    </div>
+    <form action="/catalogsearch/result/" class="cjs-search">
+        <div class="search__input">
+            <button class="search__submit-btn btn-reset btn-disabled"
+                    type="submit"
+                    data-action="search"
+                    title="<?= phrase('Search') ?>">
+                <span class="icon icon-search"></span>
+            </button>
+            <input type="search" name="q" id="search" value="" minlength="3" maxlength="128" class="search__input-field"
+                   placeholder="<?= phrase('Search entire store here...') ?>" autocomplete="off">
+            <button class="search__clear-btn btn-reset hidden"
+                    type="reset"
+                    data-action="clear-search"
+                    title="<?= phrase('Clear') ?>">
+                <span class="icon icon-close icon-close-xs"></span>
+            </button>
+        </div>
+    </form>
+</div>
+<div class="search__overlay" data-action="close-search"></div>

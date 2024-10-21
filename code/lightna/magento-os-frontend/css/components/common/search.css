@@ -1,0 +1,53 @@
+@layer components {
+    input[type='search'] {
+        @apply rounded-sm border-0 px-10 py-2.5 text-gray-900 placeholder:text-gray-400 w-full h-11
+        focus-visible:outline-none sm:leading-6;
+    }
+
+    input[type='search']::-webkit-search-cancel-button {
+        @apply hidden;
+    }
+
+    .header__right .icon-search {
+        @apply hidden md:flex;
+    }
+
+    .header__left .icon-search {
+        @apply md:hidden;
+    }
+
+    .search__wrap {
+        @apply absolute max-w-3xl opacity-0 invisible left-[54px] top-2.5 right-4 z-[100]
+        transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s]
+        md:w-7/12 sm:left-[58px] md:left-0 md:right-0 md:top-3 md:m-auto;
+    }
+
+    .search__wrap--active {
+        @apply visible opacity-100 delay-[.1s,_0s];
+    }
+
+    .search__input {
+        @apply relative w-full;
+    }
+
+    .search__submit-btn {
+        @apply absolute top-0 left-0 p-2.5;
+    }
+
+    .search__clear-btn {
+        @apply absolute top-0 right-0 p-2.5;
+    }
+
+    .search__close {
+        @apply absolute top-0 -left-10 flex p-2.5 bg-white md:hidden;
+    }
+
+    .search__overlay {
+        @apply fixed left-0 top-0 z-50 h-full w-full md:bg-black opacity-0 invisible
+        transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s]
+    }
+
+    .search-open .search__overlay {
+        @apply visible opacity-10 delay-[.1s,_0s];
+    }
+}

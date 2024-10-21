@@ -17,5 +17,6 @@ entry:
       - components/common/header.css
       - components/common/menu.css
       - components/common/minicart.css
+      - components/common/search.css
       - components/product/products-list.css
       - tailwindcss/utilities
