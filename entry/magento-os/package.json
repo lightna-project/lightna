@@ -12,11 +12,11 @@
     },
     "scripts": {
         "build-js": "webpack",
-        "build-css": "npm run build-common-css && npm run build-semi-css",
+        "build-css": "npm run build-common-css && npm run build-lane-css",
         "build-common-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/common.css -o ../../project/magento-os/pub/static/lightna/compiled/style/common.css",
-        "build-semi-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/semi.css -o ../../project/magento-os/pub/static/lightna/compiled/style/semi.css",
-        "build": "webpack && npm run build-common-css -- --minify && npm run build-semi-css -- --minify && ./cli deploy:asset:sign",
+        "build-lane-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/lane.css -o ../../project/magento-os/pub/static/lightna/compiled/style/lane.css",
+        "build": "webpack && npm run build-common-css -- --minify && npm run build-lane-css -- --minify && ./cli deploy:asset:sign",
         "watch-js": "webpack --mode=development",
-        "watch-css": "npm run build-common-css -- --watch --verbose && npm run build-semi-css -- --watch --verbose"
+        "watch-css": "npm run build-common-css -- --watch --verbose && npm run build-lane-css -- --watch --verbose"
     }
 }

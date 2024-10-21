@@ -18,7 +18,7 @@ return [
         'Lightna\Tailwind' => '../../code/lightna/lightna-tailwind',
         'Lightna\Magento' => '../../code/lightna/magento-os-backend',
         'Lightna\Magento\Frontend' => '../../code/lightna/magento-os-frontend',
-        'Lightna\Magento\Frontend\Semi' => '../../code/lightna/magento-os-frontend-semi',
+        'Lightna\Magento\Frontend\Lane' => '../../code/lightna/magento-os-frontend-lane',
         'Lightna\Magento\Demo' => '../../code/lightna/magento-os-demo',
     ],
     'libs' => [

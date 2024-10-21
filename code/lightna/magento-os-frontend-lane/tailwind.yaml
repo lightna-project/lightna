@@ -1,5 +1,5 @@
 entry:
-  semi:
+  lane:
     import:
       - tailwindcss/base
       - base/reset.css

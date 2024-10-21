@@ -1,0 +1,9 @@
+<?php
+/** @var Lightna\Engine\Data\Url $url */
+/** @var Lightna\Engine\Data\Context $context */
+if ($context->mode !== 'lane') {
+    return;
+}
+?>
+
+<script type="text/javascript" src="<?= $url->asset('compiled/js/lane.js') ?>" defer></script>

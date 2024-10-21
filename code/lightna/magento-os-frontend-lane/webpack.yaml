@@ -1,5 +1,5 @@
 entry:
-  semi:
+  lane:
     component:
       - lightna/magento-os-frontend/common/Menu
       - lightna/magento-os-frontend/common/MobileOverlay
