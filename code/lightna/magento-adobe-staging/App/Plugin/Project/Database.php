@@ -14,8 +14,9 @@ class Database extends ObjectA
 {
     protected Staging $staging;
 
-    public function sqlExtended(Closure $proceed, AbstractPreparableSql $sql): ResultInterface
+    public function sqlExtended(Closure $proceed, AbstractPreparableSql &$sql): ResultInterface
     {
+        $sql = clone $sql;
         $this->staging->apply($sql);
 
         return $proceed();
