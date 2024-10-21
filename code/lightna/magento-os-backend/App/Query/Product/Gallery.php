@@ -15,6 +15,7 @@ class Gallery extends ObjectA
     protected MagentoConfig $magentoConfig;
     protected string $cryptKey;
     protected string $imageQuality;
+    protected int $galleryAttributeId;
 
     protected function defineCryptKey(): void
     {
@@ -24,6 +25,21 @@ class Gallery extends ObjectA
     protected function defineImageQuality(): void
     {
         $this->imageQuality = $this->magentoConfig->getValue('system/upload_configuration/jpeg_quality');
+    }
+
+    protected function defineGalleryAttributeId(): void
+    {
+        $this->galleryAttributeId = $this->db->fetchOneCol($this->getGalleryAttributeIdSelect());
+    }
+
+    protected function getGalleryAttributeIdSelect(): Select
+    {
+        return $this->db->select()
+            ->from('eav_attribute')
+            ->where([
+                'entity_type_id = ?' => 4,
+                'attribute_code = ?' => 'media_gallery',
+            ]);
     }
 
     public function getItems(array $entityIds): array
@@ -48,7 +64,11 @@ class Gallery extends ObjectA
             ->join(
                 ['gallery' => 'catalog_product_entity_media_gallery'],
                 'gallery.value_id = g2e.value_id')
-            ->where('gallery.attribute_id = 90 and gallery.media_type = "image" and gallery.disabled = 0');
+            ->where([
+                'gallery.attribute_id = ?' => $this->galleryAttributeId,
+                'gallery.media_type = "image"',
+                'gallery.disabled = 0',
+            ]);
 
         $select->where->in('entity.entity_id', $entityIds);
 
