@@ -39,6 +39,10 @@
         @apply m-0 w-full px-6 md:max-w-[300px];
     }
 
+    .btn-reset {
+        @apply !border-0 !bg-transparent p-0;
+    }
+
     button {
         @apply btn;
     }

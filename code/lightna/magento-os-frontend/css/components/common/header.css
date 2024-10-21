@@ -11,6 +11,10 @@
         @apply icon icon-burger-menu md:hidden;
     }
 
+    .header__left {
+        @apply flex items-center justify-start gap-5 md:hidden;
+    }
+
     .header__right {
         @apply flex items-center justify-end gap-5;
     }
@@ -30,7 +34,7 @@
     }
 
     .logo__container {
-        @apply flex items-center;
+        @apply flex items-center justify-center md:justify-start;
     }
 
     .logo__link {

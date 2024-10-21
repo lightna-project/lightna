@@ -32,8 +32,15 @@ template: page.phtml
       attributes:
         class:
           - header__container
-      .mobile-menu-toggle:
-        template: page/header/mobile-menu-toggle.phtml
+      .header-left:
+        container: div
+        attributes:
+          class:
+            - header__left
+        .menu-toggle:
+          template: page/header/mobile-menu-toggle.phtml
+        .search:
+          template: page/header/search.phtml
       .logo:
         template: page/header/logo.phtml
       .menu:
@@ -45,6 +52,8 @@ template: page.phtml
         attributes:
           class:
             - header__right
+        .search:
+          template: page/header/search.phtml
         .account:
           id: account
           private: true
@@ -100,6 +109,8 @@ template: page.phtml
                   template: page/header/minicart/product-item/remove.phtml
             .footer:
               template: page/header/minicart/footer.phtml
+      .search:
+        template: page/header/search/form.phtml
   .main:
     container: div
     attributes:

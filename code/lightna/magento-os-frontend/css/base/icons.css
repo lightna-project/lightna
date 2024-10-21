@@ -76,6 +76,11 @@
             center / contain no-repeat;
     }
 
+    .icon-search {
+        background: url('../../magento-os-frontend/image/icon/search.svg')
+        center / 21px 21px no-repeat;
+    }
+
     .icon-counter {
         @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main
         text-xs font-normal text-white;
