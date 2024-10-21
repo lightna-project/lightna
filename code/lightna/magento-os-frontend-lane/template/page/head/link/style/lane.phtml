@@ -1,0 +1,8 @@
+<?php
+/** @var Lightna\Engine\Data\Url $url */
+/** @var Lightna\Engine\Data\Context $context */
+if ($context->mode !== 'lane') {
+    return;
+}
+?>
+<link rel="stylesheet" type="text/css" media="all" href="<?= $url->asset('compiled/style/lane.css') ?>">

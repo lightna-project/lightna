@@ -6,6 +6,6 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(
     ComponentRegistrar::THEME,
-    'frontend/Lightna/Semi',
+    'frontend/Lightna/Lane',
     __DIR__
 );

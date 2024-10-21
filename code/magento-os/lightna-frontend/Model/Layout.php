@@ -38,7 +38,7 @@ class Layout extends MagentoLayout
         $type = $this->getLightnaEntityType();
         $context->entity->type = $type;
         $context->entity->id = $this->getLightnaEntityId($type);
-        $context->mode = 'semi';
+        $context->mode = 'lane';
 
         $this->isLightnaPageContextInitialized = true;
     }

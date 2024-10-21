@@ -2,6 +2,6 @@ entry:
   common:
     component:
       - lightna/lightna-engine/Fpc
-  semi:
+  lane:
     component:
       - lightna/lightna-engine/Fpc

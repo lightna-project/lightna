@@ -20,8 +20,8 @@ class BlockHtmlAfter implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $this->observer = $observer;
-        $disabledSemi = !is_null($this->request->getParam('disable_lane'));
-        if ($disabledSemi) {
+        $disabledLane = !is_null($this->request->getParam('disable_lane'));
+        if ($disabledLane) {
             if ($this->isBlock('cookie-status-check')) {
                 $this->setBlockHtml(
                     blockhtml('#server-time-container') . $this->getBlockHtml()

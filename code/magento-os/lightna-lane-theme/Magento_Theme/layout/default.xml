@@ -16,12 +16,12 @@
             </block>
             <block name="lightna.style">
                 <arguments>
-                    <argument name="lightna_block_id" xsi:type="string">style-semi</argument>
+                    <argument name="lightna_block_id" xsi:type="string">style-lane</argument>
                 </arguments>
             </block>
             <block name="lightna.script">
                 <arguments>
-                    <argument name="lightna_block_id" xsi:type="string">script-semi</argument>
+                    <argument name="lightna_block_id" xsi:type="string">script-lane</argument>
                 </arguments>
             </block>
         </referenceBlock>

@@ -23,10 +23,10 @@ class Design
         DesignInterface $design,
         Closure $proceed
     ): DesignInterface {
-        $disabledSemi = !is_null($this->request->getParam('disable_lane'));
-        $design->setDesignTheme($disabledSemi ? 4 : 5);
+        $disabledLane = !is_null($this->request->getParam('disable_lane'));
+        $design->setDesignTheme($disabledLane ? 4 : 6);
 
-        $this->lightnaContextData->semiDemoMode = $disabledSemi ? 'Magento' : 'Magento + Lightna';
+        $this->lightnaContextData->laneDemoMode = $disabledLane ? 'Magento' : 'Magento + Lightna';
 
         return $design;
     }

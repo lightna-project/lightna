@@ -2,13 +2,13 @@
   .link:
     .font:
       id: font
-    .stylesheet-semi:
-      id: style-semi
-      template: page/head/link/style/semi.phtml
+    .stylesheet-lane:
+      id: style-lane
+      template: page/head/link/style/lane.phtml
   .script:
-    .semi:
-      id: script-semi
-      template: page/head/js/semi.phtml
+    .lane:
+      id: script-lane
+      template: page/head/js/lane.phtml
 .body:
   .usp:
     id: header-usp
