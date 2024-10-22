@@ -12,7 +12,7 @@ class CategoryBatchHandler extends BatchHandlerAbstract
     {
         if (str_starts_with($table, 'catalog_category_entity')) {
             return [
-                'category' => $this->collectIds($changelog, 'entity_id'),
+                'category' => $this->collectEntityIds($table, $changelog),
                 'content_page' => [1], // Update Top Menu
             ];
         }
