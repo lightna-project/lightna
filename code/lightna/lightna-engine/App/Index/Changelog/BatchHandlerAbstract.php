@@ -5,9 +5,14 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Index\Changelog;
 
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Project\Database;
+use Lightna\Magento\App\Index\EntityLink;
 
 abstract class BatchHandlerAbstract extends ObjectA
 {
+    protected Database $db;
+    protected EntityLink $entityLink;
+
     abstract public function handle(string $table, array $changelog): array;
 
     protected function collectIds(array $changelog, string $column, string $type = 'int'): array
@@ -43,5 +48,13 @@ abstract class BatchHandlerAbstract extends ObjectA
         $new !== null && $ids[$new] = (string)$new;
 
         return $ids;
+    }
+
+    protected function collectEntityIds(string $table, array $changelog): array
+    {
+        $column = $this->entityLink->getColumn($table);
+        $ids = $this->collectIds($changelog, $column);
+
+        return $this->entityLink->getIds($table, $ids);
     }
 }

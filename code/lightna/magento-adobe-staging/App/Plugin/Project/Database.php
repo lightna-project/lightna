@@ -17,7 +17,7 @@ class Database extends ObjectA
     public function sqlExtended(Closure $proceed, AbstractPreparableSql &$sql): ResultInterface
     {
         $sql = clone $sql;
-        $this->staging->apply($sql);
+        $this->staging->applyToQuery($sql);
 
         return $proceed();
     }

@@ -12,7 +12,7 @@ class CmsPageBatchHandler extends BatchHandlerAbstract
     {
         if (str_starts_with($table, 'cms_page')) {
             return [
-                'cms' => $this->collectIds($changelog, 'page_id'),
+                'cms' => $this->collectEntityIds($table, $changelog),
             ];
         }
 
