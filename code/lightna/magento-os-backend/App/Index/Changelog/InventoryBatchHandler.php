@@ -6,12 +6,9 @@ namespace Lightna\Magento\App\Index\Changelog;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
-use Lightna\Engine\App\Project\Database;
 
 class InventoryBatchHandler extends BatchHandlerAbstract
 {
-    protected Database $db;
-
     public function handle(string $table, array $changelog): array
     {
         if ($this->isTableRelevant($table)) {

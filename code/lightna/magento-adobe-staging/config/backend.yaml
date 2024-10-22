@@ -1,6 +1,8 @@
 plugin:
   Lightna\Engine\App\Project\Database:
     - Lightna\Magento\AdobeStaging\App\Plugin\Project\Database
+  Lightna\Magento\App\Index\EntityLink:
+    - Lightna\Magento\AdobeStaging\App\Plugin\Index\EntityLink
 staging:
   tables:
     cms_page:

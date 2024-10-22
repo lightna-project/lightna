@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace Lightna\Magento\App\Index\Changelog;
 
 use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
-use Lightna\Engine\App\Project\Database;
 
 class ProductBatchHandler extends BatchHandlerAbstract
 {
     protected string $table;
     protected array $changelog;
     protected array $toQueue;
-    protected Database $db;
 
     public function handle(string $table, array $changelog): array
     {
@@ -29,9 +27,12 @@ class ProductBatchHandler extends BatchHandlerAbstract
 
     protected function collectDefault(): void
     {
-        if (str_starts_with($this->table, 'catalog_product_entity') || $this->table === 'catalog_product_index_price') {
+        if (
+            str_starts_with($this->table, 'catalog_product_entity')
+            || $this->table === 'catalog_product_index_price'
+        ) {
             $this->toQueue['product'] = merge(
-                $this->collectIds($this->changelog, 'entity_id'),
+                $this->collectEntityIds($this->table, $this->changelog),
                 $this->toQueue['product'],
             );
         }

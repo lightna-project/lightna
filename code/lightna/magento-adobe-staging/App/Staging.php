@@ -40,7 +40,7 @@ class Staging extends ObjectA
         $this->versionId = 1;
     }
 
-    public function apply(AbstractPreparableSql $sql): void
+    public function applyToQuery(AbstractPreparableSql $sql): void
     {
         if (instance_of($sql, Select::class)) {
             $this->applyToSelect($sql);
@@ -62,10 +62,7 @@ class Staging extends ObjectA
 
     protected function applyToSelect(AbstractPreparableSql $select): void
     {
-        if (!$joins = $select->joins->getJoins()) {
-            return;
-        }
-
+        $joins = $select->joins->getJoins();
         $state = $select->getRawState();
         $select->reset(Select::JOINS);
         $versionTable = null;
@@ -97,14 +94,24 @@ class Staging extends ObjectA
     protected function getStagingJoinCondition(string $table, mixed $on): mixed
     {
         $search = [];
-        if ($parent = $this->tablesIdx[$table]['parent']) {
-            $search[] = $this->tablesIdx[$parent]['entity_id'];
+        if ($parent = $this->getTableParent($table)) {
+            $search[] = $this->getEntityIdColumn($parent);
         }
-        if ($this->tablesIdx[$table]['entity_id']) {
-            $search[] = $this->tablesIdx[$table]['entity_id'];
+        if ($column = $this->getEntityIdColumn($table)) {
+            $search[] = $column;
         }
 
         return $this->applyRowId($search, $on);
+    }
+
+    public function getTableParent(string $table): ?string
+    {
+        return $this->tablesIdx[$table]['parent'] ?? null;
+    }
+
+    public function getEntityIdColumn(string $table): ?string
+    {
+        return $this->tablesIdx[$table]['entity_id'] ?? null;
     }
 
     protected function applyRowId(array $search, mixed $condition): mixed
@@ -141,10 +148,10 @@ class Staging extends ObjectA
 
     protected function validateMainStagingTable(string $table): void
     {
-        if ($this->tablesIdx[$table]['parent']) {
+        if ($parent = $this->getTableParent($table)) {
             throw new Exception(
                 'Table "' . $table . '" is used as the first staging table in SELECT statement but it has parent table.'
-                . ' Please use "' . $this->tablesIdx[$table]['parent'] . '" as a main table to make staging functioning.'
+                . ' Please use "' . $parent . '" as a main table to make staging functioning.'
             );
         }
     }

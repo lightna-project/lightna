@@ -1,0 +1,6 @@
+indexer:
+  changelog:
+    tables:
+      include:
+        ^catalog_product_entity: [ row_id ]
+        ^catalog_category_entity: [ row_id ]
