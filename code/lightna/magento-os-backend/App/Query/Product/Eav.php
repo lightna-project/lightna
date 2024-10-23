@@ -15,13 +15,6 @@ class Eav extends EavAbstract
     protected array $visibleOnFrontAttributes;
     protected array $filterableAttributes;
 
-    protected function init(): void
-    {
-        parent::init();
-        $this->initVisibleOnFrontAttributes();
-        $this->initFilterableAttributes();
-    }
-
     public function getVisibleOnFrontAttributes(): array
     {
         return $this->visibleOnFrontAttributes;
@@ -32,12 +25,12 @@ class Eav extends EavAbstract
         return $this->filterableAttributes;
     }
 
-    protected function initVisibleOnFrontAttributes(): void
+    protected function defineVisibleOnFrontAttributes(): void
     {
         $this->visibleOnFrontAttributes = $this->db->fetch($this->getVisibleOnFrontAttributesSelect());
     }
 
-    protected function initFilterableAttributes(): void
+    protected function defineFilterableAttributes(): void
     {
         $this->filterableAttributes = $this->db->fetch($this->getFilterableAttributesSelect(), 'code');
     }

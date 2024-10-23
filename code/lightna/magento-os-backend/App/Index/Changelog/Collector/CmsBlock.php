@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Index\Changelog;
+namespace Lightna\Magento\App\Index\Changelog\Collector;
 
-use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
+use Lightna\Engine\App\Index\Changelog\CollectorInterface;
+use Lightna\Engine\App\ObjectA;
 
-class CmsBlockBatchHandler extends BatchHandlerAbstract
+class CmsBlock extends ObjectA implements CollectorInterface
 {
-    public function handle(string $table, array $changelog): array
+    public function collect(string $table, array $changelog): array
     {
         if (str_starts_with($table, 'cms_block')) {
             return [

@@ -28,4 +28,20 @@ class Product extends ObjectA
 
         return $select;
     }
+
+    public function getProductIdsBySkus(array $skus): array
+    {
+        return $this->db->fetchCol(
+            $this->getProductIdsBySkusSelect($skus),
+            'entity_id',
+        );
+    }
+
+    protected function getProductIdsBySkusSelect(array $skus): Select
+    {
+        $select = $this->db->select(['p' => 'catalog_product_entity']);
+        $select->where->in('sku', $skus);
+
+        return $select;
+    }
 }

@@ -4,4 +4,4 @@ indexer:
       include: [ ]
       exclude: [ ]
     batch:
-      handlers: [ ]
+      collectors: [ ]
