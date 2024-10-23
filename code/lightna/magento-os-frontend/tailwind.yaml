@@ -17,6 +17,7 @@ entry:
       - components/toggle-link.css
       - components/usp.css
       - components/common/import.css
+      - components/common/search-suggestions.css
       - components/listing/import.css
       - components/product/import.css
       - tailwindcss/utilities

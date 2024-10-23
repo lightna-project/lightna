@@ -110,7 +110,22 @@ template: page.phtml
             .footer:
               template: page/header/minicart/footer.phtml
       .search:
-        template: page/header/search/form.phtml
+        container: div
+        attributes:
+          class:
+            - search__wrap
+        .form:
+          template: page/header/search/form.phtml
+        .suggestions-container:
+          id: search-suggestions
+          container: div
+          attributes:
+            class:
+              - cjs-search-suggestions
+          .content:
+            template: page/header/search/suggestions.phtml
+      .search-overlay:
+        template: page/header/search/overlay.phtml
   .main:
     container: div
     attributes:
