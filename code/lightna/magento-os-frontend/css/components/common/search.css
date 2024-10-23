@@ -1,3 +1,5 @@
+@import "search-suggestions.css";
+
 @layer components {
     input[type='search'] {
         @apply rounded-sm border-0 px-10 py-2.5 text-gray-900 placeholder:text-gray-400 w-full h-11
@@ -43,7 +45,7 @@
     }
 
     .search__overlay {
-        @apply fixed left-0 top-0 z-50 h-full w-full md:bg-black opacity-0 invisible
+        @apply fixed left-0 top-0 z-50 h-full w-full bg-black opacity-0 invisible
         transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s]
     }
 

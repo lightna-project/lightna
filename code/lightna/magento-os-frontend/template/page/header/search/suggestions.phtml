@@ -1,0 +1,23 @@
+<?php
+/** @var Lightna\Engine\Data\Request $request */
+/** @var array $suggestions */
+
+$suggestions = $request->param->suggestions;
+if (!$request->isPost || !$suggestions) {
+    return;
+}
+?>
+<div class="search__suggestions-container">
+    <div class="search__suggestions-title"><?= phrase('Related terms') ?></div>
+    <ul class="search__suggestions">
+        <?php foreach ($suggestions as $suggestion) { ?>
+            <li>
+                <a href="/catalogsearch/result/?q=<?= escape($suggestion['title'], 'url-param') ?>"
+                   title="<?= escape($suggestion['title']) ?>" class="search__suggestion">
+                    <span class="search__suggestion__label"><?= escape($suggestion['title']) ?></span>
+                    <span class="search__suggestion__count"><?= escape($suggestion['num_results']) ?></span>
+                </a>
+            </li>
+        <?php }; ?>
+    </ul>
+</div>
