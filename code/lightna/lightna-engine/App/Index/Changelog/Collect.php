@@ -5,21 +5,17 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Index\Changelog;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Index\EntityLink;
 
-abstract class BatchHandlerAbstract extends ObjectA
+class Collect extends ObjectA
 {
-    protected Database $db;
     protected EntityLink $entityLink;
 
-    abstract public function handle(string $table, array $changelog): array;
-
-    protected function collectIds(array $changelog, string $column, string $type = 'int'): array
+    public function ids(array $changelog, string $column, string $type = 'int'): array
     {
         $ids = [];
         foreach ($changelog as $record) {
-            foreach ($this->collectRecordIds($record, $column, $type) as $id) {
+            foreach ($this->recordIds($record, $column, $type) as $id) {
                 $ids[$id] = $id;
             }
         }
@@ -27,10 +23,10 @@ abstract class BatchHandlerAbstract extends ObjectA
         return $ids;
     }
 
-    protected function collectRecordIds(array $record, string $column, string $type = 'int'): array
+    public function recordIds(array $record, string $column, string $type = 'int'): array
     {
         $ids = [];
-        foreach ($this->collectRecordValues($record, $column) as $id) {
+        foreach ($this->recordValues($record, $column) as $id) {
             $ids[$id] = $id;
             settype($ids[$id], $type);
         }
@@ -38,7 +34,7 @@ abstract class BatchHandlerAbstract extends ObjectA
         return $ids;
     }
 
-    protected function collectRecordValues(array $record, string $column): array
+    public function recordValues(array $record, string $column): array
     {
         $ids = [];
         // Don't use "??" operator. It must fail when key is undefined.
@@ -50,10 +46,10 @@ abstract class BatchHandlerAbstract extends ObjectA
         return $ids;
     }
 
-    protected function collectEntityIds(string $table, array $changelog): array
+    public function entityIds(string $table, array $changelog): array
     {
         $column = $this->entityLink->getColumn($table);
-        $ids = $this->collectIds($changelog, $column);
+        $ids = $this->ids($changelog, $column);
 
         return $this->entityLink->getIds($table, $ids);
     }

@@ -14,6 +14,29 @@ class Staging extends ObjectA
     protected Database $db;
     protected AppStaging $appStaging;
 
+    public function getVersionId(): int
+    {
+        $version = 1;
+        if ($data = $this->fetchFlag('staging')) {
+            $version = (int)json_decode($data, true)['current_version'];
+        }
+
+        return $version;
+    }
+
+    protected function fetchFlag(string $flag): ?string
+    {
+        return $this->db->fetchOneCol($this->getFlagSelect($flag));
+    }
+
+    protected function getFlagSelect(string $flag): Select
+    {
+        return $this->db->select()
+            ->columns(['flag_data'])
+            ->from('flag')
+            ->where(['flag_code = ?' => $flag]);
+    }
+
     public function convertRowIdsToEntityIds(string $table, array $ids): array
     {
         $parent = $this->appStaging->getTableParent($table);

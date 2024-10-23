@@ -17,6 +17,7 @@ class Staging extends ObjectA
     protected array $tables;
     protected array $tablesIdx;
     protected int $versionId;
+    protected Query\Staging $query;
 
     protected function defineTablesIdx(): void
     {
@@ -37,7 +38,7 @@ class Staging extends ObjectA
 
     protected function defineVersionId(): void
     {
-        $this->versionId = 1;
+        $this->versionId = $this->query->getVersionId();
     }
 
     public function applyToQuery(AbstractPreparableSql $sql): void

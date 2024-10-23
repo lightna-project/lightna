@@ -8,7 +8,7 @@ staging:
     cms_page:
       entity_id: page_id
       relations:
-        cms_page_store: page_id
+        cms_page_store: null
     cms_block:
       entity_id: block_id
       relations:
