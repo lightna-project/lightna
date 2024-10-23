@@ -9,3 +9,4 @@ router.bypass.rules.url_starts_with:
   - review/customer/
   - newsletter/
   - catalogsearch/
+  - search/ajax/suggest

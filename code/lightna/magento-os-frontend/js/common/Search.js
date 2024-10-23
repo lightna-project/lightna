@@ -1,12 +1,16 @@
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 
 export class Search {
-    minChars = 3;
-    actions = {
+    static minChars = 3;
+    static actions = {
         search: '[data-action="search"]',
         clear: '[data-action="clear-search"]',
         open: '[data-action="open-search"]',
         close: '[data-action="close-search"]',
+    };
+    static selectors = {
+        input: '#search',
+        wrapper: '.search__wrap',
     };
     classes = {
         active: 'search__wrap--active',
@@ -15,10 +19,10 @@ export class Search {
 
     constructor() {
         this.component = $('.cjs-search');
-        this.search = $('#search');
-        this.searchWrap = $('.search__wrap');
-        this.clearAction = $(this.actions.clear);
-        this.searchAction = $(this.actions.search);
+        this.search = $(Search.selectors.input);
+        this.searchWrap = $(Search.selectors.wrapper);
+        this.clearAction = $(Search.actions.clear);
+        this.searchAction = $(Search.actions.search);
         this.bindEvents();
         this.prefillSearchInput();
     }
@@ -27,11 +31,11 @@ export class Search {
         this.search.addEventListener('input', this.onInput.bind(this));
         this.clearAction.addEventListener('click', this.onClear.bind(this));
 
-        $$(this.actions.open).forEach((actionTrigger) => {
+        $$(Search.actions.open).forEach((actionTrigger) => {
             actionTrigger.addEventListener('click', this.open.bind(this));
         });
 
-        $$(this.actions.close).forEach((actionTrigger) => {
+        $$(Search.actions.close).forEach((actionTrigger) => {
             actionTrigger.addEventListener('click', this.close.bind(this));
         });
     }
@@ -48,7 +52,7 @@ export class Search {
 
     onInput(event) {
         this.toggleClearAction(!event.target.value);
-        this.toggleSearchAction(event.target.value.length < this.minChars);
+        this.toggleSearchAction(event.target.value.length < Search.minChars);
     }
 
     onClear(event) {
