@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Index\Changelog;
+namespace Lightna\Magento\App\Index\Changelog\Collector;
 
-use Lightna\Engine\App\Index\Changelog\BatchHandlerAbstract;
+use Lightna\Engine\App\Index\Changelog\Collect;
+use Lightna\Engine\App\Index\Changelog\CollectorInterface;
+use Lightna\Engine\App\ObjectA;
 
-class ProductBatchHandler extends BatchHandlerAbstract
+class Product extends ObjectA implements CollectorInterface
 {
+    protected Collect $collect;
     protected string $table;
     protected array $changelog;
     protected array $toQueue;
 
-    public function handle(string $table, array $changelog): array
+    public function collect(string $table, array $changelog): array
     {
         $this->table = $table;
         $this->changelog = $changelog;
@@ -32,7 +35,7 @@ class ProductBatchHandler extends BatchHandlerAbstract
             || $this->table === 'catalog_product_index_price'
         ) {
             $this->toQueue['product'] = merge(
-                $this->collectEntityIds($this->table, $this->changelog),
+                $this->collect->entityIds($this->table, $this->changelog),
                 $this->toQueue['product'],
             );
         }
@@ -43,7 +46,7 @@ class ProductBatchHandler extends BatchHandlerAbstract
         if ($this->table === 'catalog_product_relation') {
             $this->toQueue['product'] = merge(
                 $this->toQueue['product'],
-                $this->collectIds($this->changelog, 'parent_id'),
+                $this->collect->ids($this->changelog, 'parent_id'),
             );
         }
     }
@@ -53,7 +56,7 @@ class ProductBatchHandler extends BatchHandlerAbstract
         if ($this->table === 'catalog_product_super_attribute') {
             $this->toQueue['product'] = merge(
                 $this->toQueue['product'],
-                $this->collectIds($this->changelog, 'product_id'),
+                $this->collect->ids($this->changelog, 'product_id'),
             );
         }
     }

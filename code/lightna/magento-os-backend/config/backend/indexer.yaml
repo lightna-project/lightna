@@ -25,14 +25,14 @@ indexer:
         - ^sequence_
         - ^catalog_product_entity_media_gallery
     batch:
-      handlers:
-        lightna_product_handler: Lightna\Magento\App\Index\Changelog\ProductBatchHandler
-        lightna_cms_page_handler: Lightna\Magento\App\Index\Changelog\CmsPageBatchHandler
-        lightna_stock_handler: Lightna\Magento\App\Index\Changelog\StockBatchHandler
-        lightna_inventory_handler: Lightna\Magento\App\Index\Changelog\InventoryBatchHandler
-        lightna_product_website_handler: Lightna\Magento\App\Index\Changelog\ProductWebsiteBatchHandler
-        lightna_url_rewrite_handler: Lightna\Magento\App\Index\Changelog\UrlRewriteBatchHandler
-        lightna_config_handler: Lightna\Magento\App\Index\Changelog\ConfigBatchHandler
-        lightna_category_handler: Lightna\Magento\App\Index\Changelog\CategoryBatchHandler
-        lightna_attributes_handler: Lightna\Magento\App\Index\Changelog\AttributesBatchHandler
-        lightna_cms_block_handler: Lightna\Magento\App\Index\Changelog\CmsBlockBatchHandler
+      collectors:
+        lightna_product: Lightna\Magento\App\Index\Changelog\Collector\Product
+        lightna_cms_page: Lightna\Magento\App\Index\Changelog\Collector\CmsPage
+        lightna_stock: Lightna\Magento\App\Index\Changelog\Collector\Stock
+        lightna_inventory: Lightna\Magento\App\Index\Changelog\Collector\Inventory
+        lightna_product_website: Lightna\Magento\App\Index\Changelog\Collector\ProductWebsite
+        lightna_url_rewrite: Lightna\Magento\App\Index\Changelog\Collector\UrlRewrite
+        lightna_config: Lightna\Magento\App\Index\Changelog\Collector\Config
+        lightna_category: Lightna\Magento\App\Index\Changelog\Collector\Category
+        lightna_attributes: Lightna\Magento\App\Index\Changelog\Collector\Attributes
+        lightna_cms_block: Lightna\Magento\App\Index\Changelog\Collector\CmsBlock

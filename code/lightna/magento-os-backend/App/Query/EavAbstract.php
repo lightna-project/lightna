@@ -21,12 +21,7 @@ abstract class EavAbstract extends ObjectA
     protected array $attributes;
     protected array $attributesById;
 
-    protected function init(): void
-    {
-        $this->initAttributes();
-    }
-
-    protected function initAttributes(): void
+    protected function defineAttributes(): void
     {
         $select = $this->db
             ->select(['a' => 'eav_attribute'])
@@ -37,6 +32,11 @@ abstract class EavAbstract extends ObjectA
         foreach ($this->attributes as $attribute) {
             $this->attributesById[$attribute['attribute_id']] = $attribute;
         }
+    }
+
+    protected function defineAttributesById(): void
+    {
+        $this->defineAttributes();
     }
 
     public function getAttributeValues(array $entityIds, array $attributeCodes): array
