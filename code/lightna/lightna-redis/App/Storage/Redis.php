@@ -6,14 +6,26 @@ namespace Lightna\Redis\App\Storage;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\StorageInterface;
+use Lightna\Redis\App\Storage\Service\RedisScanner;
+use Lightna\Redis\App\Storage\ScanStrategy\HScanStrategy;
+use Lightna\Redis\App\Storage\ScanStrategy\SScanStrategy;
 use Redis as RedisClient;
+use RedisException;
 
 class Redis extends ObjectA implements StorageInterface
 {
+
+    public const FIELD_VALUE = 'value';
+    public const FIELD_TAGS  = 'tags';
+
     protected ?RedisClient $client;
+
     protected array $connection;
+
     protected bool $batch = false;
+
     protected array $batchSet = [];
+
     protected array $batchUnset = [];
 
     protected function init(array $connection): void
@@ -41,34 +53,114 @@ class Redis extends ObjectA implements StorageInterface
         return $this;
     }
 
-    public function set(string $key, mixed $value): void
+    public function set(string $key, mixed $value, array $tags = []): void
     {
         if ($this->batch) {
-            $this->batchSet[$key] = $value;
+            $this->batchSet[$key] = ['value' => $value, 'tags' => $tags];
         } else {
-            $this->client->set($key, $value);
+            $this->client->pipeline();
+            $this->setAtomic($key, $value, $tags);
+            $this->exec();
         }
+    }
+
+    protected function setAtomic(string $key, mixed $value, array $tags = []): void
+    {
+        $this->client->multi();
+        $this->setKeyValue($key, $value);
+        $this->createTags($key, $tags);
+        $this->exec();
+    }
+
+    protected function setKeyValue(string $key, mixed $value): void
+    {
+        $result = $this->client->hSet($key, static::FIELD_VALUE, $value);
+        if ($result === false) {
+            throw new RedisException("Could not set value for key: $key => " . json_encode($value));
+        }
+    }
+
+    protected function createTags(string $key, array $tags): void
+    {
+        $result = $this->client->hSet($key, static::FIELD_TAGS, json_encode($tags));
+        if ($result === false) {
+            throw new RedisException("Could not set tag for key: $key => " . json_encode($tags));
+        }
+
+        // Store the tags associated with the key
+        foreach ($tags as $tag) {
+            // Add the key to a set that represents the tags
+            $this->client->sAdd($tag, $key);
+        }
+    }
+
+    /**
+     * Execute queued commands. Analyze result and throw exception in case of errors or partial exec.
+     */
+    private function exec()
+    {
+        $result = $this->client->exec();
+
+        if ($result === false) {
+            throw new \RedisException("Exec failed");
+        }
+
+        // It's important to note that even when a command fails, all the other commands in the queue are processed
+        // Redis will not stop the processing of commands
+
+        /** @TODO: Analyze result and throw exception in case of partial exec */
+
+        return $result;
     }
 
     public function unset(string $key): void
     {
         if ($this->batch) {
-            $this->batchUnset[$key] = 1;
+            $this->batchUnset[$key] = [];
         } else {
-            $this->client->del($key);
+            $this->client->watch($key);
+            $tempTags = [];
+            foreach ($this->getTagsForKey($key) as $tag) {
+                $tempTags[] = $tag;
+            }
+            $tags = array_merge(...$tempTags);
+
+            $this->client->pipeline();
+            $this->unsetAtomic($key, $tags);
+            $this->exec();
+
+            $this->pruneTags($tags);
         }
+    }
+
+    protected function unsetAtomic(string $key, array $tags): void
+    {
+        $this->client->multi();
+        $this->cleanTags($key, $tags);
+        $this->client->del($key);
+        $this->exec();
     }
 
     public function get(string $key): string|array
     {
-        $result = $this->client->get($key);
+        $result = $this->client->hGet($key, static::FIELD_VALUE);
 
         return is_array($result) ? $result : (string)$result;
     }
 
     public function getList(array $keys): array
     {
-        $result = $this->client->mGet($keys);
+        $batches = array_chunk($keys, 10000);
+        $tempResults = [];
+        foreach ($batches as $batch) {
+            $this->client->pipeline();
+            foreach ($batch as $key) {
+                $this->client->hGet($key, static::FIELD_VALUE);
+            }
+            $tempResults[] = $this->exec();
+        }
+
+        $result = array_merge(...$tempResults);
 
         $return = [];
         foreach (array_values($keys) as $i => $key) {
@@ -80,7 +172,47 @@ class Redis extends ObjectA implements StorageInterface
 
     public function clean(array $tags): void
     {
-        // TODO: Implement clean() method.
+        foreach ($tags as $tag) {
+            foreach ($this->getKeysForTag($tag) as $key) {
+                $this->unset($key);
+            }
+        }
+    }
+
+    protected function cleanTags(string $key, array $tags): void
+    {
+        // Iterate over each tag and remove the key from the tag set
+        foreach ($tags as $tag) {
+            $this->client->sRem($tag, $key);
+        }
+    }
+
+    protected function pruneTags($tags): void
+    {
+        foreach ($tags as $tag) {
+            // Check if the tag set is now empty and remove it if it is
+            if ($this->client->sCard($tag) == 0) {
+                $this->client->del($tag);
+            }
+        }
+    }
+
+    protected function getTagsForKey(string $key): iterable
+    {
+        $scanner = new RedisScanner(new HScanStrategy($this->client));
+        foreach ($scanner->scanByCursor($key, 1000) as $tags) {
+            yield json_decode($tags['tags'], true);
+        }
+    }
+
+    protected function getKeysForTag(string $tag): iterable
+    {
+        $scanner = new RedisScanner(new SScanStrategy($this->client));
+        foreach ($scanner->scanByCursor($tag, 1000) as $batchKeys) {
+            foreach ($batchKeys as $key) {
+                yield $key;
+            }
+        }
     }
 
     public function batch(): void
@@ -90,10 +222,14 @@ class Redis extends ObjectA implements StorageInterface
 
     public function flush(): void
     {
-        $this->client->mSet($this->batchSet);
-        $this->client->del(array_keys($this->batchUnset));
-
         $this->batch = false;
+        foreach ($this->batchSet as $key => $data) {
+            $this->set($key, $data['value'], $data['tags']);
+        }
+        foreach ($this->batchUnset as $key => $data) {
+            $this->unset($key);
+        }
+
         $this->batchSet = [];
         $this->batchUnset = [];
     }
