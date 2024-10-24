@@ -6,6 +6,9 @@ namespace Lightna\Redis\App\Storage;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\StorageInterface;
+use Lightna\Redis\App\Storage\Service\RedisScanner;
+use Lightna\Redis\App\Storage\ScanStrategy\HScanStrategy;
+use Lightna\Redis\App\Storage\ScanStrategy\SScanStrategy;
 use Redis as RedisClient;
 use RedisException;
 
@@ -18,8 +21,11 @@ class Redis extends ObjectA implements StorageInterface
     protected ?RedisClient $client;
 
     protected array $connection;
+
     protected bool $batch = false;
+
     protected array $batchSet = [];
+
     protected array $batchUnset = [];
 
     protected function init(array $connection): void
@@ -50,7 +56,7 @@ class Redis extends ObjectA implements StorageInterface
     public function set(string $key, mixed $value, array $tags = []): void
     {
         if ($this->batch) {
-            $this->batchSet[$key] = $value;
+            $this->batchSet[$key] = ['value' => $value, 'tags' => $tags];
         } else {
             $this->client->pipeline();
             $this->setAtomic($key, $value, $tags);
@@ -110,10 +116,14 @@ class Redis extends ObjectA implements StorageInterface
     public function unset(string $key): void
     {
         if ($this->batch) {
-            $this->batchUnset[$key] = 1;
+            $this->batchUnset[$key] = [];
         } else {
             $this->client->watch($key);
-            $tags = $this->getTagsForKey($key);
+            $tempTags = [];
+            foreach ($this->getTagsForKey($key) as $tag) {
+                $tempTags[] = $tag;
+            }
+            $tags = array_merge(...$tempTags);
 
             $this->client->pipeline();
             $this->unsetAtomic($key, $tags);
@@ -187,18 +197,22 @@ class Redis extends ObjectA implements StorageInterface
         }
     }
 
-    protected function getTagsForKey(string $key): array
+    protected function getTagsForKey(string $key): iterable
     {
-        // Get string from redis
-        $tags = $this->client->hGet($key, static::FIELD_TAGS);
-
-        return $tags ? json_decode((string)$tags) : [];
+        $scanner = new RedisScanner(new HScanStrategy($this->client));
+        foreach ($scanner->scanByCursor($key, 1000) as $tags) {
+            yield json_decode($tags['tags'], true);
+        }
     }
 
-    protected function getKeysForTag(string $tag): array
+    protected function getKeysForTag(string $tag): iterable
     {
-        // Get all keys associated with the tag
-        return $this->client->sMembers($tag);
+        $scanner = new RedisScanner(new SScanStrategy($this->client));
+        foreach ($scanner->scanByCursor($tag, 1000) as $batchKeys) {
+            foreach ($batchKeys as $key) {
+                yield $key;
+            }
+        }
     }
 
     public function batch(): void
@@ -208,10 +222,14 @@ class Redis extends ObjectA implements StorageInterface
 
     public function flush(): void
     {
-        $this->client->mSet($this->batchSet);
-        $this->client->del(array_keys($this->batchUnset));
-
         $this->batch = false;
+        foreach ($this->batchSet as $key => $data) {
+            $this->set($key, $data['value'], $data['tags']);
+        }
+        foreach ($this->batchUnset as $key => $data) {
+            $this->unset($key);
+        }
+
         $this->batchSet = [];
         $this->batchUnset = [];
     }
