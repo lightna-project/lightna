@@ -1,4 +1,4 @@
-import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Request } from 'lightna/lightna-engine/lib/Request';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 import { Search } from 'lightna/magento-os-frontend/common/Search';
@@ -29,17 +29,16 @@ export class SearchSuggestions extends Search {
         this.suggestions = await Request.get(
             `${this.searchSuggestUrl}?q=${encodeURIComponent(this.search.value)}`,
         );
-        this.limitSuggestions();
     }
 
     async updateSuggestionsHtml() {
         return Blocks.updateHtml([this.blockId], {
-            suggestions: this.suggestions,
+            suggestions: this.limitSuggestions(this.suggestions),
         });
     }
 
     limitSuggestions() {
-        this.suggestions = this.suggestions.slice(0, this.maxSuggestions);
+        return this.suggestions.slice(0, this.maxSuggestions);
     }
 
     clearSuggestions() {
