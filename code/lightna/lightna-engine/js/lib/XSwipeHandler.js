@@ -11,8 +11,12 @@ export class XSwipeHandler {
     }
 
     bindEvents() {
-        this.element.addEventListener('touchstart', this.onTouchStart.bind(this));
-        this.element.addEventListener('touchmove', this.handleTouchMove.bind(this));
+        this.element.addEventListener('touchstart', this.onTouchStart.bind(this), {
+            passive: true,
+        });
+        this.element.addEventListener('touchmove', this.onTouchMove.bind(this), {
+            passive: true,
+        });
     }
 
     onTouchStart(event) {
@@ -28,7 +32,7 @@ export class XSwipeHandler {
         return this;
     }
 
-    handleTouchMove(event) {
+    onTouchMove(event) {
         if (!this.#xDown || !this.#yDown) {
             return;
         }
