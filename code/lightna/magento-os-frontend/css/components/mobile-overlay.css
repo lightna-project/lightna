@@ -1,5 +1,3 @@
-@import "./overlay.css";
-
 @layer components {
     .mobile-overlay__title__container {
         @apply flex justify-between pb-5 md:hidden;
