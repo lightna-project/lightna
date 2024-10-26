@@ -12,14 +12,27 @@ entry:
       - tailwindcss/components
       - components/collapsible.css
       - components/dropdown.css
+      - components/overlay.css
       - components/mobile-overlay.css
       - components/tabs.css
       - components/toggle-link.css
       - components/usp.css
-      - components/common/import.css
+      - components/common/footer.css
+      - components/common/header.css
+      - components/common/menu.css
+      - components/common/messages.css
+      - components/common/minicart.css
+      - components/common/search.css
       - components/common/search-suggestions.css
-      - components/listing/import.css
-      - components/product/import.css
+      - components/listing/facets.css
+      - components/listing/toolbar.css
+      - components/product/attributes-list.css
+      - components/product/gallery.css
+      - components/product/options.css
+      - components/product/products-grid.css
+      - components/product/products-list.css
+      - components/product/sku.css
+      - components/product/stock.css
       - tailwindcss/utilities
 tailwind:
   theme:
