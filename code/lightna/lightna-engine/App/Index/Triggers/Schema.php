@@ -11,19 +11,19 @@ use Lightna\Engine\App\Project\Database;
 
 class Schema extends ObjectA
 {
-    /** @AppConfig(indexer) */
-    protected array $config;
+    /** @AppConfig(indexer/changelog/tables) */
+    protected array $tablesConfig = [];
     protected Database $db;
-    protected array $tables;
+    protected array $allTables;
     protected array $tableKeys;
     protected array $triggers = [];
     protected array $watchedTables = [];
     protected array $watchedColumns = [];
     protected array $forcedColumns = [];
 
-    protected function defineTables(): void
+    protected function defineAllTables(): void
     {
-        $this->tables = $this->db->structure->getTableNames();
+        $this->allTables = $this->db->structure->getTableNames();
     }
 
     protected function defineTableKeys(): void
@@ -48,8 +48,10 @@ class Schema extends ObjectA
 
     protected function defineWatchedTables(): void
     {
-        $this->includeTables();
-        $this->excludeTables();
+        foreach ($this->tablesConfig as $table => $forcedColumns) {
+            $this->watchedTables[$table] = $table;
+            $this->forcedColumns[$table] = array_combine($forcedColumns, $forcedColumns);
+        }
     }
 
     protected function defineWatchedColumns(): void
@@ -85,7 +87,7 @@ class Schema extends ObjectA
 
     protected function removeTriggersFromUnwatchedTables(): void
     {
-        $unwatchedTables = array_diff_assoc($this->tables, $this->watchedTables);
+        $unwatchedTables = array_diff_assoc($this->allTables, $this->watchedTables);
         foreach ($unwatchedTables as $table) {
             $triggerNames = [];
             foreach (['update', 'delete', 'insert'] as $event) {
@@ -107,73 +109,6 @@ class Schema extends ObjectA
     protected function isColumnPrimaryKey(array $info): bool
     {
         return $info['COLUMN_KEY'] === 'PRI' && in_array($info['DATA_TYPE'], ['tinyint', 'smallint', 'mediumint', 'int', 'bigint']);
-    }
-
-    protected function includeTables(): void
-    {
-        foreach ($this->tables as $table) {
-            if ($this->isTableIncluded($table)) {
-                $this->watchedTables[$table] = $table;
-                $this->forcedColumns[$table] = $this->getForcedColumns($table);
-            }
-        }
-    }
-
-    protected function excludeTables(): void
-    {
-        foreach ($this->watchedTables as $table) {
-            if ($this->isTableExcluded($table)) {
-                unset($this->watchedTables[$table]);
-            }
-        }
-    }
-
-    protected function isTableIncluded(string $table): bool
-    {
-        foreach ($this->getIncludedTables() as $rx => $null) {
-            if (preg_match('~' . $rx . '~', $table)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    protected function getIncludedTables(): array
-    {
-        $ref = &$this->config['changelog']['tables']['include'];
-        if (!is_array($ref)) {
-            throw new Exception('The config "indexer.changelog.tables.include" should be an array');
-        }
-
-        return $ref;
-    }
-
-    protected function getForcedColumns(string $table): array
-    {
-        foreach ($this->getIncludedTables() as $rx => $forcedColumns) {
-            if (preg_match('~' . $rx . '~', $table)) {
-                $result = [];
-                foreach ($forcedColumns as $column) {
-                    $result[$column] = $column;
-                }
-
-                return $result;
-            }
-        }
-
-        return [];
-    }
-
-    protected function isTableExcluded(string $table): bool
-    {
-        foreach ($this->config['changelog']['tables']['exclude'] ?? [] as $rx) {
-            if (preg_match('~' . $rx . '~', $table)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     protected function updateTrigger(string $table, string $event): void

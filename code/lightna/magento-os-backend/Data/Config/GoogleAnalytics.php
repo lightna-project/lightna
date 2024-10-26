@@ -13,7 +13,7 @@ use Lightna\Engine\Data\DataA;
 class GoogleAnalytics extends DataA
 {
     public bool $active;
-    public string $account;
+    public ?string $account = null;
 
     protected function init(array $data = []): void
     {

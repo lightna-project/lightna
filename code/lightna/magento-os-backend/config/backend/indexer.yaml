@@ -1,29 +1,38 @@
 indexer:
   changelog:
     tables:
-      include:
-        ^catalog_product_entity: [ entity_id ]
-        ^catalog_product_index_price$: [ ]
-        ^catalog_product_relation$: [ ]
-        ^catalog_product_super_attribute$: [ product_id ]
-        ^cms_page: [ ]
-        ^cataloginventory_stock_item$: [ product_id ]
-        ^catalog_product_website$: [ product_id ]
-        ^url_rewrite$: [ entity_type, entity_id ]
-        ^core_config_data$: [ ]
-        ^catalog_category_entity: [ entity_id ]
-        ^eav_attribute$: [ ]
-        ^eav_attribute_label$: [ ]
-        ^eav_attribute_option$: [ ]
-        ^eav_attribute_option_value$: [ ]
-        ^catalog_eav_attribute$: [ ]
-        ^cms_block: [ ]
-        ^inventory_source_item$: [ sku ]
-        ^inventory_reservation$: [ sku ]
-      exclude:
-        - _(cl|tmp|idx|replica)$
-        - ^sequence_
-        - ^catalog_product_entity_media_gallery
+      catalog_product_entity: [ entity_id ]
+      catalog_product_entity_datetime: [ entity_id ]
+      catalog_product_entity_decimal: [ entity_id ]
+      catalog_product_entity_gallery: [ entity_id ]
+      catalog_product_entity_int: [ entity_id ]
+      catalog_product_entity_text: [ entity_id ]
+      catalog_product_entity_tier_price: [ entity_id ]
+      catalog_product_entity_varchar: [ entity_id ]
+      catalog_product_index_price: [ ]
+      catalog_product_relation: [ ]
+      catalog_product_super_attribute: [ product_id ]
+      cms_page: [ page_id ]
+      cms_page_store: [ page_id ]
+      cataloginventory_stock_item: [ product_id ]
+      catalog_product_website: [ product_id ]
+      url_rewrite: [ entity_type, entity_id ]
+      core_config_data: [ ]
+      catalog_category_entity: [ entity_id ]
+      catalog_category_entity_datetime: [ entity_id ]
+      catalog_category_entity_decimal: [ entity_id ]
+      catalog_category_entity_int: [ entity_id ]
+      catalog_category_entity_text: [ entity_id ]
+      catalog_category_entity_varchar: [ entity_id ]
+      eav_attribute: [ ]
+      eav_attribute_label: [ ]
+      eav_attribute_option: [ ]
+      eav_attribute_option_value: [ ]
+      catalog_eav_attribute: [ ]
+      cms_block: [ block_id ]
+      cms_block_store: [ block_id ]
+      inventory_source_item: [ sku ]
+      inventory_reservation: [ sku ]
     batch:
       collectors:
         lightna_product: Lightna\Magento\App\Index\Changelog\Collector\Product

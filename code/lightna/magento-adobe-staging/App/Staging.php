@@ -9,6 +9,7 @@ use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Combine;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
+use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\ObjectA;
 
 class Staging extends ObjectA
@@ -18,6 +19,7 @@ class Staging extends ObjectA
     protected array $tablesIdx;
     protected int $versionId;
     protected Query\Staging $query;
+    protected ChangelogHandler $changelogHandler;
 
     protected function defineTablesIdx(): void
     {
@@ -155,5 +157,43 @@ class Staging extends ObjectA
                 . ' Please use "' . $parent . '" as a main table to make staging functioning.'
             );
         }
+    }
+
+    public function applyNewVersion(): void
+    {
+        $version = $this->query->getVersionId();
+        $previousVersion = $this->query->getPreviousVersionId();
+        if ($version === $previousVersion) {
+            return;
+        }
+
+        $this->addEntitiesToChangelog($previousVersion, $version);
+        $this->query->setPreviousVersionId($version);
+    }
+
+    protected function addEntitiesToChangelog(int $fromVersion, int $toVersion): void
+    {
+        foreach (array_keys($this->tables) as $table) {
+            if ($ids = $this->query->getChangedEntityIds($table, $fromVersion, $toVersion)) {
+                $this->changelogHandler->processBatch(
+                    $table,
+                    $this->getChangelogForTable($table, $ids)
+                );
+            }
+        }
+    }
+
+    protected function getChangelogForTable(string $table, array $ids): array
+    {
+        $entityKey = $this->tablesIdx[$table]['entity_id'];
+        $changelog = [];
+        foreach ($ids as $id) {
+            $changelog[] = [
+                $entityKey => ['old_value' => $id, 'new_value' => $id],
+                'staging_version' => ['old_value' => 'old', 'new_value' => 'new'],
+            ];
+        }
+
+        return $changelog;
     }
 }
