@@ -33,9 +33,7 @@ class Handler extends ObjectA
         foreach ($this->changelog->getTables() as $table) {
             while ($batch = $this->changelog->getTableBatch($table)) {
                 if ($filteredBatch = $this->filterUnchanged($batch)) {
-                    $indexBatch = $this->getIndexBatch($table, $filteredBatch);
-                    $this->addIndexBatchDependencies($indexBatch);
-                    $this->queue->saveBatch($indexBatch);
+                    $this->processBatch($table, $filteredBatch);
                 }
                 $this->changelog->cleanBatch($table, $batch);
             }
@@ -71,6 +69,13 @@ class Handler extends ObjectA
         }
 
         return false;
+    }
+
+    public function processBatch(string $table, array $changelogBatch): void
+    {
+        $indexBatch = $this->getIndexBatch($table, $changelogBatch);
+        $this->addIndexBatchDependencies($indexBatch);
+        $this->queue->saveBatch($indexBatch);
     }
 
     protected function getIndexBatch(string $table, array $batch): array

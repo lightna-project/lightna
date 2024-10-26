@@ -1,7 +1,5 @@
 indexer:
   changelog:
-    tables:
-      include: [ ]
-      exclude: [ ]
+    tables: [ ]
     batch:
       collectors: [ ]

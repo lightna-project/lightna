@@ -1,6 +1,21 @@
 indexer:
   changelog:
     tables:
-      include:
-        ^catalog_product_entity: [ row_id ]
-        ^catalog_category_entity: [ row_id ]
+      catalog_product_entity: [ row_id ]
+      catalog_product_entity_datetime: [ row_id ]
+      catalog_product_entity_decimal: [ row_id ]
+      catalog_product_entity_gallery: [ row_id ]
+      catalog_product_entity_int: [ row_id ]
+      catalog_product_entity_text: [ row_id ]
+      catalog_product_entity_tier_price: [ row_id ]
+      catalog_product_entity_varchar: [ row_id ]
+      catalog_category_entity: [ row_id ]
+      catalog_category_entity_datetime: [ row_id ]
+      catalog_category_entity_decimal: [ row_id ]
+      catalog_category_entity_int: [ row_id ]
+      catalog_category_entity_text: [ row_id ]
+      catalog_category_entity_varchar: [ row_id ]
+      cms_block: [ row_id ]
+      cms_block_store: [ row_id ]
+      cms_page: [ row_id ]
+      cms_page_store: [ row_id ]
