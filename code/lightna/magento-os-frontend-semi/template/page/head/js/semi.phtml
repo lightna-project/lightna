@@ -1,9 +1,0 @@
-<?php
-/** @var Lightna\Engine\Data\Url $url */
-/** @var Lightna\Engine\Data\Context $context */
-if ($context->mode !== 'semi') {
-    return;
-}
-?>
-
-<script type="text/javascript" src="<?= $url->asset('compiled/js/semi.js') ?>" defer></script>

@@ -1,5 +1,5 @@
 import { $ } from 'lightna/lightna-engine/lib/utils/dom';
-import request from 'lightna/lightna-engine/lib/HttpClient';
+import { Request } from 'lightna/lightna-engine/lib/Request';
 
 export class Blocks {
 
@@ -8,7 +8,7 @@ export class Blocks {
         data.entityType = pageContext.entity.type;
         data.entityId = pageContext.entity.id;
 
-        return request.post('/lightna/block', data);
+        return Request.post('/lightna/block', data);
     }
 
     static async updateHtml(blockIds = [], data = []) {

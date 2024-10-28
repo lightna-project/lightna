@@ -1,6 +1,7 @@
-import request from 'lightna/lightna-engine/lib/HttpClient';
+import { Request } from 'lightna/lightna-engine/lib/Request';
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
+import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
 
 export class ShoppingCart {
     blockId = 'minicart';
@@ -67,6 +68,7 @@ export class ShoppingCart {
 
     open() {
         setTimeout(() => {
+            PageMessage.clearAll();
             document.body.classList.add(this.classes.cartOpen);
         }, this.minActionDuration);
     }
@@ -84,9 +86,9 @@ export class ShoppingCart {
             $(this.shoppingCart),
         ).closest('li');
 
-        await request.post(this.removeFromCartUrl, data, {
-            onSuccess: this.onProductRemove.bind(this, itemToRemove),
-        });
+        await Request.post(this.removeFromCartUrl, data).then(
+            this.onProductRemove.bind(this, itemToRemove)
+        );
     }
 
     onProductRemove(item) {

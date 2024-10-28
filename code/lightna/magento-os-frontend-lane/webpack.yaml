@@ -1,0 +1,6 @@
+entry:
+  lane:
+    component:
+      - lightna/magento-os-frontend/common/Menu
+      - lightna/magento-os-frontend/common/MobileOverlay
+      - lightna/magento-os-frontend/common/ShoppingCart

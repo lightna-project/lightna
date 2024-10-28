@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="url_rewrite">
+        <index referenceId="URL_REWRITE_STORE_ID_URL_REWRITE_ID" indexType="btree">
+            <column name="store_id"/>
+            <column name="url_rewrite_id"/>
+        </index>
+    </table>
+</schema>
