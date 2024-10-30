@@ -11,6 +11,7 @@ entry:
       - base/typography.css
       - tailwindcss/components
       - components/dropdown.css
+      - components/overlay.css
       - components/mobile-overlay.css
       - components/usp.css
       - components/common/footer.css
