@@ -47,12 +47,12 @@ export class SearchSuggestions {
         this.suggestions = await Request.get(
             `${this.searchSuggestUrl}?q=${encodeURIComponent(this.search.value)}`,
             { signal: this.abortController.signal }
-        );
+        ) || [];
     }
 
     async updateSuggestionsHtml() {
         return Blocks.updateHtml([this.blockId], {
-            suggestions: this.limitSuggestions(this.suggestions),
+            suggestions: this.limitSuggestions(),
             query: this.search.value,
         });
     }

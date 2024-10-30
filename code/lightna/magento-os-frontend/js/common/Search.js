@@ -55,7 +55,7 @@ export class Search {
         this.toggleSearchAction(event.target.value.length < Search.minChars);
     }
 
-    onClear(event) {
+    onClear() {
         this.search.focus();
         this.toggleClearAction(true);
         this.toggleSearchAction(true);
@@ -69,16 +69,16 @@ export class Search {
         this.searchAction.classList.toggle('btn-disabled', force);
     }
 
-    close(event) {
+    close() {
         this.searchWrap.classList.remove(this.classes.active);
         document.body.classList.remove(this.classes.overlayActive);
     }
 
-    open(event) {
+    open() {
+        this.searchWrap.classList.add(this.classes.active);
+        document.body.classList.add(this.classes.overlayActive);
         setTimeout(() => {
             this.search.focus();
         });
-        this.searchWrap.classList.add(this.classes.active);
-        document.body.classList.add(this.classes.overlayActive);
     }
 }
