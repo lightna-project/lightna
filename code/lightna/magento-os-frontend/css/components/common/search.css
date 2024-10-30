@@ -1,6 +1,6 @@
 @layer components {
     input[type='search'] {
-        @apply rounded-sm border-0 px-10 py-2.5 text-gray-900 placeholder:text-gray-400 w-full h-11
+        @apply rounded-sm border-0 px-10 py-2.5 text-gray-900 bg-white placeholder:text-gray-400 w-full h-11
         focus-visible:outline-none sm:leading-6;
     }
 
