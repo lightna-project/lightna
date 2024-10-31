@@ -56,6 +56,7 @@ template: page.phtml
           template: page/header/search.phtml
         .account:
           id: account
+          dynamic: true
           private: true
           template: page/header/account.phtml
           .guest:
@@ -77,8 +78,14 @@ template: page.phtml
                 label: Logout
         .minicart:
           id: minicart
+          dynamic: true
           private: true
-          template: page/header/minicart.phtml
+          container: div
+          attributes:
+            class:
+              - cjs-minicart
+          .icon:
+            template: page/header/minicart.phtml
           .content:
             template: page/header/minicart/content.phtml
             .empty:
@@ -116,14 +123,10 @@ template: page.phtml
             - search__wrap
         .form:
           template: page/header/search/form.phtml
-        .suggestions-container:
+        .suggestions:
           id: search-suggestions
-          container: div
-          attributes:
-            class:
-              - cjs-search-suggestions
-          .content:
-            template: page/header/search/suggestions.phtml
+          dynamic: true
+          template: page/header/search/suggestions.phtml
       .search-overlay:
         template: page/header/search/overlay.phtml
   .main:

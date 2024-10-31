@@ -23,14 +23,6 @@ export class Blocks {
     }
 
     static _updateBlockHtml(id, html) {
-        let hook = this._getBlockHook(id);
-        let block = hook.nextSibling;
-
-        block.outerHTML = html;
-        hook.remove();
-    }
-
-    static _getBlockHook(id) {
-        return $('#block_hook_' + id);
+        $(`#dynamic-${id}`).outerHTML = html;
     }
 }
