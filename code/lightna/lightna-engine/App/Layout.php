@@ -49,10 +49,12 @@ class Layout extends ObjectA
         $this->current[] = $block = $this->resolveBlock($blockName);
 
         try {
-            $this->hookBlockWithId($block);
             [$before, $after] = $this->fetchBeforeAfterBlocks($block);
+            $isDynamic = isset($block['dynamic']) && isset($block['id']) && $block['dynamic'];
 
+            $isDynamic && $this->openDynamicWrapper($block);
             $before && $this->block('before', $vars);
+
             if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
                 $this->isMainCurrent = false;
                 $this->renderBlockTemplate($block, $vars);
@@ -60,7 +62,9 @@ class Layout extends ObjectA
                 $this->isMainCurrent = false;
                 $this->renderBlockContent($block, $vars);
             }
+
             $after && $this->block('after', $vars);
+            $isDynamic && $this->closeDynamicWrapper();
         } catch (Throwable $e) {
             $this->handleBlockError($e);
         }
@@ -106,13 +110,6 @@ class Layout extends ObjectA
         return $block;
     }
 
-    protected function hookBlockWithId(array $block): void
-    {
-        if (isset($block['id'])) {
-            echo '<div style="display: none" id="block_hook_' . escape($block['id']) . '"></div>';
-        }
-    }
-
     protected function fetchBeforeAfterBlocks(array &$block): array
     {
         return [$this->fetchBeforeBlock($block), $this->fetchAfterBlock($block)];
@@ -138,6 +135,16 @@ class Layout extends ObjectA
         }
 
         return $after;
+    }
+
+    protected function openDynamicWrapper(array $block): void
+    {
+        print('<div style="display: contents;" id="dynamic-' . escape($block['id']) . '">');
+    }
+
+    protected function closeDynamicWrapper(): void
+    {
+        print('</div>');
     }
 
     protected function renderBlockTemplate(array $block, array $vars = []): void

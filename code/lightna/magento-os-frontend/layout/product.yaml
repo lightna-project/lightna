@@ -69,6 +69,7 @@ extends:
                 - gap-4
             .options:
               id: product-options
+              dynamic: true
               template: product/options.phtml
               attributes:
                 class:

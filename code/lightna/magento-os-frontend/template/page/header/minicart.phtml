@@ -2,13 +2,10 @@
 /** @var Lightna\Magento\Data\Session $session */
 $cart = $session->cart;
 ?>
-<div class="cjs-minicart">
-    <div class="header__icon" data-action="open-minicart">
-        <div class="icon icon-cart">
-            <?php if ($cart->qty() > 0) { ?>
-                <div class="icon-counter"><?= $cart->qty() ?></div>
-            <?php } ?>
-        </div>
+<div class="header__icon" data-action="open-minicart">
+    <div class="icon icon-cart">
+        <?php if ($cart->qty() > 0) { ?>
+            <div class="icon-counter"><?= $cart->qty() ?></div>
+        <?php } ?>
     </div>
-    <?= block('content') ?>
 </div>
