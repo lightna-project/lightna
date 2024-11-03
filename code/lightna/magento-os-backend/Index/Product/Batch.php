@@ -11,6 +11,7 @@ use Lightna\Magento\App\Query\Inventory;
 use Lightna\Magento\App\Query\Product\Eav;
 use Lightna\Magento\App\Query\Product\Gallery;
 use Lightna\Magento\App\Query\Store;
+use Lightna\Magento\App\Query\Url;
 use Lightna\Magento\Index\Product as ProductIndex;
 
 class Batch extends ObjectA
@@ -22,6 +23,7 @@ class Batch extends ObjectA
     protected Eav $eav;
     protected Gallery $gallery;
     protected Inventory $inventoryQuery;
+    protected Url $urlQuery;
 
     /** Batch variables */
     protected array $ids;
@@ -180,17 +182,7 @@ class Batch extends ObjectA
 
     protected function loadUrls(): void
     {
-        $select = $this->db
-            ->select(['u' => 'url_rewrite'])
-            ->columns(['entity_id', 'request_path'])
-            ->where([
-                'u.store_id = ?' => $this->context->scope,
-                'u.entity_type = ?' => 'product',
-                'u.redirect_type = ?' => 0,
-            ]);
-        $select->where->in('u.entity_id', $this->allIds);
-
-        $this->urls = $this->db->fetchCol($select, 'request_path', 'entity_id');
+        $this->urls = $this->urlQuery->getEntityDirectUrlsBatch('product', $this->allIds);
     }
 
     protected function loadOptions(): void

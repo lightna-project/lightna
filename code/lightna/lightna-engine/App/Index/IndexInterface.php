@@ -8,7 +8,9 @@ interface IndexInterface
 {
     public function refresh(array $ids): void;
 
-    public function getBatchData(array $ids): array;
+    public function getDataBatch(array $ids): array;
+
+    public function getRoutesBatch(array $ids): array;
 
     public function scan(string|int $lastId = null): array;
 }

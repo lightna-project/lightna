@@ -70,7 +70,7 @@ class Categories extends ObjectA
         $select->join(
             ['u' => 'url_rewrite'],
             new Expression(
-                'u.entity_id = e.entity_id and u.entity_type = "category" and u.store_id = ?',
+                'u.entity_id = e.entity_id and u.entity_type = "category" and u.store_id = ? and redirect_type = 0',
                 $this->context->scope,
             ),
             ['url' => 'request_path'],

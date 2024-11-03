@@ -11,14 +11,26 @@ use Lightna\Engine\App\ObjectA;
 class UrlRewrite extends ObjectA implements CollectorInterface
 {
     protected Collect $collect;
+    protected array $entityIdsByType;
 
     public function collect(string $table, array $changelog): array
     {
         if ($table === 'url_rewrite') {
             $toQueue = [];
-            $this->collectUrlRewriteChanges($changelog, $toQueue);
-            $this->collectProductChanges($changelog, $toQueue);
-            $this->collectContentPageChanges($changelog, $toQueue);
+            $this->entityIdsByType = $this->getEntityIdsByType($changelog);
+
+            if (isset($this->entityIdsByType['custom_redirect'])) {
+                $toQueue['custom_redirect'] = $this->entityIdsByType['custom_redirect'];
+            }
+            if (isset($this->entityIdsByType['product'])) {
+                $toQueue['product'] = $this->entityIdsByType['product'];
+            }
+            if (isset($this->entityIdsByType['category'])) {
+                $toQueue['content_page'] = [1]; // Update Top Menu
+            }
+            if (isset($this->entityIdsByType['cms-page'])) {
+                $toQueue['cms'] = $this->entityIdsByType['cms'];
+            }
 
             return $toQueue;
         }
@@ -26,32 +38,30 @@ class UrlRewrite extends ObjectA implements CollectorInterface
         return [];
     }
 
-    protected function collectUrlRewriteChanges(array $changelog, array &$toQueue): void
+    protected function getEntityIdsByType(array $changelog): array
     {
-        $toQueue['url_rewrite'] = $this->collect->ids($changelog, 'url_rewrite_id');
-    }
-
-    protected function collectProductChanges(array $changelog, array &$toQueue): void
-    {
+        $result = [];
         foreach ($changelog as $record) {
-            if (in_array('product', $this->collect->recordValues($record, 'entity_type'))) {
-                foreach ($this->collect->recordIds($record, 'entity_id') as $id) {
-                    $toQueue['product'][$id] = $id;
-                }
+            $indexType = $this->getRecordIndexType($record);
+            $entityIdColumn = $indexType === 'custom_redirect' ? 'url_rewrite_id' : 'entity_id';
+            $entityIds = $this->collect->recordValues($record, $entityIdColumn);
+            foreach ($entityIds as $entityId) {
+                $result[$indexType][$entityId] = (int)$entityId;
             }
         }
+
+        return $result;
     }
 
-    /**
-     * If category url changed, reindex Menu
-     */
-    protected function collectContentPageChanges(array $changelog, array &$toQueue): void
+    protected function getRecordIndexType(array $record): string
     {
-        foreach ($changelog as $record) {
-            if (in_array('category', $this->collect->recordValues($record, 'entity_type'))) {
-                $toQueue['content_page'] = [1]; // Update Top Menu
-                return;
-            }
-        }
+        // Ignore case when entity type changed
+        $entityType = current($this->collect->recordValues($record, 'entity_type'));
+
+        return match ($entityType) {
+            'custom' => 'custom_redirect',
+            'cms_page' => 'cms',
+            default => $entityType,
+        };
     }
 }

@@ -80,7 +80,7 @@ abstract class DatabaseA extends ObjectA
         try {
             return $this->sql->prepareStatementForSqlObject($sql)->execute();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage() . '. SQL was: ' . $this->buildSqlString($sql));
+            throw new Exception($e->getMessage() . ".\nSQL was: " . $this->buildSqlString($sql));
         }
     }
 
@@ -89,7 +89,7 @@ abstract class DatabaseA extends ObjectA
         try {
             return $this->adapter->createStatement($sql, $bind)->execute();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage() . '. SQL was: ' . $sql);
+            throw new Exception($e->getMessage() . ".\nSQL was: " . $sql);
         }
     }
 

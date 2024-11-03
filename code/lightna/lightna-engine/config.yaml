@@ -28,6 +28,7 @@ router:
       name: null
 entity:
   route:
+  entity_route:
   config:
   page:
     layout: page

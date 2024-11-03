@@ -96,7 +96,7 @@ class Handler extends ObjectA
 
     protected function getChangelogCollector(string $class): CollectorInterface
     {
-        return getobj($class);
+        return newobj($class);
     }
 
     protected function addIndexBatchDependencies(array &$indexBatch): void
