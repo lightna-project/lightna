@@ -90,8 +90,8 @@ class Redis extends ObjectA implements StorageInterface
 
     public function flush(): void
     {
-        $this->client->mSet($this->batchSet);
         $this->client->del(array_keys($this->batchUnset));
+        $this->client->mSet($this->batchSet);
 
         $this->batch = false;
         $this->batchSet = [];

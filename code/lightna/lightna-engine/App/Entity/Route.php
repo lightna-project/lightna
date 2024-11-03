@@ -14,10 +14,11 @@ class Route extends EntityA
 
     /** @AppConfig(entity/route/storage) */
     protected string $storageName;
+    protected EntityRoute $entityRoute;
 
-    public function get(int|string $id): array
+    public function get(int|string $url): array
     {
-        if (!$data = $this->storage->get(static::STORAGE_PREFIX . $id)) {
+        if (!$data = parent::get($url)) {
             return [];
         }
 
@@ -27,23 +28,54 @@ class Route extends EntityA
         ];
     }
 
-    public function add301(string $from, string $to): void
+    public function batch(): void
     {
-        $this->addUrl($from, [static::ACTION_301, [$to]]);
+        parent::batch();
+        $this->entityRoute->batch();
     }
 
-    public function add302(string $from, string $to): void
+    public function flush(): void
     {
-        $this->addUrl($from, [static::ACTION_302, [$to]]);
+        parent::flush();
+        $this->entityRoute->flush();
     }
 
-    public function addAction(string $url, string $code, $params = []): void
+    protected function getEntityUrls(string $entityName, int $id): array|string
     {
-        $this->addUrl($url, [static::ACTION_CUSTOM, [$code, $params]]);
+        return $this->entityRoute->get($entityName . $id);
     }
 
-    protected function addUrl(string $url, array $rule): void
+    protected function setEntityUrls(string $entityName, int $id, array $urls): void
     {
-        $this->storage->set('URL_' . $url, $rule);
+        $this->entityRoute->set($entityName . $id, $urls);
+    }
+
+    protected function unsetEntityUrls(string $entityName, int $id): void
+    {
+        $this->entityRoute->unset($entityName . $id);
+    }
+
+    public function setEntityRoutes(string $entityName, int $id, array $routes): void
+    {
+        $this->unsetEntityUrls($entityName, $id);
+
+        $urls = [];
+        foreach ($routes as $url => $rule) {
+            $urls[] = $url;
+            $this->set($url, $rule);
+        }
+        $this->setEntityUrls($entityName, $id, $urls);
+    }
+
+    public function unsetEntityRoutes(string $entityName, int $id): void
+    {
+        if (($urls = $this->getEntityUrls($entityName, $id)) === "") {
+            return;
+        }
+
+        foreach ($urls as $url) {
+            $this->unset($url);
+        }
+        $this->unsetEntityUrls($entityName, $id);
     }
 }

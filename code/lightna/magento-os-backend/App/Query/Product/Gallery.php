@@ -86,6 +86,7 @@ class Gallery extends ObjectA
 
     protected function getHash(int $w, int $h): string
     {
+        // \Magento\Catalog\Model\View\Asset\Image::getMiscPath to compare
         return hash_hmac(
             'md5',
             "h:{$h}_w:{$w}_rgb255,255,255_r:empty_q:{$this->imageQuality}_proportional_frame_transparency_doconstrainonly",

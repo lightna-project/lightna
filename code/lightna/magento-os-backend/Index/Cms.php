@@ -9,16 +9,24 @@ use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Index\IndexAbstract;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Entity\Cms as CmsEntity;
+use Lightna\Magento\App\Query\Url;
 
 class Cms extends IndexAbstract
 {
     protected CmsEntity $entity;
     protected Database $db;
     protected Context $context;
+    protected Url $url;
+    protected bool $hasRoutes = true;
 
-    public function getBatchData(array $ids): array
+    public function getDataBatch(array $ids): array
     {
         return $this->db->fetch($this->getBatchSelect($ids), 'page_id');
+    }
+
+    public function getRoutesBatch(array $ids): array
+    {
+        return $this->url->getEntityRoutesBatch('cms', $ids);
     }
 
     public function getBatchSelect(array $ids): Select

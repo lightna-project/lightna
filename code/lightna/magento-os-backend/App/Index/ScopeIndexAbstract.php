@@ -14,7 +14,7 @@ abstract class ScopeIndexAbstract extends IndexAbstract
     protected Database $db;
     protected Context $context;
 
-    public function getBatchData(array $ids): array
+    public function getDataBatch(array $ids): array
     {
         $data = [];
         $store = $this->db->fetchOne($this->getStoreSelect());
