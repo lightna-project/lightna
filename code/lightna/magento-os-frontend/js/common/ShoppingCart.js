@@ -2,15 +2,16 @@ import { Request } from 'lightna/lightna-engine/lib/Request';
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 import { PageMessage } from 'lightna/magento-os-frontend/common/PageMessage';
+import { PageOverlay } from 'lightna/magento-os-frontend/common/PageOverlay';
 
 export class ShoppingCart {
     blockId = 'minicart';
     removeFromCartUrl = '/checkout/sidebar/removeItem';
     minActionDuration = 200;
     classes = {
-        cartOpen: 'minicart-open',
         fade: 'fade-out',
     };
+    overlay = null;
 
     constructor() {
         this.shoppingCart = '.cjs-minicart';
@@ -48,12 +49,6 @@ export class ShoppingCart {
             });
         });
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                this.close();
-            }
-        });
-
         this.getContentElement().areEventsBound = true;
     }
 
@@ -73,14 +68,17 @@ export class ShoppingCart {
     }
 
     open() {
+        PageMessage.clearAll();
+        if (!this.overlay) {
+            this.overlay = new PageOverlay('.cjs-minicart', 'minicart');
+        }
         setTimeout(() => {
-            PageMessage.clearAll();
-            document.body.classList.add(this.classes.cartOpen);
+            this.overlay.show();
         }, this.minActionDuration);
     }
 
     close() {
-        document.body.classList.remove(this.classes.cartOpen);
+        this.overlay.hide();
     }
 
     async removeProduct(itemId) {

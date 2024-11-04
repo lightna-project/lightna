@@ -17,8 +17,7 @@
     }
 
     .search__wrap {
-        @apply absolute max-w-3xl opacity-0 invisible left-[54px] top-2.5 right-4 z-[100]
-        transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s]
+        @apply absolute max-w-3xl left-[54px] top-2.5 right-4 z-[100]
         md:w-7/12 sm:left-[58px] md:left-0 md:right-0 md:top-3 md:m-auto;
     }
 
@@ -40,14 +39,5 @@
 
     .search__close {
         @apply absolute top-0 -left-10 flex p-2.5 bg-white md:hidden;
-    }
-
-    .search__overlay {
-        @apply fixed left-0 top-0 z-50 h-full w-full bg-black opacity-0 invisible
-        transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s]
-    }
-
-    .search-open .search__overlay {
-        @apply visible opacity-10 delay-[.1s,_0s];
     }
 }
