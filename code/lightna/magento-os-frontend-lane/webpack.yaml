@@ -3,6 +3,7 @@ entry:
     component:
       - lightna/magento-os-frontend/common/Menu
       - lightna/magento-os-frontend/common/MobileOverlay
+      - lightna/magento-os-frontend/common/PageOverlayPool
       - lightna/magento-os-frontend/common/ShoppingCart
       - lightna/magento-os-frontend/common/Search
       - lightna/magento-os-frontend/common/SearchSuggestions
