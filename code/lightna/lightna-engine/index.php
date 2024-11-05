@@ -14,6 +14,8 @@ function error500(string $title, Throwable $exception): void
 
 try {
 
+    $GLOBALS['LIGHTNA_START_TIME'] = microtime(true);
+
     $config = require LIGHTNA_ENTRY . 'config.php';
     require LIGHTNA_ENTRY . $config['src_dir'] . '/App/boot.php';
 
