@@ -193,7 +193,7 @@ class Plugin extends CompilerA
             } else {
                 \$instance = getobj(\$callee[1]);
                 if (\$callee[0] === 'c') {
-                    {$return}\$instance->$methodNameExtended()->bindTo(\$this, __CLASS__)(\$proceed$paramsAppend);
+                    {$return}\$instance->$methodNameExtended(\$proceed$paramsAppend)->bindTo(\$this, __CLASS__)();
                 } else {
                     {$return}\$instance->$methodNameExtended(\$proceed$paramsAppend);
                 }

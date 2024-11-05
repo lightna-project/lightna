@@ -1,3 +1,8 @@
+compiler:
+  pool:
+    magento:
+      message: make run codes
+      compiler: Lightna\Magento\App\Compiler\RunCodes
 plugin:
   Lightna\Engine\App:
     - Lightna\Magento\App\Plugin\App

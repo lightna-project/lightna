@@ -22,7 +22,7 @@ class Context extends DataA
 
     protected function resolve(): void
     {
-        // To plugin
+        // Extension point
         $this->scope = 1;
     }
 }

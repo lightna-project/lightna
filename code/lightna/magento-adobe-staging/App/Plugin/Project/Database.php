@@ -18,10 +18,7 @@ class Database extends ObjectA
 
     public function sqlExtended(Closure $proceed, AbstractPreparableSql &$sql): ResultInterface
     {
-        if (!$this->query->isStagingEnabledForQuery($sql)) {
-            // Clean to avoid garbage in Query::$disabledStaging array
-            $this->query->cleanDisabledStaging($sql);
-
+        if (!$this->isQueryRelevant($sql)) {
             return $proceed();
         }
 
@@ -29,5 +26,20 @@ class Database extends ObjectA
         $this->staging->applyToQuery($sql);
 
         return $proceed();
+    }
+
+    protected function isQueryRelevant(AbstractPreparableSql $sql): bool
+    {
+        if (LIGHTNA_AREA !== 'backend') {
+            return false;
+        }
+        if (!$this->query->isStagingEnabledForQuery($sql)) {
+            // Clean to avoid garbage in Query::$disabledStaging array
+            $this->query->cleanDisabledStaging($sql);
+
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,3 +1,6 @@
+plugin:
+  Lightna\Engine\App\Context:
+    - Lightna\Magento\App\Plugin\Context
 router.bypass.rules.url_starts_with:
   - checkout/
   - customer/

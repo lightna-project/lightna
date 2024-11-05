@@ -1,5 +1,5 @@
 <?php
-$serverTime = round((microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']) * 1000, 2);
+$serverTime = round((microtime(true) - $GLOBALS['LIGHTNA_START_TIME']) * 1000, 2);
 $elasticTime = round(Lightna\Elasticsearch\App\Client::$timeSpent * 1000, 2);
 ?>
 <script>

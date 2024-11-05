@@ -39,7 +39,7 @@ abstract class ScopeIndexAbstract extends IndexAbstract
         return $this->scopeDataProvider->getData();
     }
 
-    public function getStoreSelect(): Select
+    protected function getStoreSelect(): Select
     {
         return $this->db->select('store')
             ->where(['store_id = ?' => $this->context->scope]);
