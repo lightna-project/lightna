@@ -8,7 +8,7 @@
     }
 
     .tab-trigger {
-        @apply cursor-pointer whitespace-nowrap py-2 text-sm opacity-50 hover:opacity-100 md:text-base;
+        @apply cursor-pointer whitespace-nowrap py-2 text-sm opacity-70 hover:opacity-100 md:text-base;
     }
 
     .tab-trigger.active {

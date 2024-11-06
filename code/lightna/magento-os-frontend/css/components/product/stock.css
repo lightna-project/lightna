@@ -4,7 +4,7 @@
     }
 
     .product-stock.in-stock {
-        @apply bg-green-100 text-green-600;
+        @apply bg-green-100 text-green-700;
     }
 
     .product-stock.out-of-stock {
