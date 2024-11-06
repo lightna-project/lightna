@@ -33,11 +33,16 @@ class Search extends DataA
     public function search(): array
     {
         $result = $this->client->search(
-            'product_' . $this->context->scope,
+            $this->getIndexName('product'),
             $this->buildQuery()
         );
 
         return $this->parseResult($result);
+    }
+
+    protected function getIndexName(string $entityName): string
+    {
+        return $entityName . '_' . $this->context->scope;
     }
 
     protected function buildQuery(): array

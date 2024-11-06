@@ -12,7 +12,6 @@ use Lightna\Engine\App\Context;
 class EntityA extends ObjectA
 {
     const STORAGE_PREFIX = self::STORAGE_PREFIX;
-    const MULTIPLE_VALUES_PER_SCOPE = self::MULTIPLE_VALUES_PER_SCOPE;
 
     protected Storage $storageFactory;
     protected StorageInterface $storage;
@@ -27,11 +26,7 @@ class EntityA extends ObjectA
 
     protected function getKey(string|int $id): string
     {
-        if (static::MULTIPLE_VALUES_PER_SCOPE) {
-            return static::STORAGE_PREFIX . $this->context->scope . '_' . $id;
-        } else {
-            return static::STORAGE_PREFIX . $id;
-        }
+        return static::STORAGE_PREFIX . $this->context->scope . '_' . $id;
     }
 
     public function set(string|int $id, array $data): self

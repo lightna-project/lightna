@@ -22,7 +22,7 @@ class Client extends ObjectA
 
     public function search(string $indexName, array $body): array
     {
-        return $this->request($this->getPrefix() . '_' . $indexName . '/document/_search', $body);
+        return $this->request($this->getPrefix() . $indexName . '/document/_search', $body);
     }
 
     public function getPrefix(): string

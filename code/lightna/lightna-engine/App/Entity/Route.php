@@ -7,7 +7,6 @@ namespace Lightna\Engine\App\Entity;
 class Route extends EntityA
 {
     const STORAGE_PREFIX = 'URL_';
-    const MULTIPLE_VALUES_PER_SCOPE = true;
     const ACTION_301 = 1;
     const ACTION_302 = 2;
     const ACTION_CUSTOM = 3;
