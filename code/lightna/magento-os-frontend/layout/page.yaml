@@ -10,14 +10,18 @@ template: page.phtml
   .link:
     .favicon:
       template: page/head/link/favicon.phtml
-    .font:
-      template: page/head/link/font.phtml
-    .stylesheet:
-      template: page/head/link/style/common.phtml
+    .preconnect:
+      .gtm:
+        template: page/head/link/preconnect/gtm.phtml
+    .preload:
+      .font:
+        template: page/head/link/preload/font.phtml
+  .gtm:
+    template: page/head/js/gtm.phtml
+  .common-stylesheet:
+    template: page/head/link/style/common.phtml
   .script:
     template: page/head/js/common.phtml
-  .google-analytics:
-    template: page/head/google-analytics.phtml
 .body:
   container: body
   .usp:
