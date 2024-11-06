@@ -5,7 +5,7 @@ $iconClass = $isLoggedIn ? 'icon-user__filled' : 'icon-user__outline';
 ?>
 <div class="icon-dropdown dropdown">
     <div class="header__icon header__icon--hover">
-        <a href="/customer/account" class="icon <?= $iconClass ?>"></a>
+        <a href="/customer/account" class="icon <?= $iconClass ?>" title="<?= phrase('My Account') ?>"></a>
     </div>
     <?php if ($isLoggedIn): ?>
         <?= block('customer') ?>
