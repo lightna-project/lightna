@@ -87,8 +87,13 @@ class Product extends IndexAbstract
             )
             ->where(['pw.website_id = ?' => $websiteId]);
 
-        $select->where->in('e.type_id', ['simple', 'configurable', 'virtual', 'downloadable']);
+        $this->applySupportedTypesFilter($select);
 
         return $select;
+    }
+
+    protected function applySupportedTypesFilter(Select $select): void
+    {
+        $select->where->in('e.type_id', ['simple', 'configurable', 'virtual', 'downloadable']);
     }
 }
