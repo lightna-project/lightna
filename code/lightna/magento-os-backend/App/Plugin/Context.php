@@ -19,7 +19,7 @@ class Context extends DataA
 
     protected function defineRunType(): void
     {
-        $this->runType = $_SERVER['MAGE_RUN_TYPE'];
+        $this->runType = $_SERVER['MAGE_RUN_TYPE'] ?? '';
         if (!in_array($this->runType, ['website', 'store'])) {
             throw new Exception('Unsupported MAGE_RUN_TYPE value');
         }
@@ -27,7 +27,7 @@ class Context extends DataA
 
     protected function defineRunCode(): void
     {
-        $this->runCode = $_SERVER['MAGE_RUN_CODE'];
+        $this->runCode = $_SERVER['MAGE_RUN_CODE'] ?? '';
     }
 
     protected function defineRunCodes(): void
@@ -50,6 +50,9 @@ class Context extends DataA
 
     protected function resolveScope(): int
     {
+        if ($this->runCode === '') {
+            return 1;
+        }
         if (!$runCode = $this->runCodes[$this->runType][$this->runCode] ?? null) {
             throw new Exception('Undefined run code "' . $this->runCode . '"');
         }
