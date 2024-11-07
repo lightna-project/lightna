@@ -28,7 +28,4 @@ return [
     'compiler' => [
         'dir' => '../../generated/magento-os/compiled',
     ],
-    'opcache' => [
-        'dir' => '../../generated/magento-os/storage',
-    ]
 ];

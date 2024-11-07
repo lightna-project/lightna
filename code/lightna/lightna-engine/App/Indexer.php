@@ -8,7 +8,6 @@ use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Index\Queue\Handler as QueueHandler;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Index\ScopeIndexAbstract;
 
 class Indexer extends ObjectA
 {
@@ -72,14 +71,9 @@ class Indexer extends ObjectA
 
     public function processBatch(string $entity, array $batch): void
     {
-        $index = $this->getEntityIndex($entity);
-        $scopeList = instance_of($index, ScopeIndexAbstract::class)
-            ? $batch
-            : $this->scope->getList();
-
-        foreach ($scopeList as $scope) {
+        foreach ($this->scope->getList() as $scope) {
             $this->context->scope = $scope;
-            $index->refresh($batch);
+            $this->getEntityIndex($entity)->refresh($batch);
         }
     }
 

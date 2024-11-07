@@ -7,6 +7,7 @@ namespace Lightna\Engine\App\Index\Changelog;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Query\Index\Changelog;
 use Lightna\Engine\App\Query\Index\Queue;
+use Lightna\Engine\App\Update\Schema\Index\Changelog as Schema;
 
 class Handler extends ObjectA
 {

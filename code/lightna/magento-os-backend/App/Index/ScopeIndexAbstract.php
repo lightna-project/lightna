@@ -23,7 +23,7 @@ abstract class ScopeIndexAbstract extends IndexAbstract
         }
 
         if ($scopeData = $this->getScopeData()) {
-            $data[$this->context->scope] = $scopeData;
+            $data[1] = $scopeData;
         }
 
         return $data;
@@ -47,11 +47,7 @@ abstract class ScopeIndexAbstract extends IndexAbstract
 
     public function scan(string|int $lastId = null): array
     {
-        if ($lastId) {
-            // Scan is done in a single batch
-            return [];
-        }
-
-        return [$this->context->scope];
+        // Scan is done in a single batch for id=1
+        return $lastId ? [] : [1];
     }
 }

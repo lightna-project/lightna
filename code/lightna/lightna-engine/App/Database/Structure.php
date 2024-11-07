@@ -69,4 +69,17 @@ class Structure extends ObjectA
     {
         return $this->statistics;
     }
+
+    public function getCreateTable(string $table, bool $trimExtraInfo = true): string
+    {
+        $row = $this->db
+            ->query('show create table ' . $this->db->quoteIdentifier($table))
+            ->next();
+
+        if (($def = $row['Create Table'] ?? '') && $trimExtraInfo) {
+            $def = preg_replace('~\n\) ENGINE=.+$~', "\n)", $def);
+        }
+
+        return $def;
+    }
 }
