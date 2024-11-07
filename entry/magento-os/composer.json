@@ -5,7 +5,7 @@
     "scripts": {
         "lightna:build": [
             "./cli compile",
-            "./cli indexer:schema:update",
+            "./cli update",
             "npm run build",
             "./cli deploy:opcache",
             "./cli deploy:data"

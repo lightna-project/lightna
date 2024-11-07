@@ -40,9 +40,8 @@ class Config extends DataA
 
     protected function getEntityData(): array
     {
-        $configId = $this->context->scope;
-        if (!$data = getobj($this->configEntity)->get($configId)) {
-            throw new \Exception('Config data for "' . $configId . '" not found');
+        if (!$data = getobj($this->configEntity)->get(1)) {
+            throw new \Exception('Config data not found');
         }
 
         return $data;

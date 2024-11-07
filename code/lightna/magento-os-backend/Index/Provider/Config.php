@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index\Config;
+namespace Lightna\Magento\Index\Provider;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Magento\App\Query\Cms\Page as MagentoCmsPage;
 use Lightna\Magento\App\Query\Config as MagentoConfig;
 
-class Provider extends ObjectA
+class Config extends ObjectA
 {
     protected MagentoConfig $magentoConfig;
     protected MagentoCmsPage $magentoCmsPage;

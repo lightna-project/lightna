@@ -54,3 +54,8 @@ function file_mkdir(string $file): void
         mkdir($dir, 0755, true);
     }
 }
+
+function cli_warning(string $text): string
+{
+    return "\e[33m$text\033[0m";
+}

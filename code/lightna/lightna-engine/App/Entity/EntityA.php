@@ -61,11 +61,6 @@ class EntityA extends ObjectA
         return $this->storage->getList($ids);
     }
 
-    public function clean(array $tags): void
-    {
-        $this->storage->clean($tags);
-    }
-
     public function batch(): void
     {
         $this->storage->batch();

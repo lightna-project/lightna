@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Index\Queue;
+namespace Lightna\Engine\App\Update\Schema\Index;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 
-class Schema extends ObjectA
+class Queue extends ObjectA
 {
     public const TABLE_NAME = 'lightna_indexer_queue';
 
@@ -21,6 +21,7 @@ class Schema extends ObjectA
         $currentStatement = $this->getCurrentQueueTableStatement();
         if ($currentStatement !== $statement) {
             if ($currentStatement !== '') {
+                echo cli_warning("\nWARNING: Table " . static::TABLE_NAME . " has been recreated.\n");
                 $this->db->query('DROP TABLE ' . static::TABLE_NAME);
             }
             $this->db->query($statement);
@@ -32,9 +33,8 @@ class Schema extends ObjectA
         if (!($this->db->structure->getTableNames()[static::TABLE_NAME] ?? false)) {
             return '';
         }
-        $tableRow = $this->db->query('show create table ' . static::TABLE_NAME)->next();
 
-        return preg_replace('~\n\) ENGINE=.+$~', "\n)", $tableRow['Create Table']);
+        return $this->db->structure->getCreateTable(static::TABLE_NAME);
     }
 
     protected function getQueueTableStatement(): string

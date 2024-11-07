@@ -14,8 +14,6 @@ interface StorageInterface
 
     public function getList(array $keys): array;
 
-    public function clean(array $tags): void;
-
     public function batch(): void;
 
     public function flush(): void;

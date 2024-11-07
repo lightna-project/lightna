@@ -7,9 +7,9 @@ namespace Lightna\Engine\App\Query\Index;
 use Laminas\Db\Sql\Delete;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Update;
-use Lightna\Engine\App\Index\Changelog\Schema as ChangelogSchema;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
+use Lightna\Engine\App\Update\Schema\Index\Changelog as ChangelogSchema;
 
 class Changelog extends ObjectA
 {

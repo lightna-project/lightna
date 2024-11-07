@@ -5,6 +5,13 @@ storage:
   opcache:
     adapter: Lightna\Engine\App\Storage\Opcache
     options: [ ]
+  database:
+    adapter: Lightna\Engine\App\Storage\Database
+    options:
+      host: localhost
+      port: 3306
+      serializer: json
+      dbname: ""
 router:
   # List of router custom actions (name: class)
   action:
@@ -36,10 +43,15 @@ entity:
     layout: no-route
 cli:
   command:
+    update: Lightna\Engine\App\Console\Update
     deploy:asset:sign: Lightna\Engine\App\Console\Deploy\AssetSign
     deploy:opcache: Lightna\Engine\App\Console\Deploy\Opcache
     deploy:data: Lightna\Engine\App\Console\Deploy\Data
-    indexer:schema:update: Lightna\Engine\App\Console\Indexer\UpdateSchema
     indexer:process: Lightna\Engine\App\Console\Indexer\Process
+  update:
+    - Lightna\Engine\App\Update\Schema\Index\Changelog
+    - Lightna\Engine\App\Update\Schema\Index\Triggers
+    - Lightna\Engine\App\Update\Schema\Index\Queue
+    - Lightna\Engine\App\Update\Schema\Storage\Database
 default:
   storage: opcache

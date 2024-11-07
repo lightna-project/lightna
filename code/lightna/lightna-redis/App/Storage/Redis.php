@@ -11,28 +11,32 @@ use Redis as RedisClient;
 class Redis extends ObjectA implements StorageInterface
 {
     protected ?RedisClient $client;
-    protected array $connection;
+    protected array $options;
     protected bool $batch = false;
     protected array $batchSet = [];
     protected array $batchUnset = [];
 
-    protected function init(array $connection): void
+    protected function init(array $options): void
     {
-        $this->connection = $connection;
+        $this->options = $options;
+    }
+
+    protected function defineClient(): void
+    {
         $this->client = new RedisClient();
         $this->connect();
     }
 
     protected function connect(): self
     {
-        $connType = ($this->connection['persistent'] ?? null) ? 'pconnect' : 'connect';
+        $connType = ($this->options['persistent'] ?? null) ? 'pconnect' : 'connect';
 
         $this->client->$connType(
-            $this->connection['host'] ?? 'localhost',
-            (int)($this->connection['port'] ?? 6379),
+            $this->options['host'] ?? 'localhost',
+            (int)($this->options['port'] ?? 6379),
         );
 
-        $this->client->select($this->connection['db'] ?? 0);
+        $this->client->select($this->options['db'] ?? 0);
         $this->client->setOption(
             RedisClient::OPT_SERIALIZER,
             RedisClient::SERIALIZER_IGBINARY
@@ -76,11 +80,6 @@ class Redis extends ObjectA implements StorageInterface
         }
 
         return $return;
-    }
-
-    public function clean(array $tags): void
-    {
-        // TODO: Implement clean() method.
     }
 
     public function batch(): void

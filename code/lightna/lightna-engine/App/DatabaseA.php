@@ -6,6 +6,8 @@ namespace Lightna\Engine\App;
 
 use Exception;
 use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\Adapter\Driver\Pdo\Connection as PdoConnection;
+use Laminas\Db\Adapter\Driver\Pdo\Pdo as PdoDriver;
 use Laminas\Db\Adapter\Driver\ResultInterface;
 use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Delete;
@@ -14,6 +16,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
 use Lightna\Engine\App\Database\Structure;
+use PDO;
 
 abstract class DatabaseA extends ObjectA
 {
@@ -25,14 +28,32 @@ abstract class DatabaseA extends ObjectA
 
     protected function init(): void
     {
-        $this->validateConnection();
-        $connection = merge($this->connection, [
+        $sharedName = $this->connection['shared'] ?? '';
+        if (isset($GLOBALS[$sharedName])) {
+            $this->adapter = $this->createSharedPdoAdapter($GLOBALS[$sharedName]);
+        } else {
+            $this->validateParameters();
+            $this->adapter = $this->createPdoAdapter();
+        }
+        $this->sql = new Sql($this->adapter);
+    }
+
+    protected function createSharedPdoAdapter(PDO $pdo): Adapter
+    {
+        return new Adapter(new PdoDriver(new PdoConnection($pdo)));
+    }
+
+    protected function createPdoAdapter(): Adapter
+    {
+        return new Adapter($this->getAdapterParameters());
+    }
+
+    protected function getAdapterParameters(): array
+    {
+        return merge($this->connection, [
             'driver' => 'Pdo_Mysql',
             'charset' => 'utf8',
         ]);
-
-        $this->adapter = new Adapter($connection);
-        $this->sql = new Sql($this->adapter);
     }
 
     public function getAdapter(): Adapter
@@ -140,7 +161,7 @@ abstract class DatabaseA extends ObjectA
         return $this->sql->buildSqlString($sqlObject);
     }
 
-    protected function validateConnection(): void
+    protected function validateParameters(): void
     {
         $required = ['host', 'port', 'username', 'dbname'];
         foreach ($required as $field) {

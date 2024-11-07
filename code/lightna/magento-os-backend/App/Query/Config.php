@@ -20,18 +20,16 @@ class Config extends ObjectA
     /** @AppConfig(project/src_dir) */
     protected string $projectSrc;
     protected array $defaultConfig;
-    protected array $configResult;
+    protected array $storeConfig = [];
 
     protected function init(): void
     {
         $this->projectSrc = LIGHTNA_ENTRY . $this->projectSrc . '/';
-        $this->initModules();
-        $this->initStores();
-        $this->initDefaultConfig();
     }
 
-    protected function initModules(): void
+    protected function defineModules(): void
     {
+        $this->modules = [];
         $allModules = $this->getAllModules();
         $enabledModules = $this->getEnabledModules();
         foreach ($enabledModules as $name) {
@@ -124,7 +122,7 @@ class Config extends ObjectA
         return array_keys($modules);
     }
 
-    protected function initStores(): void
+    protected function defineStores(): void
     {
         $select = $this->db
             ->select(['s' => 'store'])
@@ -136,7 +134,7 @@ class Config extends ObjectA
         );
     }
 
-    protected function initDefaultConfig(): void
+    protected function defineDefaultConfig(): void
     {
         $final = [];
         foreach ($this->modules as $folder) {
@@ -157,17 +155,21 @@ class Config extends ObjectA
 
     public function get(): array
     {
-        return $this->configResult;
+        if (!isset($this->storeConfig[$this->context->scope])) {
+            $this->storeConfig[$this->context->scope] = $this->loadConfig();
+        }
+
+        return $this->storeConfig[$this->context->scope];
     }
 
     public function getValue(string $path): mixed
     {
-        return array_path_get($this->configResult, $path);
+        return array_path_get($this->get(), $path);
     }
 
-    protected function defineConfigResult(): void
+    protected function loadConfig(): array
     {
-        $this->configResult = merge(
+        return merge(
             $this->defaultConfig,
             $this->getDatabaseConfig(),
             $this->getEnvironmentConfig(),

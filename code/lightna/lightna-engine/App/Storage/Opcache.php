@@ -8,7 +8,7 @@ use Exception;
 
 class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 {
-    /** @AppConfig(opcache/dir) */
+    /** @AppConfig(storage/opcache/dir) */
     protected string $dir;
 
     protected function init(): void
@@ -48,11 +48,6 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     protected function getFileName(string $key): string
     {
         return implode('/', str_split(substr(sha1($key), 0, 6), 2)) . '/' . $key;
-    }
-
-    public function clean(array $tags = []): void
-    {
-        // TODO: Implement clean() method.
     }
 
     public function batch(): void
