@@ -6,22 +6,11 @@ if (!$ga->active || !$ga->account) {
     return;
 }
 ?>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?<?= $ga->account('url-param') ?>"></script>
 <script>
-    function loadGTM() {
-        return new Promise((resolve) => {
-            const script = document.createElement('script')
-            script.type = 'text/javascript'
-            script.async = true
-            script.src = 'https://www.googletagmanager.com/gtag/js?<?= $ga->account('url-param') ?>'
-            script.onload = resolve
-            document.head.appendChild(script)
-        })
-    }
-
-    loadGTM().then(() => {
-        window.dataLayer = window.dataLayer || []
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', <?= $ga->account('json-js') ?>);
-    })
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', <?= $ga->account('json-js') ?>);
 </script>
