@@ -7,7 +7,7 @@ if (!$ga->active || !$ga->account) {
 }
 ?>
 <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?<?= $ga->account('url-param') ?>"></script>
+<script defer src="https://www.googletagmanager.com/gtag/js?<?= $ga->account('url-param') ?>"></script>
 <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
