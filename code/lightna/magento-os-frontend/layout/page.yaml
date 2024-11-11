@@ -10,9 +10,8 @@ template: page.phtml
   .link:
     .favicon:
       template: page/head/link/favicon.phtml
-    .preload:
-      .font:
-        template: page/head/link/preload/font.phtml
+    .font:
+      template: page/head/link/font.phtml
     .stylesheet:
       template: page/head/link/style/common.phtml
   .script:
