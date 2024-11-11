@@ -1,14 +1,8 @@
 extends:
   - page
-directives:
-  - position .head.link.preload.main-image first
 .head:
   attributes:
     prefix: "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#"
-  .link:
-    .preload:
-      .main-image:
-        template: page/head/link/preload/main-image.phtml
 .body:
   attributes:
     class:
