@@ -49,6 +49,9 @@ class Triggers extends ObjectA
     protected function defineWatchedTables(): void
     {
         foreach ($this->tablesConfig as $table => $forcedColumns) {
+            if (!isset($this->allTables[$table])) {
+                continue;
+            }
             $this->watchedTables[$table] = $table;
             $this->forcedColumns[$table] = array_combine($forcedColumns, $forcedColumns);
         }
