@@ -44,15 +44,10 @@ class Queue extends ObjectA
 
         return <<<SQL
 CREATE TABLE `$tableName` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `entity` enum($enumEntitiesExpr) NOT NULL,
   `entity_id` bigint(20) NOT NULL,
   `status` enum('pending','processing') NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `{$tableName}_uniq_key` (`entity`,`entity_id`,`status`),
-  KEY `{$tableName}_status` (`status`),
-  KEY `{$tableName}_status_entity` (`status`,`entity`),
-  KEY `{$tableName}_status_entity_entity_id` (`status`,`entity`,`entity_id`)
+  PRIMARY KEY (`status`,`entity`,`entity_id`)
 )
 SQL;
     }

@@ -26,10 +26,8 @@ class ObjectA implements JsonSerializable
         }
 
         $this->properties = $properties;
-        foreach ($this->properties as $name => $property) {
-            // Unset properties to make __get method triggered
-            unset($this->$name);
-        }
+        // Unset properties to make __get method triggered
+        $this->unsetProperties();
         $this->isConstructed = true;
     }
 
@@ -77,6 +75,13 @@ class ObjectA implements JsonSerializable
     protected function issetProperty(string $name): bool
     {
         return isset($this->properties[$name]);
+    }
+
+    protected function unsetProperties(): void
+    {
+        foreach ($this->properties as $name => $property) {
+            unset($this->$name);
+        }
     }
 
     protected function getPropertySchema(string $name): ?array

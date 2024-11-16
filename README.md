@@ -31,7 +31,7 @@ Readiness of MVP for Magento 2 - 75%.
 # Contributor Setup
 
 ### Setup Magento OS
-* Setup Magento OS into `project/magento-os` folder following standard instruction
+* Setup Magento OS into `project/magento-os` folder following standard instruction and make sure Magento is functioning correctly
 
 
 ### Setup Lightna
@@ -68,13 +68,18 @@ mv project/magento-os/pub/index.php project/magento-os/pub/magento_index.php && 
 ln -s ../../../entry/magento-os/index.php project/magento-os/pub/index.php
 ```
 
-* Change current Magento theme to Lightna
-
+* Configure Lightna entry path in `app/etc/env.php`:
+```
+    'lightna_entry' => __DIR__ . '/../../../../entry/magento-os',
+```
 
 * Enable Lightna theme and module:
 ```
 project/magento-os/bin/magento setup:upgrade
 ```
+
+* Change current Magento theme to `Lightna`
+
 
 ### Configure Lightna
 * `cp code/lightna/magento-os-backend/env.php.sample entry/magento-os/env.php`
@@ -92,5 +97,5 @@ composer lightna:build
 
 ### Schedule Lightna indexer
 ```
-* * * * * { cd [abs_path_to_repo]/entry/magento-os && ./cli indexer:process; } 2>&1 >> [abs_path_to_logs]/lightna-indexer.log
+* * * * * { cd [abs_path_to_repo]/entry/magento-os && CRON=true ./cli indexer:process; } 2>&1 >> [abs_path_to_logs]/lightna-indexer.log
 ```

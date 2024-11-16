@@ -9,6 +9,7 @@ use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Combine;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\TableIdentifier;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\ObjectA;
 
@@ -144,8 +145,12 @@ class Staging extends ObjectA
     {
         if (is_string($name)) {
             return [$name, $name];
-        } else {
+        } elseif (is_array($name)) {
             return [current($name), key($name)];
+        } elseif (instance_of($name, TableIdentifier::class)) {
+            return [$name->getTable(), $name->getTable()];
+        } else {
+            throw new \Exception('Unknown table name type');
         }
     }
 

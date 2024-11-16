@@ -82,9 +82,7 @@ class Triggers extends ObjectA
     protected function updateTriggers(): void
     {
         foreach ($this->watchedTables as $table) {
-            foreach (['insert', 'update', 'delete'] as $event) {
-                $this->updateTrigger($table, $event);
-            }
+            $this->watchTable($table);
         }
     }
 
@@ -92,15 +90,7 @@ class Triggers extends ObjectA
     {
         $unwatchedTables = array_diff_assoc($this->allTables, $this->watchedTables);
         foreach ($unwatchedTables as $table) {
-            $triggerNames = [];
-            foreach (['update', 'delete', 'insert'] as $event) {
-                $triggerNames[] = $this->getTriggerName($table, $event);
-            }
-            foreach ($triggerNames as $triggerName) {
-                if (isset($this->triggers[$triggerName])) {
-                    $this->db->query('DROP TRIGGER ' . $triggerName);
-                }
-            }
+            $this->unwatchTable($table);
         }
     }
 
@@ -117,14 +107,15 @@ class Triggers extends ObjectA
     protected function updateTrigger(string $table, string $event): void
     {
         $triggerName = $this->getTriggerName($table, $event);
-        $statementBody = $this->getTriggerStatementBody($table, $event);
+        $statementBody = trim($this->getTriggerStatementBody($table, $event), ';');
         $currentStatementBody = $this->triggers[$triggerName]['Statement'] ?? null;
 
-        if ($currentStatementBody !== trim($statementBody, ';')) {
+        if ($currentStatementBody !== $statementBody) {
             if ($currentStatementBody) {
                 $this->db->query('DROP TRIGGER ' . $triggerName);
             }
             $this->db->query($this->getTriggerStatement($table, $event));
+            $this->triggers[$triggerName]['Statement'] = $statementBody;
         }
     }
 
@@ -137,29 +128,47 @@ class Triggers extends ObjectA
 
     protected function getTriggerStatementBody(string $table, string $event): string
     {
-        $body = 'BEGIN';
+        $body = "BEGIN\n    ";
         if ($event === 'update') {
-            $body .= $this->getIsRowChangedDeclaration($table);
-        }
-
-        foreach ($this->watchedColumns[$table] as $field) {
-            $isForced = isset($this->forcedColumns[$table][$field]);
-            $insertStatement = $this->getInsertIntoChangelogStatement($table, $event, $field);
-            if ($event === 'update') {
-                $fieldIdent = $this->db->quoteIdentifier($field);
-                $condition = $isForced ? 'isRowChanged' : "NOT(NEW.$fieldIdent <=> OLD.$fieldIdent)";
-
-                $body .=
-                    "\n    IF($condition)" .
-                    "\n        THEN $insertStatement;" .
-                    "\n    END IF;";
-            } else {
-                $body .= "\n    $insertStatement;";
-            }
+            $body .= $this->getUpdateTriggerStatementBody($table);
+        } else {
+            $body .= $this->getInsertDeleteTriggerStatementBody($table, $event);
         }
         $body .= "\nEND";
 
         return $body;
+    }
+
+    protected function getUpdateTriggerStatementBody(string $table): string
+    {
+        $body = $this->getIsRowChangedDeclaration($table);
+
+        foreach ($this->watchedColumns[$table] as $field) {
+            $isForced = isset($this->forcedColumns[$table][$field]);
+            $insertStatement = $this->getInsertIntoChangelogStatement($table, 'update', $field);
+            $fieldIdent = $this->db->quoteIdentifier($field);
+            $condition = $isForced ? 'isRowChanged' : "NOT(NEW.$fieldIdent <=> OLD.$fieldIdent)";
+
+            $body .=
+                "\n    IF($condition)" .
+                "\n        THEN $insertStatement;" .
+                "\n    END IF;";
+        }
+
+        return $body;
+    }
+
+    protected function getInsertDeleteTriggerStatementBody(string $table, string $event): string
+    {
+        $body = 'INSERT INTO ' . ChangelogSchema::TABLE_NAME .
+            ' (`table`, `primary_key`, `column`, `old_value`, `new_value`, `status`) VALUES ';
+        $sep = '';
+        foreach ($this->watchedColumns[$table] as $field) {
+            $body .= $sep . "\n    " . $this->getInsertIntoChangelogValuesStatement($table, $event, $field);
+            $sep = ',';
+        }
+
+        return $body . "\n    " . 'ON DUPLICATE KEY UPDATE new_value = VALUES(new_value);';
     }
 
     protected function getIsRowChangedDeclaration(string $table): string
@@ -178,6 +187,14 @@ class Triggers extends ObjectA
 
     protected function getInsertIntoChangelogStatement(string $table, string $event, string $field): string
     {
+        return 'INSERT INTO ' . ChangelogSchema::TABLE_NAME .
+            ' (`table`, `primary_key`, `column`, `old_value`, `new_value`, `status`) VALUES ' .
+            $this->getInsertIntoChangelogValuesStatement($table, $event, $field) .
+            ' ON DUPLICATE KEY UPDATE new_value = VALUES(new_value)';
+    }
+
+    protected function getInsertIntoChangelogValuesStatement(string $table, string $event, string $field): string
+    {
         $fieldIdent = $this->db->quoteIdentifier($field);
         $maxLength = ChangelogSchema::VALUE_MAX_LENGTH;
         $oldExpr = "OLD.$fieldIdent";
@@ -188,11 +205,8 @@ class Triggers extends ObjectA
         $oldExpr = $event === 'insert' ? 'NULL' : $oldExpr;
         $newExpr = $event === 'delete' ? 'NULL' : $newExpr;
 
-        return 'INSERT INTO ' . ChangelogSchema::TABLE_NAME .
-            ' (`table`, `primary_key`, `column`, `old_value`, `new_value`, `status`) VALUES (' .
-            $this->db->quote($table) . ", " . $this->getPrimaryKeyExpr($table, $event) .
-            ", $fieldExpr, $oldExpr, $newExpr, 'pending')" .
-            ' ON DUPLICATE KEY UPDATE new_value = VALUES(new_value)';
+        return '(' . $this->db->quote($this->getTableAlias($table)) . ", " . $this->getPrimaryKeyExpr($table, $event) .
+            ", $fieldExpr, $oldExpr, $newExpr, 'pending')";
     }
 
     protected function getPrimaryKeyExpr(string $table, string $event): string
@@ -211,6 +225,12 @@ class Triggers extends ObjectA
         }
 
         return $keyExpr;
+    }
+
+    protected function getTableAlias(string $table): string
+    {
+        // Extension point
+        return $table;
     }
 
     protected function getTableKeys(string $table): array
@@ -251,5 +271,30 @@ class Triggers extends ObjectA
         }
 
         return $max;
+    }
+
+    public function unwatchTable(string $table): void
+    {
+        $triggerNames = [];
+        foreach (['update', 'delete', 'insert'] as $event) {
+            $triggerNames[] = $this->getTriggerName($table, $event);
+        }
+        foreach ($triggerNames as $triggerName) {
+            if (isset($this->triggers[$triggerName])) {
+                $this->db->query('DROP TRIGGER ' . $triggerName);
+                unset($this->triggers[$triggerName]);
+            }
+        }
+    }
+
+    public function watchTable(string $table): void
+    {
+        if (!isset($this->watchedTables[$table])) {
+            throw new Exception('Table ' . $table . ' isn\'t declared as watched.');
+        }
+
+        foreach (['insert', 'update', 'delete'] as $event) {
+            $this->updateTrigger($table, $event);
+        }
     }
 }

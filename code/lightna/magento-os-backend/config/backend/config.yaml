@@ -12,3 +12,5 @@ plugin:
     - Lightna\Magento\App\Plugin\App\Index\Changelog\Handler
   Lightna\Session\App\Session\Cookie:
     - Lightna\Magento\App\Plugin\App\Session\Cookie
+  Lightna\Engine\App\Update\Schema\Index\Triggers:
+    - Lightna\Magento\App\Plugin\App\Update\Schema\Index\Triggers
