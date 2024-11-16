@@ -36,6 +36,11 @@ class Structure extends ObjectA
         return $this->tableNames;
     }
 
+    public function tableExists(string $table): bool
+    {
+        return isset($this->tableNames[$table]);
+    }
+
     protected function defineColumnsInfo(): void
     {
         $select = $this->db->select()

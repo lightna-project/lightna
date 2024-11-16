@@ -270,11 +270,14 @@ class Batch extends ObjectA
                 $inventory['backorders'] = $inventory['backorders'] || $childInventory['backorders'];
             }
         } else {
-            $inventory = $this->inventory[$id] ?? $inventory;
-            $inventory['backorders'] = (bool)$product['backorders'];
+            $data = $this->inventory[$id] ?? $inventory;
+            $inventory = [
+                'qty' => (float)$data['qty'],
+                'status' => (bool)$data['status'],
+                'backorders' => (bool)$data['backorders'],
+            ];
         }
 
-        unset($product['backorders']);
         $product['inventory'] = $inventory;
     }
 

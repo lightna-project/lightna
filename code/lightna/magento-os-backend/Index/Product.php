@@ -64,13 +64,6 @@ class Product extends IndexAbstract
         // Composite products must be at the end
         $select->order(new Expression('field(e.type_id, "simple", "virtual", "downloadable", "configurable")'));
 
-        $select->join(
-            ['i' => 'cataloginventory_stock_item'],
-            'i.product_id = e.entity_id',
-            ['backorders'],
-            Select::JOIN_LEFT
-        );
-
         return $select;
     }
 
