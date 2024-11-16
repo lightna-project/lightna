@@ -2,34 +2,33 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query;
+namespace Lightna\Magento\App\Query\Customer;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 
-class Website extends ObjectA
+class Group extends ObjectA
 {
     protected Database $db;
-    protected array $websites;
+    protected array $groups;
 
-    protected function defineWebsites(): void
+    protected function defineGroups(): void
     {
-        $this->websites = $this->db->fetch(
+        $this->groups = $this->db->fetch(
             $this->getListSelect(),
-            'website_id',
+            'customer_group_id',
         );
     }
 
     protected function getListSelect(): Select
     {
         return $this->db->select()
-            ->from('store_website')
-            ->where('website_id > 0');
+            ->from('customer_group');
     }
 
     public function getList(): array
     {
-        return $this->websites;
+        return $this->groups;
     }
 }

@@ -47,18 +47,13 @@ class Changelog extends ObjectA
 
         return <<<SQL
 CREATE TABLE `$tableName` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `table` enum($tablesEnumExpr) NOT NULL,
   `column` varchar($maxColumnLength) NOT NULL,
   `primary_key` bigint(20) unsigned NOT NULL,
   `status` enum('pending','processing') NOT NULL,
   `old_value` varchar($maxLength) DEFAULT NULL,
   `new_value` varchar($maxLength) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `{$tableName}_uniq_key` (`table`,`status`,`primary_key`,`column`),
-  KEY `{$tableName}_status` (`status`),
-  KEY `{$tableName}_table_status` (`table`,`status`),
-  KEY `{$tableName}_table_status_primary_key` (`table`,`status`,`primary_key`)
+  PRIMARY KEY (`status`,`table`,`primary_key`,`column`)
 )
 SQL;
     }

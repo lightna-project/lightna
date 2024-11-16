@@ -9,11 +9,13 @@ use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\AdobeStaging\App\Staging as AppStaging;
+use Lightna\Magento\App\Query\Flag;
 
 class Staging extends ObjectA
 {
     public const PREVIOUS_VERSION_FLAG = 'lightna_staging_previous_version';
     protected Database $db;
+    protected Flag $flag;
     protected AppStaging $appStaging;
     /** @AppConfig(backend:staging/apply_after_magento) */
     protected bool $applyAfterMagento;
@@ -29,56 +31,22 @@ class Staging extends ObjectA
     {
         if ($this->applyAfterMagento) {
             $this->versionId = 1;
-            if ($data = $this->fetchFlag('staging')) {
-                $this->versionId = (int)json_decode($data, true)['current_version'];
+            if ($flag = $this->flag->get('staging')) {
+                $this->versionId = (int)$flag['current_version'];
             }
         } else {
             $this->versionId = time();
         }
     }
 
-    protected function fetchFlag(string $flag): ?string
-    {
-        return $this->db->fetchOneCol($this->getFlagSelect($flag));
-    }
-
-    protected function getFlagSelect(string $flag): Select
-    {
-        return $this->db->select()
-            ->from('flag')
-            ->columns(['flag_data'])
-            ->where(['flag_code = ?' => $flag]);
-    }
-
     public function getPreviousVersionId(): int
     {
-        $version = 1;
-        if ($data = $this->fetchFlag($this::PREVIOUS_VERSION_FLAG)) {
-            $version = (int)$data;
-        }
-
-        return $version;
+        return $this->flag->get($this::PREVIOUS_VERSION_FLAG) ?? 1;
     }
 
     public function setPreviousVersionId(int $versionId): void
     {
-        if ($this->fetchFlag($this::PREVIOUS_VERSION_FLAG)) {
-            $this->db->sql(
-                $this->db->update()
-                    ->table('flag')
-                    ->where(['flag_code = ?' => $this::PREVIOUS_VERSION_FLAG])
-                    ->set(['flag_data' => $versionId])
-            );
-        } else {
-            $this->db->sql(
-                $this->db->insert()
-                    ->into('flag')
-                    ->values([
-                        'flag_code' => $this::PREVIOUS_VERSION_FLAG,
-                        'flag_data' => $versionId,
-                    ])
-            );
-        }
+        $this->flag->set($this::PREVIOUS_VERSION_FLAG, $versionId);
     }
 
     public function convertRowIdsToEntityIds(string $table, array $ids): array

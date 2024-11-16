@@ -171,7 +171,7 @@ abstract class DatabaseA extends ObjectA
         }
     }
 
-    public function quote(string $value): string
+    public function quote(mixed $value): string
     {
         return $this->adapter->platform->quoteValue($value);
     }
@@ -194,5 +194,20 @@ abstract class DatabaseA extends ObjectA
     public function releaseLock(string $name): void
     {
         $this->query('SELECT RELEASE_LOCK(?)', [$name]);
+    }
+
+    public function discreteWrite(Update|Delete $sql): void
+    {
+        $limit = $this->getDiscreteLimit();
+        $query = $this->buildSqlString($sql);
+        $query .= ' LIMIT ' . $limit;
+        do {
+            $result = $this->query($query);
+        } while ($result->getAffectedRows() === $limit);
+    }
+
+    protected function getDiscreteLimit(): int
+    {
+        return 20000;
     }
 }

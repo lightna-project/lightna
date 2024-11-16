@@ -10,6 +10,7 @@ indexer:
       catalog_product_entity_tier_price: [ entity_id ]
       catalog_product_entity_varchar: [ entity_id ]
       catalog_product_index_price: [ ]
+      catalog_product_index_price_replica: [ ]
       catalog_product_relation: [ ]
       catalog_product_super_attribute: [ product_id ]
       cms_page: [ page_id ]

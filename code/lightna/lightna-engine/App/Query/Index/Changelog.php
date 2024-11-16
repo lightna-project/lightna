@@ -30,7 +30,7 @@ class Changelog extends ObjectA
 
     public function admitPendingItems(): void
     {
-        $this->db->sql($this->getAdmitPendingItemsUpdate());
+        $this->db->discreteWrite($this->getAdmitPendingItemsUpdate());
     }
 
     protected function getAdmitPendingItemsUpdate(): Update

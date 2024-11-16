@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App\Query;
 
+use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 
@@ -15,9 +16,16 @@ class Store extends ObjectA
     protected function defineStores(): void
     {
         $this->stores = $this->db->fetch(
-            $this->db->select('store'),
+            $this->getListSelect(),
             'store_id',
         );
+    }
+
+    protected function getListSelect(): Select
+    {
+        return $this->db->select()
+            ->from('store')
+            ->where('store_id > 0');
     }
 
     public function getList(): array
