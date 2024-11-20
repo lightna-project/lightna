@@ -46,6 +46,6 @@ class Category extends IndexAbstract
 
     public function getBatchSelect(array $ids): Select
     {
-        return $this->categories->getListSelect(['image', 'description']);
+        return $this->categories->getListSelect(['image', 'description', 'meta_description']);
     }
 }

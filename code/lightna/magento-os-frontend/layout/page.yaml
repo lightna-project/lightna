@@ -1,12 +1,14 @@
 template: page.phtml
 .head:
+  .title:
+    template: page/head/title.phtml
   .meta:
     .encoding:
       template: page/head/meta/encoding.phtml
     .viewport:
       template: page/head/meta/viewport.phtml
-  .title:
-    template: page/head/title.phtml
+    .description:
+      template: page/head/meta/description.phtml
   .gtm:
     template: page/head/gtm.phtml
   .link:
