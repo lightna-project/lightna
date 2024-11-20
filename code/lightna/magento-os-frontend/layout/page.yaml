@@ -7,6 +7,8 @@ template: page.phtml
       template: page/head/meta/viewport.phtml
   .title:
     template: page/head/title.phtml
+  .gtm:
+    template: page/head/gtm.phtml
   .link:
     .favicon:
       template: page/head/link/favicon.phtml
@@ -16,8 +18,6 @@ template: page.phtml
       template: page/head/link/style/common.phtml
   .script:
     template: page/head/js/common.phtml
-  .google-analytics:
-    template: page/head/google-analytics.phtml
 .body:
   container: body
   .usp:
