@@ -26,6 +26,7 @@ entity:
     data: Lightna\Magento\Data\Category
     layout: category
   custom_redirect:
+    entity: Lightna\Engine\App\Entity\Route
     index: Lightna\Magento\Index\CustomRedirect
   config:
     entity: Lightna\Magento\App\Entity\Config

@@ -25,6 +25,7 @@ class Search extends DataA
     protected Request $request;
     protected int $pageSize;
 
+    /** @noinspection PhpUnused */
     protected function definePageSize(): void
     {
         $this->pageSize = $this->config->product->listing->defaultPageSize;

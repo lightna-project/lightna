@@ -26,6 +26,7 @@ class Item extends DataA
     /** @AppConfig(entity/product/entity) */
     protected string $productEntity;
 
+    /** @noinspection PhpUnused */
     protected function defineProduct(): void
     {
         $data = getobj($this->productEntity)->get($this->productId);

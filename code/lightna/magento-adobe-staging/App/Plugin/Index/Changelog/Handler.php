@@ -12,6 +12,7 @@ class Handler extends ObjectA
 {
     protected Staging $staging;
 
+    /** @noinspection PhpUnused */
     public function processExtended(Closure $proceed): void
     {
         $this->staging->applyNewVersion();

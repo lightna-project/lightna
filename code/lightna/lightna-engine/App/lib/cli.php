@@ -8,10 +8,11 @@ function cli_get_all_commands(string $codeDir): array
     $compiledConfigFile = LIGHTNA_ENTRY . $codeDir . '/build/config/backend.php';
     if (file_exists($compiledConfigFile)) {
         $compiledConfig = require $compiledConfigFile;
-        $moreCommands = array_flip(array_keys($compiledConfig['cli']['command'] ?? []));
-        $commands = array_merge($commands, $moreCommands);
-        ksort($commands);
+        $commands = array_merge($commands, $compiledConfig['cli']['command'] ?? []);
     }
+
+    $commands = array_flat($commands);
+    ksort($commands);
 
     return $commands;
 }
@@ -58,4 +59,25 @@ function file_mkdir(string $file): void
 function cli_warning(string $text): string
 {
     return "\e[33m$text\033[0m";
+}
+
+function cli_error(string $text): string
+{
+    return "\e[31m$text\e[0m";
+}
+
+function array_flat(array $array, string $separator = '.'): array
+{
+    $flat = [];
+    foreach ($array as $k => $v) {
+        if (is_array($v)) {
+            foreach (array_flat($v, $separator) as $vk => $vv) {
+                $flat[$k . $separator . $vk] = $vv;
+            }
+        } else {
+            $flat[$k] = $v;
+        }
+    }
+
+    return $flat;
 }

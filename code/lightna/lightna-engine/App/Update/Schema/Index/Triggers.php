@@ -21,11 +21,13 @@ class Triggers extends ObjectA
     protected array $watchedColumns = [];
     protected array $forcedColumns = [];
 
+    /** @noinspection PhpUnused */
     protected function defineAllTables(): void
     {
         $this->allTables = $this->db->structure->getTableNames();
     }
 
+    /** @noinspection PhpUnused */
     protected function defineTableKeys(): void
     {
         $this->tableKeys = [];
@@ -38,6 +40,7 @@ class Triggers extends ObjectA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineTriggers(): void
     {
         $this->triggers = [];
@@ -46,6 +49,7 @@ class Triggers extends ObjectA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineWatchedTables(): void
     {
         foreach ($this->tablesConfig as $table => $forcedColumns) {
@@ -57,6 +61,7 @@ class Triggers extends ObjectA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineWatchedColumns(): void
     {
         foreach ($this->db->structure->getColumnsInfo() as $table => $columns) {

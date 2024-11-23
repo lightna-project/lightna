@@ -6,6 +6,7 @@ declare(strict_types=1);
 
 use Lightna\Engine\App\Cli;
 use Lightna\Engine\App\Console\Compile;
+use Lightna\Engine\App\UserException;
 
 require __DIR__ . '/App/lib/cli.php';
 
@@ -26,4 +27,11 @@ if ($command === 'compile') {
 
 require __DIR__ . '/App/boot.php';
 
-getobj(Cli::class)->run($command);
+try {
+    getobj(Cli::class)->run($command);
+    echo "\n";
+} catch (UserException $e) {
+    echo cli_error($e->getMessage());
+    echo "\n";
+    exit(1);
+}

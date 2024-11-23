@@ -15,9 +15,9 @@ class Route extends EntityA
     protected string $storageName;
     protected EntityRoute $entityRoute;
 
-    public function get(int|string $url): array
+    public function get(int|string $id): array
     {
-        if (!$data = parent::get($url)) {
+        if (!$data = parent::get($id)) {
             return [];
         }
 
@@ -41,17 +41,17 @@ class Route extends EntityA
 
     protected function getEntityUrls(string $entityName, int $id): array|string
     {
-        return $this->entityRoute->get($entityName . $id);
+        return $this->entityRoute->get($entityName . '.' . $id);
     }
 
     protected function setEntityUrls(string $entityName, int $id, array $urls): void
     {
-        $this->entityRoute->set($entityName . $id, $urls);
+        $this->entityRoute->set($entityName . '.' . $id, $urls);
     }
 
     protected function unsetEntityUrls(string $entityName, int $id): void
     {
-        $this->entityRoute->unset($entityName . $id);
+        $this->entityRoute->unset($entityName . '.' . $id);
     }
 
     public function setEntityRoutes(string $entityName, int $id, array $routes): void

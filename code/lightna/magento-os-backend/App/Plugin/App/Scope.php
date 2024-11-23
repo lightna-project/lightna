@@ -13,11 +13,13 @@ class Scope extends ObjectA
     protected Database $db;
     protected array $list;
 
+    /** @noinspection PhpUnused */
     protected function defineList(): void
     {
         $this->list = $this->db->fetchCol($this->getListSelect());
     }
 
+    /** @noinspection PhpUnused */
     public function getListExtended(): array
     {
         return $this->list;

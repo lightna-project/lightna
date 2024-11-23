@@ -18,11 +18,13 @@ class Structure extends ObjectA
     protected array $columnsInfo;
     protected array $statistics;
 
+    /** @noinspection PhpUnused */
     protected function defineMetadata(): void
     {
         $this->metadata = MetadataFactory::createSourceFromAdapter($this->db->getAdapter());
     }
 
+    /** @noinspection PhpUnused */
     protected function defineTableNames(): void
     {
         $this->tableNames = [];
@@ -41,6 +43,7 @@ class Structure extends ObjectA
         return isset($this->tableNames[$table]);
     }
 
+    /** @noinspection PhpUnused */
     protected function defineColumnsInfo(): void
     {
         $select = $this->db->select()
@@ -58,6 +61,7 @@ class Structure extends ObjectA
         return $this->columnsInfo;
     }
 
+    /** @noinspection PhpUnused */
     protected function defineStatistics(): void
     {
         $select = $this->db->select()

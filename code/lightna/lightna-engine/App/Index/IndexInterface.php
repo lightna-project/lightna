@@ -13,4 +13,6 @@ interface IndexInterface
     public function getRoutesBatch(array $ids): array;
 
     public function scan(string|int $lastId = null): array;
+
+    public function gcCheck(array $ids): array;
 }

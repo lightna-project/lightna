@@ -129,9 +129,9 @@ abstract class DatabaseA extends ObjectA
         return $fetch;
     }
 
-    public function fetchOne(AbstractPreparableSql $sql): ?array
+    public function fetchOne(Select $select): ?array
     {
-        $result = $this->sql($sql)->next();
+        $result = $this->sql($select->limit(1))->next();
 
         return $result !== false ? $result : null;
     }

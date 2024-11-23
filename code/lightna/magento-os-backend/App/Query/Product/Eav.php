@@ -25,11 +25,13 @@ class Eav extends EavAbstract
         return $this->filterableAttributes;
     }
 
+    /** @noinspection PhpUnused */
     protected function defineVisibleOnFrontAttributes(): void
     {
         $this->visibleOnFrontAttributes = $this->db->fetch($this->getVisibleOnFrontAttributesSelect());
     }
 
+    /** @noinspection PhpUnused */
     protected function defineFilterableAttributes(): void
     {
         $this->filterableAttributes = $this->db->fetch($this->getFilterableAttributesSelect(), 'code');

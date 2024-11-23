@@ -17,11 +17,13 @@ class Gallery extends ObjectA
     protected string $imageQuality;
     protected int $galleryAttributeId;
 
+    /** @noinspection PhpUnused */
     protected function defineCryptKey(): void
     {
         $this->cryptKey = $this->magentoConfig->getValue('crypt/key');
     }
 
+    /** @noinspection PhpUnused */
     protected function defineImageQuality(): void
     {
         $this->imageQuality = $this->magentoConfig->getValue('system/upload_configuration/jpeg_quality');

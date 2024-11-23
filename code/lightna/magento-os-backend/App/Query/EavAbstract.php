@@ -34,6 +34,7 @@ abstract class EavAbstract extends ObjectA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineAttributesById(): void
     {
         $this->defineAttributes();
@@ -223,5 +224,26 @@ abstract class EavAbstract extends ObjectA
             );
 
         return $valueExpr->getExpression();
+    }
+
+    public function joinUrl(Select $select): void
+    {
+        $select->join(
+            ['u' => 'url_rewrite'],
+            new Expression(
+                'u.entity_id = e.entity_id and u.entity_type = ? and u.store_id = ? and redirect_type = 0',
+                $this->getEntityUrlType(),
+                $this->context->scope,
+            ),
+            ['url' => 'request_path'],
+        );
+    }
+
+    protected function getEntityUrlType(): string
+    {
+        return match (static::ENTITY_TYPE) {
+            3 => 'category',
+            4 => 'product',
+        };
     }
 }

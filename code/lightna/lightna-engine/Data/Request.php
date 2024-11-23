@@ -15,26 +15,31 @@ class Request extends DataA
     public string $uriPath;
     public Param $param;
 
+    /** @noinspection PhpUnused */
     protected function defineIsPost(): void
     {
         $this->isPost = $_SERVER['REQUEST_METHOD'] === 'POST';
     }
 
+    /** @noinspection PhpUnused */
     protected function defineIsGet(): void
     {
         $this->isGet = $_SERVER['REQUEST_METHOD'] === 'GET';
     }
 
+    /** @noinspection PhpUnused */
     protected function defineIsSecure(): void
     {
         $this->isSecure = ($_SERVER['HTTPS'] ?? '') === 'on';
     }
 
+    /** @noinspection PhpUnused */
     protected function defineUri(): void
     {
         $this->uri = $_SERVER['REQUEST_URI'];
     }
 
+    /** @noinspection PhpUnused */
     protected function defineUriPath(): void
     {
         $qi = strpos($this->uri, '?');

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Console\Deploy;
+namespace Lightna\Engine\App\Console\Index\Update;
 
 use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\Indexer;
@@ -15,10 +15,11 @@ class Data extends CommandA
 
     public function run(): void
     {
-        if ($this->getArg(['--list', '-l'])) {
+        if ($this->getOpt(['list', 'l'])) {
             $this->printEntityCodes();
         } else {
-            $this->deploy();
+            $this->indexer->validatePartialReindexBlock(true);
+            $this->update();
         }
     }
 
@@ -42,9 +43,9 @@ class Data extends CommandA
         }
     }
 
-    protected function deploy(): void
+    protected function update(): void
     {
-        $whitelist = $this->hasCommands();
+        $whitelist = count($this->getArgs());
         foreach ($this->getEntities() as $code => $entity) {
             if ($whitelist && !$this->getArg($code)) {
                 continue;
@@ -54,7 +55,7 @@ class Data extends CommandA
 
             $this->indexer->reindex(
                 $code,
-                (int)$this->getArg('--scope'),
+                (int)$this->getOpt(['scope', 's']),
             );
 
             $stats = $this->indexer->stats;

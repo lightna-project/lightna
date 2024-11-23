@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Lightna\Engine\App\Console\Index;
+
+use Lightna\Engine\App\Console\CommandA;
+use Lightna\Engine\App\Entity\Gc as EntityGc;
+
+class Gc extends CommandA
+{
+    protected EntityGc $gc;
+
+    public function run(): void
+    {
+        if ($this->getOpt('v')) {
+            $this->gc->printKeys = true;
+        }
+
+        $this->gc->process();
+        $this->renderStats();
+    }
+
+    protected function renderStats(): void
+    {
+        echo 'Collected garbage:';
+
+        foreach ($this->gc->getStats() as $entity => $stats) {
+            $seconds = round($stats['time']);
+            echo "\n    " . str_pad($entity, 30, ' ')
+                . " {$stats['cleaned']} out of "
+                . str_pad("{$stats['total']} ", 8, ' ') . "in {$seconds}s";
+        }
+    }
+}

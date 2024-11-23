@@ -89,4 +89,13 @@ class Product extends IndexAbstract
     {
         $select->where->in('e.type_id', ['simple', 'configurable', 'virtual', 'downloadable']);
     }
+
+    public function gcCheck(array $ids): array
+    {
+        $exists = $this->db->fetchCol(
+            $this->getBatchSelect($ids)->columns(['entity_id']),
+        );
+
+        return array_diff($ids, $exists);
+    }
 }

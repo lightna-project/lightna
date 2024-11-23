@@ -15,7 +15,7 @@
         "build-css": "npm run build-common-css && npm run build-lane-css",
         "build-common-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/common.css -o ../../project/magento-os/pub/static/lightna/compiled/style/common.css",
         "build-lane-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/lane.css -o ../../project/magento-os/pub/static/lightna/compiled/style/lane.css",
-        "build": "webpack && npm run build-common-css -- --minify && npm run build-lane-css -- --minify && ./cli deploy:asset:sign",
+        "build": "webpack && npm run build-common-css -- --minify && npm run build-lane-css -- --minify && ./cli asset.sign",
         "watch-js": "webpack --mode=development",
         "watch-css": "npm run build-common-css -- --watch --verbose && npm run build-lane-css -- --watch --verbose"
     }

@@ -43,6 +43,11 @@ function a2o(array $arr, string $class): object
     return $object;
 }
 
+function o2a(object $obj): array
+{
+    return json_decode(json($obj), true);
+}
+
 /**
  * array_merge_recursive doesn't work as array_merge
  * merge does the logic which is expected from array_merge_recursive

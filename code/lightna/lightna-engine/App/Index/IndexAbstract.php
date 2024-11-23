@@ -13,6 +13,13 @@ abstract class IndexAbstract extends ObjectA implements IndexInterface
     protected array $dataBatch;
     protected bool $hasRoutes = false;
     protected array $routesBatch;
+    protected string $entityName;
+
+    /** @noinspection PhpUnused */
+    protected function defineEntityName(): void
+    {
+        $this->entityName = str_replace('_', '.', trim($this->entity::STORAGE_PREFIX, '_'));
+    }
 
     public function refresh(array $ids): void
     {
@@ -30,11 +37,6 @@ abstract class IndexAbstract extends ObjectA implements IndexInterface
         }
 
         $this->flush();
-    }
-
-    public function getDataBatch(array $ids): array
-    {
-        return [];
     }
 
     public function getRoutesBatch(array $ids): array
@@ -61,7 +63,7 @@ abstract class IndexAbstract extends ObjectA implements IndexInterface
     {
         if ($this->hasRoutes) {
             $this->route->setEntityRoutes(
-                $this->entity::STORAGE_PREFIX,
+                $this->entityName,
                 $id,
                 $this->routesBatch[$id] ?? [],
             );
@@ -76,7 +78,7 @@ abstract class IndexAbstract extends ObjectA implements IndexInterface
     protected function removeItemRoutes(string|int $id): void
     {
         if ($this->hasRoutes) {
-            $this->route->unsetEntityRoutes($this->entity::STORAGE_PREFIX, $id);
+            $this->route->unsetEntityRoutes($this->entityName, $id);
         }
     }
 

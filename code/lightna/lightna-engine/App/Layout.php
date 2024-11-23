@@ -23,11 +23,13 @@ class Layout extends ObjectA
     protected array $entities;
     protected string $entityType;
 
+    /** @noinspection PhpUnused */
     protected function defineEntityType(): void
     {
         $this->entityType = $this->context->entity->type;
     }
 
+    /** @noinspection PhpUnused */
     protected function defineLayout(): void
     {
         $layoutName = $this->entities[$this->entityType]['layout'];

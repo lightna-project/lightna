@@ -20,6 +20,7 @@ class Session extends ObjectA
     protected Cookie $cookie;
     protected Context $context;
 
+    /** @noinspection PhpUnused */
     protected function defineHandler(): void
     {
         $this->handler = getobj(
@@ -28,6 +29,7 @@ class Session extends ObjectA
         );
     }
 
+    /** @noinspection PhpUnused */
     protected function defineCookie(): void
     {
         $this->cookie = getobj(Cookie::class, $this->config['options']['cookie']);

@@ -7,7 +7,7 @@
 <div class="<?= $cssLevel ?> <?= ($item->children) ? 'has-children' : '' ?>">
     <?php if ($item->level > 0) { ?>
         <div class="<?= $cssLevel . '__title' ?>">
-            <a href="<?= $item->url() ?>" title="<?= $item->name() ?>">
+            <a href="/<?= $item->url() ?>" title="<?= $item->name() ?>">
                 <?= $item->name() ?>
             </a>
         </div>
@@ -21,7 +21,7 @@
             </div>
             <?php if ($item->level === 1) { ?>
                 <div class="level-1__show-all">
-                    <a href="<?= $item->url() ?>" title="<?= $item->name() ?>">
+                    <a href="/<?= $item->url() ?>" title="<?= $item->name() ?>">
                         <i><?= phrase('Show all in ') . $item->name() ?></i>
                     </a>
                 </div>

@@ -13,6 +13,7 @@ class Group extends ObjectA
     protected Database $db;
     protected array $groups;
 
+    /** @noinspection PhpUnused */
     protected function defineGroups(): void
     {
         $this->groups = $this->db->fetch(

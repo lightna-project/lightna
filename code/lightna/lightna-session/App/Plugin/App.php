@@ -12,6 +12,7 @@ class App extends ObjectA
 {
     protected Session $session;
 
+    /** @noinspection PhpUnused */
     public function processExtended(Closure $proceed): void
     {
         $this->session->prolong();

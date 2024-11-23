@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Storage;
 
+use Generator;
+
 interface StorageInterface
 {
     public function set(string $key, mixed $value): void;
@@ -17,4 +19,6 @@ interface StorageInterface
     public function batch(): void;
 
     public function flush(): void;
+
+    public function keys(string $prefix): Generator;
 }

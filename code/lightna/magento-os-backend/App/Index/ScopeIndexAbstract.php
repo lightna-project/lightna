@@ -50,4 +50,9 @@ abstract class ScopeIndexAbstract extends IndexAbstract
         // Scan is done in a single batch for id=1
         return $lastId ? [] : [1];
     }
+
+    public function gcCheck(array $ids): array
+    {
+        return array_diff($ids, [1]);
+    }
 }

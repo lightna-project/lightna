@@ -12,6 +12,7 @@ class App extends ObjectA
 {
     protected Config $config;
 
+    /** @noinspection PhpUnused */
     public function renderNoRouteExtended(): Closure
     {
         $config = $this->config;

@@ -16,11 +16,13 @@ class EntityLink extends ObjectA
     protected Staging $staging;
     protected StagingQuery $stagingQuery;
 
+    /** @noinspection PhpUnused */
     public function getColumnExtended(Closure $proceed, string $table): string
     {
         return $this->staging->getTableParent($table) ? 'row_id' : $proceed();
     }
 
+    /** @noinspection PhpUnused */
     public function getIdsExtended(Closure $proceed, string $table, array $ids): array
     {
         return $this->staging->getTableParent($table)

@@ -9,6 +9,7 @@ use Lightna\Engine\App\ObjectA;
 
 class Triggers extends ObjectA
 {
+    /** @noinspection PhpUnused */
     public function getTableAliasExtended(Closure $proceed, string $table): string
     {
         return preg_replace('~_replica$~', '', $table);

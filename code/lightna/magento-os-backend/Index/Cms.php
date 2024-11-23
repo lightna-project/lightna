@@ -67,4 +67,11 @@ class Cms extends IndexAbstract
 
         return $select;
     }
+
+    public function gcCheck(array $ids): array
+    {
+        $exists = $this->db->fetchCol($this->getBatchSelect($ids)->columns(['page_id']));
+
+        return array_diff($ids, $exists);
+    }
 }

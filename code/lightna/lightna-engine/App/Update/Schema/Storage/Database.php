@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Update\Schema\Storage;
 
-use Exception;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\Database\Client as StorageDatabase;
+use Lightna\Engine\App\UserException;
 
 class Database extends ObjectA
 {
@@ -30,9 +30,13 @@ class Database extends ObjectA
     protected function updateSchema(): void
     {
         if ($this->getCurrentSchema() !== $this->getRequiredSchema()) {
-            throw new Exception(
-                'Table schema for "' . static::TABLE_NAME . '" requires changes. Expected: '
-                . "\n\n" . $this->getRequiredSchema() . "\n\n"
+            throw new UserException(
+                'Table schema for "' . static::TABLE_NAME . '" requires changes:'
+                . "\n\nActual:"
+                . "\n\n" . $this->getCurrentSchema()
+                . "\n\nExpected:"
+                . "\n\n" . $this->getRequiredSchema()
+                . "\n\n"
             );
         }
     }
@@ -40,9 +44,11 @@ class Database extends ObjectA
     protected function getRequiredSchema(): string
     {
         return 'CREATE TABLE `lightna_storage` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(255) NOT NULL,
   `value` mediumblob DEFAULT NULL,
-  PRIMARY KEY (`key`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
 )';
     }
 

@@ -30,6 +30,7 @@ class Msi extends ObjectA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineWebsiteStock(): void
     {
         $this->defineWebsiteSources();

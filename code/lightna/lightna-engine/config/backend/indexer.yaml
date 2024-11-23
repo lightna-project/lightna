@@ -3,3 +3,7 @@ indexer:
     tables: [ ]
     batch:
       collectors: [ ]
+  watch:
+    start_at: 5
+    interval: 2
+    stop_at: 50
