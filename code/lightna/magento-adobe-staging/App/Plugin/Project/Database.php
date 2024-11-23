@@ -16,6 +16,7 @@ class Database extends ObjectA
     protected Staging $staging;
     protected Query $query;
 
+    /** @noinspection PhpUnused */
     public function sqlExtended(Closure $proceed, AbstractPreparableSql &$sql): ResultInterface
     {
         if (!$this->isQueryRelevant($sql)) {

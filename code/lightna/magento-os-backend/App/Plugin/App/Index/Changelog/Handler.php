@@ -12,6 +12,7 @@ class Handler extends ObjectA
 {
     protected Product $productQuery;
 
+    /** @noinspection PhpUnused */
     public function addIndexBatchDependenciesExtended(Closure $proceed, array &$indexBatch): void
     {
         $productIds = $indexBatch['product'] ?? [];

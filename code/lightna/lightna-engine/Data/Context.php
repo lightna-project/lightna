@@ -19,16 +19,19 @@ class Context extends DataA
     protected AppContext $appContext;
     protected Layout $layout;
 
+    /** @noinspection PhpUnused */
     protected function defineEntity(): void
     {
         $this->entity = $this->appContext->entity;
     }
 
+    /** @noinspection PhpUnused */
     protected function defineMode(): void
     {
         $this->mode = $this->appContext->mode;
     }
 
+    /** @noinspection PhpUnused */
     protected function definePrivateBlocks(): void
     {
         $this->privateBlocks =

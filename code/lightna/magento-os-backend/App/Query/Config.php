@@ -27,6 +27,7 @@ class Config extends ObjectA
         $this->projectSrc = LIGHTNA_ENTRY . $this->projectSrc . '/';
     }
 
+    /** @noinspection PhpUnused */
     protected function defineModules(): void
     {
         $this->modules = [];
@@ -122,6 +123,7 @@ class Config extends ObjectA
         return array_keys($modules);
     }
 
+    /** @noinspection PhpUnused */
     protected function defineStores(): void
     {
         $select = $this->db
@@ -134,6 +136,7 @@ class Config extends ObjectA
         );
     }
 
+    /** @noinspection PhpUnused */
     protected function defineDefaultConfig(): void
     {
         $final = [];

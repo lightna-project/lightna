@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Storage;
 
 use Exception;
+use Generator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 {
@@ -58,5 +61,18 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     public function flush(): void
     {
         // Not needed
+    }
+
+    public function keys(string $prefix): Generator
+    {
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->dir)
+        );
+
+        foreach ($iterator as $item) {
+            if ($item->isFile() && str_starts_with($item->getFilename(), $prefix)) {
+                yield pathinfo($item->getFilename(), PATHINFO_FILENAME);
+            }
+        }
     }
 }

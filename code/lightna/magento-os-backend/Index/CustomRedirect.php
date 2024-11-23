@@ -75,4 +75,25 @@ class CustomRedirect extends IndexAbstract
     {
         // Skip data, index routes only
     }
+
+    public function gcCheck(array $ids): array
+    {
+        $exists = $this->db->fetchCol($this->getGcCheckSelect($ids));
+
+        // Home page URL always exists
+        $exists[] = '';
+
+        return array_diff($ids, $exists);
+    }
+
+    protected function getGcCheckSelect(array $urls): Select
+    {
+        $select = $this->db->select()
+            ->columns(['request_path'])
+            ->from('url_rewrite')
+            ->where(['store_id = ?' => $this->context->scope]);
+        $select->where->in('request_path', $urls);
+
+        return $select;
+    }
 }

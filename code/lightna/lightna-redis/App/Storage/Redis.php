@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Redis\App\Storage;
 
+use Generator;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\StorageInterface;
 use Redis as RedisClient;
@@ -21,6 +22,7 @@ class Redis extends ObjectA implements StorageInterface
         $this->options = $options;
     }
 
+    /** @noinspection PhpUnused */
     protected function defineClient(): void
     {
         $this->client = new RedisClient();
@@ -95,5 +97,17 @@ class Redis extends ObjectA implements StorageInterface
         $this->batch = false;
         $this->batchSet = [];
         $this->batchUnset = [];
+    }
+
+    public function keys(string $prefix): Generator
+    {
+        do {
+            $keys = $this->client->scan($it, $prefix . '*');
+            if ($keys !== FALSE) {
+                foreach ($keys as $key) {
+                    yield $key;
+                }
+            }
+        } while ($it > 0);
     }
 }

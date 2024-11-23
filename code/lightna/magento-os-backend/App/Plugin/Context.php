@@ -17,6 +17,7 @@ class Context extends DataA
     protected string $runCode;
     protected array $runCodes;
 
+    /** @noinspection PhpUnused */
     protected function defineRunType(): void
     {
         $this->runType = $_SERVER['MAGE_RUN_TYPE'] ?? '';
@@ -25,16 +26,19 @@ class Context extends DataA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineRunCode(): void
     {
         $this->runCode = $_SERVER['MAGE_RUN_CODE'] ?? '';
     }
 
+    /** @noinspection PhpUnused */
     protected function defineRunCodes(): void
     {
         $this->runCodes = $this->compiled->load('magento/runCodes');
     }
 
+    /** @noinspection PhpUnused */
     public function resolveExtended(Closure $proceed): Closure
     {
         $resolveScope = $this->resolveScope(...);

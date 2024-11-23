@@ -11,6 +11,7 @@ class Cookie extends ObjectA
 {
     protected Config $config;
 
+    /** @noinspection PhpUnused */
     public function getOptionsExtended(\Closure $proceed): array
     {
         $options = $proceed();

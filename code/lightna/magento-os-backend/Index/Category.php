@@ -8,20 +8,20 @@ use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Index\IndexAbstract;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Entity\Category as CategoryEntity;
-use Lightna\Magento\App\Query\Categories;
+use Lightna\Magento\App\Query\Category as Query;
 use Lightna\Magento\App\Query\Url;
 
 class Category extends IndexAbstract
 {
     protected CategoryEntity $entity;
     protected Database $db;
-    protected Categories $categories;
+    protected Query $query;
     protected Url $url;
     protected bool $hasRoutes = true;
 
     public function getDataBatch(array $ids): array
     {
-        return $this->db->fetch($this->getBatchSelect($ids), 'entity_id');
+        return $this->query->getList($ids);
     }
 
     public function getRoutesBatch(array $ids): array
@@ -41,11 +41,11 @@ class Category extends IndexAbstract
 
     protected function getScanSelect(): Select
     {
-        return $this->categories->getListSelect()->columns(['entity_id']);
+        return $this->query->getAllSelect()->columns(['entity_id']);
     }
 
-    public function getBatchSelect(array $ids): Select
+    public function gcCheck(array $ids): array
     {
-        return $this->categories->getListSelect(['image', 'description', 'meta_description']);
+        return array_diff($ids, $this->db->fetchCol($this->getScanSelect()));
     }
 }

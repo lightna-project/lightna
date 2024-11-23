@@ -18,6 +18,7 @@ class Inventory extends ObjectA
     protected Ssi $ssi;
     protected bool $msiExists;
 
+    /** @noinspection PhpUnused */
     protected function defineMsiExists(): void
     {
         $this->msiExists = $this->db->structure->tableExists('inventory_source');

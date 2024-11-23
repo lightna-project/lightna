@@ -22,6 +22,7 @@ class Staging extends ObjectA
     protected Query\Staging $query;
     protected ChangelogHandler $changelogHandler;
 
+    /** @noinspection PhpUnused */
     protected function defineTablesIdx(): void
     {
         $this->tablesIdx = [];
@@ -39,6 +40,7 @@ class Staging extends ObjectA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineVersionId(): void
     {
         $this->versionId = $this->query->getVersionId();

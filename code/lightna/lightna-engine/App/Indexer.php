@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Lightna\Engine\App\Entity\State;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Index\Queue\Handler as QueueHandler;
@@ -11,7 +12,8 @@ use Lightna\Engine\App\Project\Database;
 
 class Indexer extends ObjectA
 {
-    public const LOCK_NAME = 'lightna_indexer';
+    protected const LOCK_PARTIAL = 'lightna_indexer_partial';
+    protected const BLOCK_PARTIAL = 'indexer/partial/block';
     public array $stats;
 
     /** @AppConfig(entity) */
@@ -21,6 +23,7 @@ class Indexer extends ObjectA
     protected ChangelogHandler $changelogHandler;
     protected QueueHandler $queueHandler;
     protected Database $db;
+    protected State $state;
 
     public function reindex(string $entity, ?int $onlyScope = null): void
     {
@@ -63,10 +66,8 @@ class Indexer extends ObjectA
 
     public function process(): void
     {
-        $this->lock();
         $this->changelogHandler->process();
         $this->queueHandler->process();
-        $this->unlock();
     }
 
     public function processBatch(string $entity, array $batch): void
@@ -82,17 +83,46 @@ class Indexer extends ObjectA
         return getobj($this->entities[$entity]['index']);
     }
 
-
-    protected function lock(): void
+    public function lockPartialReindex(): void
     {
-        if (!$this->db->getLock(static::LOCK_NAME)) {
-            echo "The indexer is already running; exiting.\n";
-            exit;
+        if (!$this->db->getLock(static::LOCK_PARTIAL)) {
+            throw new UserException('Partial reindex is already running');
         }
     }
 
-    protected function unlock(): void
+    public function unlockPartialReindex(): void
     {
-        $this->db->releaseLock(static::LOCK_NAME);
+        $this->db->releaseLock(static::LOCK_PARTIAL);
+    }
+
+    public function blockPartialReindex(): void
+    {
+        if (!$this->db->getLock(static::LOCK_PARTIAL)) {
+            throw new UserException("Can't block running partial reindex, you need to kill it or wait.");
+        }
+
+        $this->state->set(static::BLOCK_PARTIAL, [true]);
+        $this->unlockPartialReindex();
+    }
+
+    public function unblockPartialReindex(): void
+    {
+        $this->state->set(static::BLOCK_PARTIAL, [false]);
+    }
+
+    public function isPartialReindexBlocked(): bool
+    {
+        return $this->state->get(static::BLOCK_PARTIAL) === [true];
+    }
+
+    public function validatePartialReindexBlock(bool $required): void
+    {
+        if ($this->isPartialReindexBlocked() !== $required) {
+            throw new UserException(
+                $required ?
+                    'Partial reindex must be blocked, run index.queue.block to block.' :
+                    'Partial reindex is blocked, run index.queue.unblock to unblock.'
+            );
+        }
     }
 }

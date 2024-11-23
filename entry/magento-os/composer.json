@@ -3,12 +3,11 @@
         "laminas/laminas-db": "^2.20"
     },
     "scripts": {
-        "lightna:build": [
+        "lightna.build": [
             "./cli compile",
             "./cli update",
             "npm run build",
-            "./cli deploy:opcache",
-            "./cli deploy:data"
+            "./cli index.update.all"
         ]
     }
 }

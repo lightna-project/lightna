@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Storage;
 
+use Generator;
+use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\Database\Client;
 use Lightna\Engine\App\Update\Schema\Storage\Database as Schema;
@@ -16,6 +18,7 @@ class Database extends ObjectA implements StorageInterface
     protected bool $batch = false;
     protected array $batchSet = [];
     protected array $batchUnset = [];
+    protected int $keysBatchSize = 1000;
 
     public function set(string $key, mixed $value): void
     {
@@ -114,5 +117,40 @@ class Database extends ObjectA implements StorageInterface
             'json' => json_decode($value, true),
             'igbinary' => igbinary_unserialize($value),
         };
+    }
+
+    public function keys(string $prefix): Generator
+    {
+        $cursor = 0;
+        while ($batch = $this->getKeysBatch($prefix, $cursor)) {
+            foreach ($batch as $row) {
+                yield $row['key'];
+            }
+            /** @noinspection PhpUndefinedVariableInspection */
+            $cursor = $row['id'];
+
+            // Check for last batch, prevent extra query
+            if (count($batch) < $this->keysBatchSize) {
+                break;
+            }
+        }
+    }
+
+    protected function getKeysBatch(string $prefix, int $cursor): array
+    {
+        return $this->client->fetch($this->getKeysBatchSelect($prefix, $cursor));
+    }
+
+    protected function getKeysBatchSelect(string $prefix, int $cursor): Select
+    {
+        return $this->client->select()
+            ->from(['s' => Schema::TABLE_NAME])
+            ->columns(['id', 'key'])
+            ->where([
+                'id > ?' => $cursor,
+                '`key` like ?' => $prefix . '%',
+            ])
+            ->order(['id'])
+            ->limit($this->keysBatchSize);
     }
 }

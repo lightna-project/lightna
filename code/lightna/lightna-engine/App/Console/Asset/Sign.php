@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Console\Deploy;
+namespace Lightna\Engine\App\Console\Asset;
 
 use Lightna\Engine\App\Compiler\AssetSign as CompilerAssetSign;
 use Lightna\Engine\App\Console\CommandA;
 
-class AssetSign extends CommandA
+class Sign extends CommandA
 {
     protected CompilerAssetSign $assetSign;
 

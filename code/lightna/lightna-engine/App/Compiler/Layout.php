@@ -13,6 +13,7 @@ class Layout extends CompilerA
     protected array $layouts;
     protected array $templateMap;
 
+    /** @noinspection PhpUnused */
     protected function defineTemplateMap(): void
     {
         $this->templateMap = $this->compiled->load('template/map');

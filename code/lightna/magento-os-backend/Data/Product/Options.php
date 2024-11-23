@@ -21,6 +21,7 @@ class Options extends DataA
     protected array $attributeOptions;
     protected array $selected;
 
+    /** @noinspection PhpUnused */
     protected function defineSelected(): void
     {
         $this->selected = [];
@@ -29,6 +30,7 @@ class Options extends DataA
         }
     }
 
+    /** @noinspection PhpUnused */
     protected function defineAttributeOptions(): void
     {
         $this->attributeOptions = [];

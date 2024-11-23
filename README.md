@@ -31,7 +31,7 @@ Readiness of MVP for Magento 2 - 75%.
 # Contributor Setup
 
 ### Setup Magento OS
-* Setup Magento OS into `project/magento-os` folder following standard instruction and make sure Magento is functioning correctly
+* Setup Magento OS into `project/magento-os` folder following standard instruction and make sure Magento is configured and functioning correctly
 
 
 ### Setup Lightna
@@ -91,11 +91,11 @@ project/magento-os/bin/magento setup:upgrade
 ### Build
 ```
 cd entry/magento-os && \
-composer lightna:build
+composer lightna.build
 ```
 
 
 ### Schedule Lightna indexer
 ```
-* * * * * { cd [abs_path_to_repo]/entry/magento-os && CRON=true ./cli indexer:process; } 2>&1 >> [abs_path_to_logs]/lightna-indexer.log
+* * * * * { cd [abs_path_to_repo]/entry/magento-os && ./cli index.queue.watch; } 2>&1 >> [abs_path_to_logs]/lightna-index.log
 ```

@@ -117,4 +117,14 @@ class Queue extends ObjectA
 
         return $delete;
     }
+
+    public function reset(): void
+    {
+        $this->db->query('truncate table ' . $this->db->quoteIdentifier(Schema::TABLE_NAME));
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->db->fetchOne($this->db->select(Schema::TABLE_NAME)));
+    }
 }

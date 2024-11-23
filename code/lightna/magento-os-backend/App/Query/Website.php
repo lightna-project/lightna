@@ -13,6 +13,7 @@ class Website extends ObjectA
     protected Database $db;
     protected array $websites;
 
+    /** @noinspection PhpUnused */
     protected function defineWebsites(): void
     {
         $this->websites = $this->db->fetch(

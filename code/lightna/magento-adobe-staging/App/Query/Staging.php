@@ -27,6 +27,7 @@ class Staging extends ObjectA
         return $this->versionId;
     }
 
+    /** @noinspection PhpUnused */
     protected function defineVersionId(): void
     {
         if ($this->applyAfterMagento) {

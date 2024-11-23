@@ -13,6 +13,7 @@ class Store extends ObjectA
     protected Database $db;
     protected array $stores;
 
+    /** @noinspection PhpUnused */
     protected function defineStores(): void
     {
         $this->stores = $this->db->fetch(

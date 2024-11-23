@@ -1,0 +1,19 @@
+cli:
+  command:
+    update: Lightna\Engine\App\Console\Update
+    asset.sign: Lightna\Engine\App\Console\Asset\Sign
+    index.update.opcache: Lightna\Engine\App\Console\Index\Update\Opcache
+    index.update.data: Lightna\Engine\App\Console\Index\Update\Data
+    index.update.all: Lightna\Engine\App\Console\Index\Update\All
+    index.queue.process: Lightna\Engine\App\Console\Index\Queue\Process
+    index.queue.watch: Lightna\Engine\App\Console\Index\Queue\Watch
+    index.queue.block: Lightna\Engine\App\Console\Index\Queue\Block
+    index.queue.unblock: Lightna\Engine\App\Console\Index\Queue\Unblock
+    index.queue.reset: Lightna\Engine\App\Console\Index\Queue\Reset
+    index.gc: Lightna\Engine\App\Console\Index\Gc
+    entity.show: Lightna\Engine\App\Console\Entity\Show
+  update:
+    - Lightna\Engine\App\Update\Schema\Index\Changelog
+    - Lightna\Engine\App\Update\Schema\Index\Triggers
+    - Lightna\Engine\App\Update\Schema\Index\Queue
+    - Lightna\Engine\App\Update\Schema\Storage\Database

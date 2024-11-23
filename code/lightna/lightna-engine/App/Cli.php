@@ -7,7 +7,14 @@ namespace Lightna\Engine\App;
 class Cli extends ObjectA
 {
     /** @AppConfig(cli/command) */
+    protected array $cliCommands;
     protected array $commands;
+
+    /** @noinspection PhpUnused */
+    protected function defineCommands(): void
+    {
+        $this->commands = array_flat($this->cliCommands);
+    }
 
     public function run(string $command): void
     {

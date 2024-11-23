@@ -6,14 +6,19 @@ namespace Lightna\Magento\Index\Content\Provider;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Magento\App\Index\DataProvider\Cms\Block as CmsBlockProvider;
-use Lightna\Magento\App\Query\Categories;
+use Lightna\Magento\App\Query\Category;
 
 class Page extends ObjectA
 {
     protected CmsBlockProvider $cmsBlockProvider;
     /** @AppConfig(magento/page/blocks) */
     protected array $blocks;
-    protected Categories $categories;
+    protected Category $category;
+    protected array $treeItemFields = [
+        'entity_id',
+        'name',
+        'url',
+    ];
 
     public function getData(): array
     {
@@ -26,8 +31,8 @@ class Page extends ObjectA
     protected function getCategoriesTree(): array
     {
         $tree = $this->buildCategoriesTree(
-            $this->categories->getList(),
-            $this->categories->getRootId(),
+            $this->category->getNavigation(),
+            $this->category->getRootId(),
         );
 
         return array_camel([
@@ -43,7 +48,7 @@ class Page extends ObjectA
         $tree = [];
         foreach ($items as $item) {
             if ($item['parent_id'] === $parentId) {
-                $treeItem = $item;
+                $treeItem = $this->categoryToTreeItem($item);
                 $treeItem['level'] = $level;
                 $treeItem['children'] = $this->buildCategoriesTree(
                     $items,
@@ -56,5 +61,13 @@ class Page extends ObjectA
         }
 
         return $tree;
+    }
+
+    protected function categoryToTreeItem(array $item): array
+    {
+        return array_intersect_key(
+            $item,
+            array_flip($this->treeItemFields),
+        );
     }
 }

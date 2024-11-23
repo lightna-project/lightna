@@ -9,7 +9,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Update;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Engine\App\Update\Schema\Index\Changelog as ChangelogSchema;
+use Lightna\Engine\App\Update\Schema\Index\Changelog as Schema;
 
 class Changelog extends ObjectA
 {
@@ -23,7 +23,7 @@ class Changelog extends ObjectA
     protected function getHasProcessingItemsSelect(): Select
     {
         return $this->db->select()
-            ->from(ChangelogSchema::TABLE_NAME)
+            ->from(Schema::TABLE_NAME)
             ->where(['status' => 'processing'])
             ->limit(1);
     }
@@ -36,7 +36,7 @@ class Changelog extends ObjectA
     protected function getAdmitPendingItemsUpdate(): Update
     {
         return $this->db->update()
-            ->table(ChangelogSchema::TABLE_NAME)
+            ->table(Schema::TABLE_NAME)
             ->set(['status' => 'processing'])
             ->where(['status' => 'pending']);
     }
@@ -49,7 +49,7 @@ class Changelog extends ObjectA
     protected function getTablesSelect(): Select
     {
         return $this->db->select()
-            ->from(ChangelogSchema::TABLE_NAME)
+            ->from(Schema::TABLE_NAME)
             ->columns(['table'])
             ->quantifier(Select::QUANTIFIER_DISTINCT)
             ->where(['status' => 'processing']);
@@ -71,7 +71,7 @@ class Changelog extends ObjectA
     protected function getTableBatchSelect(string $table): Select
     {
         $select = $this->db->select()
-            ->from(ChangelogSchema::TABLE_NAME)
+            ->from(Schema::TABLE_NAME)
             ->where([
                 'table' => $table,
                 'status' => 'processing',
@@ -89,7 +89,7 @@ class Changelog extends ObjectA
     protected function getTableBatchPrimaryKeysSelect(string $table): Select
     {
         return $this->db->select()
-            ->from(ChangelogSchema::TABLE_NAME)
+            ->from(Schema::TABLE_NAME)
             ->columns(['primary_key'])
             ->quantifier(Select::QUANTIFIER_DISTINCT)
             ->where([
@@ -107,7 +107,7 @@ class Changelog extends ObjectA
     protected function getCleanBatchDelete(string $table, array $batch): Delete
     {
         $delete = $this->db->delete()
-            ->from(ChangelogSchema::TABLE_NAME)
+            ->from(Schema::TABLE_NAME)
             ->where([
                 'table' => $table,
                 'status' => 'processing',
@@ -115,5 +115,15 @@ class Changelog extends ObjectA
         $delete->where->in('primary_key', array_keys($batch));
 
         return $delete;
+    }
+
+    public function reset(): void
+    {
+        $this->db->query('truncate table ' . $this->db->quoteIdentifier(Schema::TABLE_NAME));
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->db->fetchOne($this->db->select(Schema::TABLE_NAME)));
     }
 }
