@@ -4,20 +4,46 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\State;
 
-use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Opcache\Compiled;
+use Lightna\Engine\Data\DataA;
 
-class Index extends ObjectA
+class Index extends DataA
 {
-    public string $version;
+    public string $version = 'a';
+    public string|int $bindToBuild = 0;
 
-    /** @noinspection PhpUnused */
-    protected function defineVersion(): void
+    protected Compiled $compiled;
+
+    protected function init(array $data = []): void
     {
-        $this->version = 'a';
+        parent::init($data);
+
+        $this->bindToBuild();
     }
 
-    public function getNewVersion(): string
+    protected function bindToBuild(): void
     {
-        return chr((ord($this->version) - ord('a') + 1) % 26 + ord('a'));
+        if (LIGHTNA_AREA !== 'frontend') {
+            return;
+        }
+
+        if ($this->bindToBuild && $this->bindToBuild !== $this->compiled->load('version')) {
+            $this->version = $this->getNextVersion();
+        }
+    }
+
+    public function getNextVersion(): string
+    {
+        return $this->getIncrementedVersion(1);
+    }
+
+    public function getPreviousVersion(): string
+    {
+        return $this->getIncrementedVersion(-1);
+    }
+
+    protected function getIncrementedVersion(int $inc): string
+    {
+        return chr((ord($this->version) - ord('a') + $inc) % 26 + ord('a'));
     }
 }

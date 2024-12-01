@@ -13,6 +13,6 @@ class Unblock extends CommandA
 
     public function run(): void
     {
-        $this->indexer->unblockPartialReindex();
+        $this->indexer->unblockQueue();
     }
 }

@@ -13,9 +13,9 @@ class Cookie extends ObjectA
     protected array $config;
     protected Request $request;
 
-    protected function init(array $config): void
+    protected function init(array $data = []): void
     {
-        $this->config = $config;
+        $this->config = $data;
     }
 
     public function prolong(): void

@@ -17,7 +17,7 @@ class Reset extends CommandA
 
     public function run(): void
     {
-        $this->indexer->validatePartialReindexBlock(true);
+        $this->indexer->validateQueueBlock(true);
         $this->changelog->reset();
         $this->queue->reset();
     }

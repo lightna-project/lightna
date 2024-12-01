@@ -26,10 +26,10 @@ abstract class DatabaseA extends ObjectA
     protected ?Sql $sql;
     protected array $connection;
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $sharedName = $this->connection['shared'] ?? '';
-        if (isset($GLOBALS[$sharedName])) {
+        if ($sharedName !== '' && isset($GLOBALS[$sharedName])) {
             $this->adapter = $this->createSharedPdoAdapter($GLOBALS[$sharedName]);
         } else {
             $this->validateParameters();

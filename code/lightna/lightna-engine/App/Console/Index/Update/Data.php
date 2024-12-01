@@ -6,19 +6,22 @@ namespace Lightna\Engine\App\Console\Index\Update;
 
 use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\Indexer;
+use Lightna\Engine\App\State;
 
 class Data extends CommandA
 {
     /** @AppConfig(entity) */
     protected array $entities;
     protected Indexer $indexer;
+    protected State $state;
 
     public function run(): void
     {
         if ($this->getOpt(['list', 'l'])) {
             $this->printEntityCodes();
         } else {
-            $this->indexer->validatePartialReindexBlock(true);
+            $this->indexer->validateQueueBlock(true);
+            $this->applyVersion();
             $this->update();
         }
     }
@@ -60,6 +63,13 @@ class Data extends CommandA
 
             $stats = $this->indexer->stats;
             $this->printEnd($stats['count'] . ' items have been indexed in ' . $stats['time'] . ' seconds');
+        }
+    }
+
+    protected function applyVersion(): void
+    {
+        if ($this->getOpt('next-version')) {
+            $this->state->index->version = $this->state->index->getNextVersion();
         }
     }
 }

@@ -31,7 +31,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         $this->makeObjects();
     }
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->compiled = new Compiled();
         foreach (LIGHTNA_AREAS as $scope) {

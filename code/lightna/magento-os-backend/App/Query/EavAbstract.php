@@ -183,8 +183,8 @@ abstract class EavAbstract extends ObjectA
             ->order('store_id');
 
         $select->where
-            ->in('a.attribute_id', $attributeIds)
             ->in('av.store_id', [0, $this->context->scope])
+            ->in('a.attribute_id', $attributeIds)
             ->in('entity.entity_id', $entityIds);
 
         return $select;

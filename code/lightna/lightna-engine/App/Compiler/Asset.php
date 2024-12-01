@@ -9,7 +9,7 @@ class Asset extends CompilerA
     /** @AppConfig(asset_dir) */
     protected string $dir;
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->dir = rtrim(LIGHTNA_ENTRY . $this->dir) . '/';
         if (!is_dir($this->dir)) {

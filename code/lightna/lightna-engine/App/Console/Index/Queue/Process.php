@@ -13,12 +13,6 @@ class Process extends CommandA
 
     public function run(): void
     {
-        $this->indexer->lockPartialReindex();
-        try {
-            $this->indexer->validatePartialReindexBlock(false);
-            $this->indexer->process();
-        } finally {
-            $this->indexer->unlockPartialReindex();
-        }
+        $this->indexer->process();
     }
 }

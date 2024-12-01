@@ -15,7 +15,7 @@ class Client extends ObjectA
     protected array $config;
     protected string $endpoint;
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->endpoint = 'http://' . $this->config['connection']['host'] . ':' . $this->config['connection']['port'];
     }

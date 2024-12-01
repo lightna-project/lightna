@@ -31,7 +31,6 @@ try {
     getobj(Cli::class)->run($command);
     echo "\n";
 } catch (UserException $e) {
-    echo cli_error($e->getMessage());
-    echo "\n";
+    echo "\n" . cli_error($e->getMessage()) . "\n";
     exit(1);
 }

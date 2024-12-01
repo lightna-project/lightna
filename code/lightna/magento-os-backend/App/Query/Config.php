@@ -22,7 +22,7 @@ class Config extends ObjectA
     protected array $defaultConfig;
     protected array $storeConfig = [];
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->projectSrc = LIGHTNA_ENTRY . $this->projectSrc . '/';
     }

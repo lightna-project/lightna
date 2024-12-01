@@ -14,9 +14,9 @@ class File extends ObjectA implements HandlerInterface
     protected array $options;
     protected Context $context;
 
-    protected function init(array $options): void
+    protected function init(array $data = []): void
     {
-        $this->options = $options;
+        $this->options = $data;
     }
 
     public function read(): array

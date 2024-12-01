@@ -17,9 +17,9 @@ class Redis extends ObjectA implements StorageInterface
     protected array $batchSet = [];
     protected array $batchUnset = [];
 
-    protected function init(array $options): void
+    protected function init(array $data = []): void
     {
-        $this->options = $options;
+        $this->options = $data;
     }
 
     /** @noinspection PhpUnused */

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\State;
 
-use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\Data\DataA;
 
-class Maintenance extends ObjectA
+class Maintenance extends DataA
 {
     public bool $enabled;
 

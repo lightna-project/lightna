@@ -32,6 +32,7 @@ class Handler extends ObjectA
     {
         foreach ($this->queue->getEntities() as $entity) {
             while ($batch = $this->queue->getEntityBatch($entity)) {
+                $this->indexer->validateQueueAllowed();
                 $this->indexer->processBatch($entity, $batch);
                 $this->queue->cleanBatch($entity, $batch);
             }
