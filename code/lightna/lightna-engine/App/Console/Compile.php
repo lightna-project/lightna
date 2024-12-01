@@ -79,9 +79,10 @@ class Compile extends CommandA
         ]);
 
         $this->runCompilersInModules();
+        $this->version();
     }
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $config = require LIGHTNA_ENTRY . 'config.php';
         foreach (['App/Bootstrap.php', 'App/Compiler/CompilerA.php', 'App/Compiler/ClassMap.php'] as $file) {
@@ -113,5 +114,10 @@ class Compile extends CommandA
         }
 
         $this->runSequence($pool);
+    }
+
+    protected function version(): void
+    {
+        $this->compiled->save('version', time());
     }
 }

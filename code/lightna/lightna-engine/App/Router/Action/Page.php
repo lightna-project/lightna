@@ -17,10 +17,10 @@ class Page extends ObjectA
     /** @AppConfig(entity) */
     protected array $entities;
 
-    protected function init(array $params): void
+    protected function init(array $data = []): void
     {
-        $this->context->entity->type = $entity = $params['type'];
-        $this->context->entity->id = $params['id'] ?? null;
+        $this->context->entity->type = $entity = $data['type'];
+        $this->context->entity->id = $data['id'] ?? null;
         if ($visibility = ($this->entities[$entity]['visibility'] ?? null)) {
             $this->context->visibility = $visibility;
         }

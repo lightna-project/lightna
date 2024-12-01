@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Index\Changelog;
 
+use Lightna\Engine\App\Indexer;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Query\Index\Changelog;
 use Lightna\Engine\App\Query\Index\Queue;
@@ -13,6 +14,7 @@ class Handler extends ObjectA
 {
     protected Changelog $changelog;
     protected Queue $queue;
+    protected Indexer $indexer;
     /** @AppConfig(indexer/changelog/batch/collectors) */
     protected array $collectors;
 
@@ -33,6 +35,7 @@ class Handler extends ObjectA
     {
         foreach ($this->changelog->getTables() as $table) {
             while ($batch = $this->changelog->getTableBatch($table)) {
+                $this->indexer->validateQueueAllowed();
                 if ($filteredBatch = $this->filterUnchanged($batch)) {
                     $this->processBatch($table, $filteredBatch);
                 }

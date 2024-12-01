@@ -8,18 +8,25 @@ use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\Indexer;
 use Lightna\Engine\App\Query\Index\Changelog;
 use Lightna\Engine\App\Query\Index\Queue;
+use Lightna\Engine\App\State;
 
 class All extends CommandA
 {
     /** @AppConfig(entity) */
     protected array $entities;
     protected Indexer $indexer;
+    protected State $state;
     protected Queue $queue;
     protected Changelog $changelog;
 
     public function run(): void
     {
-        $this->indexer->blockPartialReindex();
+        $wasBlockedByCommand = false;
+        if (!$this->indexer->isQueueBlocked()) {
+            $this->indexer->blockQueue();
+            $wasBlockedByCommand = true;
+        }
+        $this->applyVersion();
 
         try {
             $this->changelog->reset();
@@ -38,7 +45,16 @@ class All extends CommandA
                 $this->printEnd($stats['count'] . ' items have been indexed in ' . $stats['time'] . ' seconds');
             }
         } finally {
-            $this->indexer->unblockPartialReindex();
+            if ($wasBlockedByCommand) {
+                $this->indexer->unblockQueue();
+            }
+        }
+    }
+
+    protected function applyVersion(): void
+    {
+        if ($this->getOpt('next-version')) {
+            $this->state->index->version = $this->state->index->getNextVersion();
         }
     }
 }

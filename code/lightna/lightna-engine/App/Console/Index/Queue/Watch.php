@@ -23,7 +23,7 @@ class Watch extends CommandA
         $this->startTime = time();
         while ($this->canProcess()) {
             if (!$this->isQueueEmpty()) {
-                $this->process();
+                $this->indexer->process();
             }
             sleep($this->options['interval']);
         }
@@ -59,16 +59,5 @@ class Watch extends CommandA
     protected function isQueueEmpty(): bool
     {
         return $this->changelog->isEmpty() && $this->queue->isEmpty();
-    }
-
-    protected function process(): void
-    {
-        $this->indexer->lockPartialReindex();
-        try {
-            $this->indexer->validatePartialReindexBlock(false);
-            $this->indexer->process();
-        } finally {
-            $this->indexer->unlockPartialReindex();
-        }
     }
 }

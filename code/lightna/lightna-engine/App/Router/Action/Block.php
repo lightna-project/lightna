@@ -15,7 +15,7 @@ class Block extends ObjectA
     protected Context $context;
     protected Request $request;
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->context->entity->type = $this->request->param->entityType;
         $this->context->entity->id = $this->request->param->entityId;

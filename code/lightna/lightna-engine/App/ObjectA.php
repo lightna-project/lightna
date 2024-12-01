@@ -31,17 +31,19 @@ class ObjectA implements JsonSerializable
         $this->isConstructed = true;
     }
 
-    final public function initialize(array $params = []): void
+    final public function initialize(array $data = []): void
     {
         if ($this->isInitialized) {
             throw new \Exception($this::class . ' already initialized');
         }
 
-        if (method_exists($this, 'init')) {
-            $this->init($params);
-        }
-
+        $this->init($data);
         $this->isInitialized = true;
+    }
+
+    protected function init(array $data = []): void
+    {
+        // Extension point
     }
 
     public function &__get($name)
@@ -119,7 +121,10 @@ class ObjectA implements JsonSerializable
     public function jsonSerialize(): self
     {
         foreach ($this->properties as $name => $property) {
-            $this->defineProperty($name);
+            if ($property[2] === 'pb') {
+                // Trigger "define" if undefined
+                $this->{$name};
+            }
         }
 
         return $this;

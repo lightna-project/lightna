@@ -4,19 +4,33 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Storage;
 
-use Exception;
 use Generator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Throwable;
 
 class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 {
     /** @AppConfig(storage/opcache/dir) */
     protected string $dir;
+    /** @AppConfig(storage/opcache/options) */
+    protected array $options;
+    protected array $permanentOptions;
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->dir = LIGHTNA_ENTRY . rtrim($this->dir, '/') . '/';
+
+        // Need to be defined before applyOptions, thus here is the place
+        $this->definePermanentOptions();
+    }
+
+    protected function definePermanentOptions(): void
+    {
+        $this->permanentOptions = [];
+        foreach ($this->options as $option => $value) {
+            $this->permanentOptions[$option] = ini_get('opcache.' . $option);
+        }
     }
 
     public function set(string $key, mixed $value): void
@@ -32,9 +46,26 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     public function get(string $key): string|array
     {
         try {
+            $this->applyOptions();
             return parent::load($this->getFileName($key));
-        } catch (Exception $e) {
+        } catch (Throwable) {
             return [];
+        } finally {
+            $this->restoreOptions();
+        }
+    }
+
+    protected function applyOptions(): void
+    {
+        foreach ($this->options as $option => $value) {
+            ini_set('opcache.' . $option, $value);
+        }
+    }
+
+    protected function restoreOptions(): void
+    {
+        foreach ($this->permanentOptions as $option => $value) {
+            ini_set('opcache.' . $option, $value);
         }
     }
 

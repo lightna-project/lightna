@@ -27,8 +27,8 @@ class Gc extends CommandA
 
         foreach ($this->gc->getStats() as $entity => $stats) {
             $seconds = round($stats['time']);
-            echo "\n    " . str_pad($entity, 30, ' ')
-                . " {$stats['cleaned']} out of "
+            echo "\n    " . str_pad($entity, 30, ' ') . ' '
+                . str_pad("{$stats['cleaned']} ", 8, ' ') . 'out of '
                 . str_pad("{$stats['total']} ", 8, ' ') . "in {$seconds}s";
         }
     }

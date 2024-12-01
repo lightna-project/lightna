@@ -13,6 +13,8 @@ class Block extends CommandA
 
     public function run(): void
     {
-        $this->indexer->blockPartialReindex();
+        $this->indexer->blockQueue(
+            (int)($this->getOpt('wait') ?? 10),
+        );
     }
 }

@@ -12,7 +12,7 @@ class Templating extends ObjectA
     protected array $templateMap;
     protected array $templateSchema;
 
-    protected function init(): void
+    protected function init(array $data = []): void
     {
         $this->templateMap = $this->compiled->load('template/map');
         $this->templateSchema = $this->compiled->load('template/schema');

@@ -4,7 +4,9 @@ asset_dir: null
 storage:
   opcache:
     adapter: Lightna\Engine\App\Storage\Opcache
-    options: [ ]
+    options:
+      validate_timestamps: 1
+      revalidate_freq: 60
   database:
     adapter: Lightna\Engine\App\Storage\Database
     options:

@@ -12,8 +12,15 @@ use Lightna\Engine\App\Project\Database;
 
 class Indexer extends ObjectA
 {
-    protected const LOCK_PARTIAL = 'lightna_indexer_partial';
-    protected const BLOCK_PARTIAL = 'indexer/partial/block';
+    protected const QUEUE_LOCK = 'lightna_indexer_queue';
+    protected const QUEUE_BLOCK = 'indexer/queue/block';
+    protected const QUEUE_STOP = 'indexer/queue/stop';
+    /** @AppConfig(indexer/queue/lock_wait_interval_ms) */
+    protected int $lockWaitIntervalMs;
+    /** @AppConfig(indexer/queue/lock_wait_print_interval) */
+    protected int $lockWaitPrintInterval;
+    /** @AppConfig(indexer/queue/allowed_check_interval_ms) */
+    protected int $allowedCheckIntervalMs;
     public array $stats;
 
     /** @AppConfig(entity) */
@@ -66,8 +73,15 @@ class Indexer extends ObjectA
 
     public function process(): void
     {
-        $this->changelogHandler->process();
-        $this->queueHandler->process();
+        $this->lockQueue();
+        try {
+            $this->validateQueueBlock(false);
+            $this->setQueueStopFlag(false);
+            $this->changelogHandler->process();
+            $this->queueHandler->process();
+        } finally {
+            $this->unlockQueue();
+        }
     }
 
     public function processBatch(string $entity, array $batch): void
@@ -83,46 +97,99 @@ class Indexer extends ObjectA
         return getobj($this->entities[$entity]['index']);
     }
 
-    public function lockPartialReindex(): void
+    protected function lockQueue(): void
     {
-        if (!$this->db->getLock(static::LOCK_PARTIAL)) {
-            throw new UserException('Partial reindex is already running');
+        if (!$this->db->getLock(static::QUEUE_LOCK)) {
+            throw new UserException('Queue is already running or locked by another index command');
         }
     }
 
-    public function unlockPartialReindex(): void
+    protected function unlockQueue(): void
     {
-        $this->db->releaseLock(static::LOCK_PARTIAL);
+        $this->db->releaseLock(static::QUEUE_LOCK);
     }
 
-    public function blockPartialReindex(): void
+    public function blockQueue(int $timeout = 10): void
     {
-        if (!$this->db->getLock(static::LOCK_PARTIAL)) {
-            throw new UserException("Can't block running partial reindex, you need to kill it or wait.");
+        $this->stopQueue($timeout);
+        $this->state->set(static::QUEUE_BLOCK, [true]);
+        $this->unlockQueue();
+    }
+
+    protected function stopQueue(int $timeout = 10): void
+    {
+        $this->waitQueueLock($timeout);
+        $this->setQueueStopFlag(false);
+        if (!$this->db->getLock(static::QUEUE_LOCK)) {
+            throw new UserException('Queue stop timeout "' . $timeout . '" exceeded, try again.');
         }
-
-        $this->state->set(static::BLOCK_PARTIAL, [true]);
-        $this->unlockPartialReindex();
     }
 
-    public function unblockPartialReindex(): void
+    protected function setQueueStopFlag(bool $value): void
     {
-        $this->state->set(static::BLOCK_PARTIAL, [false]);
+        $this->state->set(static::QUEUE_STOP, [$value]);
     }
 
-    public function isPartialReindexBlocked(): bool
+    protected function waitQueueLock(int $timeout = 10): void
     {
-        return $this->state->get(static::BLOCK_PARTIAL) === [true];
+        $mcsLeft = $timeout * 1000000;
+        $mcsInterval = $this->lockWaitIntervalMs * 1000;
+        $start = time();
+        $printedAt = 0;
+
+        $this->setQueueStopFlag(true);
+        while ($mcsLeft > 0 && !$this->db->getLock(static::QUEUE_LOCK)) {
+            usleep($mcsInterval);
+            $mcsLeft -= $mcsInterval;
+            $waiting = time() - $start;
+
+            if ($waiting % $this->lockWaitPrintInterval === 0 && !in_array($waiting, [$printedAt, $timeout])) {
+                echo "\nWaiting for queue lock $waiting seconds";
+                $printedAt = $waiting;
+            }
+            $this->setQueueStopFlag(true);
+        }
     }
 
-    public function validatePartialReindexBlock(bool $required): void
+    public function unblockQueue(): void
     {
-        if ($this->isPartialReindexBlocked() !== $required) {
+        $this->state->set(static::QUEUE_BLOCK, [false]);
+    }
+
+    public function isQueueBlocked(): bool
+    {
+        return $this->state->get(static::QUEUE_BLOCK) === [true];
+    }
+
+    public function validateQueueBlock(bool $required): void
+    {
+        if ($this->isQueueBlocked() !== $required) {
             throw new UserException(
                 $required ?
-                    'Partial reindex must be blocked, run index.queue.block to block.' :
-                    'Partial reindex is blocked, run index.queue.unblock to unblock.'
+                    'Queue must be blocked, run index.queue.block to block.' :
+                    'Queue is blocked, run index.queue.unblock to unblock.'
             );
         }
+    }
+
+    protected function isQueueStopped(): bool
+    {
+        return $this->state->get(static::QUEUE_STOP) === [true];
+    }
+
+    public function validateQueueAllowed(): void
+    {
+        static $lastCheckMct;
+        if (!is_null($lastCheckMct)) {
+            if ((microtime(true) - $lastCheckMct) * 1000 < $this->allowedCheckIntervalMs) {
+                // Too early to check
+                return;
+            }
+        }
+
+        if ($this->isQueueStopped()) {
+            throw new UserException('Queue has been stopped by another index command.');
+        }
+        $lastCheckMct = microtime(true);
     }
 }
