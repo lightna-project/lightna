@@ -22,7 +22,13 @@ class Bootstrap
         define('LIGHTNA_AREAS', ['frontend', 'backend']);
         define('LIGHTNA_AREA', php_sapi_name() === 'cli' ? 'backend' : 'frontend');
         define('LIGHTNA_SRC', $config['src_dir'] . '/');
-        define('COMPILED_DIR', LIGHTNA_ENTRY . $config['compiler']['dir'] . '/build/');
+        define(
+            'COMPILED_DIR',
+            LIGHTNA_ENTRY . $config['compiler']['dir']
+            . (defined('IS_COMPILER') && IS_COMPILER
+                ? '/building/'
+                : '/build/'),
+        );
         define("IS_DEV_MODE", $env['mode'] === 'dev');
         define("IS_PROD_MODE", $env['mode'] === 'prod');
         define(
@@ -32,8 +38,8 @@ class Bootstrap
             && $_SERVER['REQUEST_METHOD'] === 'GET',
         );
 
-        require __DIR__ . '/lib/common.php';
-        require __DIR__ . '/lib/' . LIGHTNA_AREA . '.php';
+        require_once __DIR__ . '/lib/common.php';
+        require_once __DIR__ . '/lib/' . LIGHTNA_AREA . '.php';
     }
 
     public static function autoload(): void

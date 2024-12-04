@@ -8,7 +8,6 @@ use Lightna\Engine\Data\Url;
 
 class AssetSign extends CompilerA
 {
-    /** @AppConfig(asset_dir) */
     protected string $assetDir;
     /** @AppConfig(asset_base) */
     protected string $assetBase;
@@ -24,6 +23,12 @@ class AssetSign extends CompilerA
         $this->generateHashes();
     }
 
+    /** @noinspection PhpUnused */
+    protected function defineAssetDir(): void
+    {
+        $this->assetDir = $this->compiler->getAssetDir();
+    }
+
     protected function generateHashes(): void
     {
         $this->hashes = [];
@@ -37,7 +42,7 @@ class AssetSign extends CompilerA
     protected function applyHashesToCss(): void
     {
         foreach ($this->getCssAssets() as $file) {
-            $fileName = LIGHTNA_ENTRY . $this->assetDir . '/' . $file;
+            $fileName = $this->assetDir . '/' . $file;
             $content = file_get_contents($fileName);
             file_put_contents($fileName, $this->applyHashesToCssContent($content));
         }
@@ -74,17 +79,17 @@ class AssetSign extends CompilerA
 
     protected function getAllAssets(): array
     {
-        return rscan(LIGHTNA_ENTRY . $this->assetDir, '~.*~', false);
+        return rscan($this->assetDir, '~.*~', false);
     }
 
     protected function getCssAssets(): array
     {
-        return rscan(LIGHTNA_ENTRY . $this->assetDir, '~[.]css$~', false);
+        return rscan($this->assetDir, '~[.]css$~', false);
     }
 
     protected function getAssetHash(string $file): string
     {
-        return substr(sha1_file(LIGHTNA_ENTRY . $this->assetDir . '/' . $file), 0, 6);
+        return substr(sha1_file($this->assetDir . '/' . $file), 0, 6);
     }
 
     protected function makeUrlRelated(string $url): string

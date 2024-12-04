@@ -15,13 +15,22 @@ $command = $argv[1] ?? '';
 
 if (in_array($command, ['?', 'help', '', '-h', '--help'])) {
     $commands = array_keys(cli_get_all_commands($config['compiler']['dir']));
-    echo "  Commands list:\n    " . implode("\n    ", $commands) . "\n";
+    echo "\n Available commands:\n\n    " . implode("\n    ", $commands) . "\n\n";
     exit;
 }
 
-if ($command === 'compile') {
-    cli_init_compiler_without_autoload();
-    (new Compile())->run();
+if (str_starts_with($command, 'build.')) {
+    define('IS_COMPILER', true);
+}
+
+if (in_array($command, ['build.compile', 'build.apply'])) {
+    cli_init_compiler();
+    if ($command === 'build.compile') {
+        (new Compile())->run();
+    } elseif ($command === 'build.apply') {
+        (new Compile())->apply();
+    }
+    echo "\n";
     exit;
 }
 

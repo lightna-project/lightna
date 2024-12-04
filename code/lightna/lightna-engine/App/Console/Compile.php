@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console;
 
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Compiler;
 use Lightna\Engine\App\Compiler\Asset as AssetCompiler;
 use Lightna\Engine\App\Compiler\ClassMap as ClassMapCompiler;
 use Lightna\Engine\App\Compiler\Config as ConfigCompiler;
@@ -18,15 +19,15 @@ use Lightna\Engine\App\Opcache\Compiled;
 
 class Compile extends CommandA
 {
-    protected array $config;
+    protected Compiler $compiler;
     protected Compiled $compiled;
 
     public function run(): void
     {
         $this->init();
 
-        $this->printStart('clean compiled');
-        $this->compiled->clean();
+        $this->printStart('clean build');
+        $this->compiler->clean();
         $this->printEnd();
 
         $this->runItem([
@@ -56,9 +57,6 @@ class Compile extends CommandA
         // Load object manager
         Bootstrap::objectManager();
 
-        $assetDir = getobj(AppConfig::class)->get('asset_dir');
-        rcleandir(LIGHTNA_ENTRY . $assetDir);
-
         $this->runSequence([
             [
                 'message' => 'make preload',
@@ -79,16 +77,17 @@ class Compile extends CommandA
         ]);
 
         $this->runCompilersInModules();
-        $this->version();
+        $this->compiler->version();
     }
 
     protected function init(array $data = []): void
     {
-        $config = require LIGHTNA_ENTRY . 'config.php';
-        foreach (['App/Bootstrap.php', 'App/Compiler/CompilerA.php', 'App/Compiler/ClassMap.php'] as $file) {
-            require LIGHTNA_ENTRY . $config['src_dir'] . '/' . $file;
-        }
-        Bootstrap::declaration($config);
+        $this->compiler = new Compiler();
+        $this->compiler->defineConfig();
+
+        Bootstrap::declaration($this->compiler->getConfig());
+
+        $this->compiler->init();
         $this->compiled = new Compiled();
     }
 
@@ -116,8 +115,9 @@ class Compile extends CommandA
         $this->runSequence($pool);
     }
 
-    protected function version(): void
+    public function apply(): void
     {
-        $this->compiled->save('version', time());
+        $this->init();
+        $this->compiler->apply();
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Exception;
 use JsonSerializable;
 
 class ObjectA implements JsonSerializable
@@ -22,7 +23,7 @@ class ObjectA implements JsonSerializable
     final public function construct(array $properties = []): void
     {
         if ($this->isConstructed) {
-            throw new \Exception($this::class . ' already constructed');
+            throw new Exception($this::class . ' already constructed');
         }
 
         $this->properties = $properties;
@@ -34,7 +35,7 @@ class ObjectA implements JsonSerializable
     final public function initialize(array $data = []): void
     {
         if ($this->isInitialized) {
-            throw new \Exception($this::class . ' already initialized');
+            throw new Exception($this::class . ' already initialized');
         }
 
         $this->init($data);
@@ -100,7 +101,7 @@ class ObjectA implements JsonSerializable
 
     protected function &__get_fallback(string $name): mixed
     {
-        throw new \Exception('Attempt to access undefined property ' . $this::class . '::' . $name);
+        throw new Exception('Attempt to access undefined property ' . $this::class . '::' . $name);
     }
 
     protected function checkAccessibilityInDevMode(string $name): void
@@ -109,7 +110,7 @@ class ObjectA implements JsonSerializable
             && $caller::class === $this::class;
 
         if (!$inside) {
-            throw new \Exception('Attempt to access property outside ' . $this::class . '::' . $name);
+            throw new Exception('Attempt to access property outside ' . $this::class . '::' . $name);
         }
     }
 

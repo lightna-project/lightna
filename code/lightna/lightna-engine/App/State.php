@@ -7,12 +7,14 @@ namespace Lightna\Engine\App;
 use Exception;
 use Lightna\Engine\App\Entity\State as StateEntity;
 use Lightna\Engine\App\State\Maintenance;
+use Lightna\Engine\App\State\Opcache;
 use Lightna\Engine\Data\DataA;
 
 class State extends DataA
 {
     public Maintenance $maintenance;
     public State\Index $index;
+    public Opcache $opcache;
 
     protected StateEntity $entity;
 
