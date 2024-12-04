@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 function cli_get_all_commands(string $codeDir): array
 {
-    $commands = ['compile' => []];
+    $commands = [
+        'build.compile' => true,
+        'build.apply' => true,
+    ];
     $compiledConfigFile = LIGHTNA_ENTRY . $codeDir . '/build/config/backend.php';
     if (file_exists($compiledConfigFile)) {
         $compiledConfig = require $compiledConfigFile;
@@ -17,7 +20,7 @@ function cli_get_all_commands(string $codeDir): array
     return $commands;
 }
 
-function cli_init_compiler_without_autoload(): void
+function cli_init_compiler(): void
 {
     $requires = [
         'ObjectManagerIgnore',
@@ -27,7 +30,13 @@ function cli_init_compiler_without_autoload(): void
         'Opcache/Compiled',
         'Console/CommandA',
         'Console/Compile',
+        'Bootstrap',
+        'Compiler',
+        'Compiler/CompilerA',
+        'Compiler/ClassMap',
+        'lib/common',
     ];
+
     foreach ($requires as $require) {
         require __DIR__ . '/../' . $require . '.php';
     }

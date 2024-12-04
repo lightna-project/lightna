@@ -1,7 +1,7 @@
 cli:
   command:
+    build.asset.sign: Lightna\Engine\App\Console\Asset\Sign
     update: Lightna\Engine\App\Console\Update
-    asset.sign: Lightna\Engine\App\Console\Asset\Sign
     index.update.opcache: Lightna\Engine\App\Console\Index\Update\Opcache
     index.update.data: Lightna\Engine\App\Console\Index\Update\Data
     index.update.all: Lightna\Engine\App\Console\Index\Update\All
@@ -15,6 +15,7 @@ cli:
     index.version.previous: Lightna\Engine\App\Console\Index\Version\Previous
     index.gc: Lightna\Engine\App\Console\Index\Gc
     entity.show: Lightna\Engine\App\Console\Entity\Show
+    opcache.slap: Lightna\Engine\App\Console\Opcache\Slap
   update:
     - Lightna\Engine\App\Update\Schema\Index\Changelog
     - Lightna\Engine\App\Update\Schema\Index\Triggers

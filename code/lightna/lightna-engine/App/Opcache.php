@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Throwable;
+
 abstract class Opcache extends ObjectA
 {
     protected string $dir;
@@ -35,11 +37,11 @@ abstract class Opcache extends ObjectA
 
     public function putFile(string $file, string $content): void
     {
-        file_put($this->dir . $file, $content);
-    }
-
-    public function clean(array $tags = []): void
-    {
-        rcleandir($this->dir);
+        try {
+            file_put($this->dir . $file, $content);
+        } catch (Throwable $e) {
+            echo "\nERROR: Failed to write file: " . $this->dir . $file . "\n";
+            throw $e;
+        }
     }
 }

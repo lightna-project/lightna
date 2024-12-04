@@ -1,12 +1,17 @@
 {
+    "config": {
+        "process-timeout": 0
+    },
     "require": {
         "laminas/laminas-db": "^2.20"
     },
     "scripts": {
         "lightna.build": [
-            "./cli compile",
-            "./cli update",
+            "./cli build.compile",
             "npm run build",
+            "./cli build.asset.sign",
+            "./cli build.apply",
+            "./cli update",
             "./cli index.update.all"
         ]
     }
