@@ -170,21 +170,42 @@ abstract class EavAbstract extends ObjectA
     ): AbstractPreparableSql {
         $select = $this->db
             ->select(['entity' => $this::ENTITY_TABLE])
-            ->columns(['entity_id'])
+            ->columns(['entity_id', 'value' => new Expression('IFNULL(`av`.`value`, `av_default`.`value`)')])
             ->join(
                 ['av' => $this::ENTITY_TABLE . '_' . $type],
-                'av.entity_id = entity.entity_id',
-                ['attribute_id', 'store_id', 'value'])
+                new Expression(
+                    'av.entity_id = entity.entity_id and av.store_id = ?',
+                    $this->context->scope,
+                ),
+                ['attribute_id', 'store_id', 'value'],
+                Select::JOIN_LEFT,
+            )
             ->join(
                 ['a' => 'eav_attribute'],
-                'a.attribute_id = av.attribute_id',
-                ['attribute_code'])
-            // 0 (default) must be first
-            ->order('store_id');
+                new Expression(
+                    'a.attribute_id = av.attribute_id and a.attribute_id in (?)',
+                    implode(',', $attributeIds),
+                ),
+                ['attribute_code']
+            )->join(
+                ['av_default' => $this::ENTITY_TABLE . '_' . $type],
+                new Expression(
+                    'av_default.entity_id = entity.entity_id and av_default.store_id = ?',
+                    0,
+                ),
+                ['attribute_id', 'store_id', 'value'],
+                Select::JOIN_LEFT,
+            )
+            ->join(
+                ['a_default' => 'eav_attribute'],
+                new Expression(
+                    'a_default.attribute_id = av_default.attribute_id and a_default.attribute_id in (?)',
+                    implode(',', $attributeIds),
+                ),
+                ['attribute_code']
+            );
 
         $select->where
-            ->in('av.store_id', [0, $this->context->scope])
-            ->in('a.attribute_id', $attributeIds)
             ->in('entity.entity_id', $entityIds);
 
         return $select;
