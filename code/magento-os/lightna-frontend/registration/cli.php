@@ -11,12 +11,13 @@ if (!is_dir($env['lightna_entry'])) {
     throw new Exception('"lightna_entry" directory does not exist');
 }
 
-if (!is_file($configFile = $env['lightna_entry'] . '/config.php')) {
-    throw new Exception('Directory "lightna_entry" missing config.php');
+if (!is_file($env['lightna_entry'] . '/env.php')) {
+    throw new Exception('Invalid directory "lightna_entry"');
 }
 
 define('LIGHTNA_ENTRY', realpath($env['lightna_entry']) . '/');
 
-$config = require $configFile;
-
-require LIGHTNA_ENTRY . $config['src_dir'] . '/App/boot.php';
+// Prevent broken bin/magento if Lightna isn't compiled yet
+if (is_file($configFile = LIGHTNA_ENTRY . 'config/backend.php')) {
+    require LIGHTNA_ENTRY . (require $configFile)['value']['src_dir'] . '/App/boot.php';
+}

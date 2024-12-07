@@ -159,3 +159,38 @@ function _phrase(string $phrase): string
 
     return $i18n->phrase($phrase);
 }
+
+function opcache_load_revalidated(string $file): mixed
+{
+    opcache_invalidate($file);
+
+    return require $file;
+}
+
+function getRelativePath(string $from, string $to): string
+{
+    if (($f = realpath($from)) === false) {
+        throw new Exception('Path "' . $from . '" doesn\'t exist');
+    }
+    if (($t = realpath($to)) === false) {
+        throw new Exception('Path "' . $to . '" doesn\'t exist');
+    }
+
+    $fromParts = explode('/', $f);
+    $toParts = explode('/', $t);
+    $length = min(count($fromParts), count($toParts));
+    $commonBaseLength = 0;
+
+    for ($i = 0; $i < $length; $i++) {
+        if ($fromParts[$i] === $toParts[$i]) {
+            $commonBaseLength++;
+        } else {
+            break;
+        }
+    }
+
+    $upLevels = count($fromParts) - $commonBaseLength;
+    $relativePath = str_repeat('../', $upLevels) . implode('/', array_slice($toParts, $commonBaseLength));
+
+    return rtrim($relativePath === '' ? './' : $relativePath, '/') . '/';
+}

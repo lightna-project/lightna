@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Compiler;
 
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
+use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\ObjectManagerIgnore;
 use Lightna\Engine\App\Opcache\Compiled;
 
@@ -14,40 +15,35 @@ class Config extends CompilerA implements ObjectManagerIgnore
     public function make(): void
     {
         $this->compiled = new Compiled();
-        $envConfig = merge($this->getMainConfig(), $this->getEnvConfig());
 
-        foreach (LIGHTNA_AREAS as $scope) {
-            $config = merge(
-                $this->getYamlConfig($scope),
-                $envConfig
-            );
-
+        foreach (LIGHTNA_AREAS as $area) {
+            $config = $this->getYamlConfig($area);
             $this->applyDefaults($config);
             ArrayDirectives::apply($config);
             $this->defineAssetBase($config);
-            $this->compiled->save('config/' . $scope, $config);
+            $this->compiled->save('config/' . $area, $config);
         }
     }
 
-    protected function getYamlConfig(string $scope): array
+    protected function getYamlConfig(string $area): array
     {
-        return $this->mergeYamlFiles($this->getYamlFiles($scope));
+        return $this->mergeYamlFiles($this->getYamlFiles($area));
     }
 
-    protected function getYamlFiles(string $scope): array
+    protected function getYamlFiles(string $area): array
     {
-        $folders = merge([LIGHTNA_SRC], array_values($this->getMainConfig()['modules']), [LIGHTNA_ENTRY]);
+        $folders = merge([LIGHTNA_SRC], array_values(Bootstrap::getConfig()['modules']), [LIGHTNA_ENTRY]);
         $files = [];
         foreach ($folders as $folder) {
             $folder = $this->alignFolder($folder);
-            $files = merge($files, $this->getYamlSubFiles($folder, $scope));
-            $files = merge($files, $this->getYamlRootFiles($folder, $scope));
+            $files = merge($files, $this->getYamlSubFiles($folder, $area));
+            $files = merge($files, $this->getYamlRootFiles($folder, $area));
         }
 
         return $files;
     }
 
-    protected function getYamlSubFiles(string $moduleFolder, string $scope): array
+    protected function getYamlSubFiles(string $moduleFolder, string $area): array
     {
         if (!is_dir($configFolder = $moduleFolder . '/config/')) {
             return [];
@@ -55,7 +51,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
 
         $files = [];
         foreach ($this->listSubFolders($configFolder) as $subFolder) {
-            if ($scope === $subFolder || !isset($this->scopes[$subFolder])) {
+            if ($area === $subFolder || !in_array($subFolder, LIGHTNA_AREAS)) {
                 $files = merge($files, rscan($configFolder . $subFolder, '~.+\.yaml~'));
             }
         }
@@ -63,7 +59,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
         return $files;
     }
 
-    protected function getYamlRootFiles(string $moduleFolder, string $scope): array
+    protected function getYamlRootFiles(string $moduleFolder, string $area): array
     {
         $files = [];
         foreach (['/config.yaml', '/config/*.yaml'] as $pattern) {
@@ -75,7 +71,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
 
         foreach ($files as $i => $file) {
             $name = preg_replace('~\.yaml$~', '', basename($file));
-            if (in_array($name, LIGHTNA_AREAS) && $name !== $scope) {
+            if (in_array($name, LIGHTNA_AREAS) && $name !== $area) {
                 unset($files[$i]);
             }
         }
@@ -96,16 +92,6 @@ class Config extends CompilerA implements ObjectManagerIgnore
         }
 
         return $subFolders;
-    }
-
-    protected function getMainConfig(): array
-    {
-        return require LIGHTNA_ENTRY . 'config.php';
-    }
-
-    protected function getEnvConfig(): array
-    {
-        return require LIGHTNA_ENTRY . 'env.php';
     }
 
     protected function mergeYamlFiles(array $files): array
@@ -131,16 +117,19 @@ class Config extends CompilerA implements ObjectManagerIgnore
 
     protected function defineAssetBase(array &$config): void
     {
-        if (!$docDir = realpath($docDirConfig = LIGHTNA_ENTRY . $config['doc_dir'])) {
+        $fullConfig = merge($config, Bootstrap::getConfig());
+
+        if (!$docDir = realpath($docDirConfig = LIGHTNA_ENTRY . $fullConfig['doc_dir'])) {
             throw new Exception('Invalid doc_dir [' . $docDirConfig . ']');
         }
-        if (!$assetDir = realpath(LIGHTNA_ENTRY . $config['asset_dir'])) {
+
+        if (!$assetDir = realpath(LIGHTNA_ENTRY . $fullConfig['asset_dir'])) {
             try {
                 // Not recursive
-                mkdir(LIGHTNA_ENTRY . $config['asset_dir']);
+                mkdir(LIGHTNA_ENTRY . $fullConfig['asset_dir']);
             } catch (Exception $e) {
             }
-            if (!$assetDir = realpath(LIGHTNA_ENTRY . $config['asset_dir'])) {
+            if (!$assetDir = realpath(LIGHTNA_ENTRY . $fullConfig['asset_dir'])) {
                 throw new Exception('Invalid asset_dir');
             }
         }

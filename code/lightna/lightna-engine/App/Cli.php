@@ -6,7 +6,7 @@ namespace Lightna\Engine\App;
 
 class Cli extends ObjectA
 {
-    /** @AppConfig(cli/command) */
+    /** @AppConfig(backend:cli/command) */
     protected array $cliCommands;
     protected array $commands;
 

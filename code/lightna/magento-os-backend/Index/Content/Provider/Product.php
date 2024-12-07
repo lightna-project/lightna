@@ -12,7 +12,7 @@ class Product extends ObjectA
 {
     protected CmsBlockProvider $cmsBlockProvider;
     protected Eav $eav;
-    /** @AppConfig(magento/product/blocks) */
+    /** @AppConfig(backend:magento/product/blocks) */
     protected array $blocks;
 
     public function getData(): array

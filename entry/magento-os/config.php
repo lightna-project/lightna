@@ -2,11 +2,6 @@
 
 return [
     /**
-     * Path to Lightna package folder
-     * ! (Can be defined in config.php only)
-     */
-    'src_dir' => '../../code/lightna/lightna-engine',
-    /**
      * List of modules (namespace => folder)
      * ! (Can be defined in config.php only)
      */

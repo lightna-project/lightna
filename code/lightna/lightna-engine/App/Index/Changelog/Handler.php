@@ -15,7 +15,7 @@ class Handler extends ObjectA
     protected Changelog $changelog;
     protected Queue $queue;
     protected Indexer $indexer;
-    /** @AppConfig(indexer/changelog/batch/collectors) */
+    /** @AppConfig(backend:indexer/changelog/batch/collectors) */
     protected array $collectors;
 
     public function process(): void
@@ -66,7 +66,7 @@ class Handler extends ObjectA
             $new = $values['new_value'];
             if ($old !== $new) {
                 return true;
-            } elseif (is_string($old) && strlen($old) === Schema::VALUE_MAX_LENGTH) {
+            } elseif (is_string($old) && mb_strlen($old) >= Schema::VALUE_MAX_LENGTH) {
                 // Values are equal and are cut to VALUE_MAX_LENGTH, we can't determine if unchanged
                 return true;
             }

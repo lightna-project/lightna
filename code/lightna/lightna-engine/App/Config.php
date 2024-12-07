@@ -14,7 +14,7 @@ class Config extends ObjectA
 
     protected function init(array $data = []): void
     {
-        $this->config = $this->compiled->loadAppConfig();
+        $this->config = $this->compiled->getAppConfig();
         $this->map();
     }
 

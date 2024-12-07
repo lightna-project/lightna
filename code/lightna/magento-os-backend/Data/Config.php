@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
+use Exception;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Data\Config\Currency;
@@ -41,7 +42,7 @@ class Config extends DataA
     protected function getEntityData(): array
     {
         if (!$data = getobj($this->configEntity)->get(1)) {
-            throw new \Exception('Config data not found');
+            throw new Exception('Config data not found');
         }
 
         return $data;

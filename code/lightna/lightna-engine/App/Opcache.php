@@ -17,22 +17,30 @@ abstract class Opcache extends ObjectA
 
     public function load(string $name): mixed
     {
-        return require $this->dir . $name . '.php';
+        return require $this->dir . $this->getFileName($name);
+    }
+
+    public function loadRevalidated(string $name): mixed
+    {
+        return opcache_load_revalidated($this->dir . $this->getFileName($name));
+    }
+
+    protected function getFileName(string $name): string
+    {
+        return $name . '.php';
     }
 
     public function save(string $name, mixed $data): void
     {
-        $this->putFile($name . '.php', "<?php\nreturn " . var_export($data, true) . ';');
+        $this->putFile(
+            $this->getFileName($name),
+            "<?php\nreturn " . var_export($data, true) . ';',
+        );
     }
 
     public function delete(string $name): void
     {
-        is_file($file = $this->dir . $name . '.php') && unlink($file);
-    }
-
-    public function getFile(string $file): string
-    {
-        return file_get_contents($this->dir . $file);
+        is_file($file = $this->dir . $this->getFileName($name)) && unlink($file);
     }
 
     public function putFile(string $file, string $content): void

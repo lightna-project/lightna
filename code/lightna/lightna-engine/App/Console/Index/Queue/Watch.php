@@ -14,7 +14,7 @@ class Watch extends CommandA
     protected Indexer $indexer;
     protected Changelog $changelog;
     protected Queue $queue;
-    /** @AppConfig(indexer/watch) */
+    /** @AppConfig(backend:indexer/watch) */
     protected array $options;
     protected int $startTime;
 

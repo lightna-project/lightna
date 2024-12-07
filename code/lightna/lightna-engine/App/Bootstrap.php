@@ -4,11 +4,43 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Exception;
+
 class Bootstrap
 {
     protected static bool $autoloadRegistered = false;
+    protected static array $config;
 
-    public static function declaration(array $config): void
+    public static function declaration(): void
+    {
+        require_once __DIR__ . '/lib/common.php';
+        static::registerErrorHandler();
+
+        define('LIGHTNA_AREAS', ['frontend', 'backend']);
+        define('LIGHTNA_AREA', php_sapi_name() === 'cli' ? 'backend' : 'frontend');
+        static::loadConfig();
+
+        define('LIGHTNA_SRC', static::$config['src_dir']);
+        define(
+            'COMPILED_DIR',
+            LIGHTNA_ENTRY . static::$config['compiler']['dir']
+            . (defined('IS_COMPILER')
+                ? '/building/'
+                : '/build/'),
+        );
+        define("IS_DEV_MODE", static::$config['mode'] === 'dev');
+        define("IS_PROD_MODE", static::$config['mode'] === 'prod');
+        define(
+            'IS_PROGRESSIVE_RENDERING',
+            (static::$config['progressive_rendering'] ?? false)
+            && LIGHTNA_AREA === 'frontend'
+            && $_SERVER['REQUEST_METHOD'] === 'GET',
+        );
+
+        require_once __DIR__ . '/lib/' . LIGHTNA_AREA . '.php';
+    }
+
+    protected static function registerErrorHandler(): void
     {
         set_error_handler(
             function ($errNo, $errMsg, $errFile, $errLine) {
@@ -16,30 +48,46 @@ class Bootstrap
             },
             E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED
         );
+    }
 
-        $env = require LIGHTNA_ENTRY . 'env.php';
+    protected static function loadConfig(): void
+    {
+        if (defined('IS_COMPILER')) {
+            static::loadCompilerConfig();
+        } else {
+            static::loadAreaConfig();
+        }
+    }
 
-        define('LIGHTNA_AREAS', ['frontend', 'backend']);
-        define('LIGHTNA_AREA', php_sapi_name() === 'cli' ? 'backend' : 'frontend');
-        define('LIGHTNA_SRC', $config['src_dir'] . '/');
-        define(
-            'COMPILED_DIR',
-            LIGHTNA_ENTRY . $config['compiler']['dir']
-            . (defined('IS_COMPILER') && IS_COMPILER
-                ? '/building/'
-                : '/build/'),
+    protected static function loadCompilerConfig(): void
+    {
+        static::$config = merge(
+            opcache_load_revalidated(LIGHTNA_ENTRY . 'config.php'),
+            opcache_load_revalidated(LIGHTNA_ENTRY . 'env.php'),
+            ['src_dir' => getRelativePath(LIGHTNA_ENTRY, __DIR__ . '/../')],
         );
-        define("IS_DEV_MODE", $env['mode'] === 'dev');
-        define("IS_PROD_MODE", $env['mode'] === 'prod');
-        define(
-            'IS_PROGRESSIVE_RENDERING',
-            ($env['progressive_rendering'] ?? false)
-            && LIGHTNA_AREA === 'frontend'
-            && $_SERVER['REQUEST_METHOD'] === 'GET',
-        );
+    }
 
-        require_once __DIR__ . '/lib/common.php';
-        require_once __DIR__ . '/lib/' . LIGHTNA_AREA . '.php';
+    protected static function loadAreaConfig(): void
+    {
+        $configFile = LIGHTNA_ENTRY . 'config/' . LIGHTNA_AREA . '.php';
+        $config = require $configFile;
+        $version = opcache_load_revalidated(LIGHTNA_ENTRY . 'config/version.php');
+
+        if ($version !== $config['version']) {
+            $config = opcache_load_revalidated($configFile);
+
+            if ($version !== $config['version']) {
+                throw new Exception('Config version mismatch');
+            }
+        }
+
+        static::$config = $config['value'];
+    }
+
+    public static function getConfig(): array
+    {
+        return static::$config;
     }
 
     public static function autoload(): void
