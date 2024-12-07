@@ -11,7 +11,7 @@ use Lightna\Engine\App\Update\Schema\Index\Changelog as ChangelogSchema;
 
 class Triggers extends ObjectA
 {
-    /** @AppConfig(indexer/changelog/tables) */
+    /** @AppConfig(backend:indexer/changelog/tables) */
     protected array $tablesConfig = [];
     protected Database $db;
     protected array $allTables;

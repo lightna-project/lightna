@@ -14,9 +14,9 @@ class Config extends ObjectA
     protected MagentoCmsPage $magentoCmsPage;
     /** @AppConfig(backend:magento/configuration/list) */
     protected array $list;
-    /** @AppConfig(logo/default) */
+    /** @AppConfig(backend:logo/default) */
     protected array $defaultLogo;
-    /** @AppConfig(favicon/default) */
+    /** @AppConfig(backend:favicon/default) */
     protected array $defaultFavicon;
 
     public function getData(): array

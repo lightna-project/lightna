@@ -1,8 +1,9 @@
 /.idea
 /generated
-/entry/*-local/
+/entry/*/config
 /entry/*/auth.json
 /entry/*/env.php
 /entry/*/node_modules
 /entry/*/vendor
+/entry/*-local/
 /project

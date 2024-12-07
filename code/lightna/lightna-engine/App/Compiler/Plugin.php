@@ -21,7 +21,7 @@ class Plugin extends CompilerA
     public function make(): void
     {
         $this->compiled = new Compiled();
-        $this->config = $this->compiled->loadAppConfig();
+        $this->config = $this->compiled->getAppConfig();
         $this->classMap = $this->compiled->load('object/map');
         $this->loadPlugins();
         $this->loadMethods();

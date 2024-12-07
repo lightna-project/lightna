@@ -2,8 +2,13 @@
 
 declare(strict_types=1);
 
+use JetBrains\PhpStorm\NoReturn;
 use Lightna\Engine\App;
 
+$GLOBALS['LIGHTNA_START_TIME'] = microtime(true);
+
+/** @noinspection PhpUnusedParameterInspection */
+#[NoReturn]
 function error500(string $title, Throwable $exception): void
 {
     http_response_code(500);
@@ -13,11 +18,7 @@ function error500(string $title, Throwable $exception): void
 }
 
 try {
-
-    $GLOBALS['LIGHTNA_START_TIME'] = microtime(true);
-
-    $config = require LIGHTNA_ENTRY . 'config.php';
-    require LIGHTNA_ENTRY . $config['src_dir'] . '/App/boot.php';
+    require_once __DIR__ . '/App/boot.php';
 
     $app = getobj(App::class);
     $app->run();

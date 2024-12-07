@@ -1,12 +1,11 @@
 <?php
-/** @var array $config */
 
 declare(strict_types=1);
 
 use Lightna\Engine\App\Bootstrap;
 
-require __DIR__ . '/Bootstrap.php';
+require_once __DIR__ . '/Bootstrap.php';
 
-Bootstrap::declaration($config);
+Bootstrap::declaration();
 Bootstrap::autoload();
 Bootstrap::objectManager();

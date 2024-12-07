@@ -19,12 +19,6 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     /** @AppConfig(storage/opcache/options) */
     protected array $options;
     protected array $optionsRestore;
-    protected array $slapOptionsBase = [
-        'validate_timestamps' => 1,
-        'revalidate_freq' => 0,
-    ];
-    protected array $slapOptions;
-    protected array $slapOptionsRestore;
     protected bool $isSlapTime;
 
     protected function init(array $data = []): void
@@ -33,7 +27,6 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 
         // Restoring options need to be defined before applying, thus here is the place
         $this->defineOptionsRestore();
-        $this->defineSlapOptionsRestore();
     }
 
     protected function defineOptionsRestore(): void
@@ -41,23 +34,6 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         $this->optionsRestore = [];
         foreach ($this->options as $option => $value) {
             $this->optionsRestore[$option] = ini_get('opcache.' . $option);
-        }
-    }
-
-    /** @noinspection PhpUnused */
-    protected function defineSlapOptions(): void
-    {
-        $this->slapOptions = merge(
-            $this->options,
-            $this->slapOptionsBase,
-        );
-    }
-
-    protected function defineSlapOptionsRestore(): void
-    {
-        $this->slapOptionsRestore = [];
-        foreach ($this->slapOptions as $option => $value) {
-            $this->slapOptionsRestore[$option] = ini_get('opcache.' . $option);
         }
     }
 
@@ -74,9 +50,13 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     public function get(string $key): string|array
     {
         try {
-            $this->isSlapTime = $this->isSlapTime();
             $this->applyOptions();
-            return parent::load($this->getFileName($key));
+
+            if (!$this->isSlapTime) {
+                return parent::load($this->getFileName($key));
+            } else {
+                return parent::loadRevalidated($this->getFileName($key));
+            }
         } catch (Throwable) {
             return [];
         } finally {
@@ -84,11 +64,11 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         }
     }
 
-    protected function isSlapTime(): bool
+    /** @noinspection PhpUnused */
+    protected function defineIsSlapTime(): void
     {
         $slap = $this->state->opcache->slap;
-
-        return time() - $slap->time < $slap->length;
+        $this->isSlapTime = time() - $slap->time < $slap->length;
     }
 
     protected function applyOptions(): void
@@ -97,9 +77,7 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
             return;
         }
 
-        $this->setIniOptions(
-            $this->isSlapTime ? $this->slapOptions : $this->options,
-        );
+        $this->setIniOptions($this->options);
     }
 
     protected function restoreOptions(): void
@@ -108,9 +86,7 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
             return;
         }
 
-        $this->setIniOptions(
-            $this->isSlapTime ? $this->slapOptionsRestore : $this->optionsRestore,
-        );
+        $this->setIniOptions($this->optionsRestore);
     }
 
     protected function setIniOptions(array $options): void
@@ -130,9 +106,11 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         return $return;
     }
 
-    protected function getFileName(string $key): string
+    protected function getFileName(string $name): string
     {
-        return implode('/', str_split(substr(sha1($key), 0, 6), 2)) . '/' . $key;
+        $name = implode('/', str_split(substr(sha1($name), 0, 6), 2)) . '/' . $name;
+
+        return parent::getFileName($name);
     }
 
     public function batch(): void

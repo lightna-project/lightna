@@ -15,11 +15,11 @@ class Indexer extends ObjectA
     protected const QUEUE_LOCK = 'lightna_indexer_queue';
     protected const QUEUE_BLOCK = 'indexer/queue/block';
     protected const QUEUE_STOP = 'indexer/queue/stop';
-    /** @AppConfig(indexer/queue/lock_wait_interval_ms) */
+    /** @AppConfig(backend:indexer/queue/lock_wait_interval_ms) */
     protected int $lockWaitIntervalMs;
-    /** @AppConfig(indexer/queue/lock_wait_print_interval) */
+    /** @AppConfig(backend:indexer/queue/lock_wait_print_interval) */
     protected int $lockWaitPrintInterval;
-    /** @AppConfig(indexer/queue/allowed_check_interval_ms) */
+    /** @AppConfig(backend:indexer/queue/allowed_check_interval_ms) */
     protected int $allowedCheckIntervalMs;
     public array $stats;
 

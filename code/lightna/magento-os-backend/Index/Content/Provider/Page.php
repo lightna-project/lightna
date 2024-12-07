@@ -11,7 +11,7 @@ use Lightna\Magento\App\Query\Category;
 class Page extends ObjectA
 {
     protected CmsBlockProvider $cmsBlockProvider;
-    /** @AppConfig(magento/page/blocks) */
+    /** @AppConfig(backend:magento/page/blocks) */
     protected array $blocks;
     protected Category $category;
     protected array $treeItemFields = [

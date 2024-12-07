@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Lightna\Engine\App\Build\Config as BuildConfig;
 use Lightna\Engine\App\Opcache\Compiled;
 
 class Compiler extends ObjectA
@@ -18,15 +19,7 @@ class Compiler extends ObjectA
 
     public function defineConfig(): void
     {
-        $this->config = merge(
-            require LIGHTNA_ENTRY . 'config.php',
-            require LIGHTNA_ENTRY . 'env.php',
-        );
-    }
-
-    public function getConfig(): array
-    {
-        return $this->config;
+        $this->config = Bootstrap::getConfig();
     }
 
     public function clean(): void
@@ -49,6 +42,7 @@ class Compiler extends ObjectA
     {
         $this->applyBuild();
         $this->applyAssets();
+        $this->applyConfig();
     }
 
     protected function applyBuild(): void
@@ -89,6 +83,11 @@ class Compiler extends ObjectA
         rmdir($this->getAssetOrigBakDir());
     }
 
+    protected function applyConfig(): void
+    {
+        getobj(BuildConfig::class)->apply();
+    }
+
     public function getAssetDir(): string
     {
         $dir = IS_COMPILER ? $this->getAssetBuildingDir() : LIGHTNA_ENTRY . $this->config['asset_dir'];
@@ -98,7 +97,7 @@ class Compiler extends ObjectA
 
     protected function getBuildDir(string $name): string
     {
-        return preg_replace('~[^/]+/?$~', $name, $this->compiled->getDir());
+        return preg_replace('~[^/]+/?$~', $name, $this->compiled->getDir()) . '/';
     }
 
     protected function getBuildBakDir(): string
@@ -106,7 +105,7 @@ class Compiler extends ObjectA
         return $this->getBuildDir('build.bak');
     }
 
-    protected function getBuildOrigDir(): string
+    public function getBuildOrigDir(): string
     {
         return $this->getBuildDir('build');
     }

@@ -34,7 +34,7 @@ if (in_array($command, ['build.compile', 'build.apply'])) {
     exit;
 }
 
-require __DIR__ . '/App/boot.php';
+require_once __DIR__ . '/App/boot.php';
 
 try {
     getobj(Cli::class)->run($command);

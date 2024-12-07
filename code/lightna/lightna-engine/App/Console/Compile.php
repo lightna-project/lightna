@@ -82,11 +82,10 @@ class Compile extends CommandA
 
     protected function init(array $data = []): void
     {
+        Bootstrap::declaration();
+
         $this->compiler = new Compiler();
         $this->compiler->defineConfig();
-
-        Bootstrap::declaration($this->compiler->getConfig());
-
         $this->compiler->init();
         $this->compiled = new Compiled();
     }
@@ -118,6 +117,9 @@ class Compile extends CommandA
     public function apply(): void
     {
         $this->init();
+        Bootstrap::autoload();
+        Bootstrap::objectManager();
+
         $this->compiler->apply();
     }
 }

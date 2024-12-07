@@ -1,6 +1,7 @@
 cli:
   command:
     build.asset.sign: Lightna\Engine\App\Console\Asset\Sign
+    config.apply: Lightna\Engine\App\Console\Config\Apply
     update: Lightna\Engine\App\Console\Update
     index.update.opcache: Lightna\Engine\App\Console\Index\Update\Opcache
     index.update.data: Lightna\Engine\App\Console\Index\Update\Data

@@ -34,8 +34,8 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
     protected function init(array $data = []): void
     {
         $this->compiled = new Compiled();
-        foreach (LIGHTNA_AREAS as $scope) {
-            $this->config[$scope] = $this->compiled->loadAppConfig($scope);
+        foreach (LIGHTNA_AREAS as $area) {
+            $this->config[$area] = $this->compiled->getAppConfig($area);
         }
         $moduleNamespaces = array_keys($this->config['backend']['modules'] ?? []);
         $rx = '^(Lightna\\\Engine';
@@ -108,14 +108,14 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
 
         $ms = explode(':', $path);
         if (count($ms) > 1) {
-            $scope = $ms[0];
+            $area = $ms[0];
             $path = $ms[1];
         } else {
-            $scope = 'frontend';
+            $area = 'frontend';
             $path = $ms[0];
         }
 
-        if ($property->isRequired && ($this->getConfigValue($scope, $path) === null)) {
+        if ($property->isRequired && ($this->getConfigValue($area, $path) === null)) {
             throw new Exception('Config value ' . $path . ' required for ' . $property->class);
         }
 
@@ -156,8 +156,8 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         return is_a($class->getName(), ObjectA::class, true);
     }
 
-    protected function getConfigValue(string $scope, string $path): mixed
+    protected function getConfigValue(string $area, string $path): mixed
     {
-        return array_path_get($this->config[$scope], $path);
+        return array_path_get($this->config[$area], $path);
     }
 }
