@@ -7,10 +7,10 @@ namespace Lightna\Engine\App\Compiler;
 use Exception;
 use Lightna\Engine\App\Autoloader;
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\ObjectManager;
 use Lightna\Engine\App\ObjectManagerIgnore;
-use Lightna\Engine\App\Opcache\Compiled;
 use Lightna\Engine\Data\DataA;
 
 class ObjectSchema extends CompilerA implements ObjectManagerIgnore
@@ -33,9 +33,9 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
 
     protected function init(array $data = []): void
     {
-        $this->compiled = new Compiled();
+        $this->build = new Build();
         foreach (LIGHTNA_AREAS as $area) {
-            $this->config[$area] = $this->compiled->getAppConfig($area);
+            $this->config[$area] = $this->build->getAppConfig($area);
         }
         $moduleNamespaces = array_keys($this->config['backend']['modules'] ?? []);
         $rx = '^(Lightna\\\Engine';
@@ -47,7 +47,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
 
     protected function makeObjects(): void
     {
-        $classes = $this->compiled->load('object/map');
+        $classes = $this->build->load('object/map');
         $objects = [];
         foreach ($classes as $class => $null) {
             if (!$this->isModuleClass($class)) {
@@ -63,7 +63,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
             $objects[$class]['p'] = $this->parseClassProperties($refClass);
         }
 
-        $this->compiled->save('object/schema', $objects);
+        $this->build->save('object/schema', $objects);
     }
 
     protected function parseClassProperties(LightnaReflectionClass $refClass): array

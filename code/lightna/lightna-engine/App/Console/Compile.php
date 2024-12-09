@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console;
 
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Build;
 use Lightna\Engine\App\Compiler;
 use Lightna\Engine\App\Compiler\Asset as AssetCompiler;
 use Lightna\Engine\App\Compiler\ClassMap as ClassMapCompiler;
@@ -15,12 +16,11 @@ use Lightna\Engine\App\Compiler\Plugin as PluginCompiler;
 use Lightna\Engine\App\Compiler\Preload as PreloadCompiler;
 use Lightna\Engine\App\Compiler\Template as TemplateCompiler;
 use Lightna\Engine\App\Config as AppConfig;
-use Lightna\Engine\App\Opcache\Compiled;
 
 class Compile extends CommandA
 {
     protected Compiler $compiler;
-    protected Compiled $compiled;
+    protected Build $build;
 
     public function run(): void
     {
@@ -87,7 +87,7 @@ class Compile extends CommandA
         $this->compiler = new Compiler();
         $this->compiler->defineConfig();
         $this->compiler->init();
-        $this->compiled = new Compiled();
+        $this->build = new Build();
     }
 
     protected function runSequence(array $sequence): void

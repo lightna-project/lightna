@@ -31,9 +31,13 @@ class Handler extends ObjectA
     protected function processItems(): void
     {
         foreach ($this->queue->getEntities() as $entity) {
+            $hasIndexAvailable = $this->indexer->getEntityIndex($entity);
+
             while ($batch = $this->queue->getEntityBatch($entity)) {
                 $this->indexer->validateQueueAllowed();
-                $this->indexer->processBatch($entity, $batch);
+                if ($hasIndexAvailable) {
+                    $this->indexer->processBatch($entity, $batch);
+                }
                 $this->queue->cleanBatch($entity, $batch);
             }
         }

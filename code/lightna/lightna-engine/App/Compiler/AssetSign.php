@@ -36,7 +36,7 @@ class AssetSign extends CompilerA
             $this->hashes[$file] = $this->getAssetHash($file);
         }
 
-        $this->compiled->save('asset/hashes', $this->hashes);
+        $this->build->save('asset/hashes', $this->hashes);
     }
 
     protected function applyHashesToCss(): void

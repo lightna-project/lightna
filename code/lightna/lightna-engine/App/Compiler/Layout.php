@@ -16,7 +16,7 @@ class Layout extends CompilerA
     /** @noinspection PhpUnused */
     protected function defineTemplateMap(): void
     {
-        $this->templateMap = $this->compiled->load('template/map');
+        $this->templateMap = $this->build->load('template/map');
     }
 
     public function make(): void
@@ -123,7 +123,7 @@ class Layout extends CompilerA
     protected function save(): void
     {
         foreach ($this->layouts as $name => $layout) {
-            $this->compiled->save(
+            $this->build->save(
                 'layout/' . $name,
                 $this->layouts[$name]['data']
             );

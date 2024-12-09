@@ -6,7 +6,8 @@ namespace Lightna\Magento\App\Entity\Content;
 
 class Product extends Page
 {
-    const STORAGE_PREFIX = 'CNT.P_';
+    public const NAME = 'content_product';
+    public const STORAGE_PREFIX = 'CNT.P_';
 
     /** @AppConfig(entity/content_product/storage) */
     protected string $storageName;

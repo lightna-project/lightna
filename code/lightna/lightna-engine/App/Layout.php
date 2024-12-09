@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Lightna\Engine\App;
 
 use Exception;
-use Lightna\Engine\App\Opcache\Compiled;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
-use Lightna\Engine\Data\EntityA;
+use Lightna\Engine\Data\EntityData;
 use Throwable;
 
 class Layout extends ObjectA
 {
-    protected Compiled $compiled;
+    protected Build $build;
     protected Templating $templating;
     protected Context $context;
     protected array $layout;
@@ -33,7 +32,7 @@ class Layout extends ObjectA
     protected function defineLayout(): void
     {
         $layoutName = $this->entities[$this->entityType]['layout'];
-        $this->layout = $this->compiled->load('layout/' . $layoutName);
+        $this->layout = $this->build->load('layout/' . $layoutName);
     }
 
     public function page(): void
@@ -201,7 +200,7 @@ class Layout extends ObjectA
                 }
                 continue;
             }
-            if (is_a($type, EntityA::class, true)) {
+            if (is_a($type, EntityData::class, true)) {
                 $vars[$name] = getobj($this->entities[$this->entityType]['data']);
             }
             // Other variables will be defined in \Lightna\Engine\App\Template::getTemplateVars

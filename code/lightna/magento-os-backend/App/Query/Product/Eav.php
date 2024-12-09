@@ -10,8 +10,8 @@ use Lightna\Magento\App\Query\EavAbstract;
 
 class Eav extends EavAbstract
 {
-    const ENTITY_TYPE = 4;
-    const ENTITY_TABLE = 'catalog_product_entity';
+    public const ENTITY_TYPE = 4;
+    public const ENTITY_TABLE = 'catalog_product_entity';
     protected array $visibleOnFrontAttributes;
     protected array $filterableAttributes;
 

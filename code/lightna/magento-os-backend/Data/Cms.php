@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Lightna\Engine\App\NotFoundException;
 use Lightna\Engine\App\Context;
-use Lightna\Engine\Data\EntityA;
+use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\Data\EntityData;
 
 /**
  * @property-read string contentHeading
@@ -14,7 +14,7 @@ use Lightna\Engine\Data\EntityA;
  * @method string contentHeading
  * @method string content
  */
-class Cms extends EntityA
+class Cms extends EntityData
 {
     /** @AppConfig(entity/cms/entity) */
     protected string $cmsEntity;

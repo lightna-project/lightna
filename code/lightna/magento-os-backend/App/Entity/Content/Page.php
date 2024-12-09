@@ -8,7 +8,8 @@ use Lightna\Engine\App\Entity\EntityA;
 
 class Page extends EntityA
 {
-    const STORAGE_PREFIX = 'CNT.PG_';
+    public const NAME = 'content_page';
+    public const STORAGE_PREFIX = 'CNT.PG_';
 
     /** @AppConfig(entity/content_page/storage) */
     protected string $storageName;

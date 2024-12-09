@@ -1,11 +1,8 @@
-compiler:
-  pool:
-    magento:
-      message: make run codes
-      compiler: Lightna\Magento\App\Compiler\RunCodes
 plugin:
   Lightna\Engine\App:
     - Lightna\Magento\App\Plugin\App
+  Lightna\Engine\App\Context:
+    - Lightna\Magento\App\Plugin\Context
   Lightna\Engine\App\Scope:
     - Lightna\Magento\App\Plugin\App\Scope
   Lightna\Engine\App\Index\Changelog\Handler:

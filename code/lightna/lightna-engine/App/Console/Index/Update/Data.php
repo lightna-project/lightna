@@ -30,7 +30,7 @@ class Data extends CommandA
     {
         $entities = [];
         foreach ($this->entities as $code => $entity) {
-            if ($entity['storage'] === 'opcache' || !isset($entity['index'])) {
+            if ($entity['storage'] === 'opcache' || !$this->indexer->getEntityIndex($entity)) {
                 continue;
             }
             $entities[$code] = $entity;

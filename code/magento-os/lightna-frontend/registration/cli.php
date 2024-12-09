@@ -17,7 +17,7 @@ if (!is_file($env['lightna_entry'] . '/env.php')) {
 
 define('LIGHTNA_ENTRY', realpath($env['lightna_entry']) . '/');
 
-// Prevent broken bin/magento if Lightna isn't compiled yet
+// Prevent broken bin/magento if Lightna isn't built yet
 if (is_file($configFile = LIGHTNA_ENTRY . 'config/backend.php')) {
     require LIGHTNA_ENTRY . (require $configFile)['value']['src_dir'] . '/App/boot.php';
 }

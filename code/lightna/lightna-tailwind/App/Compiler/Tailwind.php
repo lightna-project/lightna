@@ -59,7 +59,7 @@ class Tailwind extends CompilerA
 
     protected function saveModulesConfig(): void
     {
-        $this->compiled->putFile(
+        $this->build->putFile(
             'tailwind/config.json',
             json_pretty($this->twConfig['tailwind']),
         );
@@ -119,11 +119,11 @@ class Tailwind extends CompilerA
 
     protected function saveEntryCss(string $name, string $css): void
     {
-        $this->compiled->putFile('tailwind/' . $name . '.css', $css);
+        $this->build->putFile('tailwind/' . $name . '.css', $css);
     }
 
     protected function makeMainConfig(): void
     {
-        file_copy(__DIR__ . '/../../tailwind.config.js', $this->compiled->getDir() . 'tailwind/tailwind.config.js');
+        file_copy(__DIR__ . '/../../tailwind.config.js', $this->build->getDir() . 'tailwind/tailwind.config.js');
     }
 }

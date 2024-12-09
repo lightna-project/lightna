@@ -7,21 +7,21 @@ namespace Lightna\Engine\App\Compiler;
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectManagerIgnore;
-use Lightna\Engine\App\Opcache\Compiled;
 
 class Config extends CompilerA implements ObjectManagerIgnore
 {
     public function make(): void
     {
-        $this->compiled = new Compiled();
+        $this->build = new Build();
 
         foreach (LIGHTNA_AREAS as $area) {
             $config = $this->getYamlConfig($area);
             $this->applyDefaults($config);
             ArrayDirectives::apply($config);
             $this->defineAssetBase($config);
-            $this->compiled->save('config/' . $area, $config);
+            $this->build->save('config/' . $area, $config);
         }
     }
 

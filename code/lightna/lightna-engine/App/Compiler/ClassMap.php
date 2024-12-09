@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
+use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectManagerIgnore;
-use Lightna\Engine\App\Opcache\Compiled;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
@@ -13,7 +13,7 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
 {
     public function make(): void
     {
-        $this->compiled = new Compiled();
+        $this->build = new Build();
         $root = realpath(LIGHTNA_ENTRY);
         $classes = [];
 
@@ -39,7 +39,7 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
             }
         }
 
-        $this->compiled->save('object/map', $classes);
+        $this->build->save('object/map', $classes);
     }
 
     protected function getAllLibs(): array

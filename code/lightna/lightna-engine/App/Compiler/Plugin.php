@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Lightna\Engine\App\Opcache\Compiled;
+use Lightna\Engine\App\Build;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -20,9 +20,9 @@ class Plugin extends CompilerA
 
     public function make(): void
     {
-        $this->compiled = new Compiled();
-        $this->config = $this->compiled->getAppConfig();
-        $this->classMap = $this->compiled->load('object/map');
+        $this->build = new Build();
+        $this->config = $this->build->getAppConfig();
+        $this->classMap = $this->build->load('object/map');
         $this->loadPlugins();
         $this->loadMethods();
         $this->applyPlugins();
@@ -150,7 +150,7 @@ class Plugin extends CompilerA
         $file = 'class/' . $this->classToFile($extendedClass);
         $autoloadFile = rtrim($this->config['compiler']['dir'], '/') . '/build/' . $file;
 
-        $this->compiled->putFile($file, $this->createExtendDefinition($class));
+        $this->build->putFile($file, $this->createExtendDefinition($class));
         $this->classMap[$extendedClass] = $autoloadFile;
         $this->extended[$class] = $extendedClass;
     }
@@ -228,8 +228,8 @@ PROCEED_CODE;
 
     protected function applyExtendedConfig(): void
     {
-        $this->compiled->save('object/map', $this->classMap);
-        $this->compiled->save('object/extended', $this->extended);
+        $this->build->save('object/map', $this->classMap);
+        $this->build->save('object/extended', $this->extended);
     }
 
     protected function validateClass(string $class): void

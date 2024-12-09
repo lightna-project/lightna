@@ -33,7 +33,7 @@ class All extends CommandA
             $this->queue->reset();
 
             foreach ($this->entities as $code => $entity) {
-                if (!isset($entity['index'])) {
+                if (!$this->indexer->getEntityIndex($code)) {
                     continue;
                 }
 

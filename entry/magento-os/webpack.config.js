@@ -5,7 +5,7 @@ const modulesConfig = require('../../generated/magento-os/compiled/building/webp
 let config = deepmerge(modulesConfig, {
     output: {
         filename: '[name].js',
-        path: path.resolve(__dirname, '../../generated/magento-os/compiled/asset.building/compiled/js'),
+        path: path.resolve(__dirname, '../../generated/magento-os/compiled/asset.building/build/js'),
     },
     mode: 'production'
 });

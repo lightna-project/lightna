@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Entity;
 
 use Exception;
 use Generator;
+use Lightna\Engine\App\Config as AppConfig;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\State;
@@ -14,7 +15,9 @@ use Lightna\Engine\App\Storage\StorageInterface;
 
 class EntityA extends ObjectA
 {
-    public const IS_GLOBAL = false;
+    /** Entity NAME should match to the entity code in yaml config */
+    public const NAME = self::NAME;
+    public const SCOPED = true;
     public const STORAGE_PREFIX = self::STORAGE_PREFIX;
 
     /** @AppConfig(default/storage) */
@@ -23,9 +26,9 @@ class EntityA extends ObjectA
     protected StorageInterface $storage;
     protected State $state;
     protected Context $context;
+    protected AppConfig $appConfig;
 
-    protected int $keyDepth = 4;
-    protected int $keyDepthGlobal = 2;
+    protected bool $isVersioned;
 
     /** @noinspection PhpUnused */
     protected function defineStorage(): void
@@ -33,15 +36,28 @@ class EntityA extends ObjectA
         $this->storage = $this->storageFactory->get($this->storageName);
     }
 
+    /** @noinspection PhpUnused */
+    protected function defineIsVersioned(): void
+    {
+        $this->isVersioned =
+            $this->appConfig->get('entity/' . $this::NAME . '/versioned') ?? true;
+    }
+
     public function getStorage(): StorageInterface
     {
         return $this->storage;
+    }
+
+    public function isVersioned(): bool
+    {
+        return $this->isVersioned;
     }
 
     public function set(string|int $id, array $data): self
     {
         // Validate here so it won't affect the frontend
         $this->validatePrefix();
+        $this->validateId($id);
 
         $data = array_filter_recursive($data, function ($k, $v) {
             return $v !== null && $v !== '';
@@ -100,7 +116,7 @@ class EntityA extends ObjectA
      */
     protected function validatePrefix(): void
     {
-        $expectedDepth = static::IS_GLOBAL ? $this->keyDepthGlobal : $this->keyDepth;
+        $expectedDepth = 2 + (int)$this->isVersioned + (int)static::SCOPED;
         $actualDepth = substr_count($this->getFullPrefix(), '_') + 1;
 
         if ($actualDepth !== $expectedDepth) {
@@ -108,10 +124,17 @@ class EntityA extends ObjectA
         }
     }
 
+    protected function validateId(string|int $id): void
+    {
+        if (is_string($id) && $this->storageName === 'opcache' && str_contains($id, '/')) {
+            throw new Exception('Invalid key "' . $id . '" provided for opcache storage');
+        }
+    }
+
     protected function getFullPrefix(): string
     {
-        $versionPrefix = static::IS_GLOBAL ? '' : $this->state->index->version . '_';
-        $scopePrefix = static::IS_GLOBAL ? '' : $this->context->scope . '_';
+        $versionPrefix = $this->isVersioned ? $this->state->index->version . '_' : '';
+        $scopePrefix = static::SCOPED ? $this->context->scope . '_' : '';
 
         return static::STORAGE_PREFIX . $versionPrefix . $scopePrefix;
     }

@@ -78,7 +78,7 @@ class Webpack extends CompilerA
         $entries = $this->modulesConfig['entry'] ?? [];
         $this->wpConfig['entry'] = [];
         foreach ($entries as $name => $types) {
-            $this->wpConfig['entry'][$name] = $this->compiled->getDir() . 'webpack/' . $name . '.js';
+            $this->wpConfig['entry'][$name] = $this->build->getDir() . 'webpack/' . $name . '.js';
         }
     }
 
@@ -88,8 +88,8 @@ class Webpack extends CompilerA
             if (!count($extends)) {
                 continue;
             }
-            $this->compiled->putFile('webpack/extend/' . $import . '.js', $this->getExtendsJs($import));
-            $this->extendAliases[$import] = $this->compiled->getDir() . './webpack/extend/' . $import . '.js';
+            $this->build->putFile('webpack/extend/' . $import . '.js', $this->getExtendsJs($import));
+            $this->extendAliases[$import] = $this->build->getDir() . './webpack/extend/' . $import . '.js';
         }
     }
 
@@ -173,7 +173,7 @@ class Webpack extends CompilerA
 
     protected function saveEntryJs(string $name, string $js): void
     {
-        $this->compiled->putFile('webpack/' . $name . '.js', $js);
+        $this->build->putFile('webpack/' . $name . '.js', $js);
     }
 
     protected function makeAliasesConfig(): void
@@ -199,7 +199,7 @@ class Webpack extends CompilerA
 
     protected function saveConfig(): void
     {
-        $this->compiled->putFile('webpack/webpack.config.js', $this->getWpConfigJs());
+        $this->build->putFile('webpack/webpack.config.js', $this->getWpConfigJs());
     }
 
     protected function getWpConfigJs(): string

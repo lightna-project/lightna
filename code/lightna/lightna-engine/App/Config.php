@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Lightna\Engine\App\Opcache\Compiled;
-
 class Config extends ObjectA
 {
-    protected Compiled $compiled;
+    protected Build $build;
     protected array $config;
     protected array $map;
 
-    protected function init(array $data = []): void
+    /** @noinspection PhpUnused */
+    protected function defineConfig(): void
     {
-        $this->config = $this->compiled->getAppConfig();
+        $this->config = $this->build->getAppConfig();
+        $this->map();
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineMap(): void
+    {
         $this->map();
     }
 

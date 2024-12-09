@@ -8,7 +8,7 @@ namespace Lightna\Engine\Data;
  * @method string title(string $escapeMethod = null)
  * @method string metaDescription(string $escapeMethod = null)
  */
-class EntityA extends DataA
+class EntityData extends DataA
 {
     public string $title;
     public string $metaDescription = '';

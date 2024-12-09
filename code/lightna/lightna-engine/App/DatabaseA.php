@@ -25,8 +25,10 @@ abstract class DatabaseA extends ObjectA
     protected ?Adapter $adapter;
     protected ?Sql $sql;
     protected array $connection;
+    protected int $discreteLimit = 20000;
 
-    protected function init(array $data = []): void
+    /** @noinspection PhpUnused */
+    protected function defineAdapter(): void
     {
         $sharedName = $this->connection['shared'] ?? '';
         if ($sharedName !== '' && isset($GLOBALS[$sharedName])) {
@@ -35,6 +37,11 @@ abstract class DatabaseA extends ObjectA
             $this->validateParameters();
             $this->adapter = $this->createPdoAdapter();
         }
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineSql(): void
+    {
         $this->sql = new Sql($this->adapter);
     }
 
@@ -198,16 +205,10 @@ abstract class DatabaseA extends ObjectA
 
     public function discreteWrite(Update|Delete $sql): void
     {
-        $limit = $this->getDiscreteLimit();
         $query = $this->buildSqlString($sql);
-        $query .= ' LIMIT ' . $limit;
+        $query .= ' LIMIT ' . $this->discreteLimit;
         do {
             $result = $this->query($query);
-        } while ($result->getAffectedRows() === $limit);
-    }
-
-    protected function getDiscreteLimit(): int
-    {
-        return 20000;
+        } while ($result->getAffectedRows() === $this->discreteLimit);
     }
 }

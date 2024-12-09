@@ -18,8 +18,8 @@ class ObjectManager
         if (!class_exists(ObjectA::class)) {
             throw new \Exception(ObjectA::class . ' needs to be defined');
         }
-        static::$schema = require COMPILED_DIR . 'object/schema.php';
-        static::$extended = require COMPILED_DIR . 'object/extended.php';
+        static::$schema = require BUILD_DIR . 'object/schema.php';
+        static::$extended = require BUILD_DIR . 'object/extended.php';
         static::$config = getobj(AppConfig::class);
     }
 

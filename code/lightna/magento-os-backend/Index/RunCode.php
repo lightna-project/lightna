@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Compiler;
+namespace Lightna\Magento\Index;
 
-use Lightna\Engine\App\Compiler\CompilerA;
-use Lightna\Engine\App\Opcache\Compiled;
+use Lightna\Engine\App\Index\IndexAbstract;
+use Lightna\Magento\App\Entity\RunCode as RunCodeEntity;
 use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\App\Query\Website;
 
-class RunCodes extends CompilerA
+class RunCode extends IndexAbstract
 {
-    protected Compiled $compiled;
+    protected RunCodeEntity $entity;
     protected Store $store;
     protected Website $website;
 
-    public function make(): void
+    public function getDataBatch(array $ids): array
     {
-        $this->compiled->save('magento/runCodes', $this->getRunCodes());
+        return [1 => $this->getRunCodes()];
     }
 
-    public function getRunCodes(): array
+    protected function getRunCodes(): array
     {
         $stores = $this->store->getList();
         $websites = $this->website->getList();
@@ -35,5 +35,16 @@ class RunCodes extends CompilerA
         }
 
         return $runCodes;
+    }
+
+    public function scan(int|string $lastId = null): array
+    {
+        // Scan is done in a single batch for id=1
+        return $lastId ? [] : [1];
+    }
+
+    public function gcCheck(array $ids): array
+    {
+        return array_diff($ids, [1]);
     }
 }

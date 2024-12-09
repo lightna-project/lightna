@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Build;
 
 use Exception;
+use Lightna\Engine\App\Build;
 use Lightna\Engine\App\Compiler;
-use Lightna\Engine\App\Opcache\Compiled;
 
-class Config extends Compiled
+class Config extends Build
 {
     protected string $dir;
     protected Compiler $compiler;
-    protected Compiled $compiled;
+    protected Build $build;
 
     /** @noinspection PhpUnused */
     protected function defineDir(): void

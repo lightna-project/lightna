@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Lightna\Engine\App;
 
 use Lightna\Engine\App\Build\Config as BuildConfig;
-use Lightna\Engine\App\Opcache\Compiled;
 
 class Compiler extends ObjectA
 {
     protected array $config;
-    protected Compiled $compiled;
+    protected Build $build;
 
     public function init(array $data = []): void
     {
-        $this->compiled = new Compiled();
+        $this->build = new Build();
     }
 
     public function defineConfig(): void
@@ -29,13 +28,13 @@ class Compiler extends ObjectA
             rmdir($this->getBuildBakDir());
         }
 
-        rcleandir($this->compiled->getDir());
+        rcleandir($this->build->getDir());
         rcleandir($this->getAssetDir());
     }
 
     public function version(): void
     {
-        $this->compiled->save('version', time());
+        $this->build->save('version', time());
     }
 
     public function apply(): void
@@ -47,7 +46,7 @@ class Compiler extends ObjectA
 
     protected function applyBuild(): void
     {
-        if (!is_dir($this->compiled->getDir())) {
+        if (!is_dir($this->build->getDir())) {
             echo cli_warning('No build to apply') . "\n";
             return;
         }
@@ -56,7 +55,7 @@ class Compiler extends ObjectA
             rename($this->getBuildOrigDir(), $this->getBuildBakDir());
         }
 
-        rename($this->compiled->getDir(), $this->getBuildOrigDir());
+        rename($this->build->getDir(), $this->getBuildOrigDir());
 
         if (is_dir($this->getBuildBakDir())) {
             rcleandir($this->getBuildBakDir());
@@ -97,7 +96,7 @@ class Compiler extends ObjectA
 
     protected function getBuildDir(string $name): string
     {
-        return preg_replace('~[^/]+/?$~', $name, $this->compiled->getDir()) . '/';
+        return preg_replace('~[^/]+/?$~', $name, $this->build->getDir()) . '/';
     }
 
     protected function getBuildBakDir(): string

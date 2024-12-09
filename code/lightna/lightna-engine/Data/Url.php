@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Lightna\Engine\Data;
 
 use Exception;
-use Lightna\Engine\App\Opcache\Compiled;
+use Lightna\Engine\App\Build;
 
 class Url extends DataA
 {
-    protected Compiled $compiled;
+    protected Build $build;
     protected array $assetHashes;
     /** @AppConfig(asset_base) */
     protected string $assetBase;
@@ -17,7 +17,7 @@ class Url extends DataA
     /** @noinspection PhpUnused */
     protected function defineAssetHashes(): void
     {
-        $this->assetHashes = $this->compiled->load('asset/hashes');
+        $this->assetHashes = $this->build->load('asset/hashes');
     }
 
     public function asset(string $url, bool $escape = true): string

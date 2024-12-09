@@ -22,7 +22,7 @@ class Bootstrap
 
         define('LIGHTNA_SRC', static::$config['src_dir']);
         define(
-            'COMPILED_DIR',
+            'BUILD_DIR',
             LIGHTNA_ENTRY . static::$config['compiler']['dir']
             . (defined('IS_COMPILER')
                 ? '/building/'
@@ -94,7 +94,7 @@ class Bootstrap
     {
         require_once LIGHTNA_ENTRY . LIGHTNA_SRC . 'App/Autoloader.php';
 
-        Autoloader::setClasses(require COMPILED_DIR . 'object/map.php');
+        Autoloader::setClasses(require BUILD_DIR . 'object/map.php');
 
         if (!static::$autoloadRegistered) {
             spl_autoload_register([Autoloader::class, 'loadClass'], true, true);
