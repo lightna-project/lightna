@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Lightna\Engine\App\NotFoundException;
 use Lightna\Engine\App\Context;
-use Lightna\Engine\Data\EntityA;
+use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\Data\EntityData;
 
 /**
  * @method string name(string $escapeMethod = null)
  * @method string entityId(string $escapeMethod = null)
  */
-class Category extends EntityA
+class Category extends EntityData
 {
     public string $name;
     public string|int $entityId;

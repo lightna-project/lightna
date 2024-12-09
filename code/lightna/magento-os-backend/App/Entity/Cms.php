@@ -8,7 +8,8 @@ use Lightna\Engine\App\Entity\EntityA;
 
 class Cms extends EntityA
 {
-    const STORAGE_PREFIX = 'CMS_';
+    public const NAME = 'cms';
+    public const STORAGE_PREFIX = 'CMS_';
 
     /** @AppConfig(entity/cms/storage) */
     protected string $storageName;

@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Closure;
+use Lightna\Engine\App\Build;
 use Lightna\Engine\App\Compiler;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\Opcache\Compiled;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 class CompilerA extends ObjectA
 {
     protected Compiler $compiler;
-    protected Compiled $compiled;
+    protected Build $build;
     /** @AppConfig(modules) */
     protected ?array $modules;
 

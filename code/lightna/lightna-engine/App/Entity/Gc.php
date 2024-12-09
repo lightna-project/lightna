@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Entity;
 
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Index\IndexInterface;
+use Lightna\Engine\App\Indexer;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Scope;
 use Lightna\Engine\App\State;
@@ -19,6 +20,7 @@ class Gc extends ObjectA
     protected State $state;
     protected Scope $scope;
     protected Context $context;
+    protected Indexer $indexer;
 
     protected array $scopeList;
     protected string $entityName;
@@ -46,6 +48,11 @@ class Gc extends ObjectA
                 continue;
             }
 
+            $this->entity = getobj($config['entity']);
+            if ($this->entity->getStorage()->isReadOnly()) {
+                continue;
+            }
+
             $this->startEntityGc($name, $config);
             foreach ($this->entity->keys() as $key) {
                 $this->processKey($key);
@@ -59,9 +66,8 @@ class Gc extends ObjectA
 
     protected function startEntityGc(string $name, array $config): void
     {
-        $this->entity = getobj($config['entity']);
         $this->entityName = $name;
-        $this->index = isset($config['index']) ? getobj($config['index']) : null;
+        $this->index = $this->indexer->getEntityIndex($name);
         $this->cleanKeysBatch = $this->checkIdsBatch = $this->cleanIdsBatch = [];
 
         $this->startEntityStats();
@@ -72,20 +78,11 @@ class Gc extends ObjectA
         $this->statsCountKey();
 
         [$version, $scope, $id] = $this->parseKey($key);
-        if ($this->entity::IS_GLOBAL) {
-            if ($this->index) {
-                $this->checkIdsBatch[$scope][$id] = $id;
-            }
-        } else {
-            if ($version === false || $scope === false) {
-                $this->cleanKeysBatch[] = $key;
-            } else {
-                if (!$this->versionExists($version) || !$this->scopeExists($scope)) {
-                    $this->cleanKeysBatch[] = $key;
-                } elseif ($this->index) {
-                    $this->checkIdsBatch[$scope][$id] = $id;
-                }
-            }
+
+        if (!$this->versionExists($version) || !$this->scopeExists($scope)) {
+            $this->cleanKeysBatch[] = $key;
+        } elseif ($this->index) {
+            $this->checkIdsBatch[$scope][$id] = $id;
         }
     }
 
@@ -116,25 +113,29 @@ class Gc extends ObjectA
     protected function parseKey(string $key): array
     {
         strtok($key, '_');
-        if ($this->entity::IS_GLOBAL) {
-            $version = $scope = false;
-        } else {
-            $version = strtok('_');
-            $scope = strtok('_');
-        }
+        $version = $this->entity->isVersioned() ? strtok('_') : null;
+        $scope = $this->entity::SCOPED ? strtok('_') : null;
         $id = strtok('');
         $id = $id === false ? '' : $id;
 
         return [$version, $scope, $id];
     }
 
-    protected function versionExists(string $version): bool
+    protected function versionExists(?string $version): bool
     {
+        if (!$this->entity->isVersioned()) {
+            return $version === null;
+        }
+
         return $version === $this->state->index->version;
     }
 
-    protected function scopeExists(string $scope): bool
+    protected function scopeExists(?string $scope): bool
     {
+        if (!$this->entity::SCOPED) {
+            return $scope === null;
+        }
+
         return isset($this->scopeList[$scope]);
     }
 
@@ -148,6 +149,8 @@ class Gc extends ObjectA
             }
 
             $this->processCleanIdsBatch($scope, $force);
+
+            if (!$this->entity::SCOPED) break;
         }
 
         $this->processCleanKeysBatch($force);

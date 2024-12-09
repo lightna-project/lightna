@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\State;
 
-use Lightna\Engine\App\Opcache\Compiled;
+use Lightna\Engine\App\Build;
 use Lightna\Engine\Data\DataA;
 
 class Index extends DataA
@@ -12,7 +12,7 @@ class Index extends DataA
     public string $version = 'a';
     public string|int $bindToBuild = 0;
 
-    protected Compiled $compiled;
+    protected Build $build;
 
     protected function init(array $data = []): void
     {
@@ -27,7 +27,7 @@ class Index extends DataA
             return;
         }
 
-        if ($this->bindToBuild && $this->bindToBuild !== $this->compiled->load('version')) {
+        if ($this->bindToBuild && $this->bindToBuild !== $this->build->load('version')) {
             $this->version = $this->getNextVersion();
         }
     }

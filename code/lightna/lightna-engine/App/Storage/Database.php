@@ -153,4 +153,9 @@ class Database extends ObjectA implements StorageInterface
             ->order(['id'])
             ->limit($this->keysBatchSize);
     }
+
+    public function isReadOnly(): bool
+    {
+        return false;
+    }
 }

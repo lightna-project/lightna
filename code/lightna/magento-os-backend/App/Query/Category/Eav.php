@@ -8,6 +8,6 @@ use Lightna\Magento\App\Query\EavAbstract;
 
 class Eav extends EavAbstract
 {
-    const ENTITY_TYPE = 3;
-    const ENTITY_TABLE = 'catalog_category_entity';
+    public const ENTITY_TYPE = 3;
+    public const ENTITY_TABLE = 'catalog_category_entity';
 }

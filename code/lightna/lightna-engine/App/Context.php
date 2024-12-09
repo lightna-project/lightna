@@ -17,10 +17,13 @@ class Context extends DataA
     protected function init(array $data = []): void
     {
         parent::init($data);
-        $this->resolve();
+
+        // Make sure definer will fire
+        unset($this->scope);
     }
 
-    protected function resolve(): void
+    /** @noinspection PhpUnused */
+    protected function defineScope(): void
     {
         // Extension point
         $this->scope = 1;

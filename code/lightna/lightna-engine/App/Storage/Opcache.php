@@ -5,20 +5,22 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Storage;
 
 use Generator;
-use Lightna\Engine\App\State;
+use Lightna\Engine\App\State as AppState;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Throwable;
 
 class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 {
-    protected State $state;
+    protected AppState $appState;
 
-    /** @AppConfig(storage/opcache/dir) */
+    /** @AppConfig(storage/opcache/options/dir) */
     protected string $dir;
     /** @AppConfig(storage/opcache/options) */
     protected array $options;
-    protected array $optionsRestore;
+    /** @AppConfig(storage/opcache/options/ini) */
+    protected array $iniOptions;
+    protected array $iniOptionsRestore;
     protected bool $isSlapTime;
 
     protected function init(array $data = []): void
@@ -26,25 +28,32 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         $this->dir = LIGHTNA_ENTRY . rtrim($this->dir, '/') . '/';
 
         // Restoring options need to be defined before applying, thus here is the place
-        $this->defineOptionsRestore();
+        $this->defineIniOptionsRestore();
     }
 
-    protected function defineOptionsRestore(): void
+    protected function defineIniOptionsRestore(): void
     {
-        $this->optionsRestore = [];
-        foreach ($this->options as $option => $value) {
-            $this->optionsRestore[$option] = ini_get('opcache.' . $option);
+        $this->iniOptionsRestore = [];
+        foreach ($this->iniOptions as $option => $value) {
+            $this->iniOptionsRestore[$option] = ini_get('opcache.' . $option);
         }
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineIsSlapTime(): void
+    {
+        $slap = $this->appState->opcache->slap;
+        $this->isSlapTime = time() - $slap->time < $slap->length;
     }
 
     public function set(string $key, mixed $value): void
     {
-        parent::save($this->getFileName($key), $value);
+        parent::save($key, $value);
     }
 
     public function unset(string $key): void
     {
-        parent::delete($this->getFileName($key));
+        parent::delete($key);
     }
 
     public function get(string $key): string|array
@@ -53,9 +62,9 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
             $this->applyOptions();
 
             if (!$this->isSlapTime) {
-                return parent::load($this->getFileName($key));
+                return parent::load($key);
             } else {
-                return parent::loadRevalidated($this->getFileName($key));
+                return parent::loadRevalidated($key);
             }
         } catch (Throwable) {
             return [];
@@ -64,20 +73,13 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         }
     }
 
-    /** @noinspection PhpUnused */
-    protected function defineIsSlapTime(): void
-    {
-        $slap = $this->state->opcache->slap;
-        $this->isSlapTime = time() - $slap->time < $slap->length;
-    }
-
     protected function applyOptions(): void
     {
         if (!IS_PROD_MODE) {
             return;
         }
 
-        $this->setIniOptions($this->options);
+        $this->setIniOptions($this->iniOptions);
     }
 
     protected function restoreOptions(): void
@@ -86,7 +88,7 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
             return;
         }
 
-        $this->setIniOptions($this->optionsRestore);
+        $this->setIniOptions($this->iniOptionsRestore);
     }
 
     protected function setIniOptions(array $options): void
@@ -134,5 +136,10 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
                 yield pathinfo($item->getFilename(), PATHINFO_FILENAME);
             }
         }
+    }
+
+    public function isReadOnly(): bool
+    {
+        return (bool)($this->options['is_read_only'] ?? false);
     }
 }

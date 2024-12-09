@@ -21,4 +21,6 @@ interface StorageInterface
     public function flush(): void;
 
     public function keys(string $prefix): Generator;
+
+    public function isReadOnly(): bool;
 }

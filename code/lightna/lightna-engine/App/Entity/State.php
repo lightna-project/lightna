@@ -8,7 +8,8 @@ use Exception;
 
 class State extends EntityA
 {
-    public const IS_GLOBAL = true;
+    public const NAME = 'state';
+    public const SCOPED = false;
     public const STORAGE_PREFIX = 'STATE_';
 
     /** @AppConfig(entity/state/storage) */

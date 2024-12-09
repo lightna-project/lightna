@@ -18,7 +18,7 @@ class Preload extends CompilerA
 
     protected function collectFiles(): void
     {
-        foreach ($this->compiled->load('object/map') as $fileName) {
+        foreach ($this->build->load('object/map') as $fileName) {
             $this->files[$fileName] = $fileName;
         }
     }
@@ -35,6 +35,6 @@ class Preload extends CompilerA
 
     protected function save(): void
     {
-        $this->compiled->putFile('preload.php', $this->preload);
+        $this->build->putFile('preload.php', $this->preload);
     }
 }

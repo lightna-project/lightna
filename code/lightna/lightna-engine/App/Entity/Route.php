@@ -6,10 +6,11 @@ namespace Lightna\Engine\App\Entity;
 
 class Route extends EntityA
 {
-    const STORAGE_PREFIX = 'URL_';
-    const ACTION_301 = 1;
-    const ACTION_302 = 2;
-    const ACTION_CUSTOM = 3;
+    public const NAME = 'route';
+    public const STORAGE_PREFIX = 'URL_';
+    public const ACTION_301 = 1;
+    public const ACTION_302 = 2;
+    public const ACTION_CUSTOM = 3;
 
     /** @AppConfig(entity/route/storage) */
     protected string $storageName;

@@ -22,8 +22,8 @@ class Template extends CompilerA
             }
         );
 
-        $this->compiled->save('template/map', $templates);
-        $this->compiled->save('template/schema', $schema);
+        $this->build->save('template/map', $templates);
+        $this->build->save('template/schema', $schema);
     }
 
     protected function getTemplateSchema(string $template): array

@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Console\Entity;
 
 use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Entity\EntityA;
 use Lightna\Engine\App\UserException;
 
 class Show extends CommandA
@@ -29,12 +30,18 @@ class Show extends CommandA
             throw new UserException('Specify entity ID');
         }
 
-        $scope = (int)$this->getOpt(['scope', 's']);
-        if ($scope === 0) {
-            throw new UserException('Specify scope');
+        /** @var EntityA $entity */
+        $entity = getobj($class);
+
+        if ($entity::SCOPED) {
+            $scope = (int)$this->getOpt(['scope', 's']);
+            if ($scope === 0) {
+                throw new UserException('Specify scope');
+            }
+
+            $this->context->scope = $scope;
         }
 
-        $this->context->scope = $scope;
-        echo json_pretty(getobj($class)->get($id)) . "\n";
+        echo json_pretty($entity->get($id)) . "\n";
     }
 }

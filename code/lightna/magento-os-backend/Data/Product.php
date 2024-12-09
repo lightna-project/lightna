@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Lightna\Engine\App\NotFoundException;
 use Lightna\Engine\App\Context;
-use Lightna\Engine\Data\EntityA;
+use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\Data\EntityData;
 use Lightna\Magento\Data\Product\Gallery\Image;
+use Lightna\Magento\Data\Product\Inventory as ProductInventory;
 use Lightna\Magento\Data\Product\Options as ProductOptions;
 use Lightna\Magento\Data\Product\Price as ProductPrice;
-use Lightna\Magento\Data\Product\Inventory as ProductInventory;
 
 /**
  * @property-read Image[] gallery
@@ -26,7 +26,7 @@ use Lightna\Magento\Data\Product\Inventory as ProductInventory;
  * @method string typeId(string $escapeMethod = null)
  * @method string url(string $escapeMethod = null)
  */
-class Product extends EntityA
+class Product extends EntityData
 {
     public ProductPrice $price;
     public ProductInventory $inventory;

@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Lightna\Engine\App\Opcache\Compiled;
-
 class Templating extends ObjectA
 {
-    protected Compiled $compiled;
+    protected Build $build;
     protected array $templateMap;
     protected array $templateSchema;
 
     protected function init(array $data = []): void
     {
-        $this->templateMap = $this->compiled->load('template/map');
-        $this->templateSchema = $this->compiled->load('template/schema');
+        $this->templateMap = $this->build->load('template/map');
+        $this->templateSchema = $this->build->load('template/schema');
     }
 
     public function getTemplateSchema(string $templateName): array

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Lightna\Engine\App\Entity\EntityA;
 use Lightna\Engine\App\Entity\State;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
@@ -32,17 +33,20 @@ class Indexer extends ObjectA
     protected Database $db;
     protected State $state;
 
-    public function reindex(string $entity, ?int $onlyScope = null): void
+    public function reindex(string $entityCode, ?int $onlyScope = null): void
     {
         $this->resetStats();
+        $index = $this->getEntityIndex($entityCode);
 
-        $index = $this->getEntityIndex($entity);
         foreach ($this->scope->getList() as $scope) {
             if ($onlyScope && $onlyScope !== $scope) {
                 continue;
             }
+
             $this->context->scope = $scope;
             $this->refreshAll($index);
+
+            if (!$this->getEntity($entityCode)::SCOPED) break;
         }
 
         $this->completeStats();
@@ -84,17 +88,31 @@ class Indexer extends ObjectA
         }
     }
 
-    public function processBatch(string $entity, array $batch): void
+    public function processBatch(string $entityCode, array $batch): void
     {
         foreach ($this->scope->getList() as $scope) {
             $this->context->scope = $scope;
-            $this->getEntityIndex($entity)->refresh($batch);
+            $this->getEntityIndex($entityCode)->refresh($batch);
+
+            if (!$this->getEntity($entityCode)::SCOPED) break;
         }
     }
 
-    protected function getEntityIndex(string $entity): IndexInterface
+    public function getEntityIndex(string $entityCode): ?IndexInterface
     {
-        return getobj($this->entities[$entity]['index']);
+        if (
+            (!$indexClass = $this->entities[$entityCode]['index'] ?? null)
+            || $this->getEntity($entityCode)->getStorage()->isReadOnly()
+        ) {
+            return null;
+        }
+
+        return getobj($indexClass);
+    }
+
+    protected function getEntity(string $entityCode): EntityA
+    {
+        return getobj($this->entities[$entityCode]['entity']);
     }
 
     protected function lockQueue(): void

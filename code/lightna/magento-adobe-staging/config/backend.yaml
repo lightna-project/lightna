@@ -10,7 +10,7 @@ staging:
   #   false - uses current time as a new version so that Lightna can apply new version on its own
   #         independent of Magento which is faster and stabler
   #   true - uses Magento current version. Lightna will apply the new version after Magento does
-  apply_after_magento: false
+  apply_after_magento: true
   tables:
     cms_page:
       entity_id: page_id

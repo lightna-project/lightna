@@ -8,10 +8,10 @@ function cli_get_all_commands(string $codeDir): array
         'build.compile' => true,
         'build.apply' => true,
     ];
-    $compiledConfigFile = LIGHTNA_ENTRY . $codeDir . '/build/config/backend.php';
-    if (file_exists($compiledConfigFile)) {
-        $compiledConfig = require $compiledConfigFile;
-        $commands = array_merge($commands, $compiledConfig['cli']['command'] ?? []);
+    $buildConfigFile = LIGHTNA_ENTRY . $codeDir . '/build/config/backend.php';
+    if (file_exists($buildConfigFile)) {
+        $buildConfig = require $buildConfigFile;
+        $commands = array_merge($commands, $buildConfig['cli']['command'] ?? []);
     }
 
     $commands = array_flat($commands);
@@ -27,7 +27,7 @@ function cli_init_compiler(): void
         'ArrayDirectives',
         'ObjectA',
         'Opcache',
-        'Opcache/Compiled',
+        'Build',
         'Console/CommandA',
         'Console/Compile',
         'Bootstrap',

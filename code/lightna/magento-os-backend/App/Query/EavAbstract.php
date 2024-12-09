@@ -14,8 +14,8 @@ use Lightna\Engine\App\Project\Database;
 
 abstract class EavAbstract extends ObjectA
 {
-    const ENTITY_TYPE = self::ENTITY_TYPE;
-    const ENTITY_TABLE = self::ENTITY_TABLE;
+    public const ENTITY_TYPE = self::ENTITY_TYPE;
+    public const ENTITY_TABLE = self::ENTITY_TABLE;
     protected Database $db;
     protected Context $context;
     protected array $attributes;

@@ -5,8 +5,9 @@ storage:
   opcache:
     adapter: Lightna\Engine\App\Storage\Opcache
     options:
-      validate_timestamps: 1
-      revalidate_freq: 60
+      ini:
+        validate_timestamps: 1
+        revalidate_freq: 60
   database:
     adapter: Lightna\Engine\App\Storage\Database
     options:
@@ -38,6 +39,7 @@ router:
 entity:
   state:
     entity: Lightna\Engine\App\Entity\State
+    versioned: false
   route:
     entity: Lightna\Engine\App\Entity\Route
   entity_route:

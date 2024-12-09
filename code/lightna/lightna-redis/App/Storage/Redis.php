@@ -110,4 +110,9 @@ class Redis extends ObjectA implements StorageInterface
             }
         } while ($it > 0);
     }
+
+    public function isReadOnly(): bool
+    {
+        return false;
+    }
 }

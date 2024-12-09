@@ -6,13 +6,12 @@ namespace Lightna\Magento\App\Plugin;
 
 use Closure;
 use Exception;
-use Lightna\Engine\App\Opcache\Compiled;
 use Lightna\Engine\Data\DataA;
+use Lightna\Magento\App\Entity\RunCode as RunCodeEntity;
 
 class Context extends DataA
 {
-    protected Compiled $compiled;
-
+    protected RunCodeEntity $runCodeEntity;
     protected string $runType;
     protected string $runCode;
     protected array $runCodes;
@@ -35,11 +34,11 @@ class Context extends DataA
     /** @noinspection PhpUnused */
     protected function defineRunCodes(): void
     {
-        $this->runCodes = $this->compiled->load('magento/runCodes');
+        $this->runCodes = $this->runCodeEntity->get(1);
     }
 
     /** @noinspection PhpUnused */
-    public function resolveExtended(Closure $proceed): Closure
+    public function defineScopeExtended(Closure $proceed): Closure
     {
         $resolveScope = $this->resolveScope(...);
 
@@ -57,10 +56,10 @@ class Context extends DataA
         if ($this->runCode === '') {
             return 1;
         }
-        if (!$runCode = $this->runCodes[$this->runType][$this->runCode] ?? null) {
+        if (!$scope = $this->runCodes[$this->runType][$this->runCode] ?? null) {
             throw new Exception('Undefined run code "' . $this->runCode . '"');
         }
 
-        return $runCode;
+        return $scope;
     }
 }
