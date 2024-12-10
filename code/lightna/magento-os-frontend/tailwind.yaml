@@ -1,43 +1,70 @@
 entry:
   common:
     content:
-      - lightna/magento-os-frontend/template/**/*.phtml
-      - lightna/magento-os-frontend/layout/*.yaml
-      - lightna/magento-os-frontend/js/**/*.js
+      - lightna/magento-os-frontend/template/*.phtml
+      - lightna/magento-os-frontend/template/cms/**/*.phtml
+      - lightna/magento-os-frontend/template/component/**/*.phtml
+      - lightna/magento-os-frontend/template/page/**/*.phtml
+      - lightna/magento-os-frontend/layout/page.yaml
+      - lightna/magento-os-frontend/layout/cms.yaml
+      - lightna/magento-os-frontend/js/common/*.js
     import:
       - tailwindcss/base
-      - lightna/magento-os-frontend/base/animation.css
-      - lightna/magento-os-frontend/base/buttons.css
       - lightna/magento-os-frontend/base/forms.css
-      - lightna/magento-os-frontend/base/icons.css
       - lightna/magento-os-frontend/base/layout.css
       - lightna/magento-os-frontend/base/price.css
       - lightna/magento-os-frontend/base/typography.css
       - tailwindcss/components
-      - lightna/magento-os-frontend/components/collapsible.css
-      - lightna/magento-os-frontend/components/dropdown.css
-      - lightna/magento-os-frontend/components/overlay.css
-      - lightna/magento-os-frontend/components/mobile-overlay.css
-      - lightna/magento-os-frontend/components/tabs.css
-      - lightna/magento-os-frontend/components/toggle-link.css
-      - lightna/magento-os-frontend/components/usp.css
+      - lightna/magento-os-frontend/components/common/animation.css
+      - lightna/magento-os-frontend/components/common/buttons.css
+      - lightna/magento-os-frontend/components/common/dropdown.css
       - lightna/magento-os-frontend/components/common/footer.css
       - lightna/magento-os-frontend/components/common/header.css
+      - lightna/magento-os-frontend/components/common/icons.css
       - lightna/magento-os-frontend/components/common/menu.css
       - lightna/magento-os-frontend/components/common/messages.css
       - lightna/magento-os-frontend/components/common/minicart.css
+      - lightna/magento-os-frontend/components/common/mobile-overlay.css
+      - lightna/magento-os-frontend/components/common/overlay.css
+      - lightna/magento-os-frontend/components/common/products-list.css
       - lightna/magento-os-frontend/components/common/search.css
       - lightna/magento-os-frontend/components/common/search-suggestions.css
-      - lightna/magento-os-frontend/components/listing/facets.css
-      - lightna/magento-os-frontend/components/listing/toolbar.css
+      - lightna/magento-os-frontend/components/common/usp.css
+      - lightna/magento-os-frontend/components/common/utils.css
+      - tailwindcss/utilities
+  product:
+    content:
+      - lightna/magento-os-frontend/template/product/**/*.phtml
+      - lightna/magento-os-frontend/layout/product.yaml
+      - lightna/magento-os-frontend/js/product/**/*.js
+    import:
+      - tailwindcss/components
+      - tailwindcss/utilities
+      - lightna/magento-os-frontend/components/common/buttons.css
+      - lightna/magento-os-frontend/components/common/icons.css
       - lightna/magento-os-frontend/components/product/attributes-list.css
       - lightna/magento-os-frontend/components/product/gallery.css
       - lightna/magento-os-frontend/components/product/options.css
-      - lightna/magento-os-frontend/components/product/products-grid.css
-      - lightna/magento-os-frontend/components/product/products-list.css
       - lightna/magento-os-frontend/components/product/sku.css
       - lightna/magento-os-frontend/components/product/stock.css
+      - lightna/magento-os-frontend/components/product/tabs.css
+      - lightna/magento-os-frontend/components/product/usp.css
+      - lightna/magento-os-frontend/components/common/utils.css
+  listing:
+    content:
+      - lightna/magento-os-frontend/template/category/**/*.phtml
+      - lightna/magento-os-frontend/template/component/**/*.phtml
+      - lightna/magento-os-frontend/layout/category.yaml
+      - lightna/magento-os-frontend/js/listing/**/*.js
+    import:
+      - tailwindcss/components
       - tailwindcss/utilities
+      - lightna/magento-os-frontend/components/common/icons.css
+      - lightna/magento-os-frontend/components/listing/collapsible.css
+      - lightna/magento-os-frontend/components/listing/facets.css
+      - lightna/magento-os-frontend/components/listing/products-grid.css
+      - lightna/magento-os-frontend/components/listing/toggle-link.css
+      - lightna/magento-os-frontend/components/listing/toolbar.css
 tailwind:
   theme:
     borderRadius:

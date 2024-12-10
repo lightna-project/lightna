@@ -1,4 +1,4 @@
-@layer base {
+@layer components {
     .animate-fade-in {
         animation: fade-in .2s ease-in-out forwards;
     }

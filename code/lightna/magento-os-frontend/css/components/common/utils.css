@@ -1,0 +1,11 @@
+@layer components {
+    .no-scrollbar::-webkit-scrollbar {
+        @apply hidden;
+    }
+
+    /* Hide scrollbar for Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none; /* Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+}
