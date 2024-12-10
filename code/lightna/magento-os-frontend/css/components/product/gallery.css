@@ -1,4 +1,14 @@
 @layer components {
+    .no-scrollbar::-webkit-scrollbar {
+        @apply hidden;
+    }
+
+    /* Hide scrollbar for Edge and Firefox */
+    .no-scrollbar {
+        -ms-overflow-style: none; /* Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
     .gallery-grid {
         @apply relative gap-5 md:grid md:grid-cols-[77px_auto] lg:grid-cols-[102px_auto];
     }

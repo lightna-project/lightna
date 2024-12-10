@@ -1,5 +1,9 @@
 entry:
   lane:
+    content:
+      - template/**/*.phtml
+      - layout/*.yaml
+      - js/**/*.js
     import:
       - tailwindcss/base
       - base/reset.css
