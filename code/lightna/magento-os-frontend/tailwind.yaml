@@ -24,16 +24,23 @@ entry:
       - components/common/minicart.css
       - components/common/search.css
       - components/common/search-suggestions.css
-      - components/listing/facets.css
-      - components/listing/toolbar.css
-      - components/product/attributes-list.css
-      - components/product/gallery.css
-      - components/product/options.css
       - components/product/products-grid.css
       - components/product/products-list.css
       - components/product/sku.css
       - components/product/stock.css
       - tailwindcss/utilities
+  product-page:
+    import:
+      - tailwindcss/components
+      - components/product/attributes-list.css
+      - components/product/gallery.css
+      - components/product/options.css
+  listing-page:
+    import:
+      - tailwindcss/components
+      - base/icons.css
+      - components/listing/facets.css
+      - components/listing/toolbar.css
 tailwind:
   theme:
     borderRadius:
