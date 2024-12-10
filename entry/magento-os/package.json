@@ -12,10 +12,12 @@
     },
     "scripts": {
         "build-js": "webpack",
-        "build-css": "npm run build-common-css && npm run build-lane-css",
+        "build-css": "npm run build-common-css -- --minify && npm run build-lane-css -- --minify && npm run build-product-css -- --minify && npm run build-listing-css -- --minify",
         "build-common-css": "npx tailwindcss -i ../../generated/magento-os/compiled/building/tailwind/common.css -o ../../generated/magento-os/compiled/asset.building/compiled/style/common.css",
+        "build-product-css": "npx tailwindcss -i ../../generated/magento-os/compiled/building/tailwind/product-page.css -o ../../generated/magento-os/compiled/asset.building/compiled/style/product-page.css",
+        "build-listing-css": "npx tailwindcss -i ../../generated/magento-os/compiled/building/tailwind/listing-page.css -o ../../generated/magento-os/compiled/asset.building/compiled/style/listing-page.css",
         "build-lane-css": "npx tailwindcss -i ../../generated/magento-os/compiled/building/tailwind/lane.css -o ../../generated/magento-os/compiled/asset.building/compiled/style/lane.css",
-        "build": "webpack && npm run build-common-css -- --minify && npm run build-lane-css -- --minify && ./cli build.asset.sign",
+        "build": "webpack && npm run build-css && ./cli build.asset.sign",
         "watch-js": "webpack --mode=development",
         "watch-css": "npm run build-common-css -- --watch --verbose && npm run build-lane-css -- --watch --verbose"
     }
