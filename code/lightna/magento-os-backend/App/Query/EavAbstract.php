@@ -8,6 +8,9 @@ use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Combine;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Predicate\PredicateSet;
+use Laminas\Db\Sql\Predicate\Operator;
+use Laminas\Db\Sql\Predicate\In;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
@@ -177,38 +180,63 @@ abstract class EavAbstract extends ObjectA
                     'av.entity_id = entity.entity_id and av.store_id = ?',
                     $this->context->scope,
                 ),
-                ['attribute_id', 'store_id', 'value'],
+                ['attribute_id', 'store_id'],
                 Select::JOIN_LEFT,
             )
             ->join(
                 ['a' => 'eav_attribute'],
-                new Expression(
-                    'a.attribute_id = av.attribute_id and a.attribute_id in (?)',
-                    implode(',', $attributeIds),
+                $this->getJoinAttributePredicate(
+                    'a.attribute_id',
+                    'av.attribute_id',
+                    $attributeIds
                 ),
-                ['attribute_code']
+                ['attribute_code'],
+                Select::JOIN_LEFT
             )->join(
                 ['av_default' => $this::ENTITY_TABLE . '_' . $type],
                 new Expression(
                     'av_default.entity_id = entity.entity_id and av_default.store_id = ?',
                     0,
                 ),
-                ['attribute_id', 'store_id', 'value'],
+                ['attribute_id', 'store_id'],
                 Select::JOIN_LEFT,
             )
             ->join(
                 ['a_default' => 'eav_attribute'],
-                new Expression(
-                    'a_default.attribute_id = av_default.attribute_id and a_default.attribute_id in (?)',
-                    implode(',', $attributeIds),
+                $this->getJoinAttributePredicate(
+                    'a_default.attribute_id',
+                    'av_default.attribute_id',
+                    $attributeIds
                 ),
-                ['attribute_code']
+                ['attribute_code'],
+                Select::JOIN_LEFT
             );
 
         $select->where
             ->in('entity.entity_id', $entityIds);
 
+        $select->having
+            ->isNotNull('value');
+
         return $select;
+    }
+
+    protected function getJoinAttributePredicate($eavAttributeIdField, $entityAttributeIdField, $attrIds): PredicateSet
+    {
+        $joinPredicates = new PredicateSet();
+        $joinPredicates->addPredicate(
+            new Operator(
+                $eavAttributeIdField,
+                Operator::OPERATOR_EQUAL_TO,
+                $entityAttributeIdField,
+                Operator::TYPE_IDENTIFIER,
+                Operator::TYPE_IDENTIFIER
+            ),
+            PredicateSet::OP_AND
+        );
+        $joinPredicates->addPredicate(new In($eavAttributeIdField, $attrIds), PredicateSet::OP_AND);
+
+        return $joinPredicates;
     }
 
     public function joinAttribute(string $code, Select $select): string
