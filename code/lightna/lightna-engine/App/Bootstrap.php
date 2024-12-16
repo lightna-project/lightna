@@ -72,7 +72,7 @@ class Bootstrap
     {
         $configFile = LIGHTNA_ENTRY . 'config/' . LIGHTNA_AREA . '.php';
         $config = require $configFile;
-        $version = opcache_load_revalidated(LIGHTNA_ENTRY . 'config/version.php');
+        $version = opcache_load_revalidated_soft(LIGHTNA_ENTRY . 'config/version.php');
 
         if ($version !== $config['version']) {
             $config = opcache_load_revalidated($configFile);

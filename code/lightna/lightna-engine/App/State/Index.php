@@ -4,46 +4,66 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\State;
 
-use Lightna\Engine\App\Build;
+use Lightna\Engine\App\Entity\State as StateEntity;
+use Lightna\Engine\App\Indexer;
+use Lightna\Engine\App\State\Index\Entity;
 use Lightna\Engine\Data\DataA;
 
+/**
+ * @property Entity[] entities
+ */
 class Index extends DataA
 {
-    public string $version = 'a';
-    public string|int $bindToBuild = 0;
+    public array $entities = [];
 
-    protected Build $build;
+    /** @AppConfig(entity) */
+    protected array $allEntities;
+    protected StateEntity $entity;
+    protected Indexer $indexer;
 
     protected function init(array $data = []): void
     {
-        parent::init($data);
+        parent::init($this->entity->get('index'));
 
-        $this->bindToBuild();
+        foreach ($this->allEntities as $code => $entity) {
+            if (!$this->indexer->getEntityIndex($code)) {
+                continue;
+            }
+            $this->entities[$code] ??= newobj(Entity::class);
+        }
+
+        ksort($this->entities);
     }
 
-    protected function bindToBuild(): void
+    public function save(): void
     {
-        if (LIGHTNA_AREA !== 'frontend') {
+        $this->entity->set('index', o2a($this));
+    }
+
+    public function invalidate(array $codes): void
+    {
+        foreach ($codes as $code) {
+            $this->markInvalidated($code);
+        }
+
+        $this->save();
+    }
+
+    public function invalidateAll(): void
+    {
+        foreach (array_keys($this->entities) as $code) {
+            $this->markInvalidated($code);
+        }
+
+        $this->save();
+    }
+
+    protected function markInvalidated(string $code): void
+    {
+        if (!isset($this->entities[$code])) {
             return;
         }
 
-        if ($this->bindToBuild && $this->bindToBuild !== $this->build->load('version')) {
-            $this->version = $this->getNextVersion();
-        }
-    }
-
-    public function getNextVersion(): string
-    {
-        return $this->getIncrementedVersion(1);
-    }
-
-    public function getPreviousVersion(): string
-    {
-        return $this->getIncrementedVersion(-1);
-    }
-
-    protected function getIncrementedVersion(int $inc): string
-    {
-        return chr((ord($this->version) - ord('a') + $inc) % 26 + ord('a'));
+        $this->entities[$code]->invalidatedAt = microtime(true);
     }
 }

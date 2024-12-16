@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\State\Opcache;
+namespace Lightna\Engine\App\State\Common\Opcache;
 
 use Lightna\Engine\Data\DataA;
 

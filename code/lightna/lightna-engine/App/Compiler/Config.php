@@ -99,7 +99,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
         $config = [];
         foreach ($files as $file) {
             $data = yaml_parse_file($file);
-            $data = array_expand_keys($data, '.');
+            $data = array_expand_keys($data, '.', ['/cli/command' => 1]);
             $config = merge($config, $data);
         }
 

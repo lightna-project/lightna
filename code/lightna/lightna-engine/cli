@@ -30,7 +30,6 @@ if (in_array($command, ['build.compile', 'build.apply'])) {
     } elseif ($command === 'build.apply') {
         (new Compile())->apply();
     }
-    echo "\n";
     exit;
 }
 
@@ -38,8 +37,7 @@ require_once __DIR__ . '/App/boot.php';
 
 try {
     getobj(Cli::class)->run($command);
-    echo "\n";
 } catch (UserException $e) {
-    echo "\n" . cli_error($e->getMessage()) . "\n";
+    echo cli_error($e->getMessage()) . "\n";
     exit(1);
 }

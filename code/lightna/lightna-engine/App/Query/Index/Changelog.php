@@ -126,4 +126,9 @@ class Changelog extends ObjectA
     {
         return empty($this->db->fetchOne($this->db->select(Schema::TABLE_NAME)));
     }
+
+    public function getApproxRows(): int
+    {
+        return $this->db->structure->getApproxRows(Schema::TABLE_NAME);
+    }
 }

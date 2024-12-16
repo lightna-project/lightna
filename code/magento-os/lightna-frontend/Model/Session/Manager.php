@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Frontend\Model\Session;
 
 use Lightna\Frontend\Model\Session as LightnaSession;
-use Lightna\Magento\Producer\Cart as LightnaCart;
+use Lightna\Magento\Producer\Cart as LightnaCartProducer;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Store\Model\StoreManagerInterface;
@@ -17,7 +17,9 @@ class Manager
         protected CustomerSession $customerSession,
         protected LightnaSession $lightnaSession,
         protected StoreManagerInterface $storeManager,
+        protected LightnaCartProducer $lightnaCartProducer,
     ) {
+        $this->lightnaCartProducer = getobj(LightnaCartProducer::class);
     }
 
     public function updateData(): void
@@ -31,7 +33,7 @@ class Manager
         $this->updateSectionData(
             'cart',
             ($quoteId = $this->checkoutSession->getQuoteId())
-                ? getobj(LightnaCart::class)->getData($quoteId)
+                ? $this->lightnaCartProducer->getData($quoteId)
                 : [],
         );
     }

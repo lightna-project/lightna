@@ -3,9 +3,11 @@ cli:
     build.asset.sign: Lightna\Engine\App\Console\Asset\Sign
     config.apply: Lightna\Engine\App\Console\Config\Apply
     update: Lightna\Engine\App\Console\Update
-    index.update.opcache: Lightna\Engine\App\Console\Index\Update\Opcache
-    index.update.data: Lightna\Engine\App\Console\Index\Update\Data
+    index.entity.list: Lightna\Engine\App\Console\Index\Entity\Info
+    index.entity.invalidate: Lightna\Engine\App\Console\Index\Entity\Invalidate
     index.update.all: Lightna\Engine\App\Console\Index\Update\All
+    index.update.entity: Lightna\Engine\App\Console\Index\Update\Entity
+    index.update.storage: Lightna\Engine\App\Console\Index\Update\Storage
     index.queue.process: Lightna\Engine\App\Console\Index\Queue\Process
     index.queue.watch: Lightna\Engine\App\Console\Index\Queue\Watch
     index.queue.block: Lightna\Engine\App\Console\Index\Queue\Block

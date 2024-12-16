@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console\Index\Version;
 
 use Lightna\Engine\App\Console\CommandA;
-use Lightna\Engine\App\State;
+use Lightna\Engine\App\State\Common;
 
 class Unbind extends CommandA
 {
-    protected State $state;
+    protected Common $state;
 
     public function run(): void
     {
