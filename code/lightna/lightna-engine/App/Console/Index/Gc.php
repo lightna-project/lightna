@@ -23,13 +23,13 @@ class Gc extends CommandA
 
     protected function renderStats(): void
     {
-        echo 'Collected garbage:';
+        echo "Collected garbage:\n";
 
         foreach ($this->gc->getStats() as $entity => $stats) {
             $seconds = round($stats['time']);
-            echo "\n    " . str_pad($entity, 30, ' ') . ' '
-                . str_pad("{$stats['cleaned']} ", 8, ' ') . 'out of '
-                . str_pad("{$stats['total']} ", 8, ' ') . "in {$seconds}s";
+            echo "    " . str_pad($entity, 30) . ' '
+                . str_pad("{$stats['cleaned']} ", 8) . 'out of '
+                . str_pad("{$stats['total']} ", 8) . "in {$seconds}s\n";
         }
     }
 }

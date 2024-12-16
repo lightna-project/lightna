@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App;
+namespace Lightna\Engine\App\State;
 
 use Exception;
 use Lightna\Engine\App\Entity\State as StateEntity;
-use Lightna\Engine\App\State\Maintenance;
-use Lightna\Engine\App\State\Opcache;
+use Lightna\Engine\App\State\Common\Index;
+use Lightna\Engine\App\State\Common\Maintenance;
+use Lightna\Engine\App\State\Common\Opcache;
 use Lightna\Engine\Data\DataA;
 
-class State extends DataA
+class Common extends DataA
 {
     public Maintenance $maintenance;
-    public State\Index $index;
+    public Index $index;
     public Opcache $opcache;
 
     protected StateEntity $entity;
 
     protected function init(array $data = []): void
     {
-        parent::init($this->entity->get('frontend'));
+        parent::init($this->entity->get('common'));
     }
 
     public function save(): void
@@ -29,6 +30,6 @@ class State extends DataA
             throw new Exception('State save is not available on Frontend');
         }
 
-        $this->entity->set('frontend', o2a($this));
+        $this->entity->set('common', o2a($this));
     }
 }

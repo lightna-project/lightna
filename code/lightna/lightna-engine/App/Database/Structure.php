@@ -91,4 +91,11 @@ class Structure extends ObjectA
 
         return $def;
     }
+
+    public function getApproxRows(string $table): int
+    {
+        $row = $this->db->query('show table status like ?', [$table])->next();
+
+        return $row['Rows'];
+    }
 }

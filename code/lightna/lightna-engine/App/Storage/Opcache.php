@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Storage;
 
 use Generator;
-use Lightna\Engine\App\State as AppState;
+use Lightna\Engine\App\State\Common as AppState;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Throwable;

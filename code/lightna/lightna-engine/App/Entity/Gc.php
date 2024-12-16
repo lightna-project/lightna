@@ -9,7 +9,7 @@ use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Indexer;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Scope;
-use Lightna\Engine\App\State;
+use Lightna\Engine\App\State\Common;
 
 class Gc extends ObjectA
 {
@@ -17,7 +17,7 @@ class Gc extends ObjectA
 
     /** @AppConfig(entity) */
     protected array $entities;
-    protected State $state;
+    protected Common $state;
     protected Scope $scope;
     protected Context $context;
     protected Indexer $indexer;

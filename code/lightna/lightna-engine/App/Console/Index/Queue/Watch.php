@@ -22,7 +22,7 @@ class Watch extends CommandA
     {
         $this->startTime = time();
         while ($this->canProcess()) {
-            if (!$this->isQueueEmpty()) {
+            if ($this->hasWork()) {
                 $this->indexer->process();
             }
             sleep($this->options['interval']);
@@ -56,8 +56,8 @@ class Watch extends CommandA
         return true;
     }
 
-    protected function isQueueEmpty(): bool
+    protected function hasWork(): bool
     {
-        return $this->changelog->isEmpty() && $this->queue->isEmpty();
+        return !$this->changelog->isEmpty() || !$this->queue->isEmpty() || $this->indexer->getOutdatedEntities();
     }
 }

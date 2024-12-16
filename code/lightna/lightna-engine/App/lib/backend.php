@@ -54,26 +54,17 @@ function rcleandir(string $dir, $isNestedCall = false): void
     }
 }
 
-function array_filter_recursive(array $array, ?callable $cb): array
-{
-    foreach ($array as $k => $v) {
-        if (is_array($v)) {
-            $array[$k] = array_filter_recursive($v, $cb);
-        } else {
-            if (!$cb($k, $v)) {
-                unset($array[$k]);
-            }
-        }
-    }
-
-    return $array;
-}
-
-function array_expand_keys(array $data, string $sep): array
+function array_expand_keys(array $data, string $sep, array $ignore = [], string $path = ''): array
 {
     $expanded = [];
     foreach ($data as $k => $v) {
-        $v = is_array($v) ? array_expand_keys($v, $sep) : $v;
+        $p = $path . '/' . $k;
+        if (isset($ignore[$p])) {
+            $expanded[$k] = $v;
+            continue;
+        }
+
+        $v = is_array($v) ? array_expand_keys($v, $sep, $ignore, $p) : $v;
         $k = (string)$k;
         $parts = explode($sep, trim($k, $sep));
         if (count($parts) > 1) {

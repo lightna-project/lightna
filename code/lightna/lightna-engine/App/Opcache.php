@@ -22,7 +22,7 @@ abstract class Opcache extends ObjectA
 
     public function loadRevalidated(string $name): mixed
     {
-        return opcache_load_revalidated($this->dir . $this->getFileName($name));
+        return opcache_load_revalidated_soft($this->dir . $this->getFileName($name));
     }
 
     protected function getFileName(string $name): string

@@ -167,6 +167,29 @@ function opcache_load_revalidated(string $file): mixed
     return require $file;
 }
 
+function opcache_load_revalidated_soft(string $file): mixed
+{
+    static $validate, $freq;
+
+    if (is_null($validate)) {
+        $validate = (int)ini_get('opcache.validate_timestamps');
+        $freq = (int)ini_get('opcache.revalidate_freq');
+    }
+
+    ini_set('opcache.validate_timestamps', 1);
+    ini_set('opcache.revalidate_freq', 1);
+
+    try {
+        $result = require $file;
+    } finally {
+        // Restore
+        ini_set('opcache.validate_timestamps', $validate);
+        ini_set('opcache.revalidate_freq', $freq);
+    }
+
+    return $result;
+}
+
 function getRelativePath(string $from, string $to): string
 {
     if (($f = realpath($from)) === false) {
@@ -193,4 +216,19 @@ function getRelativePath(string $from, string $to): string
     $relativePath = str_repeat('../', $upLevels) . implode('/', array_slice($toParts, $commonBaseLength));
 
     return rtrim($relativePath === '' ? './' : $relativePath, '/') . '/';
+}
+
+function array_filter_recursive(array $array, ?callable $cb): array
+{
+    foreach ($array as $k => $v) {
+        if (is_array($v)) {
+            $array[$k] = array_filter_recursive($v, $cb);
+        } else {
+            if (!$cb($k, $v)) {
+                unset($array[$k]);
+            }
+        }
+    }
+
+    return $array;
 }

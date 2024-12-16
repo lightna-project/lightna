@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console\Opcache;
 
 use Lightna\Engine\App\Console\CommandA;
-use Lightna\Engine\App\State;
+use Lightna\Engine\App\State\Common;
 
 class Slap extends CommandA
 {
-    protected State $state;
+    protected Common $state;
 
     public function run(): void
     {

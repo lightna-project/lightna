@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="lightna.index.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="lightna.index.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">lightna_index_grid</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">
+                        Lightna\Frontend\Model\Adminhtml\Index\DataSource
+                    </argument>
+                    <argument name="pager_visibility" xsi:type="string">0</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="lightna.index.massaction"
+                       as="grid.massaction">
+                    <arguments>
+                        <argument name="massaction_id_field" xsi:type="string">id</argument>
+                        <argument name="form_field_name" xsi:type="string">indices</argument>
+                        <argument name="use_select_all" xsi:type="string">1</argument>
+                        <argument name="options" xsi:type="array">
+                            <item name="invalidate" xsi:type="array">
+                                <item name="label" xsi:type="string" translate="true">Invalidate</item>
+                                <item name="url" xsi:type="string">lightna/index/massInvalidate</item>
+                                <item name="selected" xsi:type="string">1</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="lightna.index.grid.columnSet"
+                       as="grid.columnSet">
+                    <arguments>
+                        <argument name="filter_visibility" xsi:type="string">0</argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="lightna.index.grid.columnSet.name"
+                           as="name">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Name</argument>
+                            <argument name="index" xsi:type="string">name</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="width" xsi:type="string">180</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Cache\Grid\Column\Statuses"
+                           name="lightna.index.grid.columnSet.status" as="status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Status</argument>
+                            <argument name="index" xsi:type="string">status</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="width" xsi:type="string">120</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="disabled" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">UP TO DATE</item>
+                                </item>
+                                <item name="enabled" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">OUTDATED</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column"
+                           name="lightna.index.grid.columnSet.rebuilt_at"
+                           as="rebuilt_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Rebuilt At</argument>
+                            <argument name="index" xsi:type="string">rebuilt_at</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="width" xsi:type="string">180</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column"
+                           name="lightna.index.grid.columnSet.invalidated_at"
+                           as="invalidated_at">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Invalidated At</argument>
+                            <argument name="index" xsi:type="string">invalidated_at</argument>
+                            <argument name="type" xsi:type="string">text</argument>
+                            <argument name="width" xsi:type="string">180</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="translate" xsi:type="boolean">true</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

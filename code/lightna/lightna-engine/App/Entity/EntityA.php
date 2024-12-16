@@ -9,7 +9,7 @@ use Generator;
 use Lightna\Engine\App\Config as AppConfig;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\State;
+use Lightna\Engine\App\State\Common;
 use Lightna\Engine\App\Storage;
 use Lightna\Engine\App\Storage\StorageInterface;
 
@@ -24,7 +24,7 @@ class EntityA extends ObjectA
     protected string $storageName;
     protected Storage $storageFactory;
     protected StorageInterface $storage;
-    protected State $state;
+    protected Common $state;
     protected Context $context;
     protected AppConfig $appConfig;
 

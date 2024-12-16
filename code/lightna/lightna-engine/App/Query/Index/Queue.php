@@ -123,8 +123,25 @@ class Queue extends ObjectA
         $this->db->query('truncate table ' . $this->db->quoteIdentifier(Schema::TABLE_NAME));
     }
 
+    public function resetEntity(string $code): void
+    {
+        $this->db->discreteWrite($this->getResetEntityDelete($code));
+    }
+
+    protected function getResetEntityDelete(string $code): Delete
+    {
+        return $this->db->delete()
+            ->from(Schema::TABLE_NAME)
+            ->where(['entity = ?' => $code]);
+    }
+
     public function isEmpty(): bool
     {
         return empty($this->db->fetchOne($this->db->select(Schema::TABLE_NAME)));
+    }
+
+    public function getApproxRows(): int
+    {
+        return $this->db->structure->getApproxRows(Schema::TABLE_NAME);
     }
 }

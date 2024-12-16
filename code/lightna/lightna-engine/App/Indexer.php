@@ -10,6 +10,8 @@ use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Index\Queue\Handler as QueueHandler;
 use Lightna\Engine\App\Project\Database;
+use Lightna\Engine\App\Query\Index\Queue as QueueQuery;
+use Lightna\Engine\App\State\Index as IndexState;
 
 class Indexer extends ObjectA
 {
@@ -32,6 +34,7 @@ class Indexer extends ObjectA
     protected QueueHandler $queueHandler;
     protected Database $db;
     protected State $state;
+    protected QueueQuery $queueQuery;
 
     public function reindex(string $entityCode, ?int $onlyScope = null): void
     {
@@ -81,6 +84,8 @@ class Indexer extends ObjectA
         try {
             $this->validateQueueBlock(false);
             $this->setQueueStopFlag(false);
+
+            $this->reindexOutdated();
             $this->changelogHandler->process();
             $this->queueHandler->process();
         } finally {
@@ -209,5 +214,45 @@ class Indexer extends ObjectA
             throw new UserException('Queue has been stopped by another index command.');
         }
         $lastCheckMct = microtime(true);
+    }
+
+    protected function reindexOutdated(): void
+    {
+        $this->lockQueue();
+        try {
+            foreach ($this->getOutdatedEntities() as $code) {
+                $this->validateQueueAllowed();
+
+                $this->queueQuery->resetEntity($code);
+                $this->reindex($code);
+
+                $indexState = $this->getIndexState();
+                $indexState->entities[$code]->rebuiltAt = microtime(true);
+                $indexState->save();
+            }
+        } finally {
+            $this->unlockQueue();
+        }
+    }
+
+    public function getOutdatedEntities(): array
+    {
+        $outdated = [];
+        foreach ($this->getIndexState()->entities as $entityCode => $status) {
+            if (!isset($this->entities[$entityCode]) || !$this->getEntityIndex($entityCode)) {
+                continue;
+            }
+
+            if (!$status->isUpToDate()) {
+                $outdated[] = $entityCode;
+            }
+        }
+
+        return $outdated;
+    }
+
+    public function getIndexState(): IndexState
+    {
+        return newobj(IndexState::class);
     }
 }
