@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index\Product;
+namespace Lightna\Magento\Index\Provider;
 
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
@@ -14,7 +14,7 @@ use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\App\Query\Url;
 use Lightna\Magento\Index\Product as ProductIndex;
 
-class Batch extends ObjectA
+class Product extends ObjectA
 {
     protected Database $db;
     protected ProductIndex $productIndex;
@@ -24,6 +24,8 @@ class Batch extends ObjectA
     protected Gallery $gallery;
     protected Inventory $inventoryQuery;
     protected Url $urlQuery;
+    /** @AppConfig(backend:indexer/product/raw_value_attributes) */
+    protected array $rawValueAttributes;
 
     /** Batch variables */
     protected array $ids;
@@ -150,7 +152,7 @@ class Batch extends ObjectA
 
     protected function loadAttributes(): void
     {
-        $this->attributes = $this->eav->getAttributeValues($this->allIds, []);
+        $this->attributes = $this->eav->getAttributeValues($this->allIds, [], $this->rawValueAttributes);
     }
 
     protected function loadPrices(): void

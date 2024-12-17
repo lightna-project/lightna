@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Console\Entity;
+namespace Lightna\Engine\App\Console\Index\Entity;
 
 use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\Context;

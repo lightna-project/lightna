@@ -2,23 +2,23 @@ cli:
   command:
     build.asset.sign: Lightna\Engine\App\Console\Asset\Sign
     config.apply: Lightna\Engine\App\Console\Config\Apply
-    update: Lightna\Engine\App\Console\Update
-    index.entity.list: Lightna\Engine\App\Console\Index\Entity\Info
     index.entity.invalidate: Lightna\Engine\App\Console\Index\Entity\Invalidate
+    index.entity.list: Lightna\Engine\App\Console\Index\Entity\Info
+    index.entity.show: Lightna\Engine\App\Console\Index\Entity\Show
+    index.gc: Lightna\Engine\App\Console\Index\Gc
+    index.queue.block: Lightna\Engine\App\Console\Index\Queue\Block
+    index.queue.process: Lightna\Engine\App\Console\Index\Queue\Process
+    index.queue.reset: Lightna\Engine\App\Console\Index\Queue\Reset
+    index.queue.unblock: Lightna\Engine\App\Console\Index\Queue\Unblock
+    index.queue.watch: Lightna\Engine\App\Console\Index\Queue\Watch
     index.update.all: Lightna\Engine\App\Console\Index\Update\All
     index.update.entity: Lightna\Engine\App\Console\Index\Update\Entity
     index.update.storage: Lightna\Engine\App\Console\Index\Update\Storage
-    index.queue.process: Lightna\Engine\App\Console\Index\Queue\Process
-    index.queue.watch: Lightna\Engine\App\Console\Index\Queue\Watch
-    index.queue.block: Lightna\Engine\App\Console\Index\Queue\Block
-    index.queue.unblock: Lightna\Engine\App\Console\Index\Queue\Unblock
-    index.queue.reset: Lightna\Engine\App\Console\Index\Queue\Reset
     index.version.bind: Lightna\Engine\App\Console\Index\Version\Bind
     index.version.next: Lightna\Engine\App\Console\Index\Version\Next
     index.version.previous: Lightna\Engine\App\Console\Index\Version\Previous
-    index.gc: Lightna\Engine\App\Console\Index\Gc
-    entity.show: Lightna\Engine\App\Console\Entity\Show
     opcache.slap: Lightna\Engine\App\Console\Opcache\Slap
+    update: Lightna\Engine\App\Console\Update
   update:
     - Lightna\Engine\App\Update\Schema\Index\Changelog
     - Lightna\Engine\App\Update\Schema\Index\Triggers

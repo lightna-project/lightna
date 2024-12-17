@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index\Content\Provider;
+namespace Lightna\Magento\Index\Provider\Content;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Magento\App\Query\Product\Eav;

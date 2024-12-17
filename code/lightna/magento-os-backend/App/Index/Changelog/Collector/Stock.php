@@ -11,12 +11,16 @@ use Lightna\Engine\App\ObjectA;
 class Stock extends ObjectA implements CollectorInterface
 {
     protected Collect $collect;
+    /** @AppConfig(backend:indexer/inventory/ignore_qty_change) */
+    protected bool $ignoreQtyChange;
 
     public function collect(string $table, array $changelog): array
     {
         if ($table === 'cataloginventory_stock_item') {
+            $ignore = $this->ignoreQtyChange ? ['qty'] : [];
+
             return [
-                'product' => $this->collect->ids($changelog, 'product_id'),
+                'product' => $this->collect->idsWithIgnore($changelog, 'product_id', $ignore),
             ];
         }
 

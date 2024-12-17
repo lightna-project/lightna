@@ -53,4 +53,36 @@ class Collect extends ObjectA
 
         return $this->entityLink->getIds($table, $ids);
     }
+
+    public function idsWithIgnore(array $changelog, string $column, array $ignore, string $type = 'int'): array
+    {
+        $ids = [];
+        foreach ($changelog as $record) {
+            if ($this->isOnlyFieldsChanged($record, $ignore)) {
+                continue;
+            }
+            foreach ($this->recordIds($record, $column, $type) as $id) {
+                $ids[$id] = $id;
+            }
+        }
+
+        return $ids;
+    }
+
+    public function isOnlyFieldsChanged(array $record, array $fields): bool
+    {
+        return empty(array_diff($this->getChangedFields($record), $fields));
+    }
+
+    public function getChangedFields(array $record): array
+    {
+        $fields = [];
+        foreach ($record as $field => $change) {
+            if ($change['old_value'] !== $change['new_value']) {
+                $fields[] = $field;
+            }
+        }
+
+        return $fields;
+    }
 }

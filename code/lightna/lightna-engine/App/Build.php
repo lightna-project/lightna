@@ -10,13 +10,13 @@ class Build extends Opcache
 
     public function getAppConfig(string $area = null): array
     {
-        if (defined('IS_COMPILER')) {
+        if (Bootstrap::getCompilerMode() === 'none') {
+            return Bootstrap::getConfig();
+        } else {
             return merge(
                 $this->load('config/' . ($area ?? LIGHTNA_AREA)),
                 Bootstrap::getConfig(),
             );
-        } else {
-            return Bootstrap::getConfig();
         }
     }
 }

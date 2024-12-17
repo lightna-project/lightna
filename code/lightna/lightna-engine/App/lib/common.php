@@ -146,18 +146,18 @@ function json_pretty(mixed $var): string
     return json_encode($var, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 }
 
-function phrase(string $phrase): string
+function phrase(string $phrase, array $args = []): string
 {
-    return escape(_phrase($phrase));
+    return escape(_phrase($phrase, $args));
 }
 
-function _phrase(string $phrase): string
+function _phrase(string $phrase, array $args = []): string
 {
     /** @var I18n $i18n */
     static $i18n;
     $i18n ??= getobj(I18n::class);
 
-    return $i18n->phrase($phrase);
+    return $i18n->phrase($phrase, $args);
 }
 
 function opcache_load_revalidated(string $file): mixed
