@@ -15,6 +15,7 @@ use Lightna\Engine\App\Compiler\ObjectSchema as ObjectSchemaCompiler;
 use Lightna\Engine\App\Compiler\Plugin as PluginCompiler;
 use Lightna\Engine\App\Compiler\Preload as PreloadCompiler;
 use Lightna\Engine\App\Compiler\Template as TemplateCompiler;
+use Lightna\Engine\App\Compiler\Translate as TranslateCompiler;
 use Lightna\Engine\App\Config as AppConfig;
 
 class Compile extends CommandA
@@ -26,9 +27,11 @@ class Compile extends CommandA
     {
         $this->init();
 
-        $this->printStart('clean build');
-        $this->compiler->clean();
-        $this->printEnd();
+        if (Bootstrap::getCompilerMode() === 'default') {
+            $this->printStart('clean build');
+            $this->compiler->clean();
+            $this->printEnd();
+        }
 
         $this->runItem([
             'message' => 'make objects map',
@@ -69,6 +72,10 @@ class Compile extends CommandA
             [
                 'message' => 'make layout',
                 'compiler' => getobj(LayoutCompiler::class),
+            ],
+            [
+                'message' => 'make translates',
+                'compiler' => getobj(TranslateCompiler::class),
             ],
             [
                 'message' => 'make assets',
@@ -117,6 +124,12 @@ class Compile extends CommandA
     public function apply(): void
     {
         $this->init();
+
+        if (!is_dir($this->build->getDir())) {
+            echo cli_warning('No build to apply') . "\n";
+            return;
+        }
+
         Bootstrap::autoload();
         Bootstrap::objectManager();
 

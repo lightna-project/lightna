@@ -8,6 +8,13 @@ use Exception;
 
 class Bootstrap
 {
+    /**
+     * COMPILER_MODE
+     *  "none" - not a compiler run
+     *  "default" - compiler creates new build in "building" folder then moves the results into "build" folder on success
+     *  "direct" - compiler updates existing build in "build" folder
+     */
+    protected static string $COMPILER_MODE = 'none';
     protected static bool $autoloadRegistered = false;
     protected static array $config;
 
@@ -19,15 +26,9 @@ class Bootstrap
         define('LIGHTNA_AREAS', ['frontend', 'backend']);
         define('LIGHTNA_AREA', php_sapi_name() === 'cli' ? 'backend' : 'frontend');
         static::loadConfig();
+        static::defineBuild();
 
         define('LIGHTNA_SRC', static::$config['src_dir']);
-        define(
-            'BUILD_DIR',
-            LIGHTNA_ENTRY . static::$config['compiler']['dir']
-            . (defined('IS_COMPILER')
-                ? '/building/'
-                : '/build/'),
-        );
         define("IS_DEV_MODE", static::$config['mode'] === 'dev');
         define("IS_PROD_MODE", static::$config['mode'] === 'prod');
         define(
@@ -52,10 +53,10 @@ class Bootstrap
 
     protected static function loadConfig(): void
     {
-        if (defined('IS_COMPILER')) {
-            static::loadCompilerConfig();
-        } else {
+        if (static::getCompilerMode() === 'none') {
             static::loadAreaConfig();
+        } else {
+            static::loadCompilerConfig();
         }
     }
 
@@ -112,5 +113,28 @@ class Bootstrap
         set_error_handler(function () {
             return false;
         });
+    }
+
+    public static function getCompilerMode(): string
+    {
+        return static::$COMPILER_MODE;
+    }
+
+    public static function setCompilerMode(string $mode): void
+    {
+        if (!in_array($mode, ['none', 'default', 'direct'])) {
+            throw new Exception('Unknown compiler mode');
+        }
+
+        static::$COMPILER_MODE = $mode;
+    }
+
+    protected static function defineBuild(): void
+    {
+        $folder = static::$COMPILER_MODE === 'default' ? 'building' : 'build';
+        define(
+            'BUILD_DIR',
+            LIGHTNA_ENTRY . static::$config['compiler']['dir'] . '/' . $folder . '/',
+        );
     }
 }

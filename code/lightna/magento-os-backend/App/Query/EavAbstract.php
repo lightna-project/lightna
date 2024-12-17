@@ -40,10 +40,11 @@ abstract class EavAbstract extends ObjectA
         $this->defineAttributes();
     }
 
-    public function getAttributeValues(array $entityIds, array $attributeCodes): array
+    public function getAttributeValues(array $entityIds, array $attributeCodes, array $rawValueAttributes = []): array
     {
         $attributes = $this->getAttributeValuesRaw($entityIds, $attributeCodes);
-        $this->processOptions($attributes);
+        $this->processRawValueAttributes($attributes, $rawValueAttributes);
+        $this->processAttributeOptions($attributes);
 
         return $attributes;
     }
@@ -61,11 +62,27 @@ abstract class EavAbstract extends ObjectA
         return $attributes;
     }
 
-    protected function processOptions(array &$attributesBatch): void
+    protected function processRawValueAttributes(array &$attributeValues, array $rawValueAttributes = []): void
+    {
+        foreach ($attributeValues as $id => $values) {
+            foreach ($rawValueAttributes as $code) {
+                if (isset($values[$code])) {
+                    $attributeValues[$id][$code . 'Raw'] = $values[$code]['value'];
+                }
+            }
+        }
+    }
+
+    protected function processAttributeOptions(array &$attributesBatch): void
     {
         $options = $this->getOptions();
         foreach ($attributesBatch as &$attributes) {
             foreach ($attributes as &$data) {
+                if (!is_array($data)) {
+                    // Skip raw values
+                    continue;
+                }
+
                 $isMultiselect = $this->attributesById[$data['attribute_id']]['frontend_input'] === 'multiselect';
                 $values = $isMultiselect ? explode(',', (string)$data['value']) : [$data['value']];
 

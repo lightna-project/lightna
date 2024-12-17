@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
+use Exception;
 use Lightna\Engine\App\Config as AppConfig;
 
 class ObjectManager
@@ -16,7 +17,7 @@ class ObjectManager
     public static function init(): void
     {
         if (!class_exists(ObjectA::class)) {
-            throw new \Exception(ObjectA::class . ' needs to be defined');
+            throw new Exception(ObjectA::class . ' needs to be defined');
         }
         static::$schema = require BUILD_DIR . 'object/schema.php';
         static::$extended = require BUILD_DIR . 'object/extended.php';
@@ -58,7 +59,7 @@ class ObjectManager
     public static function validateClass(string $className): void
     {
         if (!isset(static::$schema[$className])) {
-            throw new \Exception('Class ' . $className . ' can\'t be created by ObjectManager');
+            throw new Exception('Class ' . $className . ' not found by ObjectManager');
         }
     }
 }

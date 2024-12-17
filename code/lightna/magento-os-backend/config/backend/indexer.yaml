@@ -46,3 +46,9 @@ indexer:
         lightna_category: Lightna\Magento\App\Index\Changelog\Collector\Category
         lightna_attributes: Lightna\Magento\App\Index\Changelog\Collector\Attributes
         lightna_cms_block: Lightna\Magento\App\Index\Changelog\Collector\CmsBlock
+  inventory:
+    ignore_qty_change: true
+  product:
+    raw_value_attributes:
+      - new
+      - sale

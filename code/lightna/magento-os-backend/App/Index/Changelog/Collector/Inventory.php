@@ -13,6 +13,8 @@ class Inventory extends ObjectA implements CollectorInterface
 {
     protected Collect $collect;
     protected ProductQuery $productQuery;
+    /** @AppConfig(backend:indexer/inventory/ignore_qty_change) */
+    protected bool $ignoreQtyChange;
 
     public function collect(string $table, array $changelog): array
     {
@@ -32,7 +34,8 @@ class Inventory extends ObjectA implements CollectorInterface
 
     protected function collectProductIds(array $changelog): array
     {
-        $skus = $this->collect->ids($changelog, 'sku', 'string');
+        $ignore = $this->ignoreQtyChange ? ['quantity'] : [];
+        $skus = $this->collect->idsWithIgnore($changelog, 'sku', $ignore, 'string');
 
         return $this->productQuery->getProductIdsBySkus($skus);
     }

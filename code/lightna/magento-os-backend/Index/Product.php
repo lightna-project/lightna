@@ -12,7 +12,7 @@ use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
 use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\App\Query\Url;
-use Lightna\Magento\Index\Product\Batch as BatchDataProvider;
+use Lightna\Magento\Index\Provider\Product as ProductDataProvider;
 
 class Product extends IndexAbstract
 {
@@ -33,9 +33,9 @@ class Product extends IndexAbstract
         return $this->url->getEntityRoutesBatch('product', $ids);
     }
 
-    protected function getDataProvider(): BatchDataProvider
+    protected function getDataProvider(): ProductDataProvider
     {
-        return newobj(BatchDataProvider::class);
+        return newobj(ProductDataProvider::class);
     }
 
     public function scan(string|int $lastId = null): array

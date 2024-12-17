@@ -46,11 +46,6 @@ class Compiler extends ObjectA
 
     protected function applyBuild(): void
     {
-        if (!is_dir($this->build->getDir())) {
-            echo cli_warning('No build to apply') . "\n";
-            return;
-        }
-
         if (is_dir($this->getBuildOrigDir())) {
             rename($this->getBuildOrigDir(), $this->getBuildBakDir());
         }
@@ -89,7 +84,9 @@ class Compiler extends ObjectA
 
     public function getAssetDir(): string
     {
-        $dir = IS_COMPILER ? $this->getAssetBuildingDir() : LIGHTNA_ENTRY . $this->config['asset_dir'];
+        $dir = Bootstrap::getCompilerMode() === 'default'
+            ? $this->getAssetBuildingDir()
+            : LIGHTNA_ENTRY . $this->config['asset_dir'];
 
         return rtrim($dir, '/') . '/';
     }

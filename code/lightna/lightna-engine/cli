@@ -5,7 +5,6 @@
 declare(strict_types=1);
 
 use Lightna\Engine\App\Cli;
-use Lightna\Engine\App\Console\Compile;
 use Lightna\Engine\App\UserException;
 
 require __DIR__ . '/App/lib/cli.php';
@@ -14,22 +13,16 @@ $config = require LIGHTNA_ENTRY . 'config.php';
 $command = $argv[1] ?? '';
 
 if (in_array($command, ['?', 'help', '', '-h', '--help'])) {
-    $commands = array_keys(cli_get_all_commands($config['compiler']['dir']));
-    echo "\n Available commands:\n\n    " . implode("\n    ", $commands) . "\n\n";
+    cli_help($config['compiler']['dir']);
     exit;
 }
 
 if (str_starts_with($command, 'build.')) {
-    define('IS_COMPILER', true);
+    cli_init_compiler_mode();
 }
 
 if (in_array($command, ['build.compile', 'build.apply'])) {
-    cli_init_compiler();
-    if ($command === 'build.compile') {
-        (new Compile())->run();
-    } elseif ($command === 'build.apply') {
-        (new Compile())->apply();
-    }
+    cli_run_compiler($command);
     exit;
 }
 

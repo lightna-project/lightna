@@ -2,6 +2,15 @@
 
 declare(strict_types=1);
 
+use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Console\Compile;
+
+function cli_help(string $compilerDir): void
+{
+    $commands = array_keys(cli_get_all_commands($compilerDir));
+    echo "\n Available commands:\n\n    " . implode("\n    ", $commands) . "\n\n";
+}
+
 function cli_get_all_commands(string $codeDir): array
 {
     $commands = [
@@ -20,6 +29,15 @@ function cli_get_all_commands(string $codeDir): array
     return $commands;
 }
 
+function cli_init_compiler_mode(): void
+{
+    require __DIR__ . '/../Bootstrap.php';
+
+    Bootstrap::setCompilerMode(
+        cli_has_option('direct') ? 'direct' : 'default',
+    );
+}
+
 function cli_init_compiler(): void
 {
     $requires = [
@@ -30,7 +48,6 @@ function cli_init_compiler(): void
         'Build',
         'Console/CommandA',
         'Console/Compile',
-        'Bootstrap',
         'Compiler',
         'Compiler/CompilerA',
         'Compiler/ClassMap',
@@ -39,6 +56,18 @@ function cli_init_compiler(): void
 
     foreach ($requires as $require) {
         require __DIR__ . '/../' . $require . '.php';
+    }
+}
+
+function cli_run_compiler(string $command): void
+{
+    cli_init_compiler();
+    if ($command === 'build.compile') {
+        (new Compile())->run();
+    } elseif ($command === 'build.apply') {
+        // No "direct" mode for apply command
+        Bootstrap::setCompilerMode('default');
+        (new Compile())->apply();
     }
 }
 
@@ -89,4 +118,10 @@ function array_flat(array $array, string $separator = '.'): array
     }
 
     return $flat;
+}
+
+function cli_has_option(string $option): bool
+{
+    global $argv;
+    return (bool)array_search('--' . $option, $argv, true);
 }
