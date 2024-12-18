@@ -200,11 +200,17 @@ class Webpack extends CompilerA
     protected function saveConfig(): void
     {
         $this->build->putFile('webpack/webpack.config.js', $this->getWpConfigJs());
+        $this->build->putFile('webpack/webpack.config.dev.js', $this->getWpDevConfigJs());
     }
 
     protected function getWpConfigJs(): string
     {
         return 'module.exports = ' . json_pretty($this->getWpConfig());
+    }
+
+    protected function getWpDevConfigJs(): string
+    {
+        return str_replace('building', 'build', $this->getWpConfigJs());
     }
 
     protected function getWpConfig(): array
