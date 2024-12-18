@@ -215,7 +215,7 @@ function getRelativePath(string $from, string $to): string
     $upLevels = count($fromParts) - $commonBaseLength;
     $relativePath = str_repeat('../', $upLevels) . implode('/', array_slice($toParts, $commonBaseLength));
 
-    return rtrim($relativePath === '' ? './' : $relativePath, '/') . '/';
+    return rtrim($relativePath === '' ? './' : $relativePath, '/') . (is_dir($to) ? '/' : '');
 }
 
 function array_filter_recursive(array $array, ?callable $cb): array

@@ -27,8 +27,9 @@ class Preload extends CompilerA
     {
         $preload = "<?php";
         foreach ($this->files as $file) {
-            $fileExpr = var_export(realpath(LIGHTNA_ENTRY . $file), true);
-            $preload .= "\nopcache_compile_file($fileExpr);";
+            $relFile = getRelativePath($this->build->getDir(), LIGHTNA_ENTRY . $file);
+            $fileExpr = var_export('/' . $relFile, true);
+            $preload .= "\nopcache_compile_file(__DIR__ . $fileExpr);";
         }
         $this->preload = $preload;
     }
