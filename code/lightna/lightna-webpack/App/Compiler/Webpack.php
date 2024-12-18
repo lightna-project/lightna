@@ -6,15 +6,14 @@ namespace Lightna\Webpack\App\Compiler;
 
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Compiler\CompilerA;
+use stdClass;
 
 class Webpack extends CompilerA
 {
     protected array $modulesConfig;
     protected array $relevantModules;
     protected array $importsIndex = [];
-    protected array $filesIndex = [];
     protected array $extendAliases = [];
-    protected array $wpConfig;
 
     public function make(): void
     {
@@ -56,30 +55,18 @@ class Webpack extends CompilerA
         $this->walkFilesInModules(
             'js',
             ['js'],
-            function ($subPath, $file, $modulePath, $moduleName, $moduleDir) {
+            function ($subPath, $file, $modulePath, $moduleName) {
                 $subPath = preg_replace('~\.js$~', '', $subPath);
                 $this->importsIndex[$moduleName . '/' . $subPath] = $moduleName . '/' . $subPath;
-                $this->filesIndex[$moduleName . '/' . $subPath] = $moduleDir . 'js/' . $subPath;
             }
         );
     }
 
     protected function makeWpConfig(): void
     {
-        $this->makeEntriesConfig();
         $this->makeExtends();
         $this->makeEntriesJs();
-        $this->makeAliasesConfig();
         $this->saveConfig();
-    }
-
-    protected function makeEntriesConfig(): void
-    {
-        $entries = $this->modulesConfig['entry'] ?? [];
-        $this->wpConfig['entry'] = [];
-        foreach ($entries as $name => $types) {
-            $this->wpConfig['entry'][$name] = $this->build->getDir() . 'webpack/' . $name . '.js';
-        }
     }
 
     protected function makeExtends(): void
@@ -89,7 +76,7 @@ class Webpack extends CompilerA
                 continue;
             }
             $this->build->putFile('webpack/extend/' . $import . '.js', $this->getExtendsJs($import));
-            $this->extendAliases[$import] = $this->build->getDir() . './webpack/extend/' . $import . '.js';
+            $this->extendAliases[$import] = $import;
         }
     }
 
@@ -99,7 +86,7 @@ class Webpack extends CompilerA
         $nameOrigin = $name . 'Origin';
         $extends = $this->modulesConfig['extend'][$import];
 
-        $js = "import { $name as $nameOrigin } from " . json_pretty(LIGHTNA_ENTRY . $this->filesIndex[$import]) . ';';
+        $js = "import { $name as $nameOrigin } from " . json_pretty($import . '.js') . ';';
         $extend = array_shift($extends);
         $js .= "\nlet $name = require(" . json_pretty($extend) . ").extend($nameOrigin);";
 
@@ -176,22 +163,6 @@ class Webpack extends CompilerA
         $this->build->putFile('webpack/' . $name . '.js', $js);
     }
 
-    protected function makeAliasesConfig(): void
-    {
-        $aliases = &$this->wpConfig['resolve']['alias'];
-        $aliases = merge($this->extendAliases, $this->getModuleAliases());
-    }
-
-    protected function getModuleAliases(): array
-    {
-        $aliases = [];
-        foreach ($this->relevantModules as $folder) {
-            $aliases[$this->getModuleAlias($folder)] = LIGHTNA_ENTRY . $folder . '/js';
-        }
-
-        return $aliases;
-    }
-
     protected function getModuleAlias(string $folder): string
     {
         return implode('/', array_slice(explode('/', rtrim($folder, '/')), -2));
@@ -204,14 +175,62 @@ class Webpack extends CompilerA
 
     protected function getWpConfigJs(): string
     {
-        return 'module.exports = ' . json_pretty($this->getWpConfig());
+        return $this->getWpConfigJsHead() .
+            $this->getWpConfigJsEntries() .
+            $this->getWpConfigJsExtendAliases() .
+            $this->getWpConfigJsModuleAliases() .
+            $this->getWpConfigJsExports();
     }
 
-    protected function getWpConfig(): array
+    protected function getWpConfigJsHead(): string
     {
-        return merge(
-            $this->modulesConfig['webpack'] ?? [],
-            $this->wpConfig,
-        );
+        $js = "const path = require('path');\n";
+        $js .= "let config = " . json_pretty($this->modulesConfig['webpack'] ?? new stdClass()) . ";\n";
+        $js .= "config.entry = config.entry || {};\n";
+        $js .= "config.resolve = config.resolve || {};\n";
+        $js .= "config.resolve.alias = config.resolve.alias || {};\n\n";
+
+        return $js;
+    }
+
+    protected function getWpConfigJsEntries(): string
+    {
+        $entries = $this->modulesConfig['entry'] ?? [];
+        $js = '';
+        foreach ($entries as $name => $entry) {
+            $js .= "config.entry[" . json_pretty($name) . "]" .
+                " = path.resolve(__dirname, " . json_pretty('./' . $name . '.js') . ");\n";
+        }
+
+        return $js;
+    }
+
+    protected function getWpConfigJsExtendAliases(): string
+    {
+        $js = '';
+        foreach ($this->extendAliases as $extend) {
+            $js .= "config.resolve.alias[" . json_pretty($extend) . "]" .
+                " = path.resolve(__dirname, " . json_pretty('./extend/' . $extend) . ");\n";
+        }
+
+        return $js;
+    }
+
+    protected function getWpConfigJsModuleAliases(): string
+    {
+        $js = '';
+        foreach ($this->relevantModules as $folder) {
+            if (!is_dir($absDir = LIGHTNA_ENTRY . $folder . '/js')) continue;
+            $relFolder = getRelativePath($this->build->getDir() . 'webpack', $absDir);
+            $js .= "config.resolve.alias[" . json_pretty($this->getModuleAlias($folder)) . "]" .
+                " = path.resolve(__dirname, " . json_pretty('./' . $relFolder) . ");\n";
+        }
+
+        return $js;
+    }
+
+    protected function getWpConfigJsExports(): string
+    {
+        return "\nmodule.exports = config;\n";
     }
 }
