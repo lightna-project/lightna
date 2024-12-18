@@ -17,6 +17,8 @@
         "build-lane-css": "npx tailwindcss -i ../../generated/magento-os/compiled/building/tailwind/lane.css -o ../../generated/magento-os/compiled/asset.building/build/style/lane.css",
         "build": "webpack && npm run build-common-css -- --minify && npm run build-lane-css -- --minify && ./cli build.asset.sign",
         "watch-js": "webpack --mode=development",
-        "watch-css": "npm run build-common-css -- --watch --verbose && npm run build-lane-css -- --watch --verbose"
+        "watch-common-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/common.css -o ../../project/magento-os/pub/static/lightna/build/style/common.css -- --watch --verbose",
+        "watch-lane-css": "npx tailwindcss -i ../../generated/magento-os/compiled/build/tailwind/lane.css -o ../../project/magento-os/pub/static/lightna/build/lane.css  -- --watch --verbose",
+        "watch-css": "npm run watch-common-css && npm run watch-lane-css"
     }
 }
