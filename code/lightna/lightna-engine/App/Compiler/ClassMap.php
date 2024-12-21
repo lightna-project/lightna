@@ -34,7 +34,7 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
                     /** @noinspection PhpUndefinedMethodInspection */
                     $subName = $iterator->getSubPathname();
                     $class = $ns . '\\' . str_replace(['/', '.php'], ['\\', ''], $subName);
-                    $classes[$class] = $path . $subName;
+                    $classes[$class] = ['e', $path . $subName];
                 }
             }
         }

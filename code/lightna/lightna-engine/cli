@@ -21,7 +21,7 @@ if (str_starts_with($command, 'build.')) {
     cli_init_compiler_mode();
 }
 
-if (in_array($command, ['build.compile', 'build.apply'])) {
+if (in_array($command, ['build.compile', 'build.apply', 'build.validate'])) {
     cli_run_compiler($command);
     exit;
 }

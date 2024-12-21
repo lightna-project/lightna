@@ -135,4 +135,10 @@ class Compile extends CommandA
 
         $this->compiler->apply();
     }
+
+    public function validate(): void
+    {
+        // Error wil be thrown in Bootstrap::validateBuild
+        $this->init();
+    }
 }

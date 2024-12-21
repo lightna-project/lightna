@@ -136,5 +136,22 @@ class Bootstrap
             'BUILD_DIR',
             LIGHTNA_ENTRY . static::$config['compiler']['dir'] . '/' . $folder . '/',
         );
+
+        static::validateBuild();
+    }
+
+    protected static function validateBuild(): void
+    {
+        global $argv;
+
+        if (
+            LIGHTNA_AREA === 'backend' &&
+            str_starts_with($c = $argv[1] ?? '', 'build.') &&
+            $c !== 'build.compile' &&
+            !is_dir(BUILD_DIR)
+        ) {
+            echo cli_warning("Build folder not found. Have you run build.compile first?\n");
+            exit(1);
+        }
     }
 }

@@ -1,6 +1,6 @@
 cli:
   command:
-    build.asset.sign: Lightna\Engine\App\Console\Asset\Sign
+    build.asset.sign: Lightna\Engine\App\Console\Build\Asset\Sign
     config.apply: Lightna\Engine\App\Console\Config\Apply
     index.entity.invalidate: Lightna\Engine\App\Console\Index\Entity\Invalidate
     index.entity.list: Lightna\Engine\App\Console\Index\Entity\Info
