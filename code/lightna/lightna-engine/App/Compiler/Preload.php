@@ -11,23 +11,20 @@ class Preload extends CompilerA
 
     public function make(): void
     {
-        $this->collectFiles();
         $this->generatePreload();
         $this->save();
-    }
-
-    protected function collectFiles(): void
-    {
-        foreach ($this->build->load('object/map') as $fileName) {
-            $this->files[$fileName] = $fileName;
-        }
     }
 
     protected function generatePreload(): void
     {
         $preload = "<?php";
-        foreach ($this->files as $file) {
-            $relFile = getRelativePath($this->build->getDir(), LIGHTNA_ENTRY . $file);
+        foreach ($this->build->load('object/map') as $file) {
+            if ($file[0] === 'e') {
+                $relFile = getRelativePath($this->build->getDir(), LIGHTNA_ENTRY . $file[1]);
+            } else {
+                $relFile = $file[1];
+            }
+
             $fileExpr = var_export('/' . $relFile, true);
             $preload .= "\nopcache_compile_file(__DIR__ . $fileExpr);";
         }

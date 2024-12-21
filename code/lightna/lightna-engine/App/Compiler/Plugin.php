@@ -148,10 +148,9 @@ class Plugin extends CompilerA
     {
         $extendedClass = $class . static::EXTENDED_CLASS_SUFFIX;
         $file = 'class/' . $this->classToFile($extendedClass);
-        $autoloadFile = rtrim($this->config['compiler']['dir'], '/') . '/build/' . $file;
 
         $this->build->putFile($file, $this->createExtendDefinition($class));
-        $this->classMap[$extendedClass] = $autoloadFile;
+        $this->classMap[$extendedClass] = ['b', $file];
         $this->extended[$class] = $extendedClass;
     }
 

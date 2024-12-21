@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Console\Asset;
+namespace Lightna\Engine\App\Console\Build\Asset;
 
 use Lightna\Engine\App\Compiler\AssetSign as CompilerAssetSign;
 use Lightna\Engine\App\Console\CommandA;

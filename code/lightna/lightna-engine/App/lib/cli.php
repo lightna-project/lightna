@@ -15,6 +15,7 @@ function cli_get_all_commands(string $codeDir): array
 {
     $commands = [
         'build.compile' => true,
+        'build.validate' => true,
         'build.apply' => true,
     ];
     $buildConfigFile = LIGHTNA_ENTRY . $codeDir . '/build/config/backend.php';
@@ -64,6 +65,8 @@ function cli_run_compiler(string $command): void
     cli_init_compiler();
     if ($command === 'build.compile') {
         (new Compile())->run();
+    } elseif ($command === 'build.validate') {
+        (new Compile())->validate();
     } elseif ($command === 'build.apply') {
         // No "direct" mode for apply command
         Bootstrap::setCompilerMode('default');
