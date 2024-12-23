@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 $env = require BP . '/app/etc/env.php';
 
-if (!isset($env['lightna_entry'])) {
-    throw new Exception('Please specify "lightna_entry" in app/etc/env.php');
-}
-if (!is_dir($env['lightna_entry'])) {
-    throw new Exception('"lightna_entry" directory does not exist');
-}
+$error = match (true) {
+    !isset($env['lightna_entry']) => 'Please specify "lightna_entry" in app/etc/env.php',
+    !is_dir($env['lightna_entry']) => '"lightna_entry" directory does not exist',
+    !is_file($env['lightna_entry'] . '/env.php') => 'Invalid directory "lightna_entry"',
+    default => null,
+};
 
-if (!is_file($env['lightna_entry'] . '/env.php')) {
-    throw new Exception('Invalid directory "lightna_entry"');
+if ($error) {
+    throw new Exception($error);
 }
 
 define('LIGHTNA_ENTRY', realpath($env['lightna_entry']) . '/');

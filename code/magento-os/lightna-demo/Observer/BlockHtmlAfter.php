@@ -11,17 +11,18 @@ use Magento\Framework\Event\ObserverInterface;
 class BlockHtmlAfter implements ObserverInterface
 {
     protected Observer $observer;
+    protected bool $disabledLane;
 
     public function __construct(
-        protected Http $request,
+        Http $request,
     ) {
+        $this->disabledLane = !is_null($request->getParam('disable_lane'));
     }
 
     public function execute(Observer $observer): void
     {
         $this->observer = $observer;
-        $disabledLane = !is_null($this->request->getParam('disable_lane'));
-        if ($disabledLane) {
+        if ($this->disabledLane) {
             if ($this->isBlock('cookie-status-check')) {
                 $this->setBlockHtml(
                     blockhtml('#server-time-container') . $this->getBlockHtml()

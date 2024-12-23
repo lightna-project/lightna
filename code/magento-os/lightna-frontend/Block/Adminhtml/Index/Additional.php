@@ -29,12 +29,12 @@ class Additional extends Template
         $queueRows = $this->lightnaQueue->getApproxRows();
 
         return <<<HTML
-<h4>
+<div>
     <span>$changelogLabel</span> $changelogRows
-</h4>
-<h4>
+</div>
+<div>
     <span>$queueLabel</span> $queueRows
-</h4>
+</div>
 HTML;
     }
 }

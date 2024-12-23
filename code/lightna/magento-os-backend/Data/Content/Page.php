@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data\Content;
 
-use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Data\Content\Page\Menu\Item as MenuItem;
 
@@ -18,7 +17,6 @@ class Page extends DataA
 
     /** @AppConfig(entity/content_page/entity) */
     protected string $contentPageEntity;
-    protected Context $context;
 
     protected function init(array $data = []): void
     {
@@ -27,6 +25,6 @@ class Page extends DataA
 
     protected function getEntityData(): array
     {
-        return getobj($this->contentPageEntity)->get($this->context->scope);
+        return getobj($this->contentPageEntity)->get(1);
     }
 }

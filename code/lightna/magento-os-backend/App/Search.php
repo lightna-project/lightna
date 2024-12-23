@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Magento\App;
 
 use Lightna\Engine\App\Context;
-use Lightna\Engine\Data\DataA;
+use Lightna\Engine\App\ObjectA;
 use Lightna\Elasticsearch\App\Client as ElasticClient;
 use Lightna\Engine\Data\Request;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
@@ -14,7 +14,7 @@ use Lightna\Magento\Data\Config;
 use Lightna\Magento\Data\Content\Category as CategoryContent;
 use Lightna\Magento\Data\Session;
 
-class Search extends DataA
+class Search extends ObjectA
 {
     protected Config $config;
     protected ElasticClient $client;

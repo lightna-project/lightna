@@ -13,6 +13,7 @@ class ObjectManager
     protected static array $schema;
     protected static array $extended;
     protected static array $instances;
+    protected static array $producers = [];
 
     public static function init(): void
     {
@@ -21,12 +22,27 @@ class ObjectManager
         }
         static::$schema = require BUILD_DIR . 'object/schema.php';
         static::$extended = require BUILD_DIR . 'object/extended.php';
+        static::$producers['Lightna'] = [static::class, 'producer'];
         static::$config = getobj(AppConfig::class);
     }
 
-    public static function new(string $className, $data = []): mixed
+    protected static function produce(string $className, $data = []): ?object
     {
-        static::validateClass($className);
+        foreach (static::$producers as $producer) {
+            if ($object = call_user_func($producer, $className, $data)) {
+                return $object;
+            }
+        }
+
+        throw new Exception('Class ' . $className . ' not found by ObjectManager');
+    }
+
+    protected static function producer(string $className, $data = []): ?object
+    {
+        if (!isset(static::$schema[$className])) {
+            return null;
+        }
+
         $name = static::$extended[$className] ?? $className;
         $schema = static::$schema[$className];
 
@@ -42,7 +58,12 @@ class ObjectManager
         return $instance;
     }
 
-    public static function get(string $className, $data = []): mixed
+    public static function new(string $className, $data = []): object
+    {
+        return static::produce($className, $data);
+    }
+
+    public static function get(string $className, $data = []): object
     {
         if (isset(static::$instances[$className])) {
             return static::$instances[$className];
@@ -56,10 +77,8 @@ class ObjectManager
         return static::$config->get($path);
     }
 
-    public static function validateClass(string $className): void
+    public static function setProducer(string $name, callable $producer): void
     {
-        if (!isset(static::$schema[$className])) {
-            throw new Exception('Class ' . $className . ' not found by ObjectManager');
-        }
+        static::$producers[$name] = $producer;
     }
 }
