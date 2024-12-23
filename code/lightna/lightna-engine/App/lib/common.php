@@ -10,7 +10,7 @@ use Lightna\Engine\App\ObjectManager;
  * @psalm-param class-string<InstanceType> $type
  * @psalm-return InstanceType
  */
-function getobj(string $type, array $data = []): mixed
+function getobj(string $type, array $data = []): object
 {
     return ObjectManager::get($type, $data);
 }
@@ -20,7 +20,7 @@ function getobj(string $type, array $data = []): mixed
  * @psalm-param class-string<InstanceType> $type
  * @psalm-return InstanceType
  */
-function newobj(object|string $type, array $data = []): mixed
+function newobj(object|string $type, array $data = []): object
 {
     return ObjectManager::new(
         is_string($type) ? $type : $type::class,

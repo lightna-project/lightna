@@ -43,7 +43,7 @@
                             <argument name="translate" xsi:type="boolean">true</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Cache\Grid\Column\Statuses"
+                    <block class="Lightna\Frontend\Block\Adminhtml\Index\Column\Status"
                            name="lightna.index.grid.columnSet.status" as="status">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Status</argument>

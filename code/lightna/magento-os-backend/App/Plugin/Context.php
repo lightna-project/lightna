@@ -28,7 +28,7 @@ class Context extends DataA
     /** @noinspection PhpUnused */
     protected function defineRunCode(): void
     {
-        $this->runCode = $_SERVER['MAGE_RUN_CODE'] ?? '';
+        $this->runCode = camel($_SERVER['MAGE_RUN_CODE'] ?? '');
     }
 
     /** @noinspection PhpUnused */

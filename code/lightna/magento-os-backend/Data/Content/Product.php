@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data\Content;
 
-use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Data\Content\Product\VisibleOnFrontAttribute;
 
@@ -18,7 +17,6 @@ class Product extends DataA
 
     /** @AppConfig(entity/content_product/entity) */
     protected string $contentProductEntity;
-    protected Context $context;
 
     protected function init(array $data = []): void
     {
@@ -27,6 +25,6 @@ class Product extends DataA
 
     protected function getEntityData(): array
     {
-        return getobj($this->contentProductEntity)->get($this->context->scope);
+        return getobj($this->contentProductEntity)->get(1);
     }
 }
