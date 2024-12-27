@@ -1,14 +1,22 @@
 entry:
   common:
+    content:
+      - template/*.phtml
+      - template/cms/**/*.phtml
+      - template/component/**/*.phtml
+      - template/page/**/*.phtml
+      - layout/page.yaml
+      - layout/cms.yaml
+      - js/common/*.js
     import:
       - tailwindcss/base
       - base/animation.css
-      - base/buttons.css
       - base/forms.css
       - base/icons.css
       - base/layout.css
       - base/price.css
       - base/typography.css
+      - base/buttons.css
       - tailwindcss/components
       - components/collapsible.css
       - components/dropdown.css
@@ -24,16 +32,40 @@ entry:
       - components/common/minicart.css
       - components/common/search.css
       - components/common/search-suggestions.css
-      - components/listing/facets.css
-      - components/listing/toolbar.css
-      - components/product/attributes-list.css
-      - components/product/gallery.css
-      - components/product/options.css
       - components/product/products-grid.css
       - components/product/products-list.css
       - components/product/sku.css
       - components/product/stock.css
       - tailwindcss/utilities
+  product-page:
+    content:
+      - template/product/**/*.phtml
+      - layout/product.yaml
+      - js/product/**/*.js
+    import:
+      - tailwindcss/utilities
+      - tailwindcss/components
+      - base/icons.css
+      - base/animation.css
+      - base/buttons.css
+      - components/usp.css
+      - components/product/attributes-list.css
+      - components/product/gallery.css
+      - components/product/options.css
+      - components/product/sku.css
+      - components/product/stock.css
+  listing-page:
+    content:
+      - template/category/**/*.phtml
+      - layout/category.yaml
+      - js/listing/**/*.js
+    import:
+      - tailwindcss/utilities
+      - tailwindcss/components
+      - base/icons.css
+      - components/product/products-grid.css
+      - components/listing/facets.css
+      - components/listing/toolbar.css
 tailwind:
   theme:
     borderRadius:

@@ -42,9 +42,4 @@
     .facet__option__count {
         @apply ml-auto text-sm text-slate-500;
     }
-
-    .toggle-link:not(.active) ~ li:nth-child(n + 7) {
-        /* +1 for the show more button */
-        @apply hidden;
-    }
 }

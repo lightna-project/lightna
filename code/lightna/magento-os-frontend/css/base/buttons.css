@@ -1,4 +1,4 @@
-@layer base {
+@layer components {
     .btn {
         @apply disabled:btn-disabled mb-2 inline-flex justify-center rounded-sm
         border border-solid border-primary-main bg-primary-main px-4 py-3 text-center font-normal text-white transition

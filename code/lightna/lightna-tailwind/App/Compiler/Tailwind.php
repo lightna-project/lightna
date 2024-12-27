@@ -19,7 +19,7 @@ class Tailwind extends CompilerA
         $this->saveModulesConfig();
         $this->indexImports();
         $this->makeEntries();
-        $this->makeMainConfig();
+        $this->makeJsConfig();
     }
 
     protected function collectModulesConfig(): void
@@ -50,19 +50,37 @@ class Tailwind extends CompilerA
 
     protected function addModuleContent(string $moduleFolder, array &$config): void
     {
-        $config['tailwind']['content'] = [
-            $moduleFolder . '/template/**/*.phtml',
-            $moduleFolder . '/layout/*.yaml',
-            $moduleFolder . '/js/**/*.js',
-        ];
+        foreach ($this->getModules() as $folder) {
+            $configFile = $folder . '/tailwind.yaml';
+            if (!is_file($configFile)) {
+                continue;
+            }
+
+            foreach ($config['entry'] as $name => $entry) {
+                if (!isset($entry['content'])) {
+                    continue;
+                }
+
+                foreach ($entry['content'] as $content) {
+                    $content = $folder . '/' . $content;
+                    $config['entry'][$name]['moduleContent'][] = $content;
+                }
+            }
+        }
     }
 
     protected function saveModulesConfig(): void
     {
-        $this->build->putFile(
-            'tailwind/config.json',
-            json_pretty($this->twConfig['tailwind']),
-        );
+        foreach ($this->twConfig['entry'] as $name => $entry) {
+            $entryContent['content'] = $entry['moduleContent'] ?? [];
+            $this->build->putFile(
+                'tailwind/' . $name . '.json',
+                json_pretty(merge(
+                    $this->twConfig['tailwind'],
+                    $entryContent
+                ))
+            );
+        }
     }
 
 
@@ -70,6 +88,9 @@ class Tailwind extends CompilerA
     {
         $this->importsIndex = [];
         foreach ($this->twConfig['entry'] as $entry) {
+            if (!array_key_exists('import', $entry)) {
+                continue;
+            }
             foreach ($entry['import'] as $import) {
                 $this->importsIndex[$import] = null;
             }
@@ -94,12 +115,25 @@ class Tailwind extends CompilerA
     {
         foreach ($this->twConfig['entry'] as $name => $entry) {
             $entryCss = '';
-            foreach ($entry['import'] as $import) {
-                $entryCss .= "\n" . '@import ' . json_pretty($this->getImport($import)) . ';';
+            if (array_key_exists('import', $entry)) {
+                foreach ($entry['import'] as $import) {
+                    $entryCss .= "\n" . '@import ' . json_pretty($this->getImport($import)) . ';';
+                }
             }
-            $entryCss .= "\n" . '@config "tailwind.config.js";';
+            $entryCss .= "\n" . '@config "tailwind.config.' . $name . '.js";';
 
             $this->saveEntryCss($name, $entryCss);
+        }
+    }
+
+    protected function makeJsConfig(): void
+    {
+        foreach ($this->twConfig['entry'] as $name => $entry) {
+            $configJs = "import { readFileSync } from 'fs';\n";
+            $configJs .= "const allModulesConfig = JSON.parse(readFileSync(__dirname + '/" . $name . ".json', 'utf8'));\n";
+            $configJs .= "module.exports = allModulesConfig;\n";
+
+            $this->saveConfigJs($name, $configJs);
         }
     }
 
@@ -122,8 +156,9 @@ class Tailwind extends CompilerA
         $this->build->putFile('tailwind/' . $name . '.css', $css);
     }
 
-    protected function makeMainConfig(): void
+    protected function saveConfigJs(string $name, string $js): void
     {
-        file_copy(__DIR__ . '/../../tailwind.config.js', $this->build->getDir() . 'tailwind/tailwind.config.js');
+        $configName = 'tailwind.config.' . $name . '.js';
+        $this->build->putFile('tailwind/' . $configName, $js);
     }
 }
