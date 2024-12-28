@@ -54,12 +54,14 @@ cd ../..
 ### Integrate Lightna and Magento
 * Symlink Lightna modules and themes:
 ```
-mkdir -p project/magento-os/app/code/Lightna && \
-mkdir -p project/magento-os/app/design/frontend/Lightna && \
-ln -s ../../../../../code/magento-os/lightna-frontend project/magento-os/app/code/Lightna/Frontend && \
-ln -s ../../../../../code/magento-os/lightna-demo project/magento-os/app/code/Lightna/Demo && \
-ln -s ../../../../../../code/magento-os/lightna-theme project/magento-os/app/design/frontend/Lightna/Lightna && \
-ln -s ../../../../../../code/magento-os/lightna-lane-theme project/magento-os/app/design/frontend/Lightna/Lane
+export magentoAppDir=`realpath project/magento-os/app` && \
+export lightnaModulesDir=`realpath code` && \
+mkdir -p $magentoAppDir/code/Lightna && \
+mkdir -p $magentoAppDir/design/frontend/Lightna && \
+ln -s $lightnaModulesDir/magento-os/lightna-frontend $magentoAppDir/code/Lightna/Frontend && \
+ln -s $lightnaModulesDir/magento-os/lightna-demo $magentoAppDir/code/Lightna/Demo && \
+ln -s $lightnaModulesDir/magento-os/lightna-theme $magentoAppDir/design/frontend/Lightna/Lightna && \
+ln -s $lightnaModulesDir/magento-os/lightna-lane-theme $magentoAppDir/design/frontend/Lightna/Lane
 ```
 
 * Redirect Magento index.php to Lightna:
