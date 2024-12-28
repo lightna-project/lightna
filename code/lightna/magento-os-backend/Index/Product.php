@@ -6,7 +6,6 @@ namespace Lightna\Magento\Index;
 
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Index\IndexAbstract;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
@@ -18,7 +17,6 @@ class Product extends IndexAbstract
 {
     protected ProductEntity $entity;
     protected Database $db;
-    protected Context $context;
     protected Store $store;
     protected Url $url;
     protected bool $hasRoutes = true;
@@ -69,7 +67,7 @@ class Product extends IndexAbstract
 
     protected function getMainSelect(): Select
     {
-        $websiteId = $this->store->get($this->context->scope)['website_id'];
+        $websiteId = $this->store->getWebsiteId();
 
         $select = $this->db
             ->select(['e' => 'catalog_product_entity'])

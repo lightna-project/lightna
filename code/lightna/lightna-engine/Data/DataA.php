@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\Data;
 
+use AllowDynamicProperties;
 use Lightna\Engine\App\ObjectA;
 
+#[AllowDynamicProperties]
 class DataA extends ObjectA
 {
     protected function init(array $data = []): void

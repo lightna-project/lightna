@@ -38,7 +38,7 @@ class Category extends ObjectA
         return $this->db
             ->select('store_group')
             ->columns(['root_category_id'])
-            ->where(['group_id = ?' => $this->store->get($this->context->scope)['group_id']]);
+            ->where(['group_id = ?' => $this->store->getGroupId()]);
     }
 
     public function getNavigation(): array

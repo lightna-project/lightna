@@ -6,9 +6,9 @@ use Lightna\Engine\App\I18n;
 use Lightna\Engine\App\ObjectManager;
 
 /**
- * @psalm-template InstanceType
- * @psalm-param class-string<InstanceType> $type
- * @psalm-return InstanceType
+ * @template T
+ * @param class-string<T> $type
+ * @return T
  */
 function getobj(string $type, array $data = []): object
 {
@@ -16,16 +16,13 @@ function getobj(string $type, array $data = []): object
 }
 
 /**
- * @psalm-template InstanceType
- * @psalm-param class-string<InstanceType> $type
- * @psalm-return InstanceType
+ * @template T
+ * @param class-string<T> $type
+ * @return T
  */
-function newobj(object|string $type, array $data = []): object
+function newobj(string $type, array $data = []): object
 {
-    return ObjectManager::new(
-        is_string($type) ? $type : $type::class,
-        $data
-    );
+    return ObjectManager::new($type, $data);
 }
 
 function getconf(string $path): mixed

@@ -37,7 +37,7 @@ Readiness of MVP for Magento 2 - 75%.
 ### Setup Lightna
 * Meet requirements
   * Ubuntu or macOS 
-  * PHP 8.1
+  * PHP 8.1, 8.2, 8.3
   * yaml extension
   * redis extension
 

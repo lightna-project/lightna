@@ -16,9 +16,9 @@ use Lightna\Engine\App\Storage\StorageInterface;
 class EntityA extends ObjectA
 {
     /** Entity NAME should match to the entity code in yaml config */
-    public const NAME = self::NAME;
-    public const SCOPED = true;
-    public const STORAGE_PREFIX = self::STORAGE_PREFIX;
+    public const string NAME = self::NAME;
+    public const bool SCOPED = true;
+    public const string STORAGE_PREFIX = self::STORAGE_PREFIX;
 
     /** @AppConfig(default/storage) */
     protected string $storageName;
