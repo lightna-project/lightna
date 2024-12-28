@@ -6,7 +6,6 @@ namespace Lightna\Magento\App\Query\Inventory;
 
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Store;
@@ -14,7 +13,6 @@ use Lightna\Magento\App\Query\Store;
 class Msi extends ObjectA
 {
     protected Database $db;
-    protected Context $context;
     protected Store $store;
     protected array $websiteSources;
     protected array $websiteStock;
@@ -66,7 +64,7 @@ class Msi extends ObjectA
 
     public function getBatch(array $productIds): array
     {
-        $websiteId = $this->store->get($this->context->scope)['website_id'];
+        $websiteId = $this->store->getWebsiteId();
         $sourceCodes = array_keys($this->getWebsiteSources($websiteId));
 
         $inventory = $this->getInventoryBatch($sourceCodes, $productIds);

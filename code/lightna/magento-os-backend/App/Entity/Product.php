@@ -8,8 +8,8 @@ use Lightna\Engine\App\Entity\EntityA;
 
 class Product extends EntityA
 {
-    public const NAME = 'product';
-    public const STORAGE_PREFIX = 'PRD_';
+    public const string NAME = 'product';
+    public const string STORAGE_PREFIX = 'PRD_';
 
     /** @AppConfig(entity/product/storage) */
     protected string $storageName;

@@ -8,8 +8,8 @@ use Lightna\Engine\App\Entity\EntityA;
 
 class Category extends EntityA
 {
-    public const NAME = 'category';
-    public const STORAGE_PREFIX = 'CAT_';
+    public const string NAME = 'category';
+    public const string STORAGE_PREFIX = 'CAT_';
 
     /** @AppConfig(entity/category/storage) */
     protected string $storageName;

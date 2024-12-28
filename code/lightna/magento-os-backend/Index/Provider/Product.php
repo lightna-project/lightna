@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Index\Provider;
 
-use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Inventory;
@@ -18,7 +17,6 @@ class Product extends ObjectA
 {
     protected Database $db;
     protected ProductIndex $productIndex;
-    protected Context $context;
     protected Store $store;
     protected Eav $eav;
     protected Gallery $gallery;
@@ -157,7 +155,7 @@ class Product extends ObjectA
 
     protected function loadPrices(): void
     {
-        $websiteId = $this->store->get($this->context->scope)['website_id'];
+        $websiteId = $this->store->getWebsiteId();
 
         $select = $this->db
             ->select('catalog_product_index_price')

@@ -13,7 +13,7 @@ storage:
     options:
       host: localhost
       port: 3306
-      serializer: json
+      serializer: igbinary
       dbname: ""
 router:
   # List of router custom actions (name: class)
