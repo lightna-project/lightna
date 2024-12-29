@@ -8,8 +8,8 @@ use Lightna\Engine\App\Entity\EntityA;
 
 class Config extends EntityA
 {
-    public const string NAME = 'config';
-    public const string STORAGE_PREFIX = 'CFG_';
+    public const NAME = 'config';
+    public const STORAGE_PREFIX = 'CFG_';
 
     /** @AppConfig(entity/config/storage) */
     protected string $storageName;
