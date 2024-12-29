@@ -17,24 +17,28 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
         $root = realpath(LIGHTNA_ENTRY);
         $classes = [];
 
-        foreach ($this->getAllLibs() as $ns => $folder) {
-            if ($folder[0] !== '/') {
-                $folder = LIGHTNA_ENTRY . $folder;
-            }
+        foreach ($this->getAllPackages() as $ns => $folders) {
+            $folders = (array)$folders;
 
-            $iterator = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator($folder)
-            );
+            foreach ($folders as $folder) {
+                if ($folder[0] !== '/') {
+                    $folder = LIGHTNA_ENTRY . $folder;
+                }
 
-            $path = preg_replace('~^' . preg_quote($root) . '~', '', $folder);
-            $path = trim($path, '/') . '/';
+                $iterator = new RecursiveIteratorIterator(
+                    new RecursiveDirectoryIterator($folder)
+                );
 
-            foreach ($iterator as $file) {
-                if ($file->isFile() && $file->getExtension() === 'php' && ctype_upper($file->getFilename()[0])) {
-                    /** @noinspection PhpUndefinedMethodInspection */
-                    $subName = $iterator->getSubPathname();
-                    $class = $ns . '\\' . str_replace(['/', '.php'], ['\\', ''], $subName);
-                    $classes[$class] = ['e', $path . $subName];
+                $path = preg_replace('~^' . preg_quote($root) . '~', '', $folder);
+                $path = trim($path, '/') . '/';
+
+                foreach ($iterator as $file) {
+                    if ($file->isFile() && $file->getExtension() === 'php' && ctype_upper($file->getFilename()[0])) {
+                        /** @noinspection PhpUndefinedMethodInspection */
+                        $subName = $iterator->getSubPathname();
+                        $class = $ns . '\\' . str_replace(['/', '.php'], ['\\', ''], $subName);
+                        $classes[$class] = ['e', $path . $subName];
+                    }
                 }
             }
         }
@@ -42,14 +46,25 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
         $this->build->save('object/map', $classes);
     }
 
-    protected function getAllLibs(): array
+    protected function getAllPackages(): array
     {
         $config = require LIGHTNA_ENTRY . 'config.php';
 
         return merge(
-            ['Lightna\Engine' => LIGHTNA_SRC],
+            $this->getComposerPackages(),
             $config['modules'] ?? [],
-            $config['libs'] ?? []
+            ['Lightna\Engine' => LIGHTNA_SRC],
         );
+    }
+
+    protected function getComposerPackages(): array
+    {
+        $psr4Config = require LIGHTNA_ENTRY . 'vendor/composer/autoload_psr4.php';
+        $packages = [];
+        foreach ($psr4Config as $ns => $paths) {
+            $packages[trim($ns, '\\')] = $paths;
+        }
+
+        return $packages;
     }
 }

@@ -7,16 +7,16 @@ namespace Lightna\Magento\Index\Provider;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Inventory;
+use Lightna\Magento\App\Query\Product as ProductQuery;
 use Lightna\Magento\App\Query\Product\Eav;
 use Lightna\Magento\App\Query\Product\Gallery;
 use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\App\Query\Url;
-use Lightna\Magento\Index\Product as ProductIndex;
 
 class Product extends ObjectA
 {
     protected Database $db;
-    protected ProductIndex $productIndex;
+    protected ProductQuery $product;
     protected Store $store;
     protected Eav $eav;
     protected Gallery $gallery;
@@ -46,8 +46,7 @@ class Product extends ObjectA
         $this->addRelations();
         $this->loadData();
 
-        $batchSelect = $this->productIndex->getBatchSelect($this->allIds);
-        foreach ($this->db->fetch($batchSelect, 'entity_id') as $id => $product) {
+        foreach ($this->product->getBatch($this->allIds) as $id => $product) {
             if (!$this->isProductIndexable($product)) {
                 $this->unloadProduct($id);
                 continue;
