@@ -8,9 +8,9 @@ use Exception;
 
 class State extends EntityA
 {
-    public const string NAME = 'state';
-    public const bool SCOPED = false;
-    public const string STORAGE_PREFIX = 'STATE_';
+    public const NAME = 'state';
+    public const SCOPED = false;
+    public const STORAGE_PREFIX = 'STATE_';
 
     /** @AppConfig(entity/state/storage) */
     protected string $storageName;

@@ -10,10 +10,19 @@ ComponentRegistrar::register(
     __DIR__
 );
 
-if (PHP_SAPI === 'cli') {
-    require_once __DIR__ . '/registration/backend.php';
-}
-
-if (defined('BUILD_DIR')) {
-    require_once __DIR__ . '/registration/common.php';
+/**
+ *
+ * INITIALIZE LIGHTNA LANE
+ *
+ * Check for BP to prevent boot on non-magento
+ * Check for LIGHTNA_ENTRY to prevent Magento 2 ObjectManager on non-lightna-lane
+ *
+ **/
+if (defined('BP')) {
+    if (PHP_SAPI === 'cli') {
+        require_once __DIR__ . '/registration/backend.php';
+    }
+    if (defined('LIGHTNA_ENTRY')) {
+        require_once __DIR__ . '/registration/common.php';
+    }
 }
