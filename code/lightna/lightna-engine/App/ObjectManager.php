@@ -58,12 +58,12 @@ class ObjectManager
         return $instance;
     }
 
-    public static function new(string $className, $data = []): object
+    public static function new(string $className, array $data = []): object
     {
         return static::produce($className, $data);
     }
 
-    public static function get(string $className, $data = []): object
+    public static function get(string $className, array $data = []): object
     {
         if (isset(static::$instances[$className])) {
             return static::$instances[$className];

@@ -71,11 +71,6 @@ class DataA extends ObjectA
         return $null;
     }
 
-    protected function checkAccessibility(string $name): void
-    {
-        // Do nothing for Data object
-    }
-
     /**
      * Escape method for object needs to be specified strictly (no default value)
      */

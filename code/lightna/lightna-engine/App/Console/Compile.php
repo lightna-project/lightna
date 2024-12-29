@@ -34,7 +34,7 @@ class Compile extends CommandA
         }
 
         $this->runItem([
-            'message' => 'make objects map',
+            'message' => 'make class map',
             'compiler' => new ClassMapCompiler(),
         ]);
 
