@@ -5,19 +5,15 @@ declare(strict_types=1);
 namespace Lightna\Magento\Index\Provider;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\Project\Database;
 use Lightna\Magento\App\Query\Inventory;
 use Lightna\Magento\App\Query\Product as ProductQuery;
 use Lightna\Magento\App\Query\Product\Eav;
 use Lightna\Magento\App\Query\Product\Gallery;
-use Lightna\Magento\App\Query\Store;
 use Lightna\Magento\App\Query\Url;
 
 class Product extends ObjectA
 {
-    protected Database $db;
     protected ProductQuery $product;
-    protected Store $store;
     protected Eav $eav;
     protected Gallery $gallery;
     protected Inventory $inventoryQuery;
@@ -138,10 +134,7 @@ class Product extends ObjectA
         $this->children = [];
         $this->parents = [];
 
-        $select = $this->db->select('catalog_product_relation');
-        $select->where->in('parent_id', $this->ids);
-
-        foreach ($this->db->fetch($select) as $row) {
+        foreach ($this->product->getChildrenRelations($this->ids) as $row) {
             $this->children[$row['parent_id']][$row['child_id']] = [];
             $this->parents[$row['child_id']] = $row['parent_id'];
         }
@@ -154,16 +147,7 @@ class Product extends ObjectA
 
     protected function loadPrices(): void
     {
-        $websiteId = $this->store->getWebsiteId();
-
-        $select = $this->db
-            ->select('catalog_product_index_price')
-            ->where(['website_id = ?' => $websiteId])
-            ->order(['entity_id', 'customer_group_id']);
-
-        $select->where->in('entity_id', $this->allIds);
-
-        foreach ($this->db->fetch($select) as $row) {
+        foreach ($this->product->getPrices($this->allIds) as $row) {
             $isPriceEqualToDefault = (int)$row['customer_group_id'] !== 0
                 && $row['final_price'] === $this->prices[$row['entity_id']][0];
 
@@ -186,19 +170,7 @@ class Product extends ObjectA
 
     protected function loadOptions(): void
     {
-        $select = $this->db
-            ->select(['o' => 'catalog_product_super_attribute'])
-            ->columns(['product_id', 'attribute_id'])
-            ->join(
-                ['a' => 'eav_attribute'],
-                'o.attribute_id = a.attribute_id',
-                ['code' => 'attribute_code', 'label' => 'frontend_label']
-            )
-            ->order(['o.product_id', 'o.position']);
-
-        $select->where->in('o.product_id', $this->allIds);
-
-        foreach ($this->db->fetch($select) as $row) {
+        foreach ($this->product->getConfigurableOptions($this->allIds) as $row) {
             $this->options[$row['product_id']][] = [
                 'id' => $row['attribute_id'],
                 'code' => $row['code'],

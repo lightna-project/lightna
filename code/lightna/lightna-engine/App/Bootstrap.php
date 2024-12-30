@@ -29,8 +29,9 @@ class Bootstrap
         static::defineBuild();
 
         define('LIGHTNA_SRC', static::$config['src_dir']);
-        define("IS_DEV_MODE", static::$config['mode'] === 'dev');
-        define("IS_PROD_MODE", static::$config['mode'] === 'prod');
+        define('IS_DEV_MODE', static::$config['mode'] === 'dev');
+        define('IS_PROD_MODE', static::$config['mode'] === 'prod');
+        !defined('TEST_MODE') && define('TEST_MODE', null);
         define(
             'IS_PROGRESSIVE_RENDERING',
             (static::$config['progressive_rendering'] ?? false)

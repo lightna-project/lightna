@@ -38,6 +38,11 @@ class LightnaReflectionClass
         return $this->reflectionClass->isInterface();
     }
 
+    public function isTrait(): bool
+    {
+        return $this->reflectionClass->isTrait();
+    }
+
     public function getProperties(): array
     {
         if ($this->properties !== null) {

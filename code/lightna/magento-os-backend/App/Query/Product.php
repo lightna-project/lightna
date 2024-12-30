@@ -133,4 +133,60 @@ class Product extends ObjectA
     {
         return implode(', ', array_map([$this->db, 'quote'], $this->availableTypes));
     }
+
+    public function getAvailableTypes(): array
+    {
+        return $this->availableTypes;
+    }
+
+    public function getChildrenRelations(array $ids): array
+    {
+        return $this->db->fetch($this->getChildrenRelationsSelect($ids));
+    }
+
+    protected function getChildrenRelationsSelect(array $ids): Select
+    {
+        $select = $this->db->select('catalog_product_relation');
+        $select->where->in('parent_id', $ids);
+
+        return $select;
+    }
+
+    public function getPrices(array $ids): array
+    {
+        return $this->db->fetch($this->getPricesSelect($ids));
+    }
+
+    protected function getPricesSelect(array $ids): Select
+    {
+        $select = $this->db
+            ->select('catalog_product_index_price')
+            ->where(['website_id = ?' => $this->store->getWebsiteId()])
+            ->order(['entity_id', 'customer_group_id']);
+        $select->where->in('entity_id', $ids);
+
+        return $select;
+    }
+
+    public function getConfigurableOptions(array $ids): array
+    {
+        return $this->db->fetch($this->getConfigurableOptionsSelect($ids));
+    }
+
+    protected function getConfigurableOptionsSelect(array $ids): Select
+    {
+        $select = $this->db
+            ->select(['o' => 'catalog_product_super_attribute'])
+            ->columns(['product_id', 'attribute_id'])
+            ->join(
+                ['a' => 'eav_attribute'],
+                'o.attribute_id = a.attribute_id',
+                ['code' => 'attribute_code', 'label' => 'frontend_label']
+            )
+            ->order(['o.product_id', 'o.position']);
+
+        $select->where->in('o.product_id', $ids);
+
+        return $select;
+    }
 }
