@@ -47,6 +47,22 @@ class ObjectA implements JsonSerializable
         // Extension point
     }
 
+    final public function mock(array $dependencies): static
+    {
+        if (!TEST_MODE) {
+            throw new Exception('mock method is allowed in TEST_MODE only');
+        }
+
+        foreach ($dependencies as $name => $value) {
+            if (!$this->getPropertySchema($name)) {
+                throw new Exception('Unknown dependency "' . $name . '" for ' . $this::class);
+            }
+            $this->{$name} = $value;
+        }
+
+        return $this;
+    }
+
     public function &__get($name)
     {
         if ($this->defineProperty($name)) {
@@ -87,7 +103,7 @@ class ObjectA implements JsonSerializable
         }
     }
 
-    protected function getPropertySchema(string $name): ?array
+    public function getPropertySchema(string $name): ?array
     {
         return $this->properties[$name] ?? null;
     }

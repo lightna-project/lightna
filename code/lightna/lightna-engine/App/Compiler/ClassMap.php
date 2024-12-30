@@ -6,16 +6,25 @@ namespace Lightna\Engine\App\Compiler;
 
 use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectManagerIgnore;
+use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use SplFileInfo;
 
 class ClassMap extends CompilerA implements ObjectManagerIgnore
 {
+    protected array $classes = [];
+
     public function make(): void
+    {
+        $this->collectClasses();
+        $this->saveMap();
+    }
+
+    protected function collectClasses(): void
     {
         $this->build = new Build();
         $root = realpath(LIGHTNA_ENTRY);
-        $classes = [];
 
         foreach ($this->getAllPackages() as $ns => $folders) {
             $folders = (array)$folders;
@@ -25,25 +34,15 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
                     $folder = LIGHTNA_ENTRY . $folder;
                 }
 
-                $iterator = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator($folder)
-                );
-
                 $path = preg_replace('~^' . preg_quote($root) . '~', '', $folder);
                 $path = trim($path, '/') . '/';
 
+                $iterator = $this->getDirectoryIterator($folder);
                 foreach ($iterator as $file) {
-                    if ($file->isFile() && $file->getExtension() === 'php' && ctype_upper($file->getFilename()[0])) {
-                        /** @noinspection PhpUndefinedMethodInspection */
-                        $subName = $iterator->getSubPathname();
-                        $class = $ns . '\\' . str_replace(['/', '.php'], ['\\', ''], $subName);
-                        $classes[$class] = ['e', $path . $subName];
-                    }
+                    $this->mapFile($file, $ns, $path, $iterator);
                 }
             }
         }
-
-        $this->build->save('object/map', $classes);
     }
 
     protected function getAllPackages(): array
@@ -66,5 +65,39 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
         }
 
         return $packages;
+    }
+
+    protected function getDirectoryIterator(string $folder): RecursiveIteratorIterator
+    {
+        return new RecursiveIteratorIterator(
+            new RecursiveCallbackFilterIterator(
+                new RecursiveDirectoryIterator($folder),
+                [$this, 'recursiveDirectoryIteratorCallback']
+            )
+        );
+    }
+
+    protected function recursiveDirectoryIteratorCallback(SplFileInfo $current): bool
+    {
+        if ($current->isDir() && $current->getFilename() === 'Test') {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function mapFile(SplFileInfo $file, string $ns, string $path, RecursiveIteratorIterator $iterator): void
+    {
+        if ($file->isFile() && $file->getExtension() === 'php' && ctype_upper($file->getFilename()[0])) {
+            /** @noinspection PhpUndefinedMethodInspection */
+            $subName = $iterator->getSubPathname();
+            $class = $ns . '\\' . str_replace(['/', '.php'], ['\\', ''], $subName);
+            $this->classes[$class] = ['e', $path . $subName];
+        }
+    }
+
+    protected function saveMap(): void
+    {
+        $this->build->save('object/map', $this->classes);
     }
 }

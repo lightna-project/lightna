@@ -1,0 +1,5 @@
+compiler:
+  pool:
+    phpunit:
+      message: make phpunit config
+      compiler: Lightna\PhpUnit\App\Compiler\PhpUnit

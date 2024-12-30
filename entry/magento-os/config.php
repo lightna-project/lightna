@@ -10,6 +10,7 @@ return [
         'Lightna\Elasticsearch' => '../../code/lightna/lightna-elasticsearch',
         'Lightna\Webpack' => '../../code/lightna/lightna-webpack',
         'Lightna\Tailwind' => '../../code/lightna/lightna-tailwind',
+        'Lightna\PhpUnit' => '../../code/lightna/lightna-phpunit',
         'Lightna\Magento' => '../../code/lightna/magento-os-backend',
         'Lightna\Magento\Frontend' => '../../code/lightna/magento-os-frontend',
         'Lightna\Magento\Frontend\Lane' => '../../code/lightna/magento-os-frontend-lane',

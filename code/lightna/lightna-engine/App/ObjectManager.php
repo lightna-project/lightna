@@ -11,9 +11,10 @@ class ObjectManager
 {
     protected static AppConfig $config;
     protected static array $schema;
-    protected static array $extended;
+    protected static array $extended = [];
     protected static array $instances;
     protected static array $producers = [];
+    protected static bool $allowConfig = true;
 
     public static function init(): void
     {
@@ -24,6 +25,10 @@ class ObjectManager
         static::$extended = require BUILD_DIR . 'object/extended.php';
         static::$producers['Lightna'] = [static::class, 'producer'];
         static::$config = getobj(AppConfig::class);
+
+        if (TEST_MODE) {
+            static::initTestMode();
+        }
     }
 
     protected static function produce(string $className, $data = []): ?object
@@ -74,11 +79,19 @@ class ObjectManager
 
     public static function getConfigValue(string $path): mixed
     {
-        return static::$config->get($path);
+        return static::$allowConfig ? static::$config->get($path) : null;
     }
 
     public static function setProducer(string $name, callable $producer): void
     {
         static::$producers[$name] = $producer;
+    }
+
+    protected static function initTestMode(): void
+    {
+        if (TEST_MODE === 'unit') {
+            static::$allowConfig = false;
+            static::$extended = [];
+        }
     }
 }

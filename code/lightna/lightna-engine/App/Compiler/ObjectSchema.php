@@ -135,6 +135,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
     {
         if (
             !$class->isInterface()
+            && !$class->isTrait()
             && !($this->ignoredClasses[$class->getName()] ?? 0)
             && !is_a($class->getName(), ObjectA::class, true)
             && !is_a($class->getName(), ObjectManagerIgnore::class, true)
