@@ -1,9 +1,6 @@
 <?php
 
 return [
-    /**
-     * Modules can be specified only in config.php
-     */
     'modules' => [
         'Lightna\Redis' => '../../code/lightna/lightna-redis',
         'Lightna\Session' => '../../code/lightna/lightna-session',
@@ -16,7 +13,8 @@ return [
         'Lightna\Magento\Frontend\Lane' => '../../code/lightna/magento-os-frontend-lane',
         'Lightna\Magento\Demo' => '../../code/lightna/magento-os-demo',
     ],
-    'compiler' => [
-        'dir' => '../../generated/magento-os/compiled',
-    ],
+    'compiler_dir' => '../../generated/magento-os/compiled',
+    'asset_dir' => '../../project/magento-os/pub/static/lightna',
+    'doc_dir' => '../../project/magento-os/pub',
+    'project_dir' => '../../project/magento-os',
 ];

@@ -40,7 +40,7 @@ class Config extends Build
             opcache_load_revalidated($this->compiler->getBuildOrigDir() . 'config/' . $name . '.php'),
             opcache_load_revalidated(LIGHTNA_ENTRY . 'config.php'),
             opcache_load_revalidated(LIGHTNA_ENTRY . 'env.php'),
-            ['src_dir' => $this->findSrcDir()]
+            ['lightna_dir' => $this->findSrcDir()]
         );
     }
 
@@ -50,7 +50,7 @@ class Config extends Build
         while (!is_file($dir . '/index.php') && $dir !== '/') {
             $dir = dirname($dir);
         }
-        if ($dir === '/') throw new Exception('src_dir not found');
+        if ($dir === '/') throw new Exception('lightna_dir not found');
 
         return getRelativePath(LIGHTNA_ENTRY, $dir);
     }

@@ -5,20 +5,23 @@ declare(strict_types=1);
 use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Console\Compile;
 
-function cli_help(string $compilerDir): void
+function cli_help(): void
 {
-    $commands = array_keys(cli_get_all_commands($compilerDir));
+    $commands = array_keys(cli_get_all_commands());
     echo "\n Available commands:\n\n    " . implode("\n    ", $commands) . "\n\n";
 }
 
-function cli_get_all_commands(string $codeDir): array
+function cli_get_all_commands(): array
 {
+    $config = require LIGHTNA_ENTRY . 'config.php';
+    $compilerDir = $config['compiler_dir'];
     $commands = [
         'build.compile' => true,
         'build.validate' => true,
         'build.apply' => true,
     ];
-    $buildConfigFile = LIGHTNA_ENTRY . $codeDir . '/build/config/backend.php';
+    $buildConfigFile = LIGHTNA_ENTRY . $compilerDir . '/build/config/backend.php';
+
     if (file_exists($buildConfigFile)) {
         $buildConfig = require $buildConfigFile;
         $commands = array_merge($commands, $buildConfig['cli']['command'] ?? []);

@@ -17,14 +17,14 @@ class Config extends ObjectA
     protected Context $context;
     protected array $modules;
     protected array $stores;
-    /** @AppConfig(project/src_dir) */
-    protected string $projectSrc;
+    /** @AppConfig(project_dir) */
+    protected string $projectDir;
     protected array $defaultConfig;
     protected array $storeConfig = [];
 
     protected function init(array $data = []): void
     {
-        $this->projectSrc = LIGHTNA_ENTRY . $this->projectSrc . '/';
+        $this->projectDir = LIGHTNA_ENTRY . $this->projectDir . '/';
     }
 
     /** @noinspection PhpUnused */
@@ -61,7 +61,7 @@ class Config extends ObjectA
 
     protected function getVendorPackages(): array
     {
-        $lock = json_decode(file_get_contents($this->projectSrc . 'composer.lock'));
+        $lock = json_decode(file_get_contents($this->projectDir . 'composer.lock'));
 
         return array_merge($lock->packages, $lock->{'packages-dev'});
     }
@@ -82,7 +82,7 @@ class Config extends ObjectA
     protected function getLocalModules(): array
     {
         $modules = [];
-        foreach (glob($this->projectSrc . 'app/code/*/*') as $folder) {
+        foreach (glob($this->projectDir . 'app/code/*/*') as $folder) {
             if ($this->isModuleFolder($folder)) {
                 $modules = merge($modules, $this->getAppCodeModule($folder));
             }
@@ -93,14 +93,14 @@ class Config extends ObjectA
 
     protected function isModuleFolder(string $folder): bool
     {
-        $folder = str_starts_with($folder, '/') ? $folder : $this->projectSrc . $folder;
+        $folder = str_starts_with($folder, '/') ? $folder : $this->projectDir . $folder;
 
         return file_exists($folder . '/etc/module.xml');
     }
 
     protected function getModuleName(string $src): string
     {
-        $src = str_starts_with($src, '/') ? $src : $this->projectSrc . $src;
+        $src = str_starts_with($src, '/') ? $src : $this->projectDir . $src;
         $configXml = simplexml_load_file(
             $src . '/etc/module.xml',
         );
@@ -118,7 +118,7 @@ class Config extends ObjectA
 
     protected function getEnabledModules(): array
     {
-        $modules = array_filter((require $this->projectSrc . 'app/etc/config.php')['modules']);
+        $modules = array_filter((require $this->projectDir . 'app/etc/config.php')['modules']);
 
         return array_keys($modules);
     }
@@ -141,7 +141,7 @@ class Config extends ObjectA
     {
         $final = [];
         foreach ($this->modules as $folder) {
-            $file = $this->projectSrc . $folder . '/etc/config.xml';
+            $file = $this->projectDir . $folder . '/etc/config.xml';
             if (!is_file($file)) {
                 continue;
             }
@@ -229,8 +229,8 @@ class Config extends ObjectA
     protected function getEtcConfig(): array
     {
         return merge(
-            require $this->projectSrc . 'app/etc/config.php',
-            require $this->projectSrc . 'app/etc/env.php',
+            require $this->projectDir . 'app/etc/config.php',
+            require $this->projectDir . 'app/etc/env.php',
         );
     }
 }

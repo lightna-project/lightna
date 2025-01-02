@@ -18,6 +18,11 @@ class Show extends CommandA
     public function run(): void
     {
         $entity = $this->getArg(1);
+
+        if (is_null($entity)) {
+            throw new UserException('Specify entity');
+        }
+
         if (!isset($this->entities[$entity])) {
             throw new UserException('Unknown entity "' . $entity . '"');
         }

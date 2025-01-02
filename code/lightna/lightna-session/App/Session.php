@@ -29,12 +29,6 @@ class Session extends ObjectA
         );
     }
 
-    /** @noinspection PhpUnused */
-    protected function defineCookie(): void
-    {
-        $this->cookie = getobj(Cookie::class, $this->config['options']['cookie']);
-    }
-
     public function read(): array
     {
         if (!$this->canRead()) {

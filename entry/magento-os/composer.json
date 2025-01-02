@@ -14,8 +14,8 @@
             "./cli update",
             "./cli index.update.all"
         ],
-        "lightna.test.unit": "vendor/bin/phpunit -c ../../generated/magento-os/compiled/build/phpunit/config.unit.xml",
-        "lightna.test.integration": "vendor/bin/phpunit -c ../../generated/magento-os/compiled/build/phpunit/config.integration.xml"
+        "lightna.test.unit": "vendor/bin/phpunit -c `./cli config compiler_dir`/build/phpunit/config.unit.xml",
+        "lightna.test.integration": "vendor/bin/phpunit -c `./cli config compiler_dir`/build/phpunit/config.integration.xml"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5"
