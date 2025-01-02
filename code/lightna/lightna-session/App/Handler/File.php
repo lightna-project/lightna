@@ -21,40 +21,46 @@ class File extends ObjectA implements HandlerInterface
 
     public function read(): array
     {
-        $cName = $this->options['cookie']['name'];
-        if (!isset($_COOKIE[$cName])) {
+        if (!isset($_COOKIE[session_name()])) {
             return [];
         }
 
-        if (!$srz = @file_get_contents($this->getFilename($_COOKIE[$cName]))) {
+        if (!$srz = @file_get_contents($this->getFilename($_COOKIE[session_name()]))) {
             return [];
         }
 
         try {
-            $data = unserialize($srz);
+            $data = $this->unserialize($srz);
         } catch (Throwable $e) {
             throw new Exception(
                 'Session can\'t be unserialized, make sure session.serialize_handler = php_serialize'
             );
         }
 
-        $scopeKey = 'scope_' . $this->context->scope;
+        return $data[$this->options['namespace']]['data'][$this->getScopeKey()] ?? [];
+    }
 
-        return $data['lightna_session']['data'][$scopeKey] ?? [];
+    protected function unserialize(string $srz): array
+    {
+        return unserialize($srz);
+    }
+
+    protected function getScopeKey(): string
+    {
+        return 'scope_' . $this->context->scope;
     }
 
     public function prolong(): void
     {
-        $cName = $this->options['cookie']['name'];
-        if (!isset($_COOKIE[$cName])) {
+        if (!isset($_COOKIE[session_name()])) {
             return;
         }
 
-        @touch($this->getFilename($_COOKIE[$cName]));
+        @touch($this->getFilename($_COOKIE[session_name()]));
     }
 
     protected function getFilename(string $id): string
     {
-        return $this->options['path'] . '/' . $this->options['prefix'] . $id;
+        return session_save_path() . '/sess_' . $id;
     }
 }

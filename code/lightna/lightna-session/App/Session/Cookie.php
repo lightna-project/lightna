@@ -10,31 +10,24 @@ use Lightna\Engine\Data\Request;
 
 class Cookie extends ObjectA
 {
-    protected array $config;
     protected Request $request;
-
-    protected function init(array $data = []): void
-    {
-        $this->config = $data;
-    }
 
     public function prolong(): void
     {
-        $cName = $this->config['name'];
-        if (!isset($_COOKIE[$cName])) {
+        if (!isset($_COOKIE[session_name()])) {
             return;
         }
 
         setcookie(
-            $cName,
-            $_COOKIE[$cName],
+            session_name(),
+            $_COOKIE[session_name()],
             $this->getOptions(),
         );
     }
 
     protected function getOptions(): array
     {
-        $lifetime = (int)($this->config['lifetime'] ?? 0);
+        $lifetime = session_get_cookie_params()['lifetime'];
 
         return [
             'expires' => $lifetime > 0 ? time() + $lifetime : 3600,

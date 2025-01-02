@@ -17,9 +17,13 @@ class CommandA extends ObjectA
         $this->args = $this->opts = [];
         $args = array_slice($GLOBALS['argv'], 2);
         foreach ($args as $arg) {
-            if (str_starts_with($arg, '-')) {
+            if (str_starts_with($arg, '--')) {
                 $parts = explode('=', ltrim($arg, '-'));
                 $this->opts[$parts[0]] = $parts[1] ?? true;
+            } elseif (str_starts_with($arg, '-')) {
+                $arg = ltrim($arg, '-');
+                $parts = [$arg[0], ltrim(substr($arg, 1))];
+                $this->opts[$parts[0]] = !isset($parts[1]) || $parts[1] === '' ? true : $parts[1];
             } else {
                 $this->args[] = $arg;
             }

@@ -1,6 +1,5 @@
 #!/usr/bin/env php
 <?php
-/** @var array $config */
 
 declare(strict_types=1);
 
@@ -9,11 +8,10 @@ use Lightna\Engine\App\UserException;
 
 require __DIR__ . '/App/lib/cli.php';
 
-$config = require LIGHTNA_ENTRY . 'config.php';
 $command = $argv[1] ?? '';
 
 if (in_array($command, ['?', 'help', '', '-h', '--help'])) {
-    cli_help($config['compiler']['dir']);
+    cli_help();
     exit;
 }
 

@@ -28,7 +28,7 @@ class Bootstrap
         static::loadConfig();
         static::defineBuild();
 
-        define('LIGHTNA_SRC', static::$config['src_dir']);
+        define('LIGHTNA_SRC', static::$config['lightna_dir']);
         define('IS_DEV_MODE', static::$config['mode'] === 'dev');
         define('IS_PROD_MODE', static::$config['mode'] === 'prod');
         !defined('TEST_MODE') && define('TEST_MODE', null);
@@ -66,7 +66,7 @@ class Bootstrap
         static::$config = merge(
             opcache_load_revalidated(LIGHTNA_ENTRY . 'config.php'),
             opcache_load_revalidated(LIGHTNA_ENTRY . 'env.php'),
-            ['src_dir' => getRelativePath(LIGHTNA_ENTRY, __DIR__ . '/../')],
+            ['lightna_dir' => getRelativePath(LIGHTNA_ENTRY, __DIR__ . '/../')],
         );
     }
 
@@ -135,7 +135,7 @@ class Bootstrap
         $folder = static::$COMPILER_MODE === 'default' ? 'building' : 'build';
         define(
             'BUILD_DIR',
-            LIGHTNA_ENTRY . static::$config['compiler']['dir'] . '/' . $folder . '/',
+            LIGHTNA_ENTRY . static::$config['compiler_dir'] . '/' . $folder . '/',
         );
 
         static::validateBuild();

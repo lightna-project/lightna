@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
+use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectManagerIgnore;
 use RecursiveCallbackFilterIterator;
@@ -47,7 +48,7 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
 
     protected function getAllPackages(): array
     {
-        $config = require LIGHTNA_ENTRY . 'config.php';
+        $config = Bootstrap::getConfig();
 
         return merge(
             $this->getComposerPackages(),
