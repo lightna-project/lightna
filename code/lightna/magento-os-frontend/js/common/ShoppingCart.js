@@ -48,6 +48,12 @@ export class ShoppingCart {
             });
         });
 
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.close();
+            }
+        });
+
         this.getContentElement().areEventsBound = true;
     }
 
