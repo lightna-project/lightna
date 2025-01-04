@@ -11,15 +11,22 @@ use Redis as RedisClient;
 
 class Redis extends ObjectA implements StorageInterface
 {
-    protected ?RedisClient $client;
+    protected RedisClient $client;
     protected array $options;
     protected bool $batch = false;
     protected array $batchSet = [];
     protected array $batchUnset = [];
+    protected array $optionDefaults = [
+        'host' => 'localhost',
+        'port' => 6379,
+        'timeout' => 5,
+        'db' => 0,
+        'persistent' => true,
+    ];
 
     protected function init(array $data = []): void
     {
-        $this->options = $data;
+        $this->options = merge($this->optionDefaults, $data);
     }
 
     /** @noinspection PhpUnused */
@@ -31,20 +38,48 @@ class Redis extends ObjectA implements StorageInterface
 
     protected function connect(): self
     {
-        $connType = ($this->options['persistent'] ?? null) ? 'pconnect' : 'connect';
+        if ($this->options['persistent']) {
+            $this->connectPersistent();
+        } else {
+            $this->connectDefault();
+        }
 
-        $this->client->$connType(
-            $this->options['host'] ?? 'localhost',
-            (int)($this->options['port'] ?? 6379),
+        $this->client->select($this->options['db']);
+        $this->setSerializerOptions();
+
+        return $this;
+    }
+
+    protected function connectPersistent(): void
+    {
+        $this->client->pconnect(
+            $this->options['host'],
+            (int)$this->options['port'],
+            (float)$this->options['timeout'],
+            $this->getPersistentId(),
         );
+    }
 
-        $this->client->select($this->options['db'] ?? 0);
+    protected function getPersistentId(): string
+    {
+        return (string)$this->options['db'];
+    }
+
+    protected function connectDefault(): void
+    {
+        $this->client->connect(
+            $this->options['host'],
+            (int)$this->options['port'],
+            (float)$this->options['timeout'],
+        );
+    }
+
+    protected function setSerializerOptions(): void
+    {
         $this->client->setOption(
             RedisClient::OPT_SERIALIZER,
             RedisClient::SERIALIZER_IGBINARY
         );
-
-        return $this;
     }
 
     public function set(string $key, mixed $value): void
@@ -70,6 +105,11 @@ class Redis extends ObjectA implements StorageInterface
         $result = $this->client->get($key);
 
         return is_array($result) ? $result : (string)$result;
+    }
+
+    public function getHashField(string $key, string $field): string
+    {
+        return $this->client->hGet($key, $field) ?? '';
     }
 
     public function getList(array $keys): array

@@ -9,27 +9,19 @@ use JsonSerializable;
 
 class ObjectA implements JsonSerializable
 {
-    private bool $isConstructed = false;
     private bool $isInitialized = false;
     private array $properties;
 
-    final public function __construct()
+    /**
+     * You need to use "protected init" method instead of __construct
+     * since object creation is delegated to ObjectManager
+     */
+    final public function __construct(array $propertiesSchema = [])
     {
-        /**
-         * You need to use "protected init" method since object creation is delegated to ObjectManager
-         */
-    }
+        $this->properties = $propertiesSchema;
 
-    final public function construct(array $properties = []): void
-    {
-        if ($this->isConstructed) {
-            throw new Exception($this::class . ' already constructed');
-        }
-
-        $this->properties = $properties;
-        // Unset properties to make __get method triggered
+        // Unset properties to make __get method triggered to define props by ObjectManager
         $this->unsetProperties();
-        $this->isConstructed = true;
     }
 
     final public function initialize(array $data = []): void
