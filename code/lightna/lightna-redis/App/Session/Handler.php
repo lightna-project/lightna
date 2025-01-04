@@ -2,17 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Session\App\Handler;
+namespace Lightna\Redis\App\Session;
 
 use Exception;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\ObjectA;
+use Lightna\Redis\App\Storage\Session as Storage;
+use Lightna\Session\App\Handler\HandlerInterface;
 use Throwable;
 
-class File extends ObjectA implements HandlerInterface
+class Handler extends ObjectA implements HandlerInterface
 {
-    protected array $options;
+    protected Storage $storage;
     protected Context $context;
+    protected array $options;
     protected string $sessionId;
 
     protected function init(array $data = []): void
@@ -28,11 +31,7 @@ class File extends ObjectA implements HandlerInterface
 
     public function read(): array
     {
-        if (!$this->sessionId) {
-            return [];
-        }
-
-        if (!$srz = @file_get_contents($this->getFilename())) {
+        if (($srz = $this->storage->get($this->getKey())) === '') {
             return [];
         }
 
@@ -59,15 +58,21 @@ class File extends ObjectA implements HandlerInterface
 
     public function prolong(): void
     {
-        if (!$this->sessionId) {
-            return;
-        }
-
-        @touch($this->getFilename());
+        $this->storage->expire(
+            $this->getKey(),
+            $this->getTTl(),
+        );
     }
 
-    protected function getFilename(): string
+    protected function getKey(): string
     {
-        return session_save_path() . '/sess_' . $this->sessionId;
+        return 'sess_' . $this->sessionId;
+    }
+
+    protected function getTTl(): int
+    {
+        $lifetime = session_get_cookie_params()['lifetime'];
+
+        return $lifetime === 0 ? 604800 : $lifetime;
     }
 }

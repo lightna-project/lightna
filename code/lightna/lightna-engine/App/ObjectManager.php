@@ -52,8 +52,7 @@ class ObjectManager
         $schema = static::$schema[$className];
 
         /** @var ObjectA $instance */
-        $instance = new $name();
-        $instance->construct($schema['p']);
+        $instance = new $name($schema['p']);
 
         if (count($data) === 0 && isset($schema['data'])) {
             $data = $schema['data'];
