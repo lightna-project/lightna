@@ -17,10 +17,17 @@ class Block extends DataA
 
         $html = '';
         foreach ($this->attributes as $name => $value) {
-            $value = is_array($value) ? implode(' ', $value) : $value;
-            $html .= ' ' . $name . '="' . escape($value) . '"';
+            $html .= ' ' . $name . '="' . $this->attributeValue($name) . '"';
         }
 
         return $html;
+    }
+
+    public function attributeValue(string $name): string
+    {
+        $value = $this->attributes->$name ?? '';
+        $value = is_array($value) ? implode(' ', $value) : $value;
+
+        return escape($value);
     }
 }
