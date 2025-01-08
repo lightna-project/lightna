@@ -1,24 +1,31 @@
 entry:
   lane:
+    content:
+      - lightna/magento-os-frontend/template/**/*.phtml
+      - lightna/magento-os-frontend/layout/*.yaml
+      - lightna/magento-os-frontend/js/**/*.js
+      - lightna/magento-os-frontend-lane/template/**/*.phtml
+      - lightna/magento-os-frontend-lane/layout/*.yaml
+      - lightna/magento-os-frontend-lane/js/**/*.js
     import:
       - tailwindcss/base
-      - base/reset.css
-      - base/animation.css
-      - base/buttons.css
-      - base/icons.css
-      - base/layout.css
-      - base/price.css
-      - base/typography.css
+      - lightna/magento-os-frontend-lane/base/reset.css
+      - lightna/magento-os-frontend/base/animation.css
+      - lightna/magento-os-frontend/base/buttons.css
+      - lightna/magento-os-frontend/base/icons.css
+      - lightna/magento-os-frontend/base/layout.css
+      - lightna/magento-os-frontend/base/price.css
+      - lightna/magento-os-frontend/base/typography.css
       - tailwindcss/components
-      - components/dropdown.css
-      - components/overlay.css
-      - components/mobile-overlay.css
-      - components/usp.css
-      - components/common/footer.css
-      - components/common/header.css
-      - components/common/menu.css
-      - components/common/minicart.css
-      - components/common/search.css
-      - components/common/search-suggestions.css
-      - components/product/products-list.css
+      - lightna/magento-os-frontend/components/dropdown.css
+      - lightna/magento-os-frontend/components/overlay.css
+      - lightna/magento-os-frontend/components/mobile-overlay.css
+      - lightna/magento-os-frontend/components/usp.css
+      - lightna/magento-os-frontend/components/common/footer.css
+      - lightna/magento-os-frontend/components/common/header.css
+      - lightna/magento-os-frontend/components/common/menu.css
+      - lightna/magento-os-frontend/components/common/minicart.css
+      - lightna/magento-os-frontend/components/common/search.css
+      - lightna/magento-os-frontend/components/common/search-suggestions.css
+      - lightna/magento-os-frontend/components/product/products-list.css
       - tailwindcss/utilities

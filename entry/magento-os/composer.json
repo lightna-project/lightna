@@ -9,7 +9,6 @@
         "lightna.build": [
             "./cli build.compile",
             "npm run build",
-            "./cli build.asset.sign",
             "./cli build.apply",
             "./cli update",
             "./cli index.update.all"

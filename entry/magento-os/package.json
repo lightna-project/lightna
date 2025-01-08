@@ -13,16 +13,12 @@
     "scripts": {
         "update": "npm run update-js && npm run update-css",
         "update-js": "webpack --config webpack.config.direct.js && ./cli build.asset.sign --direct",
-        "update-css": "npm run update-common-css && npm run update-lane-css",
-        "update-common-css": "npx tailwindcss -i `./cli config compiler_dir`/build/tailwind/common.css -o `./cli config asset_dir`/build/style/common.css && ./cli build.asset.sign --direct",
-        "update-lane-css": "npx tailwindcss -i `./cli config compiler_dir`/build/tailwind/lane.css -o `./cli config asset_dir`/build/style/lane.css && ./cli build.asset.sign --direct",
-        "build": "npm run build-js && npm run build-css && ./cli build.asset.sign",
-        "build-js": "./cli build.validate && webpack",
-        "build-css": "./cli build.validate && npm run build-common-css && npm run build-lane-css",
-        "build-common-css": "./cli build.validate && npx tailwindcss -- --minify -i `./cli build.config compiler_dir`/building/tailwind/common.css -o `./cli build.config compiler_dir`/asset.building/build/style/common.css",
-        "build-lane-css": "./cli build.validate && npx tailwindcss -- --minify -i `./cli build.config compiler_dir`/building/tailwind/lane.css -o `./cli build.config compiler_dir`/asset.building/build/style/lane.css",
+        "update-css": "`./cli config compiler_dir`/build/tailwind/update.sh && ./cli build.asset.sign --direct",
+        "build": "npm run build-js && npm run build-css",
+        "build-js": "./cli build.validate && webpack && ./cli build.asset.sign",
+        "build-css": "./cli build.validate && `./cli build.config compiler_dir`/building/tailwind/build.sh && ./cli build.asset.sign",
         "watch-js": "webpack --mode=development --config webpack.config.direct.js",
-        "watch-common-css": "npx tailwindcss -i `./cli config compiler_dir`/build/tailwind/common.css -o `./cli config asset_dir`/build/style/common.css -- --watch --verbose",
-        "watch-lane-css": "npx tailwindcss -i `./cli config compiler_dir`/build/tailwind/lane.css -o `./cli config asset_dir`/build/style/lane.css  -- --watch --verbose"
+        "watch-common-css": "npx tailwindcss -i `./cli config compiler_dir`/build/tailwind/common/entry.css -o `./cli config asset_dir`/build/style/common.css -- --watch --verbose",
+        "watch-lane-css": "npx tailwindcss -i `./cli config compiler_dir`/build/tailwind/lane/entry.css -o `./cli config asset_dir`/build/style/lane.css  -- --watch --verbose"
     }
 }
