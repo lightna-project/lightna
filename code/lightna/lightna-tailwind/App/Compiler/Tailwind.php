@@ -7,19 +7,41 @@ namespace Lightna\Tailwind\App\Compiler;
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Compiler\CompilerA;
+use Lightna\Engine\App\Config as AppConfig;
 
 class Tailwind extends CompilerA
 {
+    protected AppConfig $appConfig;
     protected array $twConfig;
+    protected array $modulesIndex;
     protected array $importsIndex;
 
     public function make(): void
     {
         $this->collectModulesConfig();
-        $this->saveModulesConfig();
-        $this->indexImports();
         $this->makeEntries();
-        $this->makeMainConfig();
+        $this->makeShellScript('build', false);
+        $this->makeShellScript('update', true);
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineModulesIndex(): void
+    {
+        $this->modulesIndex = [];
+        foreach ($this->getModules() as $folder) {
+            $this->modulesIndex[$this->getModuleName($folder)] = $folder;
+        }
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineImportsIndex(): void
+    {
+        $this->importsIndex = [];
+        foreach ($this->twConfig['entry'] as $entry) {
+            foreach ($entry['import'] as $import) {
+                $this->importsIndex[$import] = $this->getImportFile($import);
+            }
+        }
     }
 
     protected function collectModulesConfig(): void
@@ -37,93 +59,171 @@ class Tailwind extends CompilerA
 
     protected function getModuleConfig(string $folder): array
     {
-        $configFile = $folder . '/tailwind.yaml';
-        if (!is_file($configFile)) {
+        if (!is_file($configFile = $folder . '/tailwind.yaml')) {
             return [];
         }
 
-        $config = yaml_parse_file($configFile);
-        $this->addModuleContent($folder, $config);
-
-        return $config;
+        return yaml_parse_file($configFile);
     }
 
-    protected function addModuleContent(string $moduleFolder, array &$config): void
+    protected function getImportFile(string $import): string
     {
-        $config['tailwind']['content'] = [
-            $moduleFolder . '/template/**/*.phtml',
-            $moduleFolder . '/layout/*.yaml',
-            $moduleFolder . '/js/**/*.js',
+        if ($this->isCoreImport($import)) {
+            return $import;
+        }
+
+        $path = $this->getModularPath($import, 'css');
+        if (!file_exists($absFile = LIGHTNA_ENTRY . $path['fullPath'])) {
+            throw new Exception("Import \"$import\" not found. Expected file \"$absFile\"");
+        }
+
+        return $this->modulesIndex[$path['module']] . '/' . $path['path'];
+    }
+
+    protected function getModularPath(string $path, string $subfolder = null): array
+    {
+        $parts = explode('/', $path);
+        if (count($parts) < 3) {
+            throw new Exception("Invalid Tailwind path \"$path\". Have you specified the module namespace?");
+        }
+
+        $module = implode('/', array_slice($parts, 0, 2));
+        if (!isset($this->modulesIndex[$module])) {
+            throw new Exception("Invalid Tailwind path \"$path\". The module \"$module\" was not found.");
+        }
+
+        $path = ($subfolder ? "$subfolder/" : '') . implode('/', array_slice($parts, 2));
+
+        return [
+            'module' => $module,
+            'path' => $path,
+            'fullPath' => $this->modulesIndex[$module] . '/' . $path,
         ];
     }
 
-    protected function saveModulesConfig(): void
+    protected function isCoreImport(string $import): bool
     {
-        $this->build->putFile(
-            'tailwind/config.json',
-            json_pretty($this->twConfig['tailwind']),
-        );
+        return !preg_match('~\.css$~', $import);
     }
 
-
-    protected function indexImports(): void
+    protected function getImport(string $import): string
     {
-        $this->importsIndex = [];
-        foreach ($this->twConfig['entry'] as $entry) {
-            foreach ($entry['import'] as $import) {
-                $this->importsIndex[$import] = null;
-            }
-        }
-
-        foreach ($this->getModules() as $folder) {
-            foreach ($this->importsIndex as $import => &$dest) {
-                $file = $folder . '/css/' . $import;
-                if (file_exists($file)) {
-                    $dest = $file;
-                }
-            }
-        }
-    }
-
-    protected function isModuleImport(string $import): bool
-    {
-        return (bool)preg_match('~\.css$~', $import);
+        return $this->isCoreImport($import) ?
+            $import :
+            '~/' . $this->importsIndex[$import];
     }
 
     protected function makeEntries(): void
     {
         foreach ($this->twConfig['entry'] as $name => $entry) {
-            $entryCss = '';
-            foreach ($entry['import'] as $import) {
-                $entryCss .= "\n" . '@import ' . json_pretty($this->getImport($import)) . ';';
-            }
-            $entryCss .= "\n" . '@config "tailwind.config.js";';
-
-            $this->saveEntryCss($name, $entryCss);
+            $this->saveEntryCss($name, $this->getEntryCss($entry));
+            $this->saveEntryConfigJson($name, $this->getEntryConfigJson($entry));
+            $this->saveEntryConfigJs($name, $this->getEntryConfigJs());
         }
     }
 
-    protected function getImport(string $import): string
+    protected function getEntryCss(array $entry): string
     {
-        if (!$this->isModuleImport($import)) {
-            return $import;
-        } else {
-            $moduleImport = $this->importsIndex[$import] ?? '';
-            if (!$moduleImport) {
-                throw new Exception("Tailwind compiler: Import [$import] not found.");
-            }
-
-            return '~/' . $moduleImport;
+        $css = '';
+        foreach ($entry['import'] as $import) {
+            $css .= "\n" . '@import ' . json_pretty($this->getImport($import)) . ';';
         }
+        $css .= "\n" . "@config \"config.js\";";
+
+        return $css;
     }
 
     protected function saveEntryCss(string $name, string $css): void
     {
-        $this->build->putFile('tailwind/' . $name . '.css', $css);
+        $this->build->putFile("tailwind/$name/entry.css", $css);
     }
 
-    protected function makeMainConfig(): void
+    protected function getEntryConfigJson(array $entry): string
     {
-        file_copy(__DIR__ . '/../../tailwind.config.js', $this->build->getDir() . 'tailwind/tailwind.config.js');
+        return json_pretty(merge(
+            $this->twConfig['tailwind'],
+            [
+                'content' => $this->getEntryContent($entry),
+            ]
+        ));
+    }
+
+    protected function getEntryContent(array $entry): array
+    {
+        $raw = $entry['content'] ?? [];
+        $content = [];
+        foreach ($raw as $item) {
+            $content[] = $this->getModularPath($item)['fullPath'];
+        }
+
+        return $content;
+    }
+
+    protected function saveEntryConfigJson(string $name, string $config): void
+    {
+        $this->build->putFile("tailwind/$name/config.json", $config);
+    }
+
+    protected function getEntryConfigJs(): string
+    {
+        return file_get_contents(__DIR__ . '/../../tailwind.config.js');
+    }
+
+    protected function saveEntryConfigJs(string $name, string $config): void
+    {
+        $this->build->putFile("tailwind/$name/config.js", $config);
+    }
+
+    protected function makeShellScript(string $scriptName, bool $isDirect): void
+    {
+        $sh = $sep = '';
+        foreach ($this->twConfig['entry'] as $name => $entry) {
+            $sh .= $sep . $this->getBuildCommand($name, $isDirect);
+            $sep = " && \\\n";
+        }
+
+        $this->saveShellScript($scriptName, $sh);
+    }
+
+    protected function getBuildCommand(string $entryName, bool $isDirect): string
+    {
+        return "npx tailwindcss"
+            . $this->getBuildCommandArgs($entryName, $isDirect)
+            . " -i " . escapeshellarg($this->getBuildDir($isDirect) . "tailwind/$entryName/entry.css")
+            . " -o " . escapeshellarg($this->getAssetBuildDir($isDirect) . 'style/' . $entryName . '.css');
+    }
+
+    protected function getBuildCommandArgs(string $entryName, bool $isDirect): string
+    {
+        return $isDirect ? '' : ' --minify';
+    }
+
+    protected function getBuildDir(bool $isDirect): string
+    {
+        return $this->getCompilerDir() . ($isDirect ? 'build' : 'building') . '/';
+    }
+
+    protected function getCompilerDir(): string
+    {
+        return getRelativePath(LIGHTNA_ENTRY, realpath(LIGHTNA_ENTRY . $this->appConfig->get('compiler_dir')));
+    }
+
+    protected function getAssetBuildDir(bool $isDirect): string
+    {
+        return $isDirect ?
+            $this->getAssetDir() . 'build/' :
+            $this->getCompilerDir() . 'asset.building/build/';
+    }
+
+    protected function getAssetDir(): string
+    {
+        return getRelativePath(LIGHTNA_ENTRY, realpath(LIGHTNA_ENTRY . $this->appConfig->get('asset_dir')));
+    }
+
+    protected function saveShellScript(string $scriptName, string $script): void
+    {
+        $file = "tailwind/$scriptName.sh";
+        $this->build->putFile($file, $script);
+        chmod($this->build->getDir() . $file, 0774);
     }
 }

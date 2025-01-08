@@ -96,8 +96,8 @@ class ArrayDirectives implements ObjectManagerIgnore
         } elseif (in_array($position, ['before', 'after'])) {
             $pos = array_search($dest, array_keys($parent));
             $pos += (int)($position === 'after');
-            $before = array_slice($parent, 0, $pos);
-            $after = array_slice($parent, $pos);
+            $before = array_slice($parent, 0, $pos, true);
+            $after = array_slice($parent, $pos, null, true);
             $parent = $before + [$path->key => $copy] + $after;
         }
 

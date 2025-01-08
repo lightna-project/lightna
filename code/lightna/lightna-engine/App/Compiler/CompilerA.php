@@ -20,7 +20,10 @@ class CompilerA extends ObjectA
 
     protected function getModules(): array
     {
-        return merge(['Lightna\Engine' => LIGHTNA_SRC], $this->modules ?? []);
+        return merge(
+            ['Lightna\Engine' => rtrim(LIGHTNA_SRC, '/')],
+            $this->modules ?? [],
+        );
     }
 
     protected function walkFilesInModules(string $subDir, array $fileExtensions, Closure $callback): void
