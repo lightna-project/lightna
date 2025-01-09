@@ -2,9 +2,9 @@
     @font-face {
         font-family: 'Assistant';
         src:
-            url('../../magento-os-frontend/font/Assistant/Assistant-Regular.woff2')
+            url('../../lightna/magento-os-frontend/font/Assistant/Assistant-Regular.woff2')
                 format('woff2'),
-            url('../../magento-os-frontend/font/Assistant/Assistant-Regular.woff')
+            url('../../lightna/magento-os-frontend/font/Assistant/Assistant-Regular.woff')
                 format('woff');
         font-weight: normal;
         font-style: normal;
@@ -14,9 +14,9 @@
     @font-face {
         font-family: 'Assistant';
         src:
-            url('../../magento-os-frontend/font/Assistant/Assistant-ExtraLight.woff2')
+            url('../../lightna/magento-os-frontend/font/Assistant/Assistant-ExtraLight.woff2')
                 format('woff2'),
-            url('../../magento-os-frontend/font/Assistant/Assistant-ExtraLight.woff')
+            url('../../lightna/magento-os-frontend/font/Assistant/Assistant-ExtraLight.woff')
                 format('woff');
         font-weight: 200;
         font-style: normal;
@@ -26,9 +26,9 @@
     @font-face {
         font-family: 'Assistant';
         src:
-            url('../../magento-os-frontend/font/Assistant/Assistant-SemiBold.woff2')
+            url('../../lightna/magento-os-frontend/font/Assistant/Assistant-SemiBold.woff2')
                 format('woff2'),
-            url('../../magento-os-frontend/font/Assistant/Assistant-SemiBold.woff')
+            url('../../lightna/magento-os-frontend/font/Assistant/Assistant-SemiBold.woff')
                 format('woff');
         font-weight: 600;
         font-style: normal;

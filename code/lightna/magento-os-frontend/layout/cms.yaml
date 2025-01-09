@@ -7,6 +7,6 @@ extends:
   .main:
     container: div
     .heading:
-      template: cms/heading.phtml
+      template: lightna/magento-os-frontend/cms/heading.phtml
     .content:
-      template: cms/content.phtml
+      template: lightna/magento-os-frontend/cms/content.phtml

@@ -33,28 +33,28 @@
     }
 
     .success.message:before {
-        background: url('../../magento-os-frontend/image/icon/message/success.svg')
+        background: url('../../lightna/magento-os-frontend/image/icon/message/success.svg')
             center / contain no-repeat;
     }
 
     .error.message:before {
-        background: url('../../magento-os-frontend/image/icon/message/error.svg')
+        background: url('../../lightna/magento-os-frontend/image/icon/message/error.svg')
             center / contain no-repeat;
     }
 
     .warning.message:before {
-        background: url('../../magento-os-frontend/image/icon/message/warning.svg')
+        background: url('../../lightna/magento-os-frontend/image/icon/message/warning.svg')
             center / contain no-repeat;
     }
 
     .notice.message:before {
-        background: url('../../magento-os-frontend/image/icon/message/notice.svg')
+        background: url('../../lightna/magento-os-frontend/image/icon/message/notice.svg')
             center / contain no-repeat;
     }
 
     .message__close {
         @apply h-[20px] w-[20px] shrink-0 cursor-pointer opacity-50 md:h-[24px] md:w-[24px];
-        background: url('../../magento-os-frontend/image/icon/cross-small.svg')
+        background: url('../../lightna/magento-os-frontend/image/icon/cross-small.svg')
             center / contain no-repeat;
     }
 

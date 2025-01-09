@@ -8,22 +8,34 @@ use Exception;
 
 class Template extends CompilerA
 {
+    protected array $templates;
+    protected array $schema;
+
     public function make(): void
     {
-        $templates = [];
-        $schema = [];
+        $this->collectTemplates();
+        $this->collectSchemas();
+        $this->applyOverrides();
+        $this->save();
+    }
 
+    protected function collectTemplates(): void
+    {
         $this->walkFilesInModules(
             'template',
             ['phtml'],
-            function ($subPath, $file) use (&$templates, &$schema) {
-                $templates[$subPath] = $file;
-                $schema[$subPath] = $this->getTemplateSchema($file);
+            function ($subPath, $file, $modulePath, $moduleName) use (&$templates, &$schema) {
+                $this->templates[$moduleName . '/' . $subPath] = $file;
+                $schema[$moduleName . '/' . $subPath] = $this->getTemplateSchema($file);
             }
         );
+    }
 
-        $this->build->save('template/map', $templates);
-        $this->build->save('template/schema', $schema);
+    protected function collectSchemas(): void
+    {
+        foreach ($this->templates as $name => $file) {
+            $this->schema[$name] = $this->getTemplateSchema($file);
+        }
     }
 
     protected function getTemplateSchema(string $template): array
@@ -68,5 +80,20 @@ class Template extends CompilerA
         if (!str_contains($type, '\\Data\\')) {
             throw new Exception('Not allowed object "' . $type . '" requested in template "' . $template . '"');
         }
+    }
+
+    protected function applyOverrides(): void
+    {
+        foreach ($this->templates as $name => &$file) {
+            if (isset($this->overrides['template'][$name])) {
+                $file = $this->overrides['template'][$name]['rel'];
+            }
+        }
+    }
+
+    protected function save(): void
+    {
+        $this->build->save('template/map', $this->templates);
+        $this->build->save('template/schema', $this->schema);
     }
 }

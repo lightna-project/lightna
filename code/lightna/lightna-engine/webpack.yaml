@@ -1,7 +1,7 @@
 entry:
   common:
     component:
-      - lightna/lightna-engine/Fpc
+      lightna-fpc: lightna/lightna-engine/Fpc
   lane:
     component:
-      - lightna/lightna-engine/Fpc
+      lightna-fpc: lightna/lightna-engine/Fpc

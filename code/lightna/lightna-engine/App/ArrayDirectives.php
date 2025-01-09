@@ -30,6 +30,8 @@ class ArrayDirectives implements ObjectManagerIgnore
                 static::applyPosition($data, $words);
             } elseif ($directive === 'delete') {
                 static::applyDelete($data, $words);
+            } elseif ($directive === 'replace') {
+                static::applyReplace($data, $words);
             } elseif ($directive === 'move') {
                 static::applyMove($data, $words);
             } else {
@@ -165,6 +167,67 @@ class ArrayDirectives implements ObjectManagerIgnore
         foreach ($node as $k => $v) {
             if ($v == $value) {
                 unset($node[$k]);
+            }
+        }
+
+        array_path_set($data, $path->path, $node);
+    }
+
+    protected static function applyReplace(array &$data, array $params = []): void
+    {
+        $topic = 'Array replace directive';
+        $context = ' in "replace ' . implode(' ', $params) . '"';
+
+        $mode = array_shift($params);
+        if ($mode !== 'value') {
+            throw new Exception($topic . ': unexpected mode "' . $mode . '"' . $context);
+        }
+
+        $value = array_shift($params);
+        if (!is_string($value) || $value === '') {
+            throw new Exception($topic . ': value is expected' . $context);
+        }
+
+        $to = array_shift($params);
+        if ($to !== 'to') {
+            throw new Exception($topic . ': "to" is expected' . $context);
+        }
+
+        $newValue = array_shift($params);
+        if (!is_string($newValue) || $newValue === '') {
+            throw new Exception($topic . ': replacement is expected' . $context);
+        }
+
+        $in = array_shift($params);
+        if ($in !== 'in') {
+            throw new Exception($topic . ': "in" is expected' . $context);
+        }
+
+        $path = array_shift($params);
+        if (empty($path)) {
+            throw new Exception($topic . ': path is expected' . $context);
+        }
+
+        $pathS = static::dot2slash($path);
+        if (!array_path_exists($data, $pathS)) {
+            throw new Exception($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
+        }
+
+        $path = new ArrayPath($pathS);
+
+        static::makeReplace($data, $value, $newValue, $path);
+    }
+
+    protected static function makeReplace(
+        array &$data,
+        string $value,
+        string $newValue,
+        ArrayPath $path,
+    ): void {
+        $node = array_path_get($data, $path->path);
+        foreach ($node as &$v) {
+            if ($v == $value) {
+                $v = $newValue;
             }
         }
 

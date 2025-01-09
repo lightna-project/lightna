@@ -25,6 +25,7 @@ class Layout extends CompilerA
         $this->parseFiles();
         $this->extend();
         $this->applyDirectives();
+        $this->applyComponents();
         $this->indexBlockIds();
         $this->indexPrivateBlocks();
         $this->save();
@@ -118,6 +119,37 @@ class Layout extends CompilerA
             LayoutDirectives::apply($layoutData);
             $this->layouts[$name]['data'] = $layoutData;
         }
+    }
+
+    protected function applyComponents(): void
+    {
+        foreach ($this->layouts as $name => $layout) {
+            $this->layouts[$name]['data'] = $this->applyLayoutComponents($layout['data']);
+        }
+    }
+
+    protected function applyLayoutComponents(array $node, $path = ''): array
+    {
+        foreach ($node['.'] as $name => $child) {
+            if (is_string($child)) {
+                $path .= '.' . $name;
+                $component = preg_replace('~\.yaml$~', '', $child, -1, $c);
+                if ($c !== 1) {
+                    throw new Exception("Invalid component reference \"$child\" for \"$path\" - unknown extension.");
+                }
+                if (!isset($this->layouts[$component])) {
+                    throw new Exception("Invalid component reference \"$child\" for \"$path\" - path not found.");
+                }
+
+                $childData = $this->layouts[$component]['data'];
+            } else {
+                $childData = $child;
+            }
+
+            $node['.'][$name] = $this->applyLayoutComponents($childData, $path);
+        }
+
+        return $node;
     }
 
     protected function save(): void

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Closure;
+use Exception;
 use Lightna\Engine\App\Build;
 use Lightna\Engine\App\Compiler;
 use Lightna\Engine\App\ObjectA;
@@ -17,6 +18,29 @@ class CompilerA extends ObjectA
     protected Build $build;
     /** @AppConfig(modules) */
     protected ?array $modules;
+    protected array $overrides;
+
+    /** @noinspection PhpUnused */
+    protected function defineOverrides(): void
+    {
+        $this->overrides = [];
+        $this->walkFilesInModules('override', [], $this->processOverride(...));
+    }
+
+    protected function processOverride(string $subPath, string $file, string $modulePath, string $moduleName): void
+    {
+        if (count($parts = explode('/', $subPath)) < 4) {
+            throw new Exception("Invalid override \"$subPath\" in module\"$moduleName\"");
+        }
+
+        $module = $parts[0] . '/' . $parts[1];
+        $type = $parts[2];
+        $name = $module . '/' . implode('/', array_slice($parts, 3));
+        $this->overrides[$type][$name] = [
+            'rel' => $file,
+            'sub' => $moduleName . '/override/' . $subPath,
+        ];
+    }
 
     protected function getModules(): array
     {

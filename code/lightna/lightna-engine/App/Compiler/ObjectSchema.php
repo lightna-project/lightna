@@ -24,6 +24,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         LightnaReflectionProperty::class => 1,
     ];
     protected string $moduleClassRx;
+    protected string $testClassRx = '~Test\\\\(Unit|Integration)\\\\~';
 
     public function make(): void
     {
@@ -50,7 +51,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         $classes = $this->build->load('object/map');
         $objects = [];
         foreach ($classes as $class => $null) {
-            if (!$this->isModuleClass($class)) {
+            if (!$this->isModuleClass($class) || $this->isTestClass($class)) {
                 continue;
             }
 
@@ -150,6 +151,11 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
     protected function isModuleClass(string $class): bool
     {
         return (bool)preg_match($this->moduleClassRx, $class);
+    }
+
+    protected function isTestClass(string $class): bool
+    {
+        return (bool)preg_match($this->testClassRx, $class);
     }
 
     protected function isRefClassRelevant(LightnaReflectionClass $class): bool

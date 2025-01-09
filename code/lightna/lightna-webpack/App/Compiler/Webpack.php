@@ -38,6 +38,9 @@ class Webpack extends CompilerA
         }
 
         ArrayDirectives::apply($this->modulesConfig);
+
+        // Save result to validate overrides
+        $this->build->save('webpack/config', $this->modulesConfig);
     }
 
     protected function getModuleConfig(string $folder): array

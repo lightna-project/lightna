@@ -12,7 +12,7 @@ use Lightna\Engine\App\Config as AppConfig;
 class Tailwind extends CompilerA
 {
     protected AppConfig $appConfig;
-    protected array $twConfig;
+    protected array $modulesConfig;
     protected array $modulesIndex;
     protected array $importsIndex;
 
@@ -37,7 +37,7 @@ class Tailwind extends CompilerA
     protected function defineImportsIndex(): void
     {
         $this->importsIndex = [];
-        foreach ($this->twConfig['entry'] as $entry) {
+        foreach ($this->modulesConfig['entry'] as $entry) {
             foreach ($entry['import'] as $import) {
                 $this->importsIndex[$import] = $this->getImportFile($import);
             }
@@ -46,15 +46,18 @@ class Tailwind extends CompilerA
 
     protected function collectModulesConfig(): void
     {
-        $this->twConfig = [];
+        $this->modulesConfig = [];
         foreach ($this->getModules() as $folder) {
-            $this->twConfig = merge(
-                $this->twConfig,
+            $this->modulesConfig = merge(
+                $this->modulesConfig,
                 $this->getModuleConfig($folder),
             );
         }
 
-        ArrayDirectives::apply($this->twConfig);
+        ArrayDirectives::apply($this->modulesConfig);
+
+        // Save result to validate overrides
+        $this->build->save('tailwind/config', $this->modulesConfig);
     }
 
     protected function getModuleConfig(string $folder): array
@@ -73,6 +76,11 @@ class Tailwind extends CompilerA
         }
 
         $path = $this->getModularPath($import, 'css');
+        $name = $path['module'] . '/' . $path['subPath'];
+        if (isset($this->overrides['css'][$name])) {
+            $path = $this->getModularPath($this->overrides['css'][$name]['sub'], '');
+        }
+
         if (!file_exists($absFile = LIGHTNA_ENTRY . $path['fullPath'])) {
             throw new Exception("Import \"$import\" not found. Expected file \"$absFile\"");
         }
@@ -92,11 +100,13 @@ class Tailwind extends CompilerA
             throw new Exception("Invalid Tailwind path \"$path\". The module \"$module\" was not found.");
         }
 
-        $path = ($subfolder ? "$subfolder/" : '') . implode('/', array_slice($parts, 2));
+        $subPath = implode('/', array_slice($parts, 2));
+        $path = ($subfolder ? "$subfolder/" : '') . $subPath;
 
         return [
             'module' => $module,
             'path' => $path,
+            'subPath' => $subPath,
             'fullPath' => $this->modulesIndex[$module] . '/' . $path,
         ];
     }
@@ -115,7 +125,7 @@ class Tailwind extends CompilerA
 
     protected function makeEntries(): void
     {
-        foreach ($this->twConfig['entry'] as $name => $entry) {
+        foreach ($this->modulesConfig['entry'] as $name => $entry) {
             $this->saveEntryCss($name, $this->getEntryCss($entry));
             $this->saveEntryConfigJson($name, $this->getEntryConfigJson($entry));
             $this->saveEntryConfigJs($name, $this->getEntryConfigJs());
@@ -141,7 +151,7 @@ class Tailwind extends CompilerA
     protected function getEntryConfigJson(array $entry): string
     {
         return json_pretty(merge(
-            $this->twConfig['tailwind'],
+            $this->modulesConfig['tailwind'],
             [
                 'content' => $this->getEntryContent($entry),
             ]
@@ -177,7 +187,7 @@ class Tailwind extends CompilerA
     protected function makeShellScript(string $scriptName, bool $isDirect): void
     {
         $sh = $sep = '';
-        foreach ($this->twConfig['entry'] as $name => $entry) {
+        foreach ($this->modulesConfig['entry'] as $name => $entry) {
             $sh .= $sep . $this->getBuildCommand($name, $isDirect);
             $sep = " && \\\n";
         }
