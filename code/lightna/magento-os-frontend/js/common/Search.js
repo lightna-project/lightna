@@ -1,5 +1,4 @@
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
-import { PageOverlay} from 'lightna/magento-os-frontend/common/PageOverlay';
 
 export class Search {
     static minChars = 3;
@@ -13,6 +12,10 @@ export class Search {
         input: '#search',
         wrapper: '.search__wrap',
     };
+    classes = {
+        active: 'search__wrap--active',
+        overlayActive: 'search-open',
+    };
 
     constructor() {
         this.component = $('.cjs-search');
@@ -20,7 +23,6 @@ export class Search {
         this.searchWrap = $(Search.selectors.wrapper);
         this.clearAction = $(Search.actions.clear);
         this.searchAction = $(Search.actions.search);
-        this.overlay = new PageOverlay('.header__container', 'search');
         this.bindEvents();
         this.prefillSearchInput();
     }
@@ -68,11 +70,13 @@ export class Search {
     }
 
     close() {
-        this.overlay.hide();
+        this.searchWrap.classList.remove(this.classes.active);
+        document.body.classList.remove(this.classes.overlayActive);
     }
 
     open() {
-        this.overlay.show();
+        this.searchWrap.classList.add(this.classes.active);
+        document.body.classList.add(this.classes.overlayActive);
         setTimeout(() => {
             this.search.focus();
         });

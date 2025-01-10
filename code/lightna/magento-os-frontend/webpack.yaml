@@ -9,7 +9,6 @@ entry:
       - lightna/magento-os-frontend/common/Tabs
       - lightna/magento-os-frontend/common/Search
       - lightna/magento-os-frontend/common/SearchSuggestions
-      - lightna/magento-os-frontend/common/PageOverlayPool
       - lightna/magento-os-frontend/product/Options
       - lightna/magento-os-frontend/product/Gallery
       - lightna/magento-os-frontend/listing/Facets

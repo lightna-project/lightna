@@ -1,5 +1,4 @@
 <?php
-/** @var Lightna\Engine\Data\Block $block */
 /** @var Lightna\Magento\Data\Session $session */
 /** @var Lightna\Engine\Data\Request $request */
 
@@ -8,7 +7,7 @@ if (!$request->isPost) {
 }
 $cart = $session->cart;
 ?>
-<div <?= $block->attributes() ?>>
+<div class="minicart" id="minicart-content">
     <div class="overlay__title__container">
         <span class="overlay__title"><?= phrase('Your Cart') ?></span>
         <!-- Close minicart -->
@@ -21,3 +20,4 @@ $cart = $session->cart;
         <?= block('footer') ?>
     <?php endif; ?>
 </div>
+<div class="minicart__overlay" data-action="close-minicart"></div>
