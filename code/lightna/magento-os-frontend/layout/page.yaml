@@ -90,12 +90,6 @@ template: page.phtml
             template: page/header/minicart.phtml
           .content:
             template: page/header/minicart/content.phtml
-            attributes:
-              id: minicart-content
-              class:
-                - minicart
-                - overlay__content--slide-right
-              data-overlay-content: minicart
             .empty:
               template: page/header/minicart/empty.phtml
             .products:
@@ -129,14 +123,14 @@ template: page.phtml
         attributes:
           class:
             - search__wrap
-            - overlay__content--fade-in
-          data-overlay-content: search
         .form:
           template: page/header/search/form.phtml
         .suggestions:
           id: search-suggestions
           dynamic: true
           template: page/header/search/suggestions.phtml
+      .search-overlay:
+        template: page/header/search/overlay.phtml
   .main:
     container: div
     attributes:

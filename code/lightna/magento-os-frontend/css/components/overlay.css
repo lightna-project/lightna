@@ -10,37 +10,4 @@
     .overlay__title__container .icon {
         @apply icon-close cursor-pointer;
     }
-
-    .overlay__content--slide-right {
-        @apply fixed right-0 top-0 z-[55] translate-x-[calc(100%_+_15px)] transition-transform duration-500;
-    }
-
-    .overlay__content--slide-left {
-        @apply fixed left-0 top-0 z-[55] -translate-x-[calc(100%_+_15px)] transition-transform duration-500;
-    }
-
-    .overlay__content--fade-in {
-        @apply opacity-0 invisible transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s];
-    }
-
-    .overlay__content--active.overlay__content--slide-right {
-        @apply translate-x-0;
-    }
-
-    .overlay__content--active.overlay__content--slide-left {
-        @apply translate-x-0;
-    }
-
-    .overlay__content--active.overlay__content--fade-in {
-        @apply visible opacity-100 delay-[.1s,_0s];
-    }
-
-    .page-overlay {
-        @apply fixed left-0 top-0 z-50 h-full w-full bg-black opacity-0 invisible
-        transition-[opacity,_visibility] duration-[.3s,_0s] delay-[.1s,_.4s];
-    }
-
-    .page-overlay.page-overlay--active {
-        @apply visible opacity-10 delay-[.1s,_0s];
-    }
 }
