@@ -1,43 +1,43 @@
 entry:
   common:
     content:
-      - lightna/magento-os-frontend/template/**/*.phtml
-      - lightna/magento-os-frontend/layout/*.yaml
-      - lightna/magento-os-frontend/js/**/*.js
+      magento-template: lightna/magento-os-frontend/template/**/*.phtml
+      magento-layout: lightna/magento-os-frontend/layout/*.yaml
+      magento-js: lightna/magento-os-frontend/js/**/*.js
     import:
-      - tailwindcss/base
-      - lightna/magento-os-frontend/base/animation.css
-      - lightna/magento-os-frontend/base/buttons.css
-      - lightna/magento-os-frontend/base/forms.css
-      - lightna/magento-os-frontend/base/icons.css
-      - lightna/magento-os-frontend/base/layout.css
-      - lightna/magento-os-frontend/base/price.css
-      - lightna/magento-os-frontend/base/typography.css
-      - tailwindcss/components
-      - lightna/magento-os-frontend/components/collapsible.css
-      - lightna/magento-os-frontend/components/dropdown.css
-      - lightna/magento-os-frontend/components/overlay.css
-      - lightna/magento-os-frontend/components/mobile-overlay.css
-      - lightna/magento-os-frontend/components/tabs.css
-      - lightna/magento-os-frontend/components/toggle-link.css
-      - lightna/magento-os-frontend/components/usp.css
-      - lightna/magento-os-frontend/components/common/footer.css
-      - lightna/magento-os-frontend/components/common/header.css
-      - lightna/magento-os-frontend/components/common/menu.css
-      - lightna/magento-os-frontend/components/common/messages.css
-      - lightna/magento-os-frontend/components/common/minicart.css
-      - lightna/magento-os-frontend/components/common/search.css
-      - lightna/magento-os-frontend/components/common/search-suggestions.css
-      - lightna/magento-os-frontend/components/listing/facets.css
-      - lightna/magento-os-frontend/components/listing/toolbar.css
-      - lightna/magento-os-frontend/components/product/attributes-list.css
-      - lightna/magento-os-frontend/components/product/gallery.css
-      - lightna/magento-os-frontend/components/product/options.css
-      - lightna/magento-os-frontend/components/product/products-grid.css
-      - lightna/magento-os-frontend/components/product/products-list.css
-      - lightna/magento-os-frontend/components/product/sku.css
-      - lightna/magento-os-frontend/components/product/stock.css
-      - tailwindcss/utilities
+      tailwind-base: tailwindcss/base
+      magento-base-animation: lightna/magento-os-frontend/base/animation.css
+      magento-base-buttons: lightna/magento-os-frontend/base/buttons.css
+      magento-base-forms: lightna/magento-os-frontend/base/forms.css
+      magento-base-icons: lightna/magento-os-frontend/base/icons.css
+      magento-base-layout: lightna/magento-os-frontend/base/layout.css
+      magento-base-price: lightna/magento-os-frontend/base/price.css
+      magento-base-typography: lightna/magento-os-frontend/base/typography.css
+      tailwind-components: tailwindcss/components
+      magento-component-collapsible: lightna/magento-os-frontend/component/collapsible.css
+      magento-component-dropdown: lightna/magento-os-frontend/component/dropdown.css
+      magento-component-overlay: lightna/magento-os-frontend/component/overlay.css
+      magento-component-mobile-overlay: lightna/magento-os-frontend/component/mobile-overlay.css
+      magento-component-tabs: lightna/magento-os-frontend/component/tabs.css
+      magento-component-toggle-link: lightna/magento-os-frontend/component/toggle-link.css
+      magento-component-usp: lightna/magento-os-frontend/component/usp.css
+      magento-component-common-footer: lightna/magento-os-frontend/component/common/footer.css
+      magento-component-common-header: lightna/magento-os-frontend/component/common/header.css
+      magento-component-common-menu: lightna/magento-os-frontend/component/common/menu.css
+      magento-component-common-messages: lightna/magento-os-frontend/component/common/messages.css
+      magento-component-common-minicart: lightna/magento-os-frontend/component/common/minicart.css
+      magento-component-common-search: lightna/magento-os-frontend/component/common/search.css
+      magento-component-common-search-suggestions: lightna/magento-os-frontend/component/common/search-suggestions.css
+      magento-component-listing-facets: lightna/magento-os-frontend/component/listing/facets.css
+      magento-component-listing-toolbar: lightna/magento-os-frontend/component/listing/toolbar.css
+      magento-component-product-attributes-list: lightna/magento-os-frontend/component/product/attributes-list.css
+      magento-component-product-gallery: lightna/magento-os-frontend/component/product/gallery.css
+      magento-component-product-options: lightna/magento-os-frontend/component/product/options.css
+      magento-component-product-products-grid: lightna/magento-os-frontend/component/product/products-grid.css
+      magento-component-product-products-list: lightna/magento-os-frontend/component/product/products-list.css
+      magento-component-product-sku: lightna/magento-os-frontend/component/product/sku.css
+      magento-component-product-attributes: lightna/magento-os-frontend/component/product/stock.css
+      tailwind-utilities: tailwindcss/utilities
 tailwind:
   theme:
     borderRadius:

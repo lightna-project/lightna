@@ -73,7 +73,7 @@ function merge(...$arrays): array
 
 function array_path_get(array $array, string $path): mixed
 {
-    $parts = explode('/', trim($path, '/'));
+    $parts = $path === '' ? [] : explode('/', trim($path, '/'));
     $value = &$array;
     foreach ($parts as $part) {
         if (isset($value[$part])) {
@@ -88,6 +88,10 @@ function array_path_get(array $array, string $path): mixed
 
 function array_path_exists(array $array, string $path): mixed
 {
+    if ($path === '') {
+        return true;
+    }
+
     $parts = explode('/', trim($path, '/'));
     $lastKey = array_pop($parts);
     $parent = array_path_get($array, implode('/', $parts));
@@ -97,7 +101,7 @@ function array_path_exists(array $array, string $path): mixed
 
 function array_path_set(array &$array, string $path, mixed $value): void
 {
-    $parts = explode('/', trim($path, '/'));
+    $parts = $path === '' ? [] : explode('/', trim($path, '/'));
     $dest = &$array;
     foreach ($parts as $part) {
         $dest = &$dest[$part];

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine;
 
+use JetBrains\PhpStorm\NoReturn;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Router;
@@ -104,8 +105,20 @@ class App extends ObjectA
         $this->processAction();
     }
 
+    #[NoReturn]
     protected function renderError500(Throwable $e): void
     {
+        if (IS_DEV_MODE) {
+            $this->renderError500Dev($e);
+        }
+
         error500('Application internal error', $e);
+    }
+
+    #[NoReturn]
+    protected function renderError500Dev(Throwable $e): void
+    {
+        echo "<pre>\n$e\n</pre>";
+        exit(1);
     }
 }

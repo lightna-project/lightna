@@ -24,7 +24,7 @@ extends:
           class:
             - relative
         .gallery:
-          template: product/gallery.phtml
+          template: lightna/magento-os-frontend/product/gallery.phtml
       .right-container:
         container: div
         attributes:
@@ -32,9 +32,9 @@ extends:
             - md:sticky
             - top-[88px]
         .sku:
-          template: product/attributes/sku.phtml
+          template: lightna/magento-os-frontend/product/attributes/sku.phtml
         .name:
-          template: product/attributes/name.phtml
+          template: lightna/magento-os-frontend/product/attributes/name.phtml
         .price-and-discount:
           container: div
           attributes:
@@ -48,7 +48,7 @@ extends:
               - mb-4
               - price-lg
           .price:
-            template: product/price.phtml
+            template: lightna/magento-os-frontend/product/price.phtml
             attributes:
               class:
                 - flex
@@ -57,10 +57,10 @@ extends:
                 - gap-x-3
                 - gap-y-1
           .discount:
-            template: product/discount.phtml
+            template: lightna/magento-os-frontend/product/discount.phtml
         .cta:
           .add-to-cart:
-            template: product/cta/add-to-cart.phtml
+            template: lightna/magento-os-frontend/product/cta/add-to-cart.phtml
             attributes:
               class:
                 - cjs-add-to-cart
@@ -70,7 +70,7 @@ extends:
             .options:
               id: product-options
               dynamic: true
-              template: product/options.phtml
+              template: lightna/magento-os-frontend/product/options.phtml
               attributes:
                 class:
                   - cjs-product-options
@@ -79,15 +79,15 @@ extends:
                   - flex-col
                   - gap-2
         .stock:
-          template: product/stock.phtml
+          template: lightna/magento-os-frontend/product/stock.phtml
         .usp:
-          template: product/usp.phtml
+          template: lightna/magento-os-frontend/product/usp.phtml
       .details:
-        template: product/tabs.phtml
+        template: lightna/magento-os-frontend/product/tabs.phtml
         .description:
           title: "Description"
           active: true
-          template: product/description.phtml
+          template: lightna/magento-os-frontend/product/description.phtml
         .specifications:
           title: "Specifications"
-          template: product/attributes/all-visible.phtml
+          template: lightna/magento-os-frontend/product/attributes/all-visible.phtml

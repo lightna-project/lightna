@@ -80,10 +80,6 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
 
     protected function recursiveDirectoryIteratorCallback(SplFileInfo $current): bool
     {
-        if ($current->isDir() && $current->getFilename() === 'Test') {
-            return false;
-        }
-
         return true;
     }
 

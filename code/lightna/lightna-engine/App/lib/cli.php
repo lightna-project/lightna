@@ -38,7 +38,7 @@ function cli_init_compiler_mode(): void
     require __DIR__ . '/../Bootstrap.php';
 
     Bootstrap::setCompilerMode(
-        cli_has_option('direct') ? 'direct' : 'default',
+        cli_get_option('direct') ? 'direct' : 'default',
     );
 }
 
@@ -126,8 +126,16 @@ function array_flat(array $array, string $separator = '.'): array
     return $flat;
 }
 
-function cli_has_option(string $option): bool
+function cli_get_option(string $option): bool|string
 {
     global $argv;
-    return (bool)array_search('--' . $option, $argv, true);
+
+    $arg = false;
+    foreach ($argv as $v) {
+        if (preg_match('/^--' . preg_quote($option) . '/', $v)) $arg = $v;
+    }
+    if ($arg === false) return false;
+    $parts = explode('=', $arg);
+
+    return count($parts) === 1 ? true : $parts[1];
 }

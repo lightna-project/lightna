@@ -2,4 +2,4 @@
   container: head
   .context:
     id: page-context
-    template: page/context.phtml
+    template: lightna/lightna-engine/page/context.phtml

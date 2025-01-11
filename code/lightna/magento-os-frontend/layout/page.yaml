@@ -1,29 +1,29 @@
-template: page.phtml
+template: lightna/magento-os-frontend/page.phtml
 .head:
   .title:
-    template: page/head/title.phtml
+    template: lightna/magento-os-frontend/page/head/title.phtml
   .meta:
     .encoding:
-      template: page/head/meta/encoding.phtml
+      template: lightna/magento-os-frontend/page/head/meta/encoding.phtml
     .viewport:
-      template: page/head/meta/viewport.phtml
+      template: lightna/magento-os-frontend/page/head/meta/viewport.phtml
     .description:
-      template: page/head/meta/description.phtml
+      template: lightna/magento-os-frontend/page/head/meta/description.phtml
   .gtm:
-    template: page/head/gtm.phtml
+    template: lightna/magento-os-frontend/page/head/gtm.phtml
   .link:
     .favicon:
-      template: page/head/link/favicon.phtml
+      template: lightna/magento-os-frontend/page/head/link/favicon.phtml
     .font:
-      template: page/head/link/font.phtml
+      template: lightna/magento-os-frontend/page/head/link/font.phtml
     .stylesheet:
-      template: page/head/link/style/common.phtml
+      template: lightna/magento-os-frontend/page/head/link/style/common.phtml
   .script:
-    template: page/head/js/common.phtml
+    template: lightna/magento-os-frontend/page/head/js/common.phtml
 .body:
   container: body
   .usp:
-    template: page/usp.phtml
+    template: lightna/magento-os-frontend/page/usp.phtml
   .header:
     container: header
     attributes:
@@ -40,31 +40,31 @@ template: page.phtml
           class:
             - header__left
         .menu-toggle:
-          template: page/header/mobile-menu-toggle.phtml
+          template: lightna/magento-os-frontend/page/header/mobile-menu-toggle.phtml
         .search:
-          template: page/header/search.phtml
+          template: lightna/magento-os-frontend/page/header/search.phtml
       .logo:
-        template: page/header/logo.phtml
+        template: lightna/magento-os-frontend/page/header/logo.phtml
       .menu:
-        template: page/menu.phtml
+        template: lightna/magento-os-frontend/page/menu.phtml
         .item:
-          template: page/menu/item.phtml
+          template: lightna/magento-os-frontend/page/menu/item.phtml
       .header-right:
         container: div
         attributes:
           class:
             - header__right
         .search:
-          template: page/header/search.phtml
+          template: lightna/magento-os-frontend/page/header/search.phtml
         .account:
           id: account
           dynamic: true
           private: true
-          template: page/header/account.phtml
+          template: lightna/magento-os-frontend/page/header/account.phtml
           .guest:
-            template: page/header/account/dropdown-guest.phtml
+            template: lightna/magento-os-frontend/page/header/account/dropdown-guest.phtml
           .customer:
-            template: page/header/account/dropdown-customer.phtml
+            template: lightna/magento-os-frontend/page/header/account/dropdown-customer.phtml
             links:
               overview:
                 url: /customer/account
@@ -87,50 +87,48 @@ template: page.phtml
             class:
               - cjs-minicart
           .icon:
-            template: page/header/minicart.phtml
+            template: lightna/magento-os-frontend/page/header/minicart.phtml
           .content:
-            template: page/header/minicart/content.phtml
+            template: lightna/magento-os-frontend/page/header/minicart/content.phtml
             .empty:
-              template: page/header/minicart/empty.phtml
+              template: lightna/magento-os-frontend/page/header/minicart/empty.phtml
             .products:
-              template: page/header/minicart/products-list.phtml
+              template: lightna/magento-os-frontend/page/header/minicart/products-list.phtml
               .item:
                 container: li
                 attributes:
                   class:
                     - products-list__item
                 .image:
-                  template: page/header/minicart/product-item/image.phtml
+                  template: lightna/magento-os-frontend/page/header/minicart/product-item/image.phtml
                 .info:
                   container: div
                   attributes:
                     class:
                       - products-list__item__info
                   .name:
-                    template: page/header/minicart/product-item/name.phtml
+                    template: lightna/magento-os-frontend/page/header/minicart/product-item/name.phtml
                   .sku:
-                    template: page/header/minicart/product-item/sku.phtml
+                    template: lightna/magento-os-frontend/page/header/minicart/product-item/sku.phtml
                   .quantity:
-                    template: page/header/minicart/product-item/quantity.phtml
+                    template: lightna/magento-os-frontend/page/header/minicart/product-item/quantity.phtml
                   .price:
-                    template: page/header/minicart/product-item/price.phtml
+                    template: lightna/magento-os-frontend/page/header/minicart/product-item/price.phtml
                 .remove:
-                  template: page/header/minicart/product-item/remove.phtml
+                  template: lightna/magento-os-frontend/page/header/minicart/product-item/remove.phtml
             .footer:
-              template: page/header/minicart/footer.phtml
+              template: lightna/magento-os-frontend/page/header/minicart/footer.phtml
       .search:
         container: div
         attributes:
           class:
             - search__wrap
         .form:
-          template: page/header/search/form.phtml
+          template: lightna/magento-os-frontend/page/header/search/form.phtml
         .suggestions:
           id: search-suggestions
           dynamic: true
-          template: page/header/search/suggestions.phtml
-      .search-overlay:
-        template: page/header/search/overlay.phtml
+          template: lightna/magento-os-frontend/page/header/search/suggestions.phtml
   .main:
     container: div
     attributes:
@@ -139,9 +137,9 @@ template: page.phtml
   .footer:
     container: footer
     .menu:
-      template: page/footer/menu.phtml
+      template: lightna/magento-os-frontend/page/footer/menu.phtml
     .copyright:
-      template: page/footer/copyright.phtml
+      template: lightna/magento-os-frontend/page/footer/copyright.phtml
   .messages-container:
     container: div
     attributes:
@@ -149,4 +147,4 @@ template: page.phtml
         - page-messages
     .messages:
       id: messages
-      template: page/messages.phtml
+      template: lightna/magento-os-frontend/page/messages.phtml

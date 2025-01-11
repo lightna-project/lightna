@@ -4,38 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\Test\Unit\App;
 
-use Lightna\Engine\App\ArrayDirectives;
-use PHPUnit\Framework\TestCase;
-
-class ArrayDirectivesTest extends TestCase
+class ArrayDirectivesPositionTest extends ArrayDirectivesTestCase
 {
-    protected array $configSample = [
-        'numeric' => ['a', 'b', 'c', 'd'],
-        'assoc' => [
-            'a' => 1,
-            'b' => 2,
-            'c' => 3,
-            'd' => 4,
-        ],
-    ];
-
-    protected function checkDirectives(array $directives, array $expected): void
-    {
-        $config = $this->configSample;
-        $config['directives'] = $directives;
-
-        ArrayDirectives::apply($config);
-        unset($config['directives']);
-
-        $this->assertSame($expected, $config);
-    }
-
-    protected function checkDirectivesNoChange(array $directives): void
-    {
-        $this->checkDirectives($directives, $this->configSample);
-    }
-
-    public function testPositionAssocFirstFromTheMiddle(): void
+    public function testAssocFirstFromTheMiddle(): void
     {
         $expected = $this->configSample;
         $expected['assoc'] = [
@@ -48,12 +19,12 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position assoc.d first'], $expected);
     }
 
-    public function testPositionAssocFirstFromTheBeginning(): void
+    public function testAssocFirstFromTheBeginning(): void
     {
         $this->checkDirectivesNoChange(['position assoc.a first']);
     }
 
-    public function testPositionAssocLast(): void
+    public function testAssocLast(): void
     {
         $expected = $this->configSample;
         $expected['assoc'] = [
@@ -66,12 +37,12 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position assoc.a last'], $expected);
     }
 
-    public function testPositionAssocAfterDc(): void
+    public function testAssocAfterDc(): void
     {
         $this->checkDirectivesNoChange(['position assoc.d after c']);
     }
 
-    public function testPositionAssocAfterCd(): void
+    public function testAssocAfterCd(): void
     {
         $expected = $this->configSample;
         $expected['assoc'] = [
@@ -84,12 +55,12 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position assoc.c after d'], $expected);
     }
 
-    public function testPositionAssocAfterBa(): void
+    public function testAssocAfterBa(): void
     {
         $this->checkDirectivesNoChange(['position assoc.b after a']);
     }
 
-    public function testPositionAssocAfterCa(): void
+    public function testAssocAfterCa(): void
     {
         $expected = $this->configSample;
         $expected['assoc'] = [
@@ -102,7 +73,7 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position assoc.c after a'], $expected);
     }
 
-    public function testPositionAssocBeforeCb(): void
+    public function testAssocBeforeCb(): void
     {
         $expected = $this->configSample;
         $expected['assoc'] = [
@@ -115,17 +86,17 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position assoc.c before b'], $expected);
     }
 
-    public function testPositionAssocBeforeAb(): void
+    public function testAssocBeforeAb(): void
     {
         $this->checkDirectivesNoChange(['position assoc.a before b']);
     }
 
-    public function testPositionAssocBeforeCd(): void
+    public function testAssocBeforeCd(): void
     {
         $this->checkDirectivesNoChange(['position assoc.c before d']);
     }
 
-    public function testPositionNumericFirst(): void
+    public function testNumericFirst(): void
     {
         $expected = $this->configSample;
         $expected['numeric'] = [
@@ -138,7 +109,7 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position numeric.3 first'], $expected);
     }
 
-    public function testPositionNumericBefore13(): void
+    public function testNumericBefore13(): void
     {
         $expected = $this->configSample;
         $expected['numeric'] = [
@@ -151,7 +122,7 @@ class ArrayDirectivesTest extends TestCase
         $this->checkDirectives(['position numeric.1 before 3'], $expected);
     }
 
-    public function testPositionNumericAfter31(): void
+    public function testNumericAfter31(): void
     {
         $expected = $this->configSample;
         $expected['numeric'] = [
@@ -162,5 +133,15 @@ class ArrayDirectivesTest extends TestCase
         ];
 
         $this->checkDirectives(['position numeric.3 after 1'], $expected);
+    }
+
+    public function testNumericFirst0(): void
+    {
+        $this->checkDirectivesNoChange(['position numeric.0 first']);
+    }
+
+    public function testNumericLast3(): void
+    {
+        $this->checkDirectivesNoChange(['position numeric.3 last']);
     }
 }

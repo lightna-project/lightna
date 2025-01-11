@@ -4,11 +4,11 @@
       id: font
     .stylesheet-lane:
       id: style-lane
-      template: page/head/link/style/lane.phtml
+      template: lightna/magento-os-frontend-lane/page/head/link/style/lane.phtml
   .script:
     .lane:
       id: script-lane
-      template: page/head/js/lane.phtml
+      template: lightna/magento-os-frontend-lane/page/head/js/lane.phtml
 .body:
   .usp:
     id: header-usp

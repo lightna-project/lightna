@@ -8,7 +8,8 @@ class Asset extends CompilerA
 {
     protected string $dir;
 
-    protected function init(array $data = []): void
+    /** @noinspection PhpUnused */
+    protected function defineDir(): void
     {
         $this->dir = $this->compiler->getAssetDir();
         if (!is_dir($this->dir)) {
@@ -21,9 +22,17 @@ class Asset extends CompilerA
         $this->walkFilesInModules(
             'asset',
             [],
-            function ($subPath, $file, $modulePath) {
-                file_copy($file, $this->dir . $modulePath . '/' . $subPath);
-            }
+            $this->processAsset(...)
         );
+    }
+
+    protected function processAsset(string $subPath, string $file, string $modulePath, string $moduleName): void
+    {
+        $name = $moduleName . '/' . $subPath;
+        if (isset($this->overrides['asset'][$name])) {
+            $file = $this->overrides['asset'][$name]['rel'];
+        }
+
+        file_copy($file, $this->dir . $moduleName . '/' . $subPath);
     }
 }

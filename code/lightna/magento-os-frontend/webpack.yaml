@@ -1,17 +1,17 @@
 entry:
   common:
     component:
-      - lightna/magento-os-frontend/common/Menu
-      - lightna/magento-os-frontend/common/MobileOverlay
-      - lightna/magento-os-frontend/common/ShoppingCart
-      - lightna/magento-os-frontend/common/AddToCart
-      - lightna/magento-os-frontend/common/Collapsible
-      - lightna/magento-os-frontend/common/Tabs
-      - lightna/magento-os-frontend/common/Search
-      - lightna/magento-os-frontend/common/SearchSuggestions
-      - lightna/magento-os-frontend/product/Options
-      - lightna/magento-os-frontend/product/Gallery
-      - lightna/magento-os-frontend/listing/Facets
+      magento-common-menu: lightna/magento-os-frontend/common/Menu
+      magento-common-mobile-overlay: lightna/magento-os-frontend/common/MobileOverlay
+      magento-common-shipping-cart: lightna/magento-os-frontend/common/ShoppingCart
+      magento-common-add-to-cart: lightna/magento-os-frontend/common/AddToCart
+      magento-common-collapsible: lightna/magento-os-frontend/common/Collapsible
+      magento-common-tabs: lightna/magento-os-frontend/common/Tabs
+      magento-common-search: lightna/magento-os-frontend/common/Search
+      magento-common-search-suggestions: lightna/magento-os-frontend/common/SearchSuggestions
+      magento-product-options: lightna/magento-os-frontend/product/Options
+      magento-product-gallery: lightna/magento-os-frontend/product/Gallery
+      magento-listing-facets: lightna/magento-os-frontend/listing/Facets
 extend:
   lightna/lightna-engine/lib/Request:
-    - lightna/magento-os-frontend/extend/RequestExtend
+    magento-request: lightna/magento-os-frontend/extend/RequestExtend

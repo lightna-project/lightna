@@ -25,7 +25,7 @@
     input[type='checkbox']:checked + label:after {
         content: '';
         background: white
-            url('../../magento-os-frontend/image/icon/check-white.svg')
+            url('../../lightna/magento-os-frontend/image/icon/check-white.svg')
             center / 14px no-repeat;
         @apply absolute flex h-6 w-6 items-center justify-center rounded-sm bg-primary-main text-xs text-white;
     }
