@@ -1,0 +1,40 @@
+plugin:
+  Lightna\Engine\App\Project\Database:
+    - Lightna\Magento\Staging\App\Plugin\Project\Database
+  Lightna\Magento\App\Index\EntityLink:
+    - Lightna\Magento\Staging\App\Plugin\Index\EntityLink
+  Lightna\Engine\App\Index\Changelog\Handler:
+    - Lightna\Magento\Staging\App\Plugin\Index\Changelog\Handler
+staging:
+  # How to apply new staging version:
+  #   false - uses current time as a new version so that Lightna can apply new version on its own
+  #         independent of Magento which is faster and stabler
+  #   true - uses Magento current version. Lightna will apply the new version after Magento does
+  apply_after_magento: true
+  tables:
+    cms_page:
+      entity_id: page_id
+      relations:
+        cms_page_store: null
+    cms_block:
+      entity_id: block_id
+      relations:
+        cms_block_store: null
+    catalog_product_entity:
+      entity_id: entity_id
+      relations:
+        catalog_product_entity_datetime: null
+        catalog_product_entity_decimal: null
+        catalog_product_entity_int: null
+        catalog_product_entity_text: null
+        catalog_product_entity_varchar: null
+        catalog_product_entity_tier_price: null
+        catalog_product_entity_media_gallery_value_to_entity: null
+    catalog_category_entity:
+      entity_id: entity_id
+      relations:
+        catalog_category_entity_datetime: null
+        catalog_category_entity_decimal: null
+        catalog_category_entity_int: null
+        catalog_category_entity_text: null
+        catalog_category_entity_varchar: null

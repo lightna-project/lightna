@@ -1,0 +1,27 @@
+container: li
+attributes:
+  class:
+    - product-tile
+.top:
+  container: div
+  attributes:
+    class:
+      - product-tile__top
+  .image:
+    template: lightna/magento-frontend/component/product/tile/image.phtml
+.bottom:
+  container: div
+  attributes:
+    class:
+      - product-tile__bottom
+  .sku:
+    template: lightna/magento-frontend/product/attributes/sku.phtml
+  .name:
+    template: lightna/magento-frontend/component/product/tile/name.phtml
+  .price-container:
+    container: div
+    attributes:
+      class:
+        - product-tile__price
+    .price:
+      template: lightna/magento-frontend/product/price.phtml

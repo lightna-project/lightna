@@ -1,0 +1,65 @@
+@layer base {
+    @font-face {
+        font-family: 'Assistant';
+        src:
+            url('../../lightna/magento-frontend/font/Assistant/Assistant-Regular.woff2')
+                format('woff2'),
+            url('../../lightna/magento-frontend/font/Assistant/Assistant-Regular.woff')
+                format('woff');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Assistant';
+        src:
+            url('../../lightna/magento-frontend/font/Assistant/Assistant-ExtraLight.woff2')
+                format('woff2'),
+            url('../../lightna/magento-frontend/font/Assistant/Assistant-ExtraLight.woff')
+                format('woff');
+        font-weight: 200;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: 'Assistant';
+        src:
+            url('../../lightna/magento-frontend/font/Assistant/Assistant-SemiBold.woff2')
+                format('woff2'),
+            url('../../lightna/magento-frontend/font/Assistant/Assistant-SemiBold.woff')
+                format('woff');
+        font-weight: 600;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    body {
+        @apply font-extralight text-primary-text;
+    }
+
+    h1 {
+        @apply mb-6 text-4xl font-semibold;
+    }
+
+    h2 {
+        @apply mb-6 text-3xl font-semibold;
+    }
+
+    h3 {
+        @apply mb-4 text-2xl font-semibold;
+    }
+
+    h4 {
+        @apply mb-4 text-xl font-semibold;
+    }
+
+    h5 {
+        @apply mb-4 text-xl font-normal;
+    }
+
+    h6 {
+        @apply mb-4 text-xl font-normal;
+    }
+}

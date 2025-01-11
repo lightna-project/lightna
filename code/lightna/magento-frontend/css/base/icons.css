@@ -1,0 +1,88 @@
+@layer base {
+    .icon {
+        @apply h-6 w-6;
+    }
+
+    .icon-sm {
+        @apply h-4 w-4;
+    }
+
+    .icon-cart {
+        background: url('../../lightna/magento-frontend/image/icon/cart.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-close {
+        background: url('../../lightna/magento-frontend/image/icon/cross-small.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-close-xs {
+        @apply bg-[length:20px_20px];
+    }
+
+    .icon-burger-menu {
+        background: url('../../lightna/magento-frontend/image/icon/menu-burger.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-settings {
+        background: url('../../lightna/magento-frontend/image/icon/settings.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-filter {
+        background: url('../../lightna/magento-frontend/image/icon/bars-filter.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-chevron-down {
+        background: url('../../lightna/magento-frontend/image/icon/angle-small-down.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-chevron-up {
+        background: url('../../lightna/magento-frontend/image/icon/angle-small-down.svg')
+            center / contain no-repeat;
+        transform: scaleY(-1);
+    }
+
+    .icon-arrow-left {
+        background: url('../../lightna/magento-frontend/image/icon/arrow-small-left.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-arrow-right {
+        @apply icon-arrow-left -scale-100;
+    }
+
+    .icon-checkmark {
+        background: url('../../lightna/magento-frontend/image/icon/check.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-checkmark-green {
+        background: url('../../lightna/magento-frontend/image/icon/check-green.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-user__outline {
+        background: url('../../lightna/magento-frontend/image/icon/user.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-user__filled {
+        background: url('../../lightna/magento-frontend/image/icon/user-filled.svg')
+            center / contain no-repeat;
+    }
+
+    .icon-search {
+        background: url('../../lightna/magento-frontend/image/icon/search.svg')
+        center / 21px 21px no-repeat;
+    }
+
+    .icon-counter {
+        @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main
+        text-xs font-normal text-white;
+    }
+}

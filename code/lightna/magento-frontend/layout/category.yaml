@@ -1,0 +1,26 @@
+extends:
+  - page
+.body:
+  attributes:
+    class:
+      - category
+  .main:
+    .content:
+      container: div
+      .details:
+        template: lightna/magento-frontend/category/details.phtml
+      .columns:
+        container: div
+        attributes:
+          class:
+            - grid
+            - gap-6
+            - md:gap-12
+            - md:grid-cols-[280px_1fr]
+        .facets:
+          template: lightna/magento-frontend/category/facets.phtml
+          .toggle-facets:
+            template: lightna/magento-frontend/component/toggle-link.phtml
+        .result:
+          template: lightna/magento-frontend/category/result.phtml
+          .item: component/product/tile.yaml
