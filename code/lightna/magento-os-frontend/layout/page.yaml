@@ -129,6 +129,8 @@ template: lightna/magento-os-frontend/page.phtml
           id: search-suggestions
           dynamic: true
           template: lightna/magento-os-frontend/page/header/search/suggestions.phtml
+      .search-overlay:
+        template: lightna/magento-os-frontend/page/header/search/overlay.phtml
   .main:
     container: div
     attributes:
