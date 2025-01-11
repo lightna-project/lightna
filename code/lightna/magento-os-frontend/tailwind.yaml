@@ -33,8 +33,9 @@ entry:
       magento-component-product-attributes-list: lightna/magento-os-frontend/component/product/attributes-list.css
       magento-component-product-gallery: lightna/magento-os-frontend/component/product/gallery.css
       magento-component-product-options: lightna/magento-os-frontend/component/product/options.css
-      magento-component-product-products-grid: lightna/magento-os-frontend/component/product/products-grid.css
-      magento-component-product-products-list: lightna/magento-os-frontend/component/product/products-list.css
+      magento-component-product-product-tile: lightna/magento-os-frontend/component/product/tile.css
+      magento-component-product-product-grid: lightna/magento-os-frontend/component/product/grid.css
+      magento-component-product-product-list: lightna/magento-os-frontend/component/product/list.css
       magento-component-product-sku: lightna/magento-os-frontend/component/product/sku.css
       magento-component-product-attributes: lightna/magento-os-frontend/component/product/stock.css
       tailwind-utilities: tailwindcss/utilities

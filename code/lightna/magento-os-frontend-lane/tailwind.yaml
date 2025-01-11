@@ -27,5 +27,5 @@ entry:
       magento-component-common-minicart: lightna/magento-os-frontend/component/common/minicart.css
       magento-component-common-search: lightna/magento-os-frontend/component/common/search.css
       magento-component-common-search-suggestions: lightna/magento-os-frontend/component/common/search-suggestions.css
-      magento-component-product-products-list: lightna/magento-os-frontend/component/product/products-list.css
+      magento-component-product-product-list: lightna/magento-os-frontend/component/product/list.css
       tailwind-utilities: tailwindcss/utilities
