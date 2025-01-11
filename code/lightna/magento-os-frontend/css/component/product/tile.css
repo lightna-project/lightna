@@ -1,0 +1,29 @@
+@layer components {
+    .product-tile {
+        @apply grid grid-rows-[auto_1fr];
+    }
+
+    .product-tile__top {
+        @apply flex aspect-[285/354] items-center border-b;
+    }
+
+    .product-tile__image {
+        @apply w-full;
+    }
+
+    .product-tile__bottom {
+        @apply flex flex-col py-4;
+    }
+
+    .product-tile .product-sku {
+        @apply text-xs text-slate-500;
+    }
+
+    .product-tile__link {
+        @apply mb-2 block text-base font-semibold;
+    }
+
+    .product-tile__price {
+        @apply mt-auto;
+    }
+}
