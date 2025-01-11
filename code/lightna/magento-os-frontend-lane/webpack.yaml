@@ -1,8 +1,0 @@
-entry:
-  lane:
-    component:
-      magento-common-menu: lightna/magento-os-frontend/common/Menu
-      magento-common-mobile-overlay: lightna/magento-os-frontend/common/MobileOverlay
-      magento-common-shipping-cart: lightna/magento-os-frontend/common/ShoppingCart
-      magento-common-search: lightna/magento-os-frontend/common/Search
-      magento-common-search-suggestions: lightna/magento-os-frontend/common/SearchSuggestions

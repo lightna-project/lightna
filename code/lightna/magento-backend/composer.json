@@ -1,0 +1,10 @@
+{
+    "name": "lightna/magento-backend",
+    "type": "library",
+    "description": "",
+    "require": {
+        "ext-pdo": "*",
+        "ext-simplexml": "*",
+        "laminas/laminas-db": "*"
+    }
+}

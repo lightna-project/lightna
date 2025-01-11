@@ -1,0 +1,17 @@
+entry:
+  common:
+    component:
+      magento-common-menu: lightna/magento-frontend/common/Menu
+      magento-common-mobile-overlay: lightna/magento-frontend/common/MobileOverlay
+      magento-common-shipping-cart: lightna/magento-frontend/common/ShoppingCart
+      magento-common-add-to-cart: lightna/magento-frontend/common/AddToCart
+      magento-common-collapsible: lightna/magento-frontend/common/Collapsible
+      magento-common-tabs: lightna/magento-frontend/common/Tabs
+      magento-common-search: lightna/magento-frontend/common/Search
+      magento-common-search-suggestions: lightna/magento-frontend/common/SearchSuggestions
+      magento-product-options: lightna/magento-frontend/product/Options
+      magento-product-gallery: lightna/magento-frontend/product/Gallery
+      magento-listing-facets: lightna/magento-frontend/listing/Facets
+extend:
+  lightna/lightna-engine/lib/Request:
+    magento-request: lightna/magento-frontend/extend/RequestExtend

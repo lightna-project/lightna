@@ -1,0 +1,7 @@
+logo.default:
+  src: lightna/magento-frontend/image/logo-default.svg
+  width: 105
+  height: 31
+  alt: Lightna
+favicon.default:
+  href: lightna/magento-frontend/image/favicon.ico

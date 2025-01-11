@@ -1,0 +1,12 @@
+extends:
+  - page
+.body:
+  attributes:
+    class:
+      - cms
+  .main:
+    container: div
+    .heading:
+      template: lightna/magento-frontend/cms/heading.phtml
+    .content:
+      template: lightna/magento-frontend/cms/content.phtml

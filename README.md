@@ -58,16 +58,16 @@ export magentoAppDir=`realpath project/magento-os/app` && \
 export lightnaModulesDir=`realpath code` && \
 mkdir -p $magentoAppDir/code/Lightna && \
 mkdir -p $magentoAppDir/design/frontend/Lightna && \
-ln -s $lightnaModulesDir/magento-os/lightna-frontend $magentoAppDir/code/Lightna/Frontend && \
-ln -s $lightnaModulesDir/magento-os/lightna-demo $magentoAppDir/code/Lightna/Demo && \
-ln -s $lightnaModulesDir/magento-os/lightna-theme $magentoAppDir/design/frontend/Lightna/Lightna && \
-ln -s $lightnaModulesDir/magento-os/lightna-lane-theme $magentoAppDir/design/frontend/Lightna/Lane
+ln -sf $lightnaModulesDir/magento/lightna-frontend $magentoAppDir/code/Lightna/Frontend && \
+ln -sf $lightnaModulesDir/magento/lightna-demo $magentoAppDir/code/Lightna/Demo && \
+ln -sf $lightnaModulesDir/magento/lightna-theme $magentoAppDir/design/frontend/Lightna/Lightna && \
+ln -sf $lightnaModulesDir/magento/lightna-lane-theme $magentoAppDir/design/frontend/Lightna/Lane
 ```
 
 * Redirect Magento index.php to Lightna:
 ```
 mv project/magento-os/pub/index.php project/magento-os/pub/magento_index.php && \
-ln -s ../../../entry/magento-os/index.php project/magento-os/pub/index.php
+ln -sf ../../../entry/magento-os/index.php project/magento-os/pub/index.php
 ```
 
 * Configure Lightna entry path in `app/etc/env.php`:
@@ -84,7 +84,7 @@ project/magento-os/bin/magento setup:upgrade
 
 
 ### Configure Lightna
-* `cp code/lightna/magento-os-backend/env.php.sample entry/magento-os/env.php`
+* `cp code/lightna/magento-backend/env.php.sample entry/magento-os/env.php`
 * Edit `entry/magento-os/env.php` and define `*****` with your values
 * Ensure that the Elasticsearch and Session settings correspond to the Magento setup, and note that currently, only file storage for sessions is supported
 * Ensure that `session.serialize_handler` value is set to `php_serialize`

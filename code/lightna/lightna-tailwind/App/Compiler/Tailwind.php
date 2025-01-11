@@ -56,7 +56,7 @@ class Tailwind extends CompilerA
 
         ArrayDirectives::apply($this->modulesConfig);
 
-        // Save result to validate overrides
+        // Save result to validate config overrides
         $this->build->save('tailwind/config', $this->modulesConfig);
     }
 

@@ -1,0 +1,20 @@
+.head:
+  .link:
+    .font:
+      id: font
+    .stylesheet-lane:
+      id: style-lane
+      template: lightna/magento-frontend-lane/page/head/link/style/lane.phtml
+  .script:
+    .lane:
+      id: script-lane
+      template: lightna/magento-frontend-lane/page/head/js/lane.phtml
+.body:
+  .usp:
+    id: header-usp
+  .header:
+    id: header
+  .footer:
+    id: footer
+    .copyright:
+      id: copyright

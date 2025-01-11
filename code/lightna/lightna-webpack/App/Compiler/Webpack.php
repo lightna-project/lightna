@@ -11,7 +11,6 @@ use stdClass;
 class Webpack extends CompilerA
 {
     protected array $modulesConfig;
-    protected array $relevantModules;
     protected array $importsIndex = [];
     protected array $extendAliases = [];
 
@@ -19,18 +18,19 @@ class Webpack extends CompilerA
     {
         $this->collectModulesConfig();
         $this->indexImports();
-        $this->makeWpConfig();
+        $this->makeExtends();
+        $this->makeEntriesJs();
+        $this->makeConfigJs();
     }
 
     protected function collectModulesConfig(): void
     {
         $this->modulesConfig = [];
-        $this->relevantModules = [];
         foreach ($this->getModules() as $folder) {
             if (!$moduleConfig = $this->getModuleConfig($folder)) {
                 continue;
             }
-            $this->relevantModules[] = $folder;
+
             $this->modulesConfig = merge(
                 $this->modulesConfig,
                 $moduleConfig,
@@ -39,7 +39,7 @@ class Webpack extends CompilerA
 
         ArrayDirectives::apply($this->modulesConfig);
 
-        // Save result to validate overrides
+        // Save result to validate config overrides
         $this->build->save('webpack/config', $this->modulesConfig);
     }
 
@@ -58,18 +58,19 @@ class Webpack extends CompilerA
         $this->walkFilesInModules(
             'js',
             ['js'],
-            function ($subPath, $file, $modulePath, $moduleName) {
-                $subPath = preg_replace('~\.js$~', '', $subPath);
-                $this->importsIndex[$moduleName . '/' . $subPath] = $moduleName . '/' . $subPath;
-            }
+            $this->indexImport(...),
         );
     }
 
-    protected function makeWpConfig(): void
+    protected function indexImport(string $subPath, string $file, string $modulePath, string $moduleName): void
     {
-        $this->makeExtends();
-        $this->makeEntriesJs();
-        $this->saveConfig();
+        $subPath = preg_replace('~\.js$~', '', $subPath);
+        $this->importsIndex[$moduleName . '/' . $subPath] = $moduleName . '/' . $subPath;
+    }
+
+    protected function makeConfigJs(): void
+    {
+        $this->build->putFile('webpack/webpack.config.js', $this->getConfigJs());
     }
 
     protected function makeExtends(): void
@@ -79,7 +80,7 @@ class Webpack extends CompilerA
                 continue;
             }
             $this->build->putFile('webpack/extend/' . $import . '.js', $this->getExtendsJs($import));
-            $this->extendAliases[$import] = $import;
+            $this->extendAliases[$import] = './extend/' . $import;
         }
     }
 
@@ -171,21 +172,15 @@ class Webpack extends CompilerA
         return implode('/', array_slice(explode('/', rtrim($folder, '/')), -2));
     }
 
-    protected function saveConfig(): void
+    protected function getConfigJs(): string
     {
-        $this->build->putFile('webpack/webpack.config.js', $this->getWpConfigJs());
+        return $this->getConfigJsHead() .
+            $this->getConfigJsEntries() .
+            $this->getConfigJsAliases() .
+            $this->getConfigJsExports();
     }
 
-    protected function getWpConfigJs(): string
-    {
-        return $this->getWpConfigJsHead() .
-            $this->getWpConfigJsEntries() .
-            $this->getWpConfigJsExtendAliases() .
-            $this->getWpConfigJsModuleAliases() .
-            $this->getWpConfigJsExports();
-    }
-
-    protected function getWpConfigJsHead(): string
+    protected function getConfigJsHead(): string
     {
         $js = "const path = require('path');\n";
         $js .= "let config = " . json_pretty($this->modulesConfig['webpack'] ?? new stdClass()) . ";\n";
@@ -196,7 +191,7 @@ class Webpack extends CompilerA
         return $js;
     }
 
-    protected function getWpConfigJsEntries(): string
+    protected function getConfigJsEntries(): string
     {
         $entries = $this->modulesConfig['entry'] ?? [];
         $js = '';
@@ -208,31 +203,40 @@ class Webpack extends CompilerA
         return $js;
     }
 
-    protected function getWpConfigJsExtendAliases(): string
+    protected function getConfigJsAliases(): string
     {
         $js = '';
-        foreach ($this->extendAliases as $extend) {
-            $js .= "config.resolve.alias[" . json_pretty($extend) . "]" .
-                " = path.resolve(__dirname, " . json_pretty('./extend/' . $extend) . ");\n";
+        foreach ($this->getConfigAliases() as $alias => $path) {
+            $js .= "config.resolve.alias[" . json_pretty($alias) . "]" .
+                " = path.resolve(__dirname, " . json_pretty($path) . ");\n";
         }
 
         return $js;
     }
 
-    protected function getWpConfigJsModuleAliases(): string
+    protected function getConfigAliases(): array
     {
-        $js = '';
-        foreach ($this->relevantModules as $folder) {
-            if (!is_dir($absDir = LIGHTNA_ENTRY . $folder . '/js')) continue;
-            $relFolder = getRelativePath($this->build->getDir() . 'webpack', $absDir);
-            $js .= "config.resolve.alias[" . json_pretty($this->getModuleAlias($folder)) . "]" .
-                " = path.resolve(__dirname, " . json_pretty('./' . $relFolder) . ");\n";
-        }
-
-        return $js;
+        return merge(
+            $this->extendAliases,
+            $this->getConfigModuleAliases(),
+        );
     }
 
-    protected function getWpConfigJsExports(): string
+    protected function getConfigModuleAliases(): array
+    {
+        $aliases = [];
+        $wpbDir = $this->build->getDir() . 'webpack';
+        foreach ($this->getModules() as $folder) {
+            $folder = LIGHTNA_ENTRY . $folder . '/';
+            if (is_dir($abs = $folder . 'js')) {
+                $aliases[$this->getModuleAlias($folder)] = './' . getRelativePath($wpbDir, $abs);
+            }
+        }
+
+        return $aliases;
+    }
+
+    protected function getConfigJsExports(): string
     {
         return "\nmodule.exports = config;\n";
     }
