@@ -38,12 +38,17 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         foreach (LIGHTNA_AREAS as $area) {
             $this->config[$area] = $this->build->getAppConfig($area);
         }
-        $moduleNamespaces = array_keys($this->config['backend']['modules'] ?? []);
-        $rx = '^(Lightna\\\Engine';
-        foreach ($moduleNamespaces as $ns) {
-            $rx .= '|' . preg_quote($ns, '~');
+        $this->defineModuleClassRx();
+    }
+
+    protected function defineModuleClassRx(): void
+    {
+        $rx = $sep = '';
+        foreach (Bootstrap::getEnabledModules() as $module) {
+            $rx .= $sep . preg_quote($module['namespace'], '~');
+            $sep = '|';
         }
-        $this->moduleClassRx = "~$rx)~";
+        $this->moduleClassRx = "~^($rx)~";
     }
 
     protected function makeObjects(): void

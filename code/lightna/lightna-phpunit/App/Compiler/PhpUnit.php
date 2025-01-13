@@ -55,7 +55,8 @@ class PhpUnit extends CompilerA
     protected function getTestDirectories(): array
     {
         $directories = ['unit' => [], 'integration' => []];
-        foreach ($this->getModules() as $dir) {
+        foreach ($this->getEnabledModules() as $module) {
+            $dir = $module['path'];
             if (str_contains($dir, '/vendor/')) {
                 // Skip testing vendor modules
                 continue;

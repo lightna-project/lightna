@@ -27,8 +27,8 @@ class Webpack extends CompilerA
     protected function collectModulesConfig(): void
     {
         $this->modulesConfig = [];
-        foreach ($this->getModules() as $folder) {
-            if (!$moduleConfig = $this->getModuleConfig($folder)) {
+        foreach ($this->getEnabledModules() as $module) {
+            if (!$moduleConfig = $this->getModuleConfig($module['path'])) {
                 continue;
             }
 
@@ -227,8 +227,8 @@ class Webpack extends CompilerA
     {
         $aliases = [];
         $wpbDir = $this->build->getDir() . 'webpack';
-        foreach ($this->getModules() as $folder) {
-            $folder = LIGHTNA_ENTRY . $folder . '/';
+        foreach ($this->getEnabledModules() as $module) {
+            $folder = LIGHTNA_ENTRY . $module['path'] . '/';
             if (is_dir($abs = $folder . 'js')) {
                 $aliases[$this->getModuleAlias($folder)] = './' . getRelativePath($wpbDir, $abs);
             }

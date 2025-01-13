@@ -48,12 +48,14 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
 
     protected function getAllPackages(): array
     {
-        $config = Bootstrap::getConfig();
+        $modules = [];
+        foreach (Bootstrap::getEnabledModules() as $module) {
+            $modules[$module['namespace']] = [$module['path']];
+        }
 
         return merge(
             $this->getComposerPackages(),
-            $config['modules'] ?? [],
-            ['Lightna\Engine' => LIGHTNA_SRC],
+            $modules,
         );
     }
 

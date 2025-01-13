@@ -29,8 +29,8 @@ class Tailwind extends CompilerA
     protected function defineModulesIndex(): void
     {
         $this->modulesIndex = [];
-        foreach ($this->getModules() as $folder) {
-            $this->modulesIndex[$this->getModuleName($folder)] = $folder;
+        foreach ($this->getEnabledModules() as $module) {
+            $this->modulesIndex[$this->getModuleName($module['path'])] = $module['path'];
         }
     }
 
@@ -48,10 +48,10 @@ class Tailwind extends CompilerA
     protected function collectModulesConfig(): void
     {
         $this->modulesConfig = [];
-        foreach ($this->getModules() as $folder) {
+        foreach ($this->getEnabledModules() as $module) {
             $this->modulesConfig = merge(
                 $this->modulesConfig,
-                $this->getModuleConfig($folder),
+                $this->getModuleConfig($module['path']),
             );
         }
 
