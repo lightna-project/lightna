@@ -15,8 +15,7 @@ class CommandA extends ObjectA
     protected function defineArgs(): void
     {
         $this->args = $this->opts = [];
-        $args = array_slice($GLOBALS['argv'], 2);
-        foreach ($args as $arg) {
+        foreach ($this->getArgvRaw() as $arg) {
             if (str_starts_with($arg, '--')) {
                 $parts = explode('=', ltrim($arg, '-'));
                 $this->opts[$parts[0]] = $parts[1] ?? true;
@@ -28,6 +27,16 @@ class CommandA extends ObjectA
                 $this->args[] = $arg;
             }
         }
+    }
+
+    protected function getArgvRaw(): array
+    {
+        // Remove spaces in short options, for example: "-s 123" will be replaced to "-s123"
+        return explode(' ', preg_replace(
+            '~(-[a-z]) +([^-])~i',
+            '$1$2',
+            implode(' ', array_slice($GLOBALS['argv'], 2)),
+        ));
     }
 
     /** @noinspection PhpUnused */

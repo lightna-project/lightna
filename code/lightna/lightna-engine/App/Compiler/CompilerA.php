@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Compiler;
 
 use Closure;
 use Exception;
+use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Build;
 use Lightna\Engine\App\Compiler;
 use Lightna\Engine\App\ObjectA;
@@ -16,8 +17,6 @@ class CompilerA extends ObjectA
 {
     protected Compiler $compiler;
     protected Build $build;
-    /** @AppConfig(modules) */
-    protected ?array $modules;
     protected array $overrides;
 
     /** @noinspection PhpUnused */
@@ -42,12 +41,9 @@ class CompilerA extends ObjectA
         ];
     }
 
-    protected function getModules(): array
+    protected function getEnabledModules(): array
     {
-        return merge(
-            ['Lightna\Engine' => rtrim(LIGHTNA_SRC, '/')],
-            $this->modules ?? [],
-        );
+        return Bootstrap::getEnabledModules();
     }
 
     protected function walkFilesInModules(string $subDir, array $fileExtensions, Closure $callback): void
@@ -55,7 +51,8 @@ class CompilerA extends ObjectA
         $subDir = $subDir . '/';
         $root = realpath(LIGHTNA_ENTRY) . '/';
 
-        foreach ($this->getModules() as $folder) {
+        foreach ($this->getEnabledModules() as $module) {
+            $folder = $module['path'];
             $folder = rtrim(($folder[0] !== '/' ? LIGHTNA_ENTRY . $folder : $folder), '/') . '/';
 
             if (!is_dir($folder . $subDir)) {

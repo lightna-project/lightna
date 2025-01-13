@@ -20,6 +20,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
             $config = $this->getYamlConfig($area);
             $this->applyDefaults($config);
             ArrayDirectives::apply($config);
+            $this->defineEnabledModules($config);
             $this->defineAssetBase($config);
             $this->build->save('config/' . $area, $config);
         }
@@ -32,7 +33,12 @@ class Config extends CompilerA implements ObjectManagerIgnore
 
     protected function getYamlFiles(string $area): array
     {
-        $folders = merge([LIGHTNA_SRC], array_values(Bootstrap::getConfig()['modules']), [LIGHTNA_ENTRY]);
+        $folders = [];
+        foreach (Bootstrap::getEnabledModules() as $module) {
+            $folders[] = $module['path'];
+        }
+        $folders[] = LIGHTNA_ENTRY;
+
         $files = [];
         foreach ($folders as $folder) {
             $folder = $this->alignFolder($folder);
@@ -113,6 +119,11 @@ class Config extends CompilerA implements ObjectManagerIgnore
                 $entity['storage'] ??= $defaultStorage;
             }
         }
+    }
+
+    protected function defineEnabledModules(array &$config): void
+    {
+        $config['enabled_modules'] = Bootstrap::getEnabledModules();
     }
 
     protected function defineAssetBase(array &$config): void

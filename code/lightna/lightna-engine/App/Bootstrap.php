@@ -68,6 +68,7 @@ class Bootstrap
             opcache_load_revalidated(LIGHTNA_ENTRY . 'env.php'),
             ['lightna_dir' => getRelativePath(LIGHTNA_ENTRY, __DIR__ . '/../')],
         );
+        static::$config['enabled_modules'] = static::getEnabledModules();
     }
 
     protected static function loadAreaConfig(): void
@@ -146,13 +147,60 @@ class Bootstrap
         global $argv;
 
         if (
-            LIGHTNA_AREA === 'backend' &&
-            str_starts_with($c = $argv[1] ?? '', 'build.') &&
-            $c !== 'build.compile' &&
-            !is_dir(BUILD_DIR)
+            LIGHTNA_AREA === 'backend'
+            && str_starts_with($cmd = $argv[1] ?? '', 'build.')
+            && $cmd !== 'build.compile'
+            && !is_dir(BUILD_DIR)
         ) {
             echo cli_warning("Build folder not found. Have you run build.compile first?\n");
             exit(1);
         }
+    }
+
+    public static function getEnabledModules(): array
+    {
+        if (!isset(static::$config['enabled_modules'])) {
+            static::$config['enabled_modules'] = static::loadEnabledModules();
+        }
+
+        return static::$config['enabled_modules'];
+    }
+
+    protected static function loadEnabledModules(): array
+    {
+        $enabled = merge(
+            ['lightna/lightna-engine'],
+            static::$config['modules']['enabled'],
+        );
+
+        $enabledModules = [];
+        foreach ($enabled as $name) {
+            if ($enabledModules[$name] ?? false) {
+                throw new Exception("Cannot redeclare module \"$name\"");
+            }
+
+            $enabledModules[$name] = static::getModuleConfig($name);
+        }
+
+        return $enabledModules;
+    }
+
+    protected static function getModuleConfig(string $name): array
+    {
+        foreach (static::$config['modules']['pool'] as $path) {
+            $configFile = LIGHTNA_ENTRY . $path . "/$name/module.yaml";
+            if (!is_file($configFile)) continue;
+
+            $config = yaml_parse_file($configFile);
+            if (!isset($config['namespace'])) {
+                throw new Exception("Module namespace is not defined in \"$configFile\"");
+            }
+
+            $config['path'] = "$path/$name";
+
+            return $config;
+        }
+
+        throw new Exception("Module \"$name\" not found");
     }
 }

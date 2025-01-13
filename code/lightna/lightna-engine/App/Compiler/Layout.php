@@ -8,8 +8,8 @@ use Exception;
 
 class Layout extends CompilerA
 {
-    /** @AppConfig(modules) */
-    protected ?array $modules;
+    /** @AppConfig(enabled_modules) */
+    protected ?array $enabledModules;
     protected array $layouts;
     protected array $templateMap;
 
@@ -33,11 +33,9 @@ class Layout extends CompilerA
 
     protected function collectFiles(): void
     {
-        $directories = [LIGHTNA_SRC];
-        if (($modules = $this->modules) && is_array($modules)) {
-            foreach ($modules as $dir) {
-                $directories[] = LIGHTNA_ENTRY . $dir . '/';
-            }
+        $directories = [];
+        foreach ($this->enabledModules as $module) {
+            $directories[] = LIGHTNA_ENTRY . $module['path'] . '/';
         }
 
         $files = [];
