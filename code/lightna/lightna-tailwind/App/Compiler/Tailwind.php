@@ -18,6 +18,7 @@ class Tailwind extends CompilerA
 
     public function make(): void
     {
+        $this->build->addValidateConfigOverrides('tailwind/config');
         $this->collectModulesConfig();
         $this->makeEntries();
         $this->makeShellScript('build', false);

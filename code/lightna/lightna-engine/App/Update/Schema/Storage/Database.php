@@ -31,11 +31,11 @@ class Database extends ObjectA
     {
         if ($this->getCurrentSchema() !== $this->getRequiredSchema()) {
             throw new UserException(
-                'Table schema for "' . static::TABLE_NAME . '" requires changes:'
+                "\nTable schema for \"" . static::TABLE_NAME . "\" requires changes:"
                 . "\n\nActual:"
-                . "\n\n" . $this->getCurrentSchema()
+                . "\n\n    " . str_replace("\n", "\n    ", $this->getCurrentSchema())
                 . "\n\nExpected:"
-                . "\n\n" . $this->getRequiredSchema()
+                . "\n\n    " . str_replace("\n", "\n    ", $this->getRequiredSchema())
                 . "\n\n"
             );
         }
@@ -54,6 +54,8 @@ class Database extends ObjectA
 
     protected function getCurrentSchema(): string
     {
-        return $this->storageDatabase->structure->getCreateTable(static::TABLE_NAME);
+        return $this->storageDatabase->structure->tableExists(static::TABLE_NAME)
+            ? $this->storageDatabase->structure->getCreateTable(static::TABLE_NAME)
+            : '';
     }
 }
