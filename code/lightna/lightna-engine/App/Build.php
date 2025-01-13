@@ -10,8 +10,6 @@ class Build extends Opcache
     protected array $validateConfigOverrides = [
         'config/frontend' => 1,
         'config/backend' => 1,
-        'tailwind/config' => 1,
-        'webpack/config' => 1,
     ];
 
     public function getAppConfig(string $area = null): array
@@ -45,28 +43,10 @@ class Build extends Opcache
             return;
         }
 
-        if (
-            !$this->isConfigOverrideAccepted($name)
-            && ($overrides = $this->searchConfigOverrides(require $prevFile, $data))
-        ) {
+        if ($overrides = $this->searchConfigOverrides(require $prevFile, $data)) {
             echo $this->getConfigOverrideErrorMessage($name, $overrides) . "\n";
-            exit(1);
+            $this->acceptConfigOverrides();
         }
-    }
-
-    protected function isConfigOverrideAccepted(string $name): bool
-    {
-        return in_array($name, $this->getAcceptedConfigOverrides());
-    }
-
-    protected function getAcceptedConfigOverrides(): array
-    {
-        $arg = cli_get_option('accept-config-override');
-        if (!is_string($arg)) {
-            return [];
-        }
-
-        return explode(',', $arg);
     }
 
     protected function searchConfigOverrides(array $prev, array $curr): array
@@ -109,15 +89,22 @@ class Build extends Opcache
             $msg .= $t . $column('Current Value: ') . $override['curr'] . "\n";
         }
 
-        $toAccept = implode(',', merge($this->getAcceptedConfigOverrides(), [$name]));
+        $msg .= cli_warning("\n{$t}This message is shown only in DEV MODE and is intended to prevent accidental configuration overrides due to copy-pasting.\n");
 
-        $exp = "\n{$t}This message is shown only in DEV MODE and is intended to prevent accidental configuration overrides due to copy-pasting.\n";
-        $exp .= "{$t}If these changes are intentional, accept them by adding the following argument:\n";
-        $exp .= "{$t}    ./cli build.compile --direct --accept-config-override=$toAccept\n";
-        $exp .= "{$t}In case of composer script:\n";
-        $exp .= "{$t}    composer lightna.build -- --accept-config-override=$toAccept\n";
-        $exp = cli_warning($exp);
+        return $msg;
+    }
 
-        return $msg . $exp;
+    protected function acceptConfigOverrides(): void
+    {
+        echo "Press A to accept or CTRL+C to abort: ";
+        $answer = trim(fgets(STDIN));
+        if ($answer !== 'a' && $answer !== 'A') {
+            $this->acceptConfigOverrides();
+        }
+    }
+
+    public function addValidateConfigOverrides(string $name): void
+    {
+        $this->validateConfigOverrides[$name] = 1;
     }
 }

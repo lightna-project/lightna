@@ -170,7 +170,8 @@ abstract class DatabaseA extends ObjectA
 
     protected function validateParameters(): void
     {
-        $required = ['host', 'port', 'username', 'dbname'];
+        // No dbname is required here, dbname is also used as a flag that database storage is enabled
+        $required = ['host', 'port', 'username'];
         foreach ($required as $field) {
             if (empty($this->connection[$field])) {
                 throw new Exception('Field "connection.' . $field . '" is required');

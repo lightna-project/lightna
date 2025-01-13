@@ -59,6 +59,8 @@ class Layout extends CompilerA
             foreach ($value['files'] as $file) {
                 $layout = yaml_parse_file($file);
                 $layout = $this->expandKeys($layout);
+                $layout = $this->alignValues($layout);
+                $layout = $this->expandIds($layout);
                 $final = merge($final, $layout);
             }
             $this->layouts[$key]['data'] = $final;
@@ -85,6 +87,26 @@ class Layout extends CompilerA
         }
 
         return $expanded;
+    }
+
+    protected function expandIds(array $data): array
+    {
+        $ids = $this->getAllBlockIds($data);
+        foreach ($data as $key => $value) {
+            if (!str_starts_with($key, 'id=')) {
+                continue;
+            }
+            $id = substr($key, 3);
+            if (!isset($ids[$id])) {
+                throw new Exception("Block id not found in '{$key}'");
+            }
+            $path = str_replace('/', '/./', $ids[$id]);
+            $block = merge(array_path_get($data, $path), $value);
+            $block = $this->alignValues($block);
+            array_path_set($data, $path, $block);
+        }
+
+        return $data;
     }
 
     protected function extend(): void
@@ -114,10 +136,8 @@ class Layout extends CompilerA
 
     protected function applyDirectives(): void
     {
-        foreach ($this->layouts as $name => $layout) {
-            $layoutData = $this->alignValues($layout['data']);
-            LayoutDirectives::apply($layoutData);
-            $this->layouts[$name]['data'] = $layoutData;
+        foreach ($this->layouts as &$layout) {
+            LayoutDirectives::apply($layout['data']);
         }
     }
 
@@ -195,7 +215,9 @@ class Layout extends CompilerA
         }
 
         foreach ($layout as $key => $value) {
-            if (is_array($value)) {
+            if (is_null($value) && $isBlocksNode) {
+                throw new Exception("Block \"$path/$key\" is NULL");
+            } elseif (is_array($value)) {
                 $aligned[$key] = $this->alignValues($value, $key === '.', $path . '/' . $key);
                 if ($isBlocksNode && !isset($value['.'])) {
                     $aligned[$key]['.'] = [];
@@ -217,19 +239,23 @@ class Layout extends CompilerA
     protected function indexBlockIds(): void
     {
         foreach ($this->layouts as $name => $layout) {
-            $ids = $this->indexBlockIdsRecursive($layout['data']);
+            $ids = $this->getAllBlockIds($layout['data']);
             $this->layouts[$name]['data']['blockById'] = $ids;
         }
     }
 
-    protected function indexBlockIdsRecursive(array $layout, string $path = ''): array
+    protected function getAllBlockIds(array $layout, string $path = ''): array
     {
         $ids = [];
         foreach ($layout['.'] as $key => $block) {
+            if (is_string($block)) {
+                // Skip components
+                continue;
+            }
             if (isset($block['id'])) {
                 $ids[$block['id']] = $path . '/' . $key;
             }
-            $ids = merge($ids, $this->indexBlockIdsRecursive($block, $path . '/' . $key));
+            $ids = merge($ids, $this->getAllBlockIds($block, $path . '/' . $key));
         }
 
         return $ids;

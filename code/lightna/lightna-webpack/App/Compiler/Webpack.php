@@ -16,6 +16,7 @@ class Webpack extends CompilerA
 
     public function make(): void
     {
+        $this->build->addValidateConfigOverrides('webpack/config');
         $this->collectModulesConfig();
         $this->indexImports();
         $this->makeExtends();
