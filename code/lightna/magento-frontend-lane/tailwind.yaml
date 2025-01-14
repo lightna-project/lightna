@@ -2,30 +2,37 @@ entry:
   lane:
     content:
       magento-template: lightna/magento-frontend/template/**/*.phtml
-      magento-layout: lightna/magento-frontend/layout/*.yaml
+      magento-layout: lightna/magento-frontend/layout/**/*.yaml
       magento-js: lightna/magento-frontend/js/**/*.js
       magento-lane-template: lightna/magento-frontend-lane/template/**/*.phtml
-      magento-lane-layout: lightna/magento-frontend-lane/layout/*.yaml
+      magento-lane-layout: lightna/magento-frontend-lane/layout/**/*.yaml
       magento-lane-js: lightna/magento-frontend-lane/js/**/*.js
     import:
       tailwind-base: tailwindcss/base
+      tailwind-components: tailwindcss/components
+      tailwind-utilities: tailwindcss/utilities
+      # Base
       magento-lane-base-reset: lightna/magento-frontend-lane/base/reset.css
       magento-base-animation: lightna/magento-frontend/base/animation.css
       magento-base-buttons: lightna/magento-frontend/base/buttons.css
       magento-base-icons: lightna/magento-frontend/base/icons.css
-      magento-base-layout: lightna/magento-frontend/base/layout.css
       magento-base-price: lightna/magento-frontend/base/price.css
       magento-base-typography: lightna/magento-frontend/base/typography.css
-      tailwind-components: tailwindcss/components
+      magento-base-utilities: lightna/magento-frontend/base/utilities.css
+      # Components
       magento-component-dropdown: lightna/magento-frontend/component/dropdown.css
-      magento-component-overlay: lightna/magento-frontend/component/overlay.css
+      magento-component-messages: lightna/magento-frontend/component/messages.css
+      magento-component-minicart: lightna/magento-frontend/component/minicart.css
       magento-component-mobile-overlay: lightna/magento-frontend/component/mobile-overlay.css
-      magento-component-usp: lightna/magento-frontend/component/usp.css
-      magento-component-common-footer: lightna/magento-frontend/component/common/footer.css
-      magento-component-common-header: lightna/magento-frontend/component/common/header.css
-      magento-component-common-menu: lightna/magento-frontend/component/common/menu.css
-      magento-component-common-minicart: lightna/magento-frontend/component/common/minicart.css
-      magento-component-common-search: lightna/magento-frontend/component/common/search.css
-      magento-component-common-search-suggestions: lightna/magento-frontend/component/common/search-suggestions.css
-      magento-component-product-product-list: lightna/magento-frontend/component/product/list.css
-      tailwind-utilities: tailwindcss/utilities
+      magento-component-overlay: lightna/magento-frontend/component/overlay.css
+      ## Layout
+      magento-component-layout-footer: lightna/magento-frontend/component/layout/footer.css
+      magento-component-layout-grid: lightna/magento-frontend/component/layout/grid.css
+      magento-component-layout-header: lightna/magento-frontend/component/layout/header.css
+      magento-component-layout-nav: lightna/magento-frontend/component/layout/main-navigation.css
+      magento-component-layout-usp: lightna/magento-frontend/component/layout/usp.css
+      ## Product
+      magento-component-product-list: lightna/magento-frontend/component/product/list.css
+      ## Search
+      magento-component-search-form: lightna/magento-frontend/component/search/form.css
+      magento-component-search-suggestions: lightna/magento-frontend/component/search/suggestions.css

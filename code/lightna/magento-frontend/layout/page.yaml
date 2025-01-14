@@ -98,14 +98,14 @@ template: lightna/magento-frontend/page.phtml
                 container: li
                 attributes:
                   class:
-                    - products-list__item
+                    - product-list__item
                 .image:
                   template: lightna/magento-frontend/page/header/minicart/product-item/image.phtml
                 .info:
                   container: div
                   attributes:
                     class:
-                      - products-list__item__info
+                      - product-list__item__info
                   .name:
                     template: lightna/magento-frontend/page/header/minicart/product-item/name.phtml
                   .sku:

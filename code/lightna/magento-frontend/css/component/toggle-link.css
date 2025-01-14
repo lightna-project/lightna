@@ -11,4 +11,9 @@
     .toggle-link.active .on {
         @apply inline;
     }
+
+    .toggle-link:not(.active) ~ li:nth-child(n + 7) {
+        /* +1 for the show more button */
+        @apply hidden;
+    }
 }

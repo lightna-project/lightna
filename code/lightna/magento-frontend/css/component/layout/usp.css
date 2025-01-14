@@ -14,23 +14,6 @@
     .usp li {
         @apply w-full shrink-0 py-1 m-0;
     }
-
-    .product-usp {
-        @apply my-5;
-    }
-
-    .product-usp ul {
-        @apply flex flex-col gap-1;
-    }
-
-    .product-usp li {
-        @apply relative pl-6;
-    }
-
-    .product-usp li:before {
-        content: '';
-        @apply icon-sm icon-checkmark absolute left-0 top-[5px] mr-2 block shrink-0;
-    }
 }
 
 .slide-2 ul {
