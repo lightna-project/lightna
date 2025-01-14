@@ -1,0 +1,5 @@
+@layer utilities {
+    .no-results {
+        @apply -mt-6 md:-ml-[328px] md:mt-0;
+    }
+}

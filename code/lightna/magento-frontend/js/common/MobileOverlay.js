@@ -19,6 +19,6 @@ export class MobileOverlay {
     toggleMobileOverlay(overlayId) {
         const overlay = $(`[data-overlay-id="${overlayId}"]`);
         overlay.classList.toggle('active');
-        document.body.classList.toggle('mobile-overlay-active');
+        document.body.classList.toggle('mobile-overlay--active');
     }
 }

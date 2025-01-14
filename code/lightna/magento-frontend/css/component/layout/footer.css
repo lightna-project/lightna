@@ -1,4 +1,8 @@
 @layer components {
+    footer {
+        @apply mt-auto;
+    }
+
     .footer-columns {
         @apply bg-primary-bg lg:mt-20;
     }

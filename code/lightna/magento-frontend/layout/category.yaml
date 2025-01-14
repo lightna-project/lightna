@@ -4,6 +4,7 @@ extends:
   attributes:
     class:
       - category
+      - bottomed-footer
   .main:
     .content:
       container: div

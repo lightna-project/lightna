@@ -4,6 +4,10 @@
         flex-col gap-2 overflow-auto bg-white p-5 pb-0 shadow-lg transition-transform duration-500;
     }
 
+    .minicart__product-list {
+        @apply max-h-[calc(100%_-_200px)] overflow-auto;
+    }
+
     .minicart__footer {
         @apply sticky bottom-0 bg-white mt-auto flex flex-col gap-1 border-t py-4;
     }

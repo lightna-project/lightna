@@ -1,0 +1,17 @@
+@layer base {
+    .page-container {
+        @apply mx-auto w-full max-w-screen-xl p-5 sm:px-6 md:py-8;
+    }
+
+    .grid-one-column {
+        grid-template-columns: minmax(auto, 1234px);
+    }
+
+    .full-width-container {
+        @apply grid-one-column grid justify-center px-5 sm:px-6;
+    }
+
+    .bottomed-footer {
+        @apply flex min-h-screen flex-col;
+    }
+}
