@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Lightna\Engine\App\Build;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -20,7 +19,7 @@ class Plugin extends CompilerA
 
     public function make(): void
     {
-        $this->build = new Build();
+        $this->init();
         $this->config = $this->build->getAppConfig();
         $this->classMap = $this->build->load('object/map');
         $this->loadPlugins();

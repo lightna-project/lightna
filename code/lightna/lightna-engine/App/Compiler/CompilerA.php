@@ -19,6 +19,13 @@ class CompilerA extends ObjectA
     protected Build $build;
     protected array $overrides;
 
+    protected function init(array $data = []): void
+    {
+        $this->build = new Build();
+        $this->build->init($data);
+        parent::init($data);
+    }
+
     /** @noinspection PhpUnused */
     protected function defineOverrides(): void
     {

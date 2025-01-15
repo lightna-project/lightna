@@ -21,6 +21,7 @@ class Layout extends ObjectA
     /** @AppConfig(entity) */
     protected array $entities;
     protected string $entityType;
+    protected string $layoutName;
 
     /** @noinspection PhpUnused */
     protected function defineEntityType(): void
@@ -29,10 +30,15 @@ class Layout extends ObjectA
     }
 
     /** @noinspection PhpUnused */
+    protected function defineLayoutName(): void
+    {
+        $this->layoutName = $this->entities[$this->entityType]['layout'];
+    }
+
+    /** @noinspection PhpUnused */
     protected function defineLayout(): void
     {
-        $layoutName = $this->entities[$this->entityType]['layout'];
-        $this->layout = $this->build->load('layout/' . $layoutName);
+        $this->layout = $this->build->load('layout/' . $this->layoutName);
     }
 
     public function page(): void

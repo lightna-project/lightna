@@ -14,6 +14,8 @@ class Compiler extends ObjectA
     public function init(array $data = []): void
     {
         $this->build = new Build();
+        $this->build->init();
+        parent::init($data);
     }
 
     public function defineConfig(): void
@@ -30,11 +32,6 @@ class Compiler extends ObjectA
 
         rcleandir($this->build->getDir());
         rcleandir($this->getAssetDir());
-    }
-
-    public function version(): void
-    {
-        $this->build->save('version', time());
     }
 
     public function apply(): void
@@ -86,7 +83,7 @@ class Compiler extends ObjectA
     {
         $dir = Bootstrap::getCompilerMode() === 'default'
             ? $this->getAssetBuildingDir()
-            : LIGHTNA_ENTRY . $this->config['asset_dir'];
+            : Bootstrap::getAssetDir();
 
         return rtrim($dir, '/') . '/';
     }
@@ -113,7 +110,7 @@ class Compiler extends ObjectA
 
     protected function getAssetOrigDir(): string
     {
-        return LIGHTNA_ENTRY . rtrim($this->config['asset_dir'], '/') . '/';
+        return Bootstrap::getAssetDir();
     }
 
     protected function getAssetOrigBakDir(): string

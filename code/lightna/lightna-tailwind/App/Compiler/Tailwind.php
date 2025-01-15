@@ -6,6 +6,7 @@ namespace Lightna\Tailwind\App\Compiler;
 
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
+use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Compiler\CompilerA;
 use Lightna\Engine\App\Config as AppConfig;
 
@@ -216,7 +217,7 @@ class Tailwind extends CompilerA
 
     protected function getCompilerDir(): string
     {
-        return getRelativePath(LIGHTNA_ENTRY, realpath(LIGHTNA_ENTRY . $this->appConfig->get('compiler_dir')));
+        return getRelativePath(LIGHTNA_ENTRY, dirname(Bootstrap::getBuildDir()));
     }
 
     protected function getAssetBuildDir(bool $isDirect): string
@@ -228,7 +229,11 @@ class Tailwind extends CompilerA
 
     protected function getAssetDir(): string
     {
-        return getRelativePath(LIGHTNA_ENTRY, realpath(LIGHTNA_ENTRY . $this->appConfig->get('asset_dir')));
+        if (!is_dir($dir = Bootstrap::getAssetDir())) {
+            mkdir($dir, 0775, true);
+        }
+
+        return getRelativePath(LIGHTNA_ENTRY, $dir);
     }
 
     protected function saveShellScript(string $scriptName, string $script): void

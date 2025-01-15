@@ -73,6 +73,6 @@ class Handler extends ObjectA implements HandlerInterface
     {
         $lifetime = session_get_cookie_params()['lifetime'];
 
-        return $lifetime === 0 ? 604800 : $lifetime;
+        return $lifetime === 0 ? /* 1 week */ 604800 : $lifetime;
     }
 }

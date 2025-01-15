@@ -6,11 +6,17 @@ namespace Lightna\Engine\App;
 
 class Build extends Opcache
 {
-    protected string $dir = BUILD_DIR;
+    protected string $dir;
     protected array $validateConfigOverrides = [
         'config/frontend' => 1,
         'config/backend' => 1,
     ];
+
+    public function init(array $data = []): void
+    {
+        $this->dir = Bootstrap::getBuildDir();
+        parent::init($data);
+    }
 
     public function getAppConfig(string $area = null): array
     {
@@ -38,7 +44,7 @@ class Build extends Opcache
             !IS_DEV_MODE
             || PHP_SAPI !== 'cli'
             || !isset($this->validateConfigOverrides[$name])
-            || !is_file($prevFile = LIGHTNA_ENTRY . Bootstrap::getConfig()['compiler_dir'] . "/build/$name.php")
+            || !is_file($prevFile = dirname(Bootstrap::getBuildDir()) . "/build/$name.php")
         ) {
             return;
         }

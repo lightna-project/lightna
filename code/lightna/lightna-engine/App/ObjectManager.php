@@ -21,8 +21,8 @@ class ObjectManager
         if (!class_exists(ObjectA::class)) {
             throw new Exception(ObjectA::class . ' needs to be defined');
         }
-        static::$schema = require BUILD_DIR . 'object/schema.php';
-        static::$extended = require BUILD_DIR . 'object/extended.php';
+        static::$schema = require Bootstrap::getBuildDir() . 'object/schema.php';
+        static::$extended = require Bootstrap::getBuildDir() . 'object/extended.php';
         static::$producers['Lightna'] = [static::class, 'producer'];
         static::$config = getobj(AppConfig::class);
 

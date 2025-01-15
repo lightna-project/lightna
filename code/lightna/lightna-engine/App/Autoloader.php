@@ -20,7 +20,7 @@ class Autoloader
         }
 
         if (static::$classes[$class][0] === 'b') {
-            require BUILD_DIR . static::$classes[$class][1];
+            require Bootstrap::getBuildDir() . static::$classes[$class][1];
         } else {
             require LIGHTNA_ENTRY . static::$classes[$class][1];
         }

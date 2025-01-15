@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Lightna\Engine\App\Bootstrap;
-use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectManagerIgnore;
 use RecursiveCallbackFilterIterator;
 use RecursiveDirectoryIterator;
@@ -18,13 +17,13 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
 
     public function make(): void
     {
+        $this->init();
         $this->collectClasses();
         $this->saveMap();
     }
 
     protected function collectClasses(): void
     {
-        $this->build = new Build();
         $root = realpath(LIGHTNA_ENTRY);
 
         foreach ($this->getAllPackages() as $ns => $folders) {

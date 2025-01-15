@@ -191,15 +191,19 @@ function opcache_load_revalidated_soft(string $file): mixed
     return $result;
 }
 
-function getRelativePath(string $from, string $to): string
+function getRelativePath(string $from, string $to, bool $useReal = true): string
 {
-    if (($f = realpath($from)) === false) {
+    $f = $useReal ? realpath($from) : normalpath($from);
+    if ($f === false) {
         throw new Exception('Path "' . $from . '" doesn\'t exist');
     }
-    if (($t = realpath($to)) === false) {
+    $t = $useReal ? realpath($to) : normalpath($to);
+    if ($t === false) {
         throw new Exception('Path "' . $to . '" doesn\'t exist');
     }
 
+    $f = rtrim($f, '/');
+    $t = rtrim($t, '/');
     $fromParts = explode('/', $f);
     $toParts = explode('/', $t);
     $length = min(count($fromParts), count($toParts));
@@ -216,7 +220,23 @@ function getRelativePath(string $from, string $to): string
     $upLevels = count($fromParts) - $commonBaseLength;
     $relativePath = str_repeat('../', $upLevels) . implode('/', array_slice($toParts, $commonBaseLength));
 
-    return rtrim($relativePath === '' ? './' : $relativePath, '/') . (is_dir($to) ? '/' : '');
+    return rtrim($relativePath === '' ? './' : $relativePath, '/')
+        . ($useReal && is_dir($to) ? '/' : '');
+}
+
+function normalpath(string $path): string
+{
+    if ($path[0] !== '/') {
+        throw new Exception('Path "' . $path . '" is not a valid absolute path');
+    }
+    do {
+        $path = preg_replace(['~/{2,}~', '~^\./~', '~/\./~'], ['/', '', '/'], $path, -1, $count);
+    } while ($count);
+    do {
+        $path = preg_replace('~/(?!\.\.)[^/]+/\.\./~', '/', $path, -1, $count);
+    } while ($count);
+
+    return $path;
 }
 
 function array_filter_recursive(array $array, ?callable $cb): array

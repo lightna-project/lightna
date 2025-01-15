@@ -67,8 +67,9 @@ class DataA extends ObjectA
      */
     protected function &__get_fallback(string $name): mixed
     {
-        $null = null;
-        return $null;
+        $this->$name = null;
+
+        return $this->$name;
     }
 
     /**

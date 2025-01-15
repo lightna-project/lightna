@@ -84,7 +84,6 @@ class Compile extends CommandA
         ]);
 
         $this->runCompilersInModules();
-        $this->compiler->version();
     }
 
     protected function init(array $data = []): void
@@ -95,6 +94,8 @@ class Compile extends CommandA
         $this->compiler->defineConfig();
         $this->compiler->init();
         $this->build = new Build();
+        $this->build->init();
+        parent::init($data);
     }
 
     protected function runSequence(array $sequence): void
