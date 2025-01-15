@@ -32,6 +32,11 @@ Readiness of MVP for Magento 2 - 75%.
 
 ### Setup Magento OS
 * Setup Magento OS into `project/magento-os` folder following standard instruction and make sure Magento is configured and functioning correctly
+* Set developer mode and allow symlinks:
+```bash
+php bin/magento deploy:mode:set developer
+php bin/magento config:set dev/template/allow_symlink 1
+```
 
 
 ### Setup Lightna
@@ -45,8 +50,7 @@ Readiness of MVP for Magento 2 - 75%.
 * Initialize packages:
 ```
 cd entry/magento-os && \
-composer install && \
-npm install && \
+make install && \
 cd ../..
 ```
 
@@ -77,14 +81,14 @@ ln -sf ../../../entry/magento-os/index.php project/magento-os/pub/index.php
 
 * Enable Lightna theme and module:
 ```
-project/magento-os/bin/magento setup:upgrade
+php project/magento-os/bin/magento setup:upgrade
 ```
 
 * Change current Magento theme to `Lightna`
 
 
 ### Configure Lightna
-* `cp code/lightna/magento-backend/env.php.sample entry/magento-os/env.php`
+* `cp code/lightna/magento-backend/env.php.sample entry/magento-os/edition/main/env.php`
 * Edit `entry/magento-os/env.php` and define `*****` with your values
 * Ensure that the Elasticsearch and Session settings correspond to the Magento setup, and note that currently, only file storage for sessions is supported
 * Ensure that `session.serialize_handler` value is set to `php_serialize`
@@ -93,7 +97,7 @@ project/magento-os/bin/magento setup:upgrade
 ### Build
 ```
 cd entry/magento-os && \
-composer lightna.build
+make build
 ```
 
 

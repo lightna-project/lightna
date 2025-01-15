@@ -15,6 +15,8 @@ class Bootstrap
      *  "direct" - compiler updates existing build in "build" folder
      */
     protected static string $COMPILER_MODE = 'none';
+    protected static string $EDITION;
+    protected static string $BUILD_DIR;
     protected static bool $autoloadRegistered = false;
     protected static array $config;
 
@@ -25,10 +27,10 @@ class Bootstrap
 
         define('LIGHTNA_AREAS', ['frontend', 'backend']);
         define('LIGHTNA_AREA', php_sapi_name() === 'cli' ? 'backend' : 'frontend');
-        static::loadConfig();
+        static::defineEdition();
+        static::defineConfig();
         static::defineBuild();
 
-        define('LIGHTNA_SRC', static::$config['lightna_dir']);
         define('IS_DEV_MODE', static::$config['mode'] === 'dev');
         define('IS_PROD_MODE', static::$config['mode'] === 'prod');
         !defined('TEST_MODE') && define('TEST_MODE', null);
@@ -52,7 +54,7 @@ class Bootstrap
         );
     }
 
-    protected static function loadConfig(): void
+    protected static function defineConfig(): void
     {
         if (static::getCompilerMode() === 'none') {
             static::loadAreaConfig();
@@ -64,28 +66,62 @@ class Bootstrap
     protected static function loadCompilerConfig(): void
     {
         static::$config = merge(
-            opcache_load_revalidated(LIGHTNA_ENTRY . 'config.php'),
-            opcache_load_revalidated(LIGHTNA_ENTRY . 'env.php'),
-            ['lightna_dir' => getRelativePath(LIGHTNA_ENTRY, __DIR__ . '/../')],
+            opcache_load_revalidated(static::getEditionConfigFile('config.php')),
+            opcache_load_revalidated(static::getEditionConfigFile('env.php')),
         );
-        static::$config['enabled_modules'] = static::getEnabledModules();
+
+        static::$config = merge(
+            static::$config,
+            static::getAdditionalConfig(),
+            ['enabled_modules' => static::getEnabledModules()],
+        );
+    }
+
+    public static function getAdditionalConfig(): array
+    {
+        return [
+            'lightna_dir' => static::getEntryRelatedPath(__DIR__ . '/../') . '/',
+            'edition_dir' => static::getEntryRelatedPath(static::$config['compiler_dir'] . '/' . static::$EDITION),
+            'edition_asset_dir' => static::getEntryRelatedPath(static::$config['asset_dir'] . '/' . static::$EDITION),
+        ];
+    }
+
+    protected static function getEntryRelatedPath(string $to): string
+    {
+        return getRelativePath(
+            LIGHTNA_ENTRY,
+            $to[0] === '/' ? $to : LIGHTNA_ENTRY . $to,
+            false,
+        );
+    }
+
+    public static function getEditionConfigFile(string $fileName): string
+    {
+        $paths = [
+            'edition/' . static::$EDITION . '/' . $fileName,
+            'edition/main/' . $fileName,
+        ];
+
+        foreach ($paths as $path) {
+            $path = LIGHTNA_ENTRY . $path;
+            if (is_file($path)) {
+                return $path;
+            }
+        }
+
+        throw new Exception('Config file "' . $fileName . '" not found.');
     }
 
     protected static function loadAreaConfig(): void
     {
-        $configFile = LIGHTNA_ENTRY . 'config/' . LIGHTNA_AREA . '.php';
-        $config = require $configFile;
-        $version = opcache_load_revalidated_soft(LIGHTNA_ENTRY . 'config/version.php');
+        static::$config = opcache_load_revalidated_soft(
+            static::getAppliedConfigDir() . LIGHTNA_AREA . '.php',
+        );
+    }
 
-        if ($version !== $config['version']) {
-            $config = opcache_load_revalidated($configFile);
-
-            if ($version !== $config['version']) {
-                throw new Exception('Config version mismatch');
-            }
-        }
-
-        static::$config = $config['value'];
+    protected static function getAppliedConfigDir(): string
+    {
+        return LIGHTNA_ENTRY . 'edition/' . static::$EDITION . '/applied/';
     }
 
     public static function getConfig(): array
@@ -95,9 +131,9 @@ class Bootstrap
 
     public static function autoload(): void
     {
-        require_once LIGHTNA_ENTRY . LIGHTNA_SRC . 'App/Autoloader.php';
+        require_once LIGHTNA_ENTRY . static::$config['lightna_dir'] . 'App/Autoloader.php';
 
-        Autoloader::setClasses(require BUILD_DIR . 'object/map.php');
+        Autoloader::setClasses(require static::$BUILD_DIR . 'object/map.php');
 
         if (!static::$autoloadRegistered) {
             spl_autoload_register([Autoloader::class, 'loadClass'], true, true);
@@ -133,13 +169,26 @@ class Bootstrap
 
     protected static function defineBuild(): void
     {
+        $edition = static::getEdition();
         $folder = static::$COMPILER_MODE === 'default' ? 'building' : 'build';
-        define(
-            'BUILD_DIR',
-            LIGHTNA_ENTRY . static::$config['compiler_dir'] . '/' . $folder . '/',
-        );
 
+        static::$BUILD_DIR = LIGHTNA_ENTRY . static::$config['compiler_dir'] . "/$edition/$folder/";
         static::validateBuild();
+    }
+
+    protected static function defineEdition(): void
+    {
+        static::$EDITION = $_SERVER['LIGHTNA_EDITION'] ?? 'main';
+    }
+
+    public static function getEdition(): string
+    {
+        return static::$EDITION;
+    }
+
+    public static function getBuildDir(): string
+    {
+        return static::$BUILD_DIR;
     }
 
     protected static function validateBuild(): void
@@ -150,7 +199,7 @@ class Bootstrap
             LIGHTNA_AREA === 'backend'
             && str_starts_with($cmd = $argv[1] ?? '', 'build.')
             && $cmd !== 'build.compile'
-            && !is_dir(BUILD_DIR)
+            && !is_dir(static::$BUILD_DIR)
         ) {
             echo cli_warning("Build folder not found. Have you run build.compile first?\n");
             exit(1);
@@ -202,5 +251,10 @@ class Bootstrap
         }
 
         throw new Exception("Module \"$name\" not found");
+    }
+
+    public static function getAssetDir(): string
+    {
+        return LIGHTNA_ENTRY . static::$config['asset_dir'] . '/' . static::$EDITION . '/';
     }
 }

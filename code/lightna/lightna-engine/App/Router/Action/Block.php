@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Router\Action;
 
-use Lightna\Engine\App\Layout;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\Request;
 
 class Block extends ObjectA
 {
-    protected Layout $layout;
     protected Context $context;
     protected Request $request;
 

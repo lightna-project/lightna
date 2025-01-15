@@ -7,7 +7,6 @@ namespace Lightna\Engine\App\Compiler;
 use Exception;
 use Lightna\Engine\App\Autoloader;
 use Lightna\Engine\App\Bootstrap;
-use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\ObjectManager;
 use Lightna\Engine\App\ObjectManagerIgnore;
@@ -34,7 +33,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
 
     protected function init(array $data = []): void
     {
-        $this->build = new Build();
+        parent::init();
         foreach (LIGHTNA_AREAS as $area) {
             $this->config[$area] = $this->build->getAppConfig($area);
         }

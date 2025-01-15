@@ -30,7 +30,7 @@ class Cookie extends ObjectA
         $lifetime = session_get_cookie_params()['lifetime'];
 
         return [
-            'expires' => $lifetime > 0 ? time() + $lifetime : 3600,
+            'expires' => $lifetime > 0 ? time() + $lifetime : $lifetime,
             'path' => '/',
             'domain' => $_SERVER['HTTP_HOST'],
             'secure' => $this->getIsSecure(),

@@ -7,14 +7,13 @@ namespace Lightna\Engine\App\Compiler;
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Bootstrap;
-use Lightna\Engine\App\Build;
 use Lightna\Engine\App\ObjectManagerIgnore;
 
 class Config extends CompilerA implements ObjectManagerIgnore
 {
     public function make(): void
     {
-        $this->build = new Build();
+        $this->init();
 
         foreach (LIGHTNA_AREAS as $area) {
             $config = $this->getYamlConfig($area);
@@ -134,16 +133,18 @@ class Config extends CompilerA implements ObjectManagerIgnore
             throw new Exception('Invalid doc_dir [' . $docDirConfig . ']');
         }
 
-        if (!$assetDir = realpath(LIGHTNA_ENTRY . $fullConfig['asset_dir'])) {
+        $assetDir = Bootstrap::getAssetDir();
+        if (!is_dir($assetDir)) {
             try {
                 // Not recursive
-                mkdir(LIGHTNA_ENTRY . $fullConfig['asset_dir']);
+                mkdir($assetDir);
             } catch (Exception $e) {
             }
-            if (!$assetDir = realpath(LIGHTNA_ENTRY . $fullConfig['asset_dir'])) {
+            if (!is_dir($assetDir)) {
                 throw new Exception('Invalid asset_dir');
             }
         }
-        $config['asset_base'] = preg_replace('~^' . preg_quote($docDir, '~') . '~', '', $assetDir) . '/';
+
+        $config['asset_base'] = '/' . getRelativePath($docDir, $assetDir);
     }
 }

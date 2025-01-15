@@ -2,7 +2,7 @@
 
 return [
     'modules' => [
-        'pool' => ['../../code', 'vendor'],
+        'pool' => ['module', '../../code', 'vendor'],
         'enabled' => [
             'lightna/lightna-redis',
             'lightna/lightna-session',

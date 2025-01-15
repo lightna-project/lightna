@@ -109,7 +109,7 @@ class Redis extends ObjectA implements StorageInterface
 
     public function getHashField(string $key, string $field): string
     {
-        return $this->client->hGet($key, $field) ?? '';
+        return (string)$this->client->hGet($key, $field);
     }
 
     public function getList(array $keys): array

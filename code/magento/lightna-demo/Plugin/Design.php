@@ -24,7 +24,7 @@ class Design
         Closure $proceed
     ): DesignInterface {
         $disabledLane = !is_null($this->request->getParam('disable_lane'));
-        $design->setDesignTheme($disabledLane ? 4 : 6);
+        $design->setDesignTheme($disabledLane ? 'Lightna/Lightna' : 'Lightna/Lane');
 
         $this->lightnaContextData->laneDemoMode = $disabledLane ? 'Magento' : 'Magento + Lightna';
 

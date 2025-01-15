@@ -13,14 +13,15 @@ function cli_help(): void
 
 function cli_get_all_commands(): array
 {
-    $config = require LIGHTNA_ENTRY . 'config.php';
+    $edition = $_SERVER['LIGHTNA_EDITION'] ?? 'main';
+    $config = require LIGHTNA_ENTRY . "edition/$edition/config.php";
     $compilerDir = $config['compiler_dir'];
     $commands = [
         'build.compile' => true,
         'build.validate' => true,
         'build.apply' => true,
     ];
-    $buildConfigFile = LIGHTNA_ENTRY . $compilerDir . '/build/config/backend.php';
+    $buildConfigFile = LIGHTNA_ENTRY . $compilerDir . "/$edition/build/config/backend.php";
 
     if (file_exists($buildConfigFile)) {
         $buildConfig = require $buildConfigFile;
