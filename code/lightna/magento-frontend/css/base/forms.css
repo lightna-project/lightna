@@ -44,6 +44,10 @@
         @apply absolute inset-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main text-xs text-white;
     }
 
+    button {
+        @apply btn;
+    }
+
     .field {
         @apply mb-4 leading-none;
     }

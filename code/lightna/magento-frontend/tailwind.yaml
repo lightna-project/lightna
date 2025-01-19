@@ -1,9 +1,13 @@
 entry:
   common:
     content:
-      magento-template: lightna/magento-frontend/template/**/*.phtml
-      magento-layout: lightna/magento-frontend/layout/**/*.yaml
-      magento-js: lightna/magento-frontend/js/**/*.js
+      magento-common-template: lightna/magento-frontend/template/*.phtml
+      magento-cms-template: lightna/magento-frontend/template/cms/**/*.phtml
+      magento-component-template: lightna/magento-frontend/template/component/**/*.phtml
+      magento-page-template: lightna/magento-frontend/template/page/**/*.phtml
+      magento-common-layout: lightna/magento-frontend/layout/**/*.yaml
+      magento-cms-layout: lightna/magento-frontend/layout/**/*.yaml
+      magento-common-js: lightna/magento-frontend/js/common/*.js
     import:
       tailwind-base: tailwindcss/base
       tailwind-components: tailwindcss/components
@@ -32,23 +36,59 @@ entry:
       magento-component-layout-nav: lightna/magento-frontend/component/layout/main-navigation.css
       magento-component-layout-toolbar: lightna/magento-frontend/component/layout/toolbar.css
       magento-component-layout-usp: lightna/magento-frontend/component/layout/usp.css
-      ## Listing
-      magento-component-listing-facets: lightna/magento-frontend/component/listing/facets.css
       ## Product
-      magento-component-product-attributes-list: lightna/magento-frontend/component/product/attributes-list.css
-      magento-component-product-gallery: lightna/magento-frontend/component/product/gallery.css
       magento-component-product-grid: lightna/magento-frontend/component/product/grid.css
       magento-component-product-list: lightna/magento-frontend/component/product/list.css
-      magento-component-product-options: lightna/magento-frontend/component/product/options.css
       magento-component-product-sku: lightna/magento-frontend/component/product/sku.css
       magento-component-product-stock: lightna/magento-frontend/component/product/stock.css
       magento-component-product-tile: lightna/magento-frontend/component/product/tile.css
-      magento-component-product-usp: lightna/magento-frontend/component/product/usp.css
       ## Search
       magento-component-search-form: lightna/magento-frontend/component/search/form.css
       magento-component-search-suggestions: lightna/magento-frontend/component/search/suggestions.css
       # Page
       magento-page-category: lightna/magento-frontend/page/category.css
+  product:
+    content:
+      magento-product-template: lightna/magento-frontend/template/product/**/*.phtml
+      magento-product-layout: lightna/magento-frontend/layout/product.yaml
+      magento-product-js: lightna/magento-frontend/js/product/**/*.js
+    import:
+      tailwind-components: tailwindcss/components
+      tailwind-utilities: tailwindcss/utilities
+      # Base
+      magento-base-buttons: lightna/magento-frontend/base/buttons.css
+      magento-base-icons: lightna/magento-frontend/base/icons.css
+      magento-base-utilities: lightna/magento-frontend/base/utilities.css
+      ## Layout
+      magento-component-layout-grid: lightna/magento-frontend/component/layout/grid.css
+      # Components
+      magento-component-tabs: lightna/magento-frontend/component/tabs.css
+      ## Product
+      magento-component-product-attributes-list: lightna/magento-frontend/component/product/attributes-list.css
+      magento-component-product-gallery: lightna/magento-frontend/component/product/gallery.css
+      magento-component-product-options: lightna/magento-frontend/component/product/options.css
+      magento-component-product-sku: lightna/magento-frontend/component/product/sku.css
+      magento-component-product-stock: lightna/magento-frontend/component/product/stock.css
+      magento-component-product-usp: lightna/magento-frontend/component/product/usp.css
+  listing:
+    content:
+      magento-product-template: lightna/magento-frontend/template/category/**/*.phtml
+      magento-product-layout: lightna/magento-frontend/layout/category.yaml
+      magento-product-js: lightna/magento-frontend/js/listing/**/*.js
+    import:
+      tailwind-components: tailwindcss/components
+      tailwind-utilities: tailwindcss/utilities
+      # Base
+      magento-base-icons: lightna/magento-frontend/base/icons.css
+      # Components
+      magento-component-collapsible: lightna/magento-frontend/component/collapsible.css
+      magento-component-toggle-link: lightna/magento-frontend/component/toggle-link.css
+      ## Layout
+      magento-component-layout-toolbar: lightna/magento-frontend/component/layout/toolbar.css
+      ## Product
+      magento-component-product-grid: lightna/magento-frontend/component/product/grid.css
+      ## Listing
+      magento-component-listing-facets: lightna/magento-frontend/component/listing/facets.css
 tailwind:
   theme:
     borderRadius:

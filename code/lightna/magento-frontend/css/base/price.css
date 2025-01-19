@@ -1,4 +1,4 @@
-@layer base {
+@layer components {
     .price {
         @apply text-sm font-normal md:text-base;
     }

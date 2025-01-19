@@ -1,4 +1,4 @@
-@layer base {
+@layer components {
     .page-container {
         @apply mx-auto w-full max-w-screen-xl p-5 sm:px-6 md:py-8;
     }
