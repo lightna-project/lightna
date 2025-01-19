@@ -3,6 +3,9 @@ extends:
 .head:
   attributes:
     prefix: "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# product: http://ogp.me/ns/product#"
+  .link:
+    .product:
+      template: lightna/magento-frontend/page/head/link/style/product.phtml
 .body:
   attributes:
     class:

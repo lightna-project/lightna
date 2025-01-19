@@ -1,5 +1,9 @@
 extends:
   - page
+.head:
+  .link:
+    .listing:
+      template: lightna/magento-frontend/page/head/link/style/listing.phtml
 .body:
   attributes:
     class:
