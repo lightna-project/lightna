@@ -15,5 +15,3 @@ storage:
       persistent: true
       timeout: 2
       data_type: string
-default:
-  storage: redis

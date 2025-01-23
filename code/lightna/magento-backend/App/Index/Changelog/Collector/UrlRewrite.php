@@ -19,17 +19,17 @@ class UrlRewrite extends ObjectA implements CollectorInterface
             $toQueue = [];
             $this->entityIdsByType = $this->getEntityIdsByType($changelog);
 
-            if (isset($this->entityIdsByType['custom_redirect'])) {
-                $toQueue['custom_redirect'] = $this->entityIdsByType['custom_redirect'];
+            if ($redirectIds = $this->entityIdsByType['custom_redirect'] ?? []) {
+                $toQueue['custom_redirect'] = $redirectIds;
             }
-            if (isset($this->entityIdsByType['product'])) {
-                $toQueue['product'] = $this->entityIdsByType['product'];
+            if ($productIds = $this->entityIdsByType['product'] ?? []) {
+                $toQueue['product'] = $productIds;
             }
             if (isset($this->entityIdsByType['category'])) {
                 $toQueue['content_page'] = [1]; // Update Top Menu
             }
-            if (isset($this->entityIdsByType['cms-page'])) {
-                $toQueue['cms'] = $this->entityIdsByType['cms'];
+            if ($cmsPageIds = $this->entityIdsByType['cms-page'] ?? []) {
+                $toQueue['cms'] = $cmsPageIds;
             }
 
             return $toQueue;

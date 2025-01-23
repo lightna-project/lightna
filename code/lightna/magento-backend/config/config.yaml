@@ -13,12 +13,10 @@ entity:
   run_code:
     entity: Lightna\Magento\App\Entity\RunCode
     index: Lightna\Magento\Index\RunCode
-    storage: opcache
   config:
     entity: Lightna\Magento\App\Entity\Config
     index: Lightna\Magento\Index\Config
     data: Lightna\Magento\Data\Config
-    storage: opcache
   cms:
     entity: Lightna\Magento\App\Entity\Cms
     index: Lightna\Magento\Index\Cms

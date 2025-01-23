@@ -21,6 +21,7 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     /** @AppConfig(storage/opcache/options/ini) */
     protected array $iniOptions;
     protected array $iniOptionsRestore;
+    protected bool $isSlapEnabled = true;
     protected bool $isSlapTime;
 
     protected function init(array $data = []): void
@@ -39,6 +40,12 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         }
     }
 
+    public function setIniOptions(array $options): void
+    {
+        $this->iniOptions = $options;
+        $this->defineIniOptionsRestore();
+    }
+
     /** @noinspection PhpUnused */
     protected function defineIsSlapTime(): void
     {
@@ -48,12 +55,12 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 
     public function set(string $key, mixed $value): void
     {
-        parent::save($key, $value);
+        parent::save($this->encodeKey($key), $value);
     }
 
     public function unset(string $key): void
     {
-        parent::delete($key);
+        parent::delete($this->encodeKey($key));
     }
 
     public function get(string $key): string|array
@@ -61,10 +68,10 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
         try {
             $this->applyOptions();
 
-            if (!$this->isSlapTime) {
-                return parent::load($key);
+            if ($this->isSlapEnabled && $this->isSlapTime) {
+                return parent::loadRevalidated($this->encodeKey($key));
             } else {
-                return parent::loadRevalidated($key);
+                return parent::load($this->encodeKey($key));
             }
         } catch (Throwable) {
             return [];
@@ -75,23 +82,33 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 
     protected function applyOptions(): void
     {
-        if (!IS_PROD_MODE) {
+        if (!$this->isCustomIniOptionsRelevant()) {
             return;
         }
 
-        $this->setIniOptions($this->iniOptions);
+        $this->applyIniOptions($this->iniOptions);
     }
 
     protected function restoreOptions(): void
     {
-        if (!IS_PROD_MODE) {
+        if (!$this->isCustomIniOptionsRelevant()) {
             return;
         }
 
-        $this->setIniOptions($this->iniOptionsRestore);
+        $this->applyIniOptions($this->iniOptionsRestore);
     }
 
-    protected function setIniOptions(array $options): void
+    protected function isCustomIniOptionsRelevant(): bool
+    {
+        return IS_PROD_MODE;
+    }
+
+    public function disableSlap(): void
+    {
+        $this->isSlapEnabled = false;
+    }
+
+    protected function applyIniOptions(array $options): void
     {
         foreach ($options as $option => $value) {
             ini_set('opcache.' . $option, $value);
@@ -133,7 +150,7 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
 
         foreach ($iterator as $item) {
             if ($item->isFile() && str_starts_with($item->getFilename(), $prefix)) {
-                yield pathinfo($item->getFilename(), PATHINFO_FILENAME);
+                yield $this->decodeKey(pathinfo($item->getFilename(), PATHINFO_FILENAME));
             }
         }
     }
@@ -141,5 +158,15 @@ class Opcache extends \Lightna\Engine\App\Opcache implements StorageInterface
     public function isReadOnly(): bool
     {
         return (bool)($this->options['is_read_only'] ?? false);
+    }
+
+    protected function encodeKey(int|string $id): int|string
+    {
+        return urlencode((string)$id);
+    }
+
+    protected function decodeKey(int|string $id): int|string
+    {
+        return urldecode((string)$id);
     }
 }

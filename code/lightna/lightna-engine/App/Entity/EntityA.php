@@ -57,7 +57,6 @@ class EntityA extends ObjectA
     {
         // Validate here so it won't affect the frontend
         $this->validatePrefix();
-        $this->validateId($id);
 
         $data = array_filter_recursive($data, function ($k, $v) {
             return $v !== null && $v !== '';
@@ -121,13 +120,6 @@ class EntityA extends ObjectA
 
         if ($actualDepth !== $expectedDepth) {
             throw new Exception('Invalid depth for prefix "' . $this->getFullPrefix() . '". Make sure "_" isn\'t overused.');
-        }
-    }
-
-    protected function validateId(string|int $id): void
-    {
-        if (is_string($id) && $this->storageName === 'opcache' && str_contains($id, '/')) {
-            throw new Exception('Invalid key "' . $id . '" provided for opcache storage');
         }
     }
 

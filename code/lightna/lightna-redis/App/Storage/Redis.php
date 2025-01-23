@@ -22,6 +22,7 @@ class Redis extends ObjectA implements StorageInterface
         'timeout' => 5,
         'db' => 0,
         'persistent' => true,
+        'prefix' => '',
     ];
 
     protected function init(array $data = []): void
@@ -82,8 +83,23 @@ class Redis extends ObjectA implements StorageInterface
         );
     }
 
+    protected function getStorageKey(string $key): string
+    {
+        return $this->options['prefix'] . $key;
+    }
+
+    protected function getEntityKey(string $key): string
+    {
+        if ($this->options['prefix'] !== '') {
+            $key = substr($key, strlen($this->options['prefix']));
+        }
+
+        return $key;
+    }
+
     public function set(string $key, mixed $value): void
     {
+        $key = $this->getStorageKey($key);
         if ($this->batch) {
             $this->batchSet[$key] = $value;
         } else {
@@ -93,6 +109,7 @@ class Redis extends ObjectA implements StorageInterface
 
     public function unset(string $key): void
     {
+        $key = $this->getStorageKey($key);
         if ($this->batch) {
             $this->batchUnset[$key] = 1;
         } else {
@@ -102,19 +119,20 @@ class Redis extends ObjectA implements StorageInterface
 
     public function get(string $key): string|array
     {
-        $result = $this->client->get($key);
+        $result = $this->client->get($this->getStorageKey($key));
 
         return is_array($result) ? $result : (string)$result;
     }
 
     public function getHashField(string $key, string $field): string
     {
-        return (string)$this->client->hGet($key, $field);
+        return (string)$this->client->hGet($this->getStorageKey($key), $field);
     }
 
     public function getList(array $keys): array
     {
-        $result = $this->client->mGet($keys);
+        $storageKeys = array_map(fn(string $key) => $this->getStorageKey($key), $keys);
+        $result = $this->client->mGet($storageKeys);
 
         $return = [];
         foreach (array_values($keys) as $i => $key) {
@@ -141,10 +159,13 @@ class Redis extends ObjectA implements StorageInterface
 
     public function keys(string $prefix): Generator
     {
+        $prefix = $this->getStorageKey($prefix);
+
         do {
             $keys = $this->client->scan($it, $prefix . '*');
             if ($keys !== FALSE) {
                 foreach ($keys as $key) {
+                    $key = $this->getEntityKey($key);
                     yield $key;
                 }
             }
