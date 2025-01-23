@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Entity;
 
-use Exception;
+use Lightna\Engine\App\Storage\Opcache as OpcacheStorage;
 
 class State extends EntityA
 {
@@ -15,22 +15,29 @@ class State extends EntityA
     /** @AppConfig(entity/state/storage) */
     protected string $storageName;
 
-    protected function init(array $data = []): void
+    #[\Override]
+    protected function defineStorage(): void
     {
-        $this->validateStorage();
-    }
-
-    protected function validateStorage(): void
-    {
-        // Extension point
+        parent::defineStorage();
 
         if ($this->storageName === 'opcache') {
-            /**
-             * State storage must be realtime including multinode setup
-             * If you have shared writable opcache folder and implemented revalidated load for state entity only
-             * then you can remove this validation
-             */
-            throw new Exception('opcache storage for state isn\'t supported at the moment');
+            $this->initOpcacheStorage();
         }
+    }
+
+    protected function initOpcacheStorage(): void
+    {
+        /**
+         * Create new instance with custom settings
+         * @var OpcacheStorage $storage
+         */
+        $storage = $this->storage = newobj($this->storage::class);
+
+        $storage->setIniOptions([
+            'validate_timestamps' => 1,
+            'revalidate_freq' => 0,
+        ]);
+
+        $storage->disableSlap();
     }
 }

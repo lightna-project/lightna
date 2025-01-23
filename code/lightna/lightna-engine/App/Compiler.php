@@ -34,6 +34,11 @@ class Compiler extends ObjectA
         rcleandir($this->getAssetDir());
     }
 
+    public function version(): void
+    {
+        $this->build->save('version', time());
+    }
+
     public function apply(): void
     {
         $this->applyBuild();

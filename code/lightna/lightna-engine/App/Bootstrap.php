@@ -231,6 +231,8 @@ class Bootstrap
             $enabledModules[$name] = static::getModuleConfig($name);
         }
 
+        static::validateModuleRequirements($enabledModules);
+
         return $enabledModules;
     }
 
@@ -251,6 +253,24 @@ class Bootstrap
         }
 
         throw new Exception("Module \"$name\" not found");
+    }
+
+    protected static function validateModuleRequirements(array $modules): void
+    {
+        foreach ($modules as $name => $module) {
+            if (!isset($module['require'])) continue;
+
+            $modulePosition = array_search($name, array_keys($modules));
+            foreach ($module['require'] as $requirement) {
+                $requirementPosition = array_search($requirement, array_keys($modules));
+                if ($requirementPosition === false) {
+                    throw new Exception("The requirement \"$requirement\" for \"$name\" was not found among the modules.");
+                }
+                if ($requirementPosition > $modulePosition) {
+                    throw new Exception("The module \"$name\" should be declared after \"$requirement\" in modules sequence, as it depends on it.");
+                }
+            }
+        }
     }
 
     public static function getAssetDir(): string

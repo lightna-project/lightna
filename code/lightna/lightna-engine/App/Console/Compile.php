@@ -84,6 +84,7 @@ class Compile extends CommandA
         ]);
 
         $this->runCompilersInModules();
+        $this->compiler->version();
     }
 
     protected function init(array $data = []): void

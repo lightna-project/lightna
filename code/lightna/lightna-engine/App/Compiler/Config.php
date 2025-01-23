@@ -16,13 +16,21 @@ class Config extends CompilerA implements ObjectManagerIgnore
         $this->init();
 
         foreach (LIGHTNA_AREAS as $area) {
-            $config = $this->getYamlConfig($area);
-            $this->applyDefaults($config);
-            ArrayDirectives::apply($config);
-            $this->defineEnabledModules($config);
-            $this->defineAssetBase($config);
-            $this->build->save('config/' . $area, $config);
+            $this->build->save(
+                'config/' . $area,
+                $this->getAreaConfig($area),
+            );
         }
+    }
+
+    protected function getAreaConfig(string $area): array
+    {
+        $config = $this->getYamlConfig($area);
+        ArrayDirectives::apply($config);
+        $this->defineEnabledModules($config);
+        $this->defineAssetBase($config);
+
+        return $config;
     }
 
     protected function getYamlConfig(string $area): array
@@ -109,15 +117,6 @@ class Config extends CompilerA implements ObjectManagerIgnore
         }
 
         return $config;
-    }
-
-    protected function applyDefaults(array &$config): void
-    {
-        if ($defaultStorage = $config['default']['storage'] ?? '') {
-            foreach ($config['entity'] as &$entity) {
-                $entity['storage'] ??= $defaultStorage;
-            }
-        }
     }
 
     protected function defineEnabledModules(array &$config): void

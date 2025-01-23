@@ -28,11 +28,24 @@ class Config extends Build
 
     public function load(string $name): array
     {
-        return merge(
+        $config = merge(
             opcache_load_revalidated($this->compiler->getBuildOrigDir() . 'config/' . $name . '.php'),
             opcache_load_revalidated(Bootstrap::getEditionConfigFile('config.php')),
             opcache_load_revalidated(Bootstrap::getEditionConfigFile('env.php')),
             Bootstrap::getAdditionalConfig(),
         );
+
+        $this::applyDefaults($config);
+
+        return $config;
+    }
+
+    public static function applyDefaults(array &$config): void
+    {
+        if ($defaultStorage = $config['default']['storage'] ?? '') {
+            foreach ($config['entity'] as &$entity) {
+                $entity['storage'] ??= $defaultStorage;
+            }
+        }
     }
 }
