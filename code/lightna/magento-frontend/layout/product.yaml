@@ -72,7 +72,7 @@ extends:
                 - gap-4
             .options:
               id: product-options
-              dynamic: true
+              type: dynamic
               template: lightna/magento-frontend/product/options.phtml
               attributes:
                 class:

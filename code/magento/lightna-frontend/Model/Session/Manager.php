@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Frontend\Model\Session;
 
 use Lightna\Frontend\Model\Session as LightnaSession;
-use Lightna\Magento\Producer\Cart as LightnaCartProducer;
+use Lightna\Session\App\Session\DataBuilder as LightnaSessionDataBuilder;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Manager
 {
@@ -16,43 +15,18 @@ class Manager
         protected CheckoutSession $checkoutSession,
         protected CustomerSession $customerSession,
         protected LightnaSession $lightnaSession,
-        protected StoreManagerInterface $storeManager,
-        protected LightnaCartProducer $lightnaCartProducer,
     ) {
-        $this->lightnaCartProducer = getobj(LightnaCartProducer::class);
     }
 
-    public function updateData(): void
+    public function updateData(bool $forceReindex = false): void
     {
-        $this->updateCartData();
-        $this->updateCustomerData();
-    }
+        $dataBuilder = getobj(LightnaSessionDataBuilder::class)
+            ->setSessionData($this->lightnaSession->getData())
+            ->setField('customer_id', (int)$this->customerSession->getId())
+            ->setField('quote_id', (int)$this->checkoutSession->getQuoteId())
+            ->setField('customer_group_id', (int)$this->customerSession->getCustomerGroupId())
+            ->forceReindex($forceReindex);
 
-    public function updateCartData(): void
-    {
-        $this->updateSectionData(
-            'cart',
-            ($quoteId = $this->checkoutSession->getQuoteId())
-                ? $this->lightnaCartProducer->getData($quoteId)
-                : [],
-        );
-    }
-
-    public function updateCustomerData(): void
-    {
-        $this->updateSectionData(
-            'user',
-            [
-                'groupId' => (int)$this->customerSession->getCustomerGroupId(),
-            ],
-        );
-    }
-
-    public function updateSectionData(string $section, array $data): void
-    {
-        $storeId = $this->storeManager->getStore()->getId();
-        $lightnaData = $this->lightnaSession->getData();
-        $lightnaData['data']['scope_' . $storeId][$section] = $data;
-        $this->lightnaSession->setData($lightnaData);
+        $this->lightnaSession->setData($dataBuilder->getSessionData());
     }
 }

@@ -275,6 +275,11 @@ class Bootstrap
 
     public static function getAssetDir(): string
     {
-        return LIGHTNA_ENTRY . static::$config['asset_dir'] . '/' . static::$EDITION . '/';
+        return LIGHTNA_ENTRY . static::$config['asset_dir'] . '/';
+    }
+
+    public static function getEditionAssetDir(): string
+    {
+        return static::getAssetDir() . static::$EDITION . '/';
     }
 }

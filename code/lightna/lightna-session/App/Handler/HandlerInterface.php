@@ -6,7 +6,7 @@ namespace Lightna\Session\App\Handler;
 
 interface HandlerInterface
 {
-    public function read(): array;
+    public function read(): string;
 
     public function prolong(): void;
 }

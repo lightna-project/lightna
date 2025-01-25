@@ -14,7 +14,7 @@ class ProductTest extends TestCase
 
     public function testGetDataSimpleAvailable(): void
     {
-        $subject = $this->newSubject(Product::class, $this->getSimpleProductDependenciesMock());
+        $subject = $this->newSubject(Product::class, [], $this->getSimpleProductDependenciesMock());
 
         $this->assertEquals(
             $this->getSimpleProductExpectedResult(),
@@ -31,7 +31,7 @@ class ProductTest extends TestCase
             'status' => 0,
             'backorders' => 1,
         ];
-        $subject = $this->newSubject(Product::class, $depsMock);
+        $subject = $this->newSubject(Product::class, [], $depsMock);
 
         $expected = $this->getSimpleProductExpectedResult();
         $expected[1]['inventory'] = [
@@ -50,7 +50,7 @@ class ProductTest extends TestCase
     {
         $depsMock = $this->getSimpleProductDependenciesMock();
         $depsMock['inventoryQuery']['getBatch'][1]['status'] = 0;
-        $subject = $this->newSubject(Product::class, $depsMock);
+        $subject = $this->newSubject(Product::class, [], $depsMock);
 
         $this->assertEquals(
             [],
@@ -62,7 +62,7 @@ class ProductTest extends TestCase
     {
         $depsMock = $this->getSimpleProductDependenciesMock();
         $depsMock['inventoryQuery']['getBatch'] = [];
-        $subject = $this->newSubject(Product::class, $depsMock);
+        $subject = $this->newSubject(Product::class, [], $depsMock);
 
         $this->assertEquals(
             [],
@@ -77,7 +77,7 @@ class ProductTest extends TestCase
         // If product is disabled, it will have no price in the index
         $depsMock['product']['getPrices'] = [];
 
-        $subject = $this->newSubject(Product::class, $depsMock);
+        $subject = $this->newSubject(Product::class, [], $depsMock);
 
         $this->assertEquals(
             [],
@@ -104,7 +104,7 @@ class ProductTest extends TestCase
             'discount_percents' => [9.0, 5 => 18.0, 11 => 27.0],
         ];
 
-        $subject = $this->newSubject(Product::class, $depsMock);
+        $subject = $this->newSubject(Product::class, [], $depsMock);
 
         $this->assertEquals(
             $expected,
@@ -115,7 +115,7 @@ class ProductTest extends TestCase
     public function testGetDataConfigurableAvailable(): void
     {
         $depsMock = $this->getConfigurableProductDependenciesMock();
-        $subject = $this->newSubject(Product::class, $depsMock);
+        $subject = $this->newSubject(Product::class, [], $depsMock);
 
         $this->assertEquals(
             [

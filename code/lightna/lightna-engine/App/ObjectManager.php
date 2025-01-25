@@ -93,4 +93,13 @@ class ObjectManager
             static::$extended = [];
         }
     }
+
+    public static function getClassSchema(string $className): ?array
+    {
+        if (!TEST_MODE) {
+            throw new Exception('ObjectManager::getClassSchema is allowed only in TEST_MODE');
+        }
+
+        return isset(static::$schema[$className]) ? static::$schema[$className]['p'] : null;
+    }
 }

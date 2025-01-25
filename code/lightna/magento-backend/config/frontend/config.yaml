@@ -1,3 +1,4 @@
+
 router.bypass.rules.url_starts_with:
   - checkout/
   - customer/
@@ -10,3 +11,11 @@ router.bypass.rules.url_starts_with:
   - newsletter/
   - catalogsearch/
   - search/ajax/suggest
+  - lightna/session/update
+
+cart.item.fields:
+  - product_id
+  - sku
+  - name
+  - qty
+  - price

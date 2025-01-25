@@ -7,11 +7,11 @@ namespace Lightna\Magento\Data;
 use Lightna\Engine\Data\DataA;
 
 /**
- * @property-read string code
- * @property-read string lang
- * @method string code
- * @method string lang
+ * @method string code(string $escapeMethod = null)
+ * @method string lang(string $escapeMethod = null)
  */
 class Locale extends DataA
 {
+    public string $code;
+    public string $lang;
 }

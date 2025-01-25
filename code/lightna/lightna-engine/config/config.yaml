@@ -7,7 +7,7 @@ storage:
     options:
       ini:
         validate_timestamps: 1
-        revalidate_freq: 60
+        revalidate_freq: 15
   database:
     adapter: Lightna\Engine\App\Storage\Database
     options:

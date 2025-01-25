@@ -27,7 +27,7 @@ class Index extends DataA
             return;
         }
 
-        if ($this->bindToBuild && $this->bindToBuild !== $this->build->load('version')) {
+        if ($this->bindToBuild && $this->bindToBuild !== $this->build->getVersion()) {
             $this->version = $this->getNextVersion();
         }
     }

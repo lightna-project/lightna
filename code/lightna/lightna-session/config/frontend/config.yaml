@@ -1,0 +1,4 @@
+storage:
+  session_file:
+    adapter: Lightna\Session\App\Storage\File
+    options: [ ]

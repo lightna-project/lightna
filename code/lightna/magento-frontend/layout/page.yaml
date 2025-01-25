@@ -58,7 +58,6 @@ template: lightna/magento-frontend/page.phtml
           template: lightna/magento-frontend/page/header/search.phtml
         .account:
           id: account
-          dynamic: true
           private: true
           template: lightna/magento-frontend/page/header/account.phtml
           .guest:
@@ -80,7 +79,6 @@ template: lightna/magento-frontend/page.phtml
                 label: Logout
         .minicart:
           id: minicart
-          dynamic: true
           private: true
           container: div
           attributes:
@@ -89,6 +87,7 @@ template: lightna/magento-frontend/page.phtml
           .icon:
             template: lightna/magento-frontend/page/header/minicart.phtml
           .content:
+            type: lazy
             template: lightna/magento-frontend/page/header/minicart/content.phtml
             .empty:
               template: lightna/magento-frontend/page/header/minicart/empty.phtml
@@ -127,7 +126,7 @@ template: lightna/magento-frontend/page.phtml
           template: lightna/magento-frontend/page/header/search/form.phtml
         .suggestions:
           id: search-suggestions
-          dynamic: true
+          type: lazy
           template: lightna/magento-frontend/page/header/search/suggestions.phtml
       .search-overlay:
         template: lightna/magento-frontend/page/header/search/overlay.phtml

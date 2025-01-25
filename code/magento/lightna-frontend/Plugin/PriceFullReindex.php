@@ -8,6 +8,8 @@ use Closure;
 use Lightna\Magento\App\Index\Service;
 use Magento\Catalog\Model\Indexer\Product\Price\Action\Full;
 
+/** @noinspection PhpUnused */
+
 class PriceFullReindex
 {
     protected Service $service;

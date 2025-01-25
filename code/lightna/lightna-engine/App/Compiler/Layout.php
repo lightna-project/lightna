@@ -271,7 +271,7 @@ class Layout extends CompilerA
     {
         $ids = [];
         foreach ($layout['.'] as $key => $block) {
-            if (isset($block['id']) && isset($block['private'])) {
+            if (isset($block['id']) && ($block['private'] ?? false)) {
                 $ids[$block['id']] = 1;
             }
             $ids = merge($ids, $this->indexPrivateBlocksRecursive($block, $path . '/' . $key));

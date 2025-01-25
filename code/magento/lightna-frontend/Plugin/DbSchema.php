@@ -6,8 +6,11 @@ namespace Lightna\Frontend\Plugin;
 
 use Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaReaderInterface;
 
+/** @noinspection PhpUnused */
+
 class DbSchema
 {
+    /** @noinspection PhpUnused */
     public function afterReadTables(DbSchemaReaderInterface $subject, array $tables): array
     {
         foreach ($tables as $key => $table) {

@@ -95,7 +95,7 @@ class ObjectA implements JsonSerializable
         }
     }
 
-    public function getPropertySchema(string $name): ?array
+    protected function getPropertySchema(string $name): ?array
     {
         return $this->properties[$name] ?? null;
     }

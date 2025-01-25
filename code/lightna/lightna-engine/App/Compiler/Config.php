@@ -140,10 +140,14 @@ class Config extends CompilerA implements ObjectManagerIgnore
             } catch (Exception $e) {
             }
             if (!is_dir($assetDir)) {
-                throw new Exception('Invalid asset_dir');
+                throw new Exception('Invalid asset_dir "' . $assetDir . '"');
             }
         }
 
-        $config['asset_base'] = '/' . getRelativePath($docDir, $assetDir);
+        $config['asset_base'] = '/' . getRelativePath(
+                $docDir,
+                Bootstrap::getEditionAssetDir(),
+                false,
+            ) . '/';
     }
 }

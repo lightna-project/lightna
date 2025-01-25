@@ -11,3 +11,7 @@ plugin:
     - Lightna\Magento\App\Plugin\App\Session\Cookie
   Lightna\Engine\App\Update\Schema\Index\Triggers:
     - Lightna\Magento\App\Plugin\App\Update\Schema\Index\Triggers
+  Lightna\Engine\App\I18n:
+    - Lightna\Magento\App\Plugin\App\I18n
+  Lightna\Session\App\Session\DataBuilder:
+    - Lightna\Magento\App\Plugin\App\Session\DataBuilder

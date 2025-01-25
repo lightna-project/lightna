@@ -1,6 +1,6 @@
 <?php
 /** @var Lightna\Magento\Data\Session $session */
-$isLoggedIn = $session->user->groupId !== 0;
+$isLoggedIn = $session->customer->groupId !== 0;
 $iconClass = $isLoggedIn ? 'icon-user__filled' : 'icon-user__outline';
 ?>
 <div class="icon-dropdown dropdown">

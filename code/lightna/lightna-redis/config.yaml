@@ -6,8 +6,9 @@ storage:
       port: null
       db: null
       persistent: true
-  redis_session:
-    adapter: Lightna\Redis\App\Storage\Session
+      serializer: igbinary
+  session_redis:
+    adapter: Lightna\Redis\App\Storage\Redis
     options:
       host: null
       port: null
@@ -15,3 +16,4 @@ storage:
       persistent: true
       timeout: 2
       data_type: string
+      serializer: null

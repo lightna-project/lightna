@@ -88,7 +88,7 @@ class Compiler extends ObjectA
     {
         $dir = Bootstrap::getCompilerMode() === 'default'
             ? $this->getAssetBuildingDir()
-            : Bootstrap::getAssetDir();
+            : Bootstrap::getEditionAssetDir();
 
         return rtrim($dir, '/') . '/';
     }
@@ -115,7 +115,7 @@ class Compiler extends ObjectA
 
     protected function getAssetOrigDir(): string
     {
-        return Bootstrap::getAssetDir();
+        return Bootstrap::getEditionAssetDir();
     }
 
     protected function getAssetOrigBakDir(): string
