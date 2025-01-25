@@ -15,7 +15,7 @@ class Bind extends CommandA
 
     public function run(): void
     {
-        $this->state->index->bindToBuild = $this->build->load('version');
+        $this->state->index->bindToBuild = $this->build->getVersion();
         $this->state->save();
     }
 }

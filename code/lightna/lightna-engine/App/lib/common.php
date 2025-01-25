@@ -253,3 +253,14 @@ function array_filter_recursive(array $array, ?callable $cb): array
 
     return $array;
 }
+
+function array_is_fields_changed(array $fields, array $original, array $updated): bool
+{
+    foreach ($fields as $field) {
+        if (($original[$field] ?? null) !== ($updated[$field] ?? null)) {
+            return true;
+        }
+    }
+
+    return false;
+}

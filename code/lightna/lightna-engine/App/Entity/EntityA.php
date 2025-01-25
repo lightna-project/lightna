@@ -10,7 +10,7 @@ use Lightna\Engine\App\Config as AppConfig;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\State\Common;
-use Lightna\Engine\App\Storage;
+use Lightna\Engine\App\StoragePool;
 use Lightna\Engine\App\Storage\StorageInterface;
 
 class EntityA extends ObjectA
@@ -22,7 +22,7 @@ class EntityA extends ObjectA
 
     /** @AppConfig(default/storage) */
     protected string $storageName;
-    protected Storage $storageFactory;
+    protected StoragePool $storagePool;
     protected StorageInterface $storage;
     protected Common $state;
     protected Context $context;
@@ -33,7 +33,7 @@ class EntityA extends ObjectA
     /** @noinspection PhpUnused */
     protected function defineStorage(): void
     {
-        $this->storage = $this->storageFactory->get($this->storageName);
+        $this->storage = $this->storagePool->get($this->storageName);
     }
 
     /** @noinspection PhpUnused */
@@ -81,11 +81,14 @@ class EntityA extends ObjectA
 
     public function getList(array $ids): array
     {
-        foreach ($ids as &$id) {
-            $id = $this->getKey($id);
+        $storageIds = array_map(fn($id) => $this->getKey($id), $ids);
+
+        $result = [];
+        foreach ($this->storage->getList($storageIds) as $key => $data) {
+            $result[$this->getId($key)] = $data;
         }
 
-        return $this->storage->getList($ids);
+        return $result;
     }
 
     public function batch(): void
@@ -108,6 +111,11 @@ class EntityA extends ObjectA
     protected function getKey(string|int $id): string
     {
         return $this->getFullPrefix() . $id;
+    }
+
+    protected function getId(string $key): string
+    {
+        return substr($key, strlen($this->getFullPrefix()));
     }
 
     /**

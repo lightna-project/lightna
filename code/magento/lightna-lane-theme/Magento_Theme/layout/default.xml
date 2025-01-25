@@ -48,5 +48,12 @@
         <referenceContainer name="header.container" remove="true"/>
         <referenceContainer name="footer-container" remove="true"/>
         <referenceBlock name="copyright" remove="true"/>
+        <referenceContainer name="before.body.end">
+            <block name="lightna.session.updater">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">lightna-session-updater</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
     </body>
 </page>

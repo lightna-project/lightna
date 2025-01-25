@@ -1,0 +1,7 @@
+entry:
+  common:
+    component:
+      lightna-session: lightna/lightna-session/Session
+  lane:
+    component:
+      lightna-session: lightna/lightna-session/Session

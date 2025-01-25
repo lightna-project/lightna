@@ -1,10 +1,8 @@
 <?php
 /** @var Lightna\Magento\Data\Session\Cart\Item $item */
-$product = $item->product;
-$mainImage = reset($product->gallery);
 ?>
 <div class="product-list__item__image">
-    <a href="<?= $product->url() ?>">
-        <img src="<?= $mainImage->thumbnail() ?>" alt="<?= $product->name() ?>">
+    <a href="<?= $item->url() ?>">
+        <img src="<?= $item->thumbnail() ?>" alt="<?= $item->name() ?>">
     </a>
 </div>

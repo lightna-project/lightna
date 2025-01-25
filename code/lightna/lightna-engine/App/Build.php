@@ -9,6 +9,7 @@ use Lightna\Engine\App\Build\Config as BuildConfig;
 class Build extends Opcache
 {
     protected string $dir;
+    protected int $version;
     protected array $validateConfigOverrides = [
         'config/frontend' => 1,
         'config/backend' => 1,
@@ -118,5 +119,14 @@ class Build extends Opcache
     public function addValidateConfigOverrides(string $name): void
     {
         $this->validateConfigOverrides[$name] = 1;
+    }
+
+    public function getVersion(): int
+    {
+        if (!isset($this->version)) {
+            $this->version = $this->load('version');
+        }
+
+        return $this->version;
     }
 }

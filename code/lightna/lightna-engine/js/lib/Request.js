@@ -16,6 +16,8 @@ export class Request {
     }
 
     static post(url, data, options = {}) {
+        data ??= {};
+
         if (!data.form_key) {
             data.form_key = FormKey.get();
         }

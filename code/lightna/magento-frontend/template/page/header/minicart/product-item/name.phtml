@@ -1,7 +1,6 @@
 <?php
 /** @var Lightna\Magento\Data\Session\Cart\Item $item */
-$product = $item->product;
 ?>
 <span class="product-list__item__name">
-    <a href="<?= $product->url() ?>"><?= $product->name() ?></a>
+    <a href="<?= $item->url() ?>"><?= $item->name() ?></a>
 </span>

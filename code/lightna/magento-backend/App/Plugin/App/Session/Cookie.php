@@ -16,7 +16,7 @@ class Cookie extends ObjectA
     {
         $options = $proceed();
         $lifetime = $this->config->session->cookie->lifetime;
-        $options['expires'] = $lifetime > 0 ? time() + $lifetime : 3600;
+        $options['expires'] = $lifetime > 0 ? time() + $lifetime : $lifetime;
 
         return $options;
     }

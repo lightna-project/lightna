@@ -90,7 +90,7 @@ class Search extends ObjectA
     {
         $facets = [
             'price_bucket' => [
-                'extended_stats' => ['field' => 'price_' . $this->session->user->groupId . '_' . $this->context->scope],
+                'extended_stats' => ['field' => 'price_' . $this->session->customer->groupId . '_' . $this->context->scope],
             ],
             'category_bucket' => [
                 'terms' => ['field' => 'category_ids', 'size' => 500],

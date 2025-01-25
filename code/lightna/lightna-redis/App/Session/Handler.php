@@ -5,22 +5,23 @@ declare(strict_types=1);
 namespace Lightna\Redis\App\Session;
 
 use Exception;
-use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Redis\App\Storage\Session as Storage;
+use Lightna\Engine\App\StoragePool;
+use Lightna\Engine\App\Storage\StorageInterface;
 use Lightna\Session\App\Handler\HandlerInterface;
-use Throwable;
 
 class Handler extends ObjectA implements HandlerInterface
 {
-    protected Storage $storage;
-    protected Context $context;
-    protected array $options;
+    protected StoragePool $storagePool;
+    protected StorageInterface $redis;
     protected string $sessionId;
+    /** @AppConfig(storage/session_redis/options) */
+    protected array $storageOptions;
 
-    protected function init(array $data = []): void
+    /** @noinspection PhpUnused */
+    protected function defineRedis(): void
     {
-        $this->options = $data;
+        $this->redis = $this->storagePool->get('session_redis');
     }
 
     /** @noinspection PhpUnused */
@@ -29,36 +30,31 @@ class Handler extends ObjectA implements HandlerInterface
         $this->sessionId = $_COOKIE[session_name()] ?? '';
     }
 
-    public function read(): array
+    public function read(): string
     {
-        if (($srz = $this->storage->get($this->getKey())) === '') {
-            return [];
+        if (!$this->sessionId) {
+            return '';
         }
 
-        try {
-            $data = $this->unserialize($srz);
-        } catch (Throwable $e) {
-            throw new Exception(
-                'Session can\'t be unserialized, make sure session.serialize_handler = php_serialize'
-            );
+        if (!$srz = $this->readRedis()) {
+            return '';
         }
 
-        return $data[$this->options['namespace']]['data'][$this->getScopeKey()] ?? [];
+        return $srz;
     }
 
-    protected function unserialize(string $srz): array
+    protected function readRedis(): string
     {
-        return unserialize($srz);
-    }
-
-    protected function getScopeKey(): string
-    {
-        return 'scope_' . $this->context->scope;
+        return match ($this->storageOptions['data_type']) {
+            'string' => $this->redis->get($this->getKey()),
+            'hash' => $this->redis->getHashField($this->getKey(), $this->storageOptions['data_hash_field']),
+            default => throw new Exception('Unknown data_type for session_redis storage'),
+        };
     }
 
     public function prolong(): void
     {
-        $this->storage->expire(
+        $this->redis->expire(
             $this->getKey(),
             $this->getTTl(),
         );

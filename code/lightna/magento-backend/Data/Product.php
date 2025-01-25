@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
+use Exception;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\NotFoundException;
 use Lightna\Engine\Data\EntityData;
@@ -59,7 +60,7 @@ class Product extends EntityData
     protected function getEntityData(): array
     {
         if ($this->context->entity->type !== 'product') {
-            throw new \Exception(
+            throw new Exception(
                 'Attempt to load product entity when rendering ' . $this->context->entity->type
             );
         }

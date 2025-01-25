@@ -24,7 +24,7 @@ class Price extends DataA
 
     protected function init(array $data = []): void
     {
-        $group = $this->session->user->groupId;
+        $group = $this->session->customer->groupId;
         $priceGroup = isset($data['finalPrices'][$group]) ? $group : 0;
 
         $data = array_merge($data, [

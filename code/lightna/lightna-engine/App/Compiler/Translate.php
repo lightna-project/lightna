@@ -42,11 +42,31 @@ class Translate extends CompilerA
                 );
             }
 
-            $translates[$row[0]] = $row[1];
+            $translates[$row[0]] = $this->getTranslate($row);
         }
         fclose($handle);
 
         return [$locale => $translates];
+    }
+
+    protected function getTranslate(array $row): array
+    {
+        return [
+            $this->getTranslateType($row),
+            $row[1],
+        ];
+    }
+
+    protected function getTranslateType(array $row): string
+    {
+        // Remove quoted brackets
+        $pattern = preg_replace('~{{~', '', $row[0]);
+
+        /**
+         * m - MessageFormatter
+         * k - keys starting with %
+         */
+        return str_contains($pattern, '{') ? 'm' : 'k';
     }
 
     protected function saveTranslates(array $localeTranslates): void

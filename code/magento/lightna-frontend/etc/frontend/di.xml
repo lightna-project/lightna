@@ -3,9 +3,6 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\LayoutInterface" type="Lightna\Frontend\Model\Layout"/>
     <type name="Magento\Framework\App\FrontController">
-        <plugin name="lightna_response" type="Lightna\Frontend\Plugin\Response"/>
-    </type>
-    <type name="Magento\Checkout\Model\Session">
-        <plugin name="lightna_checkout_session" type="Lightna\Frontend\Plugin\CheckoutSession"/>
+        <plugin name="lightna_dispatch" type="Lightna\Frontend\Plugin\FrontController"/>
     </type>
 </config>

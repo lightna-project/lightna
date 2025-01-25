@@ -11,7 +11,7 @@ export class Blocks {
         return Request.post('/lightna/block', data);
     }
 
-    static async updateHtml(blockIds = [], data = []) {
+    static async updateHtml(blockIds = [], data = {}) {
         let blocks = await this.getHtml(blockIds, data);
         this._renderBlocks(blocks);
     }
@@ -23,6 +23,6 @@ export class Blocks {
     }
 
     static _updateBlockHtml(id, html) {
-        $(`#dynamic-${id}`).outerHTML = html;
+        $(`#block-wrapper-${id}`).outerHTML = html;
     }
 }

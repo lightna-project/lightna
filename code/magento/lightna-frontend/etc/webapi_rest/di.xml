@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Checkout\Model\Session">
-        <plugin name="lightna_checkout_session" type="Lightna\Frontend\Plugin\CheckoutSession"/>
+    <preference for="Magento\Framework\View\LayoutInterface" type="Lightna\Frontend\Model\Layout"/>
+    <type name="Magento\Webapi\Controller\Rest">
+        <plugin name="lightna_dispatch" type="Lightna\Frontend\Plugin\RestController"/>
     </type>
 </config>

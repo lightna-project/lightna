@@ -1,10 +1,6 @@
 <?php
 /** @var Lightna\Magento\Data\Session $session */
-/** @var Lightna\Engine\Data\Request $request */
 
-if (!$request->isPost) {
-    return;
-}
 $cart = $session->cart;
 ?>
 <div class="minicart" id="minicart-content">

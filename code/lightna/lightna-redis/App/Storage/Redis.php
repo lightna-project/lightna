@@ -23,6 +23,7 @@ class Redis extends ObjectA implements StorageInterface
         'db' => 0,
         'persistent' => true,
         'prefix' => '',
+        'serializer' => 'igbinary',
     ];
 
     protected function init(array $data = []): void
@@ -79,8 +80,18 @@ class Redis extends ObjectA implements StorageInterface
     {
         $this->client->setOption(
             RedisClient::OPT_SERIALIZER,
-            RedisClient::SERIALIZER_IGBINARY
+            $this->getSerializer(),
         );
+    }
+
+    protected function getSerializer(): int
+    {
+        return match ($this->options['serializer']) {
+            'php' => RedisClient::SERIALIZER_PHP,
+            'json' => RedisClient::SERIALIZER_JSON,
+            'igbinary' => RedisClient::SERIALIZER_IGBINARY,
+            default => RedisClient::SERIALIZER_NONE,
+        };
     }
 
     protected function getStorageKey(string $key): string
@@ -170,6 +181,11 @@ class Redis extends ObjectA implements StorageInterface
                 }
             }
         } while ($it > 0);
+    }
+
+    public function expire(int|string $key, int $ttl): void
+    {
+        $this->client->expire($key, $ttl);
     }
 
     public function isReadOnly(): bool

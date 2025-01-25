@@ -229,7 +229,7 @@ class Tailwind extends CompilerA
 
     protected function getAssetDir(): string
     {
-        if (!is_dir($dir = Bootstrap::getAssetDir())) {
+        if (!is_dir($dir = Bootstrap::getEditionAssetDir())) {
             mkdir($dir, 0775, true);
         }
 

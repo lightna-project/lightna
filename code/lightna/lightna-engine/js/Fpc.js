@@ -3,7 +3,9 @@ import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 export class Fpc {
 
     constructor() {
-        this.handlePrivateBlocks();
+        this.handlePrivateBlocks().then(() => {
+            document.dispatchEvent(new CustomEvent('page-ready'));
+        });
     }
 
     async handlePrivateBlocks() {
@@ -12,6 +14,9 @@ export class Fpc {
             return;
         }
 
-        await Blocks.updateHtml(privateBlocks);
+        await Blocks.updateHtml(
+            privateBlocks,
+            { 'renderLazyBlocks': false },
+        );
     }
 }

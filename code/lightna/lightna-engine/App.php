@@ -118,6 +118,7 @@ class App extends ObjectA
     #[NoReturn]
     protected function renderError500Dev(Throwable $e): void
     {
+        http_response_code(500);
         echo "<pre>\n$e\n</pre>";
         exit(1);
     }

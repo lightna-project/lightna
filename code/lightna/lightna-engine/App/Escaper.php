@@ -22,6 +22,7 @@ class Escaper extends ObjectA
         return match ($method) {
             null, 'html' => $this->escapeHtml((string)$var),
             'json-js' => $this->escapeJsonJs($var),
+            'json-js-pretty' => $this->escapeJsonJsPretty($var),
             'json-html' => $this->escapeJsonHtml($var),
             'url-param' => $this->escapeUrlParam((string)$var),
             default => null,
@@ -36,6 +37,11 @@ class Escaper extends ObjectA
     protected function escapeJsonJs(mixed $var): string
     {
         return json($var);
+    }
+
+    protected function escapeJsonJsPretty(mixed $var): string
+    {
+        return json_pretty($var);
     }
 
     protected function escapeJsonHtml(mixed $var): string

@@ -4,7 +4,4 @@
     <event name="controller_action_predispatch">
         <observer name="lightna_frontend_predispatch_observer" instance="Lightna\Frontend\Observer\PreDispatch"/>
     </event>
-    <event name="sales_quote_save_commit_after">
-        <observer name="lightna_frontend_update_cart" instance="Lightna\Frontend\Observer\UpdateCart"/>
-    </event>
 </config>

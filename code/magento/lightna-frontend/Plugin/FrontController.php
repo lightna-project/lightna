@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Frontend\Plugin;
 
+use Lightna\Frontend\Model\Session\Manager as LightnaSessionManager;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\ResponseInterface;
@@ -14,20 +15,38 @@ use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\InterpretationMediator;
 
-class Response
+class FrontController
 {
     public function __construct(
         protected ResultJsonFactory $resultJsonFactory,
         protected MessageManager $messageManager,
         protected InterpretationMediator $interpretationMediator,
         protected RequestHttp $request,
+        protected LightnaSessionManager $lightnaSessionManager,
     ) {
     }
 
+    /** @noinspection PhpUnused */
     public function afterDispatch(
         FrontControllerInterface $subject,
         ResponseInterface|ResultInterface $result,
         RequestHttp $request,
+    ): ResponseInterface|ResultInterface {
+        $this->updateLightnaSession($request);
+
+        return $this->getLightnaResult($request, $result);
+    }
+
+    protected function updateLightnaSession(RequestHttp $request): void
+    {
+        if ($request->getMethod() === RequestHttp::METHOD_POST) {
+            $this->lightnaSessionManager->updateData(true);
+        }
+    }
+
+    protected function getLightnaResult(
+        RequestHttp $request,
+        ResponseInterface|ResultInterface $result,
     ): ResponseInterface|ResultInterface {
         if ($request->getHeader('X-Request-With') !== 'Lightna') {
             return $result;

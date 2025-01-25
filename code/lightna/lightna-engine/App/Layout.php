@@ -22,6 +22,7 @@ class Layout extends ObjectA
     protected array $entities;
     protected string $entityType;
     protected string $layoutName;
+    protected bool $renderLazyBlocks = false;
 
     /** @noinspection PhpUnused */
     protected function defineEntityType(): void
@@ -48,6 +49,11 @@ class Layout extends ObjectA
         $this->block();
     }
 
+    public function setRenderLazyBlocks(bool $value): void
+    {
+        $this->renderLazyBlocks = $value;
+    }
+
     /**
      * Return is always empty string but declared return type "string" allows to use <?=
      */
@@ -56,22 +62,24 @@ class Layout extends ObjectA
         $this->current[] = $block = $this->resolveBlock($blockName);
 
         try {
-            [$before, $after] = $this->fetchBeforeAfterBlocks($block);
-            $isDynamic = isset($block['dynamic']) && isset($block['id']) && $block['dynamic'];
+            $this->openBlockWrapper($block);
 
-            $isDynamic && $this->openDynamicWrapper($block);
-            $before && $this->block('before', $vars);
+            if ($this->canRenderBlock($block)) {
+                [$before, $after] = $this->fetchBeforeAfterBlocks($block);
+                $before && $this->block('before', $vars);
 
-            if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
-                $this->isMainCurrent = false;
-                $this->renderBlockTemplate($block, $vars);
-            } else {
-                $this->isMainCurrent = false;
-                $this->renderBlockContent($block, $vars);
+                if (isset($block['template']) && (!empty($blockName) || $this->isMainCurrent)) {
+                    $this->isMainCurrent = false;
+                    $this->renderBlockTemplate($block, $vars);
+                } else {
+                    $this->isMainCurrent = false;
+                    $this->renderBlockContent($block, $vars);
+                }
+
+                $after && $this->block('after', $vars);
             }
 
-            $after && $this->block('after', $vars);
-            $isDynamic && $this->closeDynamicWrapper();
+            $this->closeBlockWrapper($block);
         } catch (Throwable $e) {
             $this->handleBlockError($e);
         }
@@ -80,6 +88,15 @@ class Layout extends ObjectA
         $this->flushRendering();
 
         return '';
+    }
+
+    protected function canRenderBlock(array $block): bool
+    {
+        if (!$this->renderLazyBlocks && ($block['type'] ?? '') === 'lazy') {
+            return false;
+        }
+
+        return true;
     }
 
     protected function resolveBlock(string $blockName): ?array
@@ -144,14 +161,27 @@ class Layout extends ObjectA
         return $after;
     }
 
-    protected function openDynamicWrapper(array $block): void
+    protected function isBlockWrapperNeeded(array $block): bool
     {
-        print('<div style="display: contents;" id="dynamic-' . escape($block['id']) . '">');
+        return ($block['id'] ?? '')
+            && (
+                ($block['private'] ?? false)
+                || in_array($block['type'] ?? '', ['lazy', 'dynamic'])
+            );
     }
 
-    protected function closeDynamicWrapper(): void
+    protected function openBlockWrapper(array $block): void
     {
-        print('</div>');
+        if ($this->isBlockWrapperNeeded($block)) {
+            print('<div style="display: contents;" id="block-wrapper-' . escape($block['id']) . '">');
+        }
+    }
+
+    protected function closeBlockWrapper(array $block): void
+    {
+        if ($this->isBlockWrapperNeeded($block)) {
+            print('</div>');
+        }
     }
 
     protected function renderBlockTemplate(array $block, array $vars = []): void

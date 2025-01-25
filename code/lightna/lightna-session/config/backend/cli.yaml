@@ -1,0 +1,3 @@
+cli:
+  command:
+    session.version.up: Lightna\Session\App\Console\Version\Up
