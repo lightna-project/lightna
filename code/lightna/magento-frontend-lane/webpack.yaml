@@ -3,6 +3,6 @@ entry:
     component:
       magento-common-menu: lightna/magento-frontend/common/Menu
       magento-common-mobile-overlay: lightna/magento-frontend/common/MobileOverlay
-      magento-common-shipping-cart: lightna/magento-frontend/common/ShoppingCart
+      magento-common-mini-cart: lightna/magento-frontend/common/MiniCart
       magento-common-search: lightna/magento-frontend/common/Search
       magento-common-search-suggestions: lightna/magento-frontend/common/SearchSuggestions
