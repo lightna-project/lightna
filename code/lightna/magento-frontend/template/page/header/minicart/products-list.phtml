@@ -4,7 +4,7 @@
 
 $cart = $session->cart;
 ?>
-<ul class="products-list--minicart">
+<ul class="product-list minicart__product-list">
     <?php foreach ($cart->items as $id => $item): ?>
         <?= block('item', compact('id', 'item')) ?>
     <?php endforeach; ?>

@@ -45,8 +45,6 @@ entry:
       ## Search
       magento-component-search-form: lightna/magento-frontend/component/search/form.css
       magento-component-search-suggestions: lightna/magento-frontend/component/search/suggestions.css
-      # Page
-      magento-page-category: lightna/magento-frontend/page/category.css
   product:
     content:
       magento-product-template: lightna/magento-frontend/template/product/**/*.phtml
@@ -89,6 +87,8 @@ entry:
       magento-component-product-grid: lightna/magento-frontend/component/product/grid.css
       ## Listing
       magento-component-listing-facets: lightna/magento-frontend/component/listing/facets.css
+      # Page
+      magento-page-category: lightna/magento-frontend/page/category.css
 tailwind:
   theme:
     borderRadius:
