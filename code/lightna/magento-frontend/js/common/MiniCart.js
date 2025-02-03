@@ -23,7 +23,7 @@ export class MiniCart {
     }
 
     initializeEventListeners() {
-        document.addEventListener('add-to-cart', () => this.open(true));
+        document.addEventListener('add-to-cart', (event) => this.handleAddToCart(event));
         document.addEventListener('keydown', (event) => this.handleKeydown(event));
         $('body').addEventListener('click', (event) => this.handleCartActions(event));
     }
@@ -61,8 +61,15 @@ export class MiniCart {
         }
     }
 
-    async open(refresh = false) {
-        if (!this.getContentElement() || refresh) {
+    async handleAddToCart(event) {
+        await this.refresh();
+        if (!event.detail.withMessages) {
+            await this.open();
+        }
+    }
+
+    async open() {
+        if (!this.getContentElement()) {
             await this.refresh();
         }
 
