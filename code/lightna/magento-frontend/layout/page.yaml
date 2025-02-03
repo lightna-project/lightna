@@ -131,6 +131,14 @@ template: lightna/magento-frontend/page.phtml
           template: lightna/magento-frontend/page/header/search/suggestions.phtml
       .search-overlay:
         template: lightna/magento-frontend/page/header/search/overlay.phtml
+    .messages-container:
+      container: div
+      attributes:
+        class:
+          - page-messages
+      .messages:
+        id: messages
+        template: lightna/magento-frontend/page/messages.phtml
   .main:
     container: div
     attributes:
@@ -142,11 +150,3 @@ template: lightna/magento-frontend/page.phtml
       template: lightna/magento-frontend/page/footer/menu.phtml
     .copyright:
       template: lightna/magento-frontend/page/footer/copyright.phtml
-  .messages-container:
-    container: div
-    attributes:
-      class:
-        - page-messages
-    .messages:
-      id: messages
-      template: lightna/magento-frontend/page/messages.phtml
