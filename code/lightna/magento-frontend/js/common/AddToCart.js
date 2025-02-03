@@ -52,10 +52,10 @@ export class AddToCart {
     }
 
     addProductSuccess(response) {
-        if (response.messagesHtml) {
-            return;
-        }
-        document.dispatchEvent(new CustomEvent('add-to-cart'));
+        document.dispatchEvent(new CustomEvent(
+            'add-to-cart',
+            { detail: { withMessages: Boolean(response.messagesHtml) } }
+        ));
     }
 
     afterAddProduct(component) {
