@@ -19,9 +19,7 @@ function error500(string $title, Throwable $exception): void
 
 try {
     require_once __DIR__ . '/App/boot.php';
-
-    $app = getobj(App::class);
-    $app->run();
+    (getobj(App::class))->run();
 
 } catch (Throwable $e) {
     error500('Initialization error', $e);

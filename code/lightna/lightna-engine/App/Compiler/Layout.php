@@ -9,7 +9,7 @@ use Exception;
 class Layout extends CompilerA
 {
     /** @AppConfig(enabled_modules) */
-    protected ?array $enabledModules;
+    protected array $enabledModules;
     protected array $layouts;
     protected array $templateMap;
 
@@ -26,6 +26,7 @@ class Layout extends CompilerA
         $this->extend();
         $this->applyDirectives();
         $this->applyComponents();
+        $this->validateIds();
         $this->indexBlockIds();
         $this->indexPrivateBlocks();
         $this->save();
@@ -278,5 +279,29 @@ class Layout extends CompilerA
         }
 
         return $ids;
+    }
+
+    protected function validateIds(): void
+    {
+        foreach ($this->layouts as $name => $layout) {
+            $this->validateIdsRecursive($name, $layout['data']);
+        }
+    }
+
+    protected function validateIdsRecursive(string $name, array $layout, string $path = ''): void
+    {
+        foreach ($layout['.'] as $key => $block) {
+            $hasId = isset($block['id']) && is_string($block['id']) && $block['id'] !== '';
+            $requiresId = ($block['private'] ?? false) || in_array($block['type'] ?? '', ['dynamic', 'lazy']);
+
+            if (!$hasId && $requiresId) {
+                throw new Exception(
+                    'The block "' . $name . ':' . ($path . '/' . $key)
+                    . '" is missing a required "id" attribute. Please define an "id" for this block.',
+                );
+            }
+
+            $this->validateIdsRecursive($name, $block, $path . '/' . $key);
+        }
     }
 }

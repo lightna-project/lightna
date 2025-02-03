@@ -16,6 +16,8 @@ class Session extends ObjectA
 {
     /** @AppConfig(session) */
     protected array $config;
+    /** @AppConfig(session_handler) */
+    protected array $handlers;
     /** @AppConfig(fpc_compatible) */
     protected bool $fpcCompatible;
     protected HandlerInterface $handler;
@@ -28,7 +30,11 @@ class Session extends ObjectA
     /** @noinspection PhpUnused */
     protected function defineHandler(): void
     {
-        $this->handler = getobj($this->config['handler']);
+        if (!$handler = $this->handlers[$this->config['handler']] ?? null) {
+            throw new Exception('Unknown session handler "' . $this->config['handler'] . '"');
+        }
+
+        $this->handler = getobj($handler);
     }
 
     /** @noinspection PhpUnused */

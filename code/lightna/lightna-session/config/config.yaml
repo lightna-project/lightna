@@ -1,0 +1,6 @@
+session_handler:
+  file: Lightna\Session\App\Handler\File
+session:
+  namespace: lightna_session
+  scoped: true
+  handler: file

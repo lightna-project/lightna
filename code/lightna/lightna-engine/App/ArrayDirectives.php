@@ -10,11 +10,11 @@ class ArrayDirectives implements ObjectManagerIgnore
 {
     public static function apply(array &$data): void
     {
-        if (empty($data['directives'])) {
+        if (empty($data['directive'])) {
             return;
         }
 
-        foreach ($data['directives'] as $directiveText) {
+        foreach ($data['directive'] as $directiveText) {
             if (empty($directiveText)) {
                 continue;
             }

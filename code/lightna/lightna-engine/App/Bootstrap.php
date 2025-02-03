@@ -141,6 +141,16 @@ class Bootstrap
         }
     }
 
+    public static function maintenance(): void
+    {
+        if (PHP_SAPI === 'cli') {
+            return;
+        }
+
+        require __DIR__ . '/Maintenance.php';
+        (new Maintenance())->process();
+    }
+
     public static function objectManager(): void
     {
         ObjectManager::init();

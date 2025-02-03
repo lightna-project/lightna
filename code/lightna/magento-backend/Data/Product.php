@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Exception;
-use Lightna\Engine\App\Context;
-use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\App\Context\Entity\Loader as ContextEntityLoader;
 use Lightna\Engine\Data\EntityData;
 use Lightna\Magento\Data\Product\Gallery\Image;
 use Lightna\Magento\Data\Product\Inventory as ProductInventory;
@@ -42,9 +40,7 @@ class Product extends EntityData
     public string $typeId;
     public string $url;
 
-    /** @AppConfig(entity/product/entity) */
-    protected string $productEntity;
-    protected Context $context;
+    protected ContextEntityLoader $contextEntityLoader;
 
     protected function init(array $data = []): void
     {
@@ -54,28 +50,6 @@ class Product extends EntityData
 
     protected function getData(array $data): array
     {
-        return $data ?: $this->getEntityData();
-    }
-
-    protected function getEntityData(): array
-    {
-        if ($this->context->entity->type !== 'product') {
-            throw new Exception(
-                'Attempt to load product entity when rendering ' . $this->context->entity->type
-            );
-        }
-
-        $entity = getobj($this->productEntity);
-
-        if (
-            !$this->context->entity->id
-            || !($entityData = $entity->get($this->context->entity->id))
-        ) {
-            throw new NotFoundException(
-                'Entity "' . $this->context->entity->type . ':' . $this->context->entity->id . '" not found'
-            );
-        }
-
-        return $entityData;
+        return $data ?: $this->contextEntityLoader->loadData();
     }
 }

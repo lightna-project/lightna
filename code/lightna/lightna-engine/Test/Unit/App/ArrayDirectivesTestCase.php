@@ -27,10 +27,10 @@ class ArrayDirectivesTestCase extends TestCase
     protected function checkDirectives(array $directives, array $expected): void
     {
         $config = $this->configSample;
-        $config['directives'] = $directives;
+        $config['directive'] = $directives;
 
         ArrayDirectives::apply($config);
-        unset($config['directives']);
+        unset($config['directive']);
 
         $this->assertSame($expected, $config);
     }

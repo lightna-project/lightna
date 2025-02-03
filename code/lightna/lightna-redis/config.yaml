@@ -17,3 +17,5 @@ storage:
       timeout: 2
       data_type: string
       serializer: null
+session_handler:
+  redis: Lightna\Redis\App\Session\Handler
