@@ -24,6 +24,7 @@ export class MiniCart {
 
     initializeEventListeners() {
         document.addEventListener('add-to-cart', () => this.open(true));
+        document.addEventListener('refresh-cart', () => this.refresh());
         document.addEventListener('keydown', (event) => this.handleKeydown(event));
         $('body').addEventListener('click', (event) => this.handleCartActions(event));
     }
