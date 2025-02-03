@@ -87,6 +87,7 @@ template: lightna/magento-frontend/page.phtml
           .icon:
             template: lightna/magento-frontend/page/header/minicart.phtml
           .content:
+            id: minicart-content
             type: lazy
             template: lightna/magento-frontend/page/header/minicart/content.phtml
             .empty:

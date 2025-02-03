@@ -1,6 +1,9 @@
 <?php
-/** @var Lightna\Magento\Data\Product $product */
-/** @var Lightna\Magento\Data\Content\Product $productContent */
+/**
+ * Import:
+ * @var Lightna\Magento\Data\Product $product
+ * @var Lightna\Magento\Data\Content\Product $productContent
+ */
 ?>
 <?php foreach ($productContent->visibleOnFrontAttributes as $attribute) { ?>
     <?php if ($value = $product->{$attribute->code}) { ?>

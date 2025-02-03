@@ -2,8 +2,8 @@ cli:
   command:
     build.asset.sign: Lightna\Engine\App\Console\Build\Asset\Sign
     build.config: Lightna\Engine\App\Console\Build\Config
-    config: Lightna\Engine\App\Console\Config
     config.apply: Lightna\Engine\App\Console\Config\Apply
+    config: Lightna\Engine\App\Console\Config
     index.entity.invalidate: Lightna\Engine\App\Console\Index\Entity\Invalidate
     index.entity.list: Lightna\Engine\App\Console\Index\Entity\Info
     index.entity.show: Lightna\Engine\App\Console\Index\Entity\Show

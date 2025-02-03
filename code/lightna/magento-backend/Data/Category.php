@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Lightna\Engine\App\Context;
-use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\App\Context\Entity\Loader as ContextEntityLoader;
 use Lightna\Engine\Data\EntityData;
 
 /**
@@ -19,39 +18,15 @@ class Category extends EntityData
     public ?string $image;
     public ?string $description;
 
-    /** @AppConfig(entity/category/entity) */
-    protected string $categoryEntity;
-    protected Context $context;
+    protected ContextEntityLoader $contextEntityLoader;
 
     protected function init(array $data = []): void
     {
         if (!$data) {
-            parent::init($this->getEntityData());
+            parent::init($this->contextEntityLoader->loadData());
             $this->title = $this->name;
         } else {
             parent::init($data);
         }
-    }
-
-    protected function getEntityData(): array
-    {
-        if ($this->context->entity->type !== 'category') {
-            throw new \Exception(
-                'Attempt to load category entity when rendering ' . $this->context->entity->type
-            );
-        }
-
-        $entity = getobj($this->categoryEntity);
-
-        if (
-            !$this->context->entity->id
-            || !($entityData = $entity->get($this->context->entity->id))
-        ) {
-            throw new NotFoundException(
-                'Entity "' . $this->context->entity->type . ':' . $this->context->entity->id . '" not found'
-            );
-        }
-
-        return $entityData;
     }
 }

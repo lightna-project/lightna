@@ -11,6 +11,8 @@ use Lightna\Engine\App\State\Common as AppState;
 
 class DataBuilder extends ObjectA
 {
+    /** @AppConfig(session) */
+    protected array $config;
     protected Context $context;
     protected Build $build;
     protected AppState $appState;
@@ -24,7 +26,6 @@ class DataBuilder extends ObjectA
     public function setSessionData(array $sessionData): static
     {
         $this->forceReindex = $this->isReindexRequired = false;
-        $this->scopeKey = 'scope_' . $this->context->scope;
         $this->sessionData = $sessionData;
         $this->scopeData = $sessionData[$this->scopeKey] ?? [];
         $this->scopeData += $this->getDefaultValues();
@@ -72,6 +73,13 @@ class DataBuilder extends ObjectA
         $this->updateDataIndex();
 
         return $this->scopeData;
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineScopeKey(): void
+    {
+        $scope = $this->config['scoped'] ? $this->context->scope : '*';
+        $this->scopeKey = 'scope_' . $scope;
     }
 
     protected function getDefaultValues(): array

@@ -46,28 +46,46 @@ class Template extends CompilerA
 
         $vars = [];
         $content = file_get_contents($file);
-        if (!preg_match_all('~/\\*\\*(.+?)\\*/~ism', $content, $ms)) {
-            return $vars;
-        }
-
-        $docs = $ms[1];
-        foreach ($docs as $doc) {
+        $statements = $this->getDocStatements($content);
+        foreach ($statements as $statement) {
             $ms = [];
-            if (!preg_match_all('~@var\s+(\S+)\s+\\$(\S+)~ism', $doc, $ms)) {
+            if (!preg_match('~@var\s+([^\s&|]+).*\s+\\$(\S+)~is', $statement, $ms)) {
                 continue;
             }
-            for ($i = 0; $i < count($ms[0]); $i++) {
-                $type = ltrim($ms[1][$i], '\\');
-                if (!ctype_upper($type[0])) {
-                    // Skip scalar types
-                    continue;
-                }
-                $this->validateType($type, $template);
-                $vars[$ms[2][$i]] = $type;
+            $type = ltrim($ms[1], '\\');
+            if (!ctype_upper($type[0])) {
+                // Skip scalar types
+                continue;
             }
+            $this->validateType($type, $template);
+            $vars[$ms[2]] = $type;
         }
 
         return $vars;
+    }
+
+    protected function getDocStatements(string $content): array
+    {
+        if (!preg_match_all('~/\*\*(.*?)\*/~ism', $content, $ms)) {
+            return [];
+        }
+
+        $statements = [];
+        foreach ($ms[1] as $doc) {
+            $lines = explode("\n", $doc);
+            $isImport = false;
+            foreach ($lines as $line) {
+                if (preg_match('~^\s*\*\s*Import\s*:\s*$~ism', $line)) {
+                    $isImport = true;
+                    continue;
+                }
+                if ($isImport && str_starts_with($line, ' * @var ')) {
+                    $statements[] = $line;
+                }
+            }
+        }
+
+        return $statements;
     }
 
     protected function validateType(string $type, string $template): void

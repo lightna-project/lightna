@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Data;
 
-use Lightna\Engine\App\Context;
-use Lightna\Engine\App\NotFoundException;
+use Lightna\Engine\App\Context\Entity\Loader as ContextEntityLoader;
 use Lightna\Engine\Data\EntityData;
 
 /**
@@ -16,34 +15,10 @@ use Lightna\Engine\Data\EntityData;
  */
 class Cms extends EntityData
 {
-    /** @AppConfig(entity/cms/entity) */
-    protected string $cmsEntity;
-    protected Context $context;
+    protected ContextEntityLoader $contextEntityLoader;
 
     protected function init(array $data = []): void
     {
-        parent::init($this->getEntityData());
-    }
-
-    protected function getEntityData(): array
-    {
-        if ($this->context->entity->type !== 'cms') {
-            throw new \Exception(
-                'Attempt to load cms entity when rendering ' . $this->context->entity->type
-            );
-        }
-
-        $entity = getobj($this->cmsEntity);
-
-        if (
-            !$this->context->entity->id
-            || !($entityData = $entity->get($this->context->entity->id))
-        ) {
-            throw new NotFoundException(
-                'Entity "' . $this->context->entity->type . ':' . $this->context->entity->id . '" not found'
-            );
-        }
-
-        return $entityData;
+        parent::init($this->contextEntityLoader->loadData());
     }
 }

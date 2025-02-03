@@ -7,6 +7,7 @@ namespace Lightna\Frontend\Plugin;
 use Lightna\Frontend\Model\Session\Manager as LightnaSessionManager;
 use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
@@ -23,7 +24,14 @@ class FrontController
         protected InterpretationMediator $interpretationMediator,
         protected RequestHttp $request,
         protected LightnaSessionManager $lightnaSessionManager,
+        protected ResourceConnection $resource,
     ) {
+    }
+
+    /** @noinspection PhpUnused */
+    public function beforeDispatch(): void
+    {
+        $GLOBALS['SHARED_PDO_CONNECTION'] = $this->resource->getConnection()->getConnection();
     }
 
     /** @noinspection PhpUnused */

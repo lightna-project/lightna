@@ -46,10 +46,17 @@ export class Request {
             const response = await this._lock;
             this._lock = null;
 
+            if (response.status === 503) {
+                if (confirm('The service is under maintenance. Reload the page?')) {
+                    document.location.reload()
+                } else {
+                    throw new Error('The service is under maintenance. Terminated.');
+                }
+            }
+
             return await this._handleJson(response);
-        } catch (error) {
+        } finally {
             this._lock = null;
-            console.error(error.message);
         }
     }
 
