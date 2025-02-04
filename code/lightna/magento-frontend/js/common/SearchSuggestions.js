@@ -15,6 +15,7 @@ export class SearchSuggestions {
 
     constructor() {
         this.search = $(Search.selectors.input);
+        if (!this.search) return;
         this.clearAction = $(Search.actions.clear);
         this.bindEvents();
     }

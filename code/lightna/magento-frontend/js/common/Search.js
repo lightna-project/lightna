@@ -19,6 +19,7 @@ export class Search {
 
     constructor() {
         this.component = $('.cjs-search');
+        if (!this.component) return;
         this.search = $(Search.selectors.input);
         this.searchWrap = $(Search.selectors.wrapper);
         this.clearAction = $(Search.actions.clear);
