@@ -28,6 +28,7 @@ export class Menu {
         this.menuContainer = $(this.selectors.menuContainer);
         this.itemsWithChildren = $$(this.selectors.itemsWithChildren);
         this.itemsTopLevel = $$(this.selectors.itemsTopLevel);
+        if (!this.menuContainer) return;
         this.menuContainer.classList.remove('no-js');
         this.bindEvents();
     }
