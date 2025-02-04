@@ -4,17 +4,17 @@
 <div>
     <?php if ($search->facets) { ?>
         <div class="facets__toggle-button">
-            <button type="button" class="cjs-toggle-overlay" data-overlay="facets">
+            <button type="button" data-action="toggle-overlay" data-overlay-id="facets">
                 <?= phrase('Facets') ?>
                 <span class="icon" aria-hidden="true"></span>
             </button>
         </div>
     <?php } ?>
-    <div class="cjs-facets facets mobile-overlay" data-overlay-id="facets">
+    <div class="cjs-facets facets mobile-overlay" data-overlay="facets">
         <div class="mobile-overlay__title__container">
             <span class="mobile-overlay__title"><?= phrase('Facets') ?></span>
             <!-- Close mobile facets -->
-            <div class="cjs-toggle-overlay icon" data-overlay="facets"></div>
+            <div class="icon" data-action="toggle-overlay" data-overlay-id="facets"></div>
         </div>
         <?php foreach ($search->facets as $facet) { ?>
             <?php $collapsibleActive = $facet->position < 5 || $facet->isInUse ?>
