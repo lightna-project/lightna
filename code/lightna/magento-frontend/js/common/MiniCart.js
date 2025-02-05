@@ -18,7 +18,7 @@ export class MiniCart {
     };
 
     constructor() {
-        this.miniCart = '.cjs-minicart';
+        this.component = '.cjs-minicart';
         this.initializeEventListeners();
     }
 
@@ -63,7 +63,7 @@ export class MiniCart {
 
     async handleAddToCart(event) {
         await this.refresh();
-        if (!event.detail.withMessages) {
+        if (!event.detail.response.messagesHtml) {
             await this.open();
         }
     }
@@ -104,7 +104,7 @@ export class MiniCart {
     }
 
     fadeOutItem(itemId) {
-        const removedItem = $(`[data-item-id="${itemId}"]`, $(this.miniCart))?.closest('li');
+        const removedItem = $(`[data-item-id="${itemId}"]`, $(this.component))?.closest('li');
         if (removedItem) {
             removedItem.classList.add(this.classes.fade);
         }
