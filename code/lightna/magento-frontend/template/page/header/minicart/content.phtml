@@ -10,7 +10,7 @@ $cart = $session->cart;
     <div class="overlay__title__container">
         <span class="overlay__title"><?= phrase('Your Cart') ?></span>
         <!-- Close minicart -->
-        <div class="icon" data-action="close-minicart"></div>
+        <div class="icon" data-click-action="close-minicart"></div>
     </div>
     <?php if ($cart->qty === 0): ?>
         <?= block('empty') ?>
@@ -19,4 +19,4 @@ $cart = $session->cart;
         <?= block('footer') ?>
     <?php endif; ?>
 </div>
-<div class="minicart__overlay" data-action="close-minicart"></div>
+<div class="minicart__overlay" data-click-action="close-minicart"></div>

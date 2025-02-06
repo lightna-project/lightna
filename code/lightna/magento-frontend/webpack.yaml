@@ -1,6 +1,7 @@
 entry:
   common:
     component:
+      magento-common-click-delegator: lightna/magento-frontend/common/ClickEventDelegator
       magento-common-menu: lightna/magento-frontend/common/Menu
       magento-common-mobile-overlay: lightna/magento-frontend/common/MobileOverlay
       magento-common-mini-cart: lightna/magento-frontend/common/MiniCart
