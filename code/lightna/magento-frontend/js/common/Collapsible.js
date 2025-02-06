@@ -1,43 +1,38 @@
 import { $$ } from 'lightna/lightna-engine/lib/utils/dom';
 import { isElementInViewport } from 'lightna/lightna-engine/lib/utils/isElementInViewport';
+import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Collapsible {
     items = [];
+    scrollTimeout = null;
+    classes = {
+        active: 'collapsible--active',
+    };
+    actions = {
+        'toggle-collapsible': (event, item) => this.toggle(item),
+    };
 
     constructor() {
-        this.init();
-        this.bindEvents();
+        this.component = '.cjs-collapsible';
+        this.initializeActions();
     }
 
-    init() {
-        const cjs = $$('.cjs-collapsible');
-        cjs.forEach((item) => {
-            const trigger = item.querySelector('[data-action="toggle-collapsible"]');
-            if (trigger) {
-                this.items.push({
-                    container: item,
-                    trigger,
-                });
-            }
-        });
+    initializeActions() {
+        ClickEventDelegator.addActions(this.actions);
     }
 
-    bindEvents() {
-        this.items.forEach((item) => {
-            item.trigger.addEventListener('click', () => {
-                this.onToggle(item);
-            });
-        });
+    toggle(item) {
+        const container = item.closest(this.component);
+        container.classList.toggle(this.classes.active);
+        this.scrollIfNotVisible(item);
     }
 
-    onToggle(item) {
-        item.container.classList.toggle('collapsible--active');
-        this.scrollIfNotVisible(item.trigger);
-    }
-
-    scrollIfNotVisible(trigger) {
-        if (!isElementInViewport(trigger)) {
-            trigger.scrollIntoView();
+    scrollIfNotVisible(item) {
+        if (!isElementInViewport(item)) {
+            clearTimeout(this.scrollTimeout);
+            this.scrollTimeout = setTimeout(() => {
+                item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 50);
         }
     }
 }

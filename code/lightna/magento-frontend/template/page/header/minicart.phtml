@@ -5,7 +5,7 @@
  */
 $cart = $session->cart;
 ?>
-<div class="header__icon" data-action="open-minicart">
+<div class="header__icon" data-click-action="open-minicart">
     <div class="icon icon-cart">
         <?php if ($cart->qty() > 0) { ?>
             <div class="icon-counter"><?= $cart->qty() ?></div>

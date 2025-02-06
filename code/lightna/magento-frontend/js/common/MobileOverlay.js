@@ -1,4 +1,5 @@
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class MobileOverlay {
     classes = {
@@ -6,35 +7,19 @@ export class MobileOverlay {
         overlayActive: 'active',
     };
     actions = {
-        'toggle-overlay': (overlayId) => this.toggle(overlayId),
+        'toggle-overlay': (event, trigger) => this.toggle(trigger),
     };
 
     constructor() {
-        this.initializeEventListeners();
+        this.initializeActions();
     }
 
-    initializeEventListeners() {
-        document.body.addEventListener('click', (event) => this.handleOverlayActions(event));
+    initializeActions() {
+        ClickEventDelegator.addActions(this.actions);
     }
 
-    handleOverlayActions(event) {
-        const trigger = event.target.closest('[data-action]');
-        if (!trigger) return;
-
-        const action = trigger.getAttribute('data-action');
+    toggle(trigger) {
         const overlayId = trigger.dataset.overlayId;
-        const handler = this.actions[action];
-
-        if (handler) {
-            try {
-                handler(overlayId);
-            } catch (error) {
-                console.error(`Error handling overlay action: ${action}`, error);
-            }
-        }
-    }
-
-    toggle(overlayId) {
         if (!overlayId) return;
 
         const overlay = $(`[data-overlay="${overlayId}"]`);

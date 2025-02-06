@@ -7,7 +7,7 @@
 <div>
     <?php if ($search->facets) { ?>
         <div class="facets__toggle-button">
-            <button type="button" data-action="toggle-overlay" data-overlay-id="facets">
+            <button type="button" data-click-action="toggle-overlay" data-overlay-id="facets">
                 <?= phrase('Facets') ?>
                 <span class="icon" aria-hidden="true"></span>
             </button>
@@ -17,7 +17,7 @@
         <div class="mobile-overlay__title__container">
             <span class="mobile-overlay__title"><?= phrase('Facets') ?></span>
             <!-- Close mobile facets -->
-            <div class="icon" data-action="toggle-overlay" data-overlay-id="facets"></div>
+            <div class="icon" data-click-action="toggle-overlay" data-overlay-id="facets"></div>
         </div>
         <?php foreach ($search->facets as $facet) { ?>
             <?php $collapsibleActive = $facet->position < 5 || $facet->isInUse ?>
@@ -29,7 +29,7 @@
                     </div>
                 <?php } ?>
                 <?php if ($facet->type === 'option') { ?>
-                    <div class="collapsible__trigger facets__item__title" data-action="toggle-collapsible">
+                    <div class="collapsible__trigger facets__item__title" data-click-action="toggle-collapsible">
                         <?= $facet->label() ?>
                         <span class="icon" aria-hidden="true"></span>
                     </div>
