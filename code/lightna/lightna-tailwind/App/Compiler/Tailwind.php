@@ -120,9 +120,11 @@ class Tailwind extends CompilerA
 
     protected function getImport(string $import): string
     {
-        return $this->isCoreImport($import) ?
-            $import :
-            '~/' . $this->importsIndex[$import];
+        return '~/' . (
+            $this->isCoreImport($import) ?
+                $import :
+                $this->importsIndex[$import]
+            );
     }
 
     protected function makeEntries(): void
@@ -140,7 +142,7 @@ class Tailwind extends CompilerA
         foreach ($entry['import'] as $import) {
             $css .= "\n" . '@import ' . json_pretty($this->getImport($import)) . ';';
         }
-        $css .= "\n" . "@config \"config.js\";";
+        $css .= "\n@config \"config.js\";";
 
         return $css;
     }
@@ -202,7 +204,8 @@ class Tailwind extends CompilerA
         return "npx tailwindcss"
             . $this->getBuildCommandArgs($entryName, $isDirect)
             . " -i " . escapeshellarg($this->getBuildDir($isDirect) . "tailwind/$entryName/entry.css")
-            . " -o " . escapeshellarg($this->getAssetBuildDir($isDirect) . 'style/' . $entryName . '.css');
+            . " -o " . escapeshellarg($this->getAssetBuildDir($isDirect) . 'style/' . $entryName . '.css')
+            . " --postcss " . escapeshellarg('./postcss.config.js');
     }
 
     protected function getBuildCommandArgs(string $entryName, bool $isDirect): string

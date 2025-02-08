@@ -14,7 +14,8 @@ class Maintenance extends ObjectA
     public function process(): void
     {
         $this->config = Bootstrap::getConfig()['maintenance'] ?? [];
-        if (!($this->config['enabled'] ?? false)) {
+
+        if (!$this->config['enabled'] || $this->canBypass()) {
             return;
         }
 
@@ -23,6 +24,16 @@ class Maintenance extends ObjectA
         } catch (Throwable $e) {
             error500('Initialization error', $e);
         }
+    }
+
+    protected function canBypass(): bool
+    {
+        $cookieConfig = $this->config['bypass']['cookie'];
+        if (!($name = $cookieConfig['name']) || !($value = $cookieConfig['value'])) {
+            return false;
+        }
+
+        return ($_COOKIE[$name] ?? '') === $value;
     }
 
     #[NoReturn]

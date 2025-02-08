@@ -1,0 +1,5 @@
+/auth.json
+/node_modules
+/vendor
+/edition/*/env.php
+/edition/*/applied/

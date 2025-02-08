@@ -4,6 +4,10 @@ maintenance:
   dir: maintenance
   # Environment variable name which values will be used as maintenance page name
   vary_name: null
+  bypass:
+    cookie:
+      name:
+      value:
 # Path to the public folder accessible from Web where static assets will be placed
 asset_dir: null
 # List of Key-Value storages

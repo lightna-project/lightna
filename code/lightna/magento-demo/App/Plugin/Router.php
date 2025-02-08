@@ -13,7 +13,7 @@ class Router extends ObjectA
     protected Request $request;
 
     /** @noinspection PhpUnused */
-    public function isBypassExtended(Closure $proceed): bool
+    public function canBypassExtended(Closure $proceed): bool
     {
         $disableLightna = !is_null($this->request->param->disable_lightna);
 
