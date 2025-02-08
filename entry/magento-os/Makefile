@@ -35,6 +35,9 @@ build.update:
 _build.update:
 	export LIGHTNA_EDITION_DIR=$$(./cli config edition_dir) && \
 	export LIGHTNA_EDITION_ASSET_DIR=$$(./cli config edition_asset_dir) && \
+	make __build.update
+
+__build.update:
 	make _build.compile.direct
 	make _build.update.js
 	make _build.update.css
@@ -46,7 +49,7 @@ _build.update.js:
 _build.update.css:
 	`./cli config edition_dir`/build/tailwind/update.sh
 
-build.compile.direct:
+compile:
 	LIGHTNA_EDITION=main make _build.compile.direct
 	LIGHTNA_EDITION=design-example make _build.compile.direct
 

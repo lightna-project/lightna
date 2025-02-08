@@ -1,9 +1,4 @@
 /.idea
-/generated
-/entry/*/auth.json
-/entry/*/node_modules
-/entry/*/vendor
+/generated/
+/project/
 /entry/*-local/
-/entry/*/edition/*/env.php
-/entry/*/edition/*/applied/
-/project

@@ -77,7 +77,7 @@ class Router extends ObjectA
 
     protected function processBypass(): void
     {
-        $this->isBypass() && $this->bypass();
+        $this->canBypass() && $this->bypass();
     }
 
     protected function processNoRouteRule(): void
@@ -92,7 +92,7 @@ class Router extends ObjectA
         }
     }
 
-    protected function isBypass(): bool
+    protected function canBypass(): bool
     {
         $bypass =
             ($this->bypass['file'] ?? false)

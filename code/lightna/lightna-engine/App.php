@@ -81,6 +81,11 @@ class App extends ObjectA
 
     protected function sendHeaders(): void
     {
+        $this->sendCacheControlHeaders();
+    }
+
+    protected function sendCacheControlHeaders(): void
+    {
         header('Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private');
     }
 
