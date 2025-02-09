@@ -2,6 +2,7 @@ import { $ } from 'lightna/lightna-engine/lib/utils/dom';
 import { Request } from 'lightna/lightna-engine/lib/Request';
 import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
 import { Search } from 'lightna/magento-frontend/common/Search';
+import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class SearchSuggestions {
     searchSuggestUrl = '/search/ajax/suggest';
@@ -12,17 +13,23 @@ export class SearchSuggestions {
     debounceTimer = null;
     debounceTimeout = 300;
     abortController = null;
+    actions = {
+        'clear-search': () => this.clearSuggestions(),
+    }
 
     constructor() {
         this.search = $(Search.selectors.input);
         if (!this.search) return;
-        this.clearAction = $(Search.actions.clear);
-        this.bindEvents();
+        this.initializeEventListeners();
+        this.initializeActions();
     }
 
-    bindEvents() {
-        this.search.addEventListener('input', this.updateSuggestions.bind(this));
-        this.clearAction.addEventListener('click', this.clearSuggestions.bind(this));
+    initializeEventListeners() {
+        this.search.addEventListener('input', async () => { await this.updateSuggestions(); });
+    }
+
+    initializeActions() {
+        ClickEventDelegator.addActions(this.actions);
     }
 
     async updateSuggestions() {
