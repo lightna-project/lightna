@@ -6,7 +6,19 @@ export class ClickEventDelegator {
     }
 
     static addActions(actions) {
-        this.actions = { ...this.actions, ...actions }
+        for (const [action, handler] of Object.entries(actions)) {
+            if (this.actions[action]) {
+                const originalHandler = this.actions[action];
+                this.actions[action] = (event, element) => {
+                    originalHandler(event, element);
+                    handler(event, element);
+                };
+
+                return;
+            }
+
+            this.actions[action] = handler;
+        }
     }
 
     handleClick(event) {

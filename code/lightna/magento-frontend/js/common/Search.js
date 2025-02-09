@@ -1,44 +1,43 @@
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Search {
     static minChars = 3;
-    static actions = {
-        search: '[data-action="search"]',
-        clear: '[data-action="clear-search"]',
-        open: '[data-action="open-search"]',
-        close: '[data-action="close-search"]',
-    };
     static selectors = {
         input: '#search',
         wrapper: '.search__wrap',
+        searchAction: '.search__submit-btn',
+        clearAction: '.search__clear-btn',
     };
     classes = {
         active: 'search__wrap--active',
         overlayActive: 'search-open',
     };
+    actions = {
+        'clear-search': () => { this.onClear() },
+        'open-search': () => { this.open() },
+        'close-search': () => { this.close() },
+    };
 
     constructor() {
-        this.component = $('.cjs-search');
-        if (!this.component) return;
+        this.component = '.cjs-search';
+        if (!$(this.component)) return;
+
         this.search = $(Search.selectors.input);
         this.searchWrap = $(Search.selectors.wrapper);
-        this.clearAction = $(Search.actions.clear);
-        this.searchAction = $(Search.actions.search);
-        this.bindEvents();
+        this.searchAction = $(Search.selectors.searchAction);
+        this.clearAction = $(Search.selectors.clearAction);
+        this.initializeEventListeners();
+        this.initializeActions();
         this.prefillSearchInput();
     }
 
-    bindEvents() {
-        this.search.addEventListener('input', this.onInput.bind(this));
-        this.clearAction.addEventListener('click', this.onClear.bind(this));
+    initializeEventListeners() {
+        this.search.addEventListener('input', (event) => { this.onInput(event) });
+    }
 
-        $$(Search.actions.open).forEach((actionTrigger) => {
-            actionTrigger.addEventListener('click', this.open.bind(this));
-        });
-
-        $$(Search.actions.close).forEach((actionTrigger) => {
-            actionTrigger.addEventListener('click', this.close.bind(this));
-        });
+    initializeActions() {
+        ClickEventDelegator.addActions(this.actions);
     }
 
     prefillSearchInput() {

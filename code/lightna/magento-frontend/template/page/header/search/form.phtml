@@ -1,11 +1,10 @@
-<div class="search__close" data-action="close-search">
+<div class="search__close" data-click-action="close-search">
     <span class="icon icon-arrow-left"></span>
 </div>
 <form action="/catalogsearch/result/" class="cjs-search">
     <div class="search__input">
         <button class="search__submit-btn btn-reset btn-disabled"
                 type="submit"
-                data-action="search"
                 title="<?= phrase('Search') ?>">
             <span class="icon icon-search"></span>
         </button>
@@ -13,7 +12,7 @@
                placeholder="<?= phrase('Search entire store here...') ?>" autocomplete="off">
         <button class="search__clear-btn btn-reset hidden"
                 type="reset"
-                data-action="clear-search"
+                data-click-action="clear-search"
                 title="<?= phrase('Clear') ?>">
             <span class="icon icon-close icon-close-xs"></span>
         </button>
