@@ -5,9 +5,9 @@ export class ClickEventDelegator {
         document.addEventListener('click', (event) => this.handleClick(event));
     }
 
-    static addActions(actions) {
+    static addActions(actions, merge = true) {
         for (const [action, handler] of Object.entries(actions)) {
-            if (this.actions[action]) {
+            if (this.actions[action] && merge) {
                 const originalHandler = this.actions[action];
                 this.actions[action] = (event, element) => {
                     originalHandler(event, element);

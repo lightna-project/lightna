@@ -14,7 +14,9 @@ export class SearchSuggestions {
     debounceTimeout = 300;
     abortController = null;
     actions = {
-        'clear-search': () => this.clearSuggestions(),
+        click: {
+            'clear-search': () => this.clearSuggestions(),
+        }
     }
 
     constructor() {
@@ -29,7 +31,7 @@ export class SearchSuggestions {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     async updateSuggestions() {

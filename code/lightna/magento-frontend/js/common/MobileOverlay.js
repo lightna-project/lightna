@@ -7,7 +7,9 @@ export class MobileOverlay {
         overlayActive: 'active',
     };
     actions = {
-        'toggle-overlay': (event, trigger) => this.toggle(trigger),
+        click: {
+            'toggle-overlay': (event, trigger) => this.toggle(trigger),
+        }
     };
 
     constructor() {
@@ -15,7 +17,7 @@ export class MobileOverlay {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     toggle(trigger) {

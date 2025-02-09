@@ -9,7 +9,9 @@ export class Collapsible {
         active: 'collapsible--active',
     };
     actions = {
-        'toggle-collapsible': (event, item) => this.toggle(item),
+        click: {
+            'toggle-collapsible': (event, item) => this.toggle(item),
+        },
     };
 
     constructor() {
@@ -18,7 +20,7 @@ export class Collapsible {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     toggle(item) {

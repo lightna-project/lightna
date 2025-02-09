@@ -13,9 +13,11 @@ export class MiniCart {
         fade: 'fade-out',
     };
     actions = {
-        'open-minicart': () => this.open(),
-        'close-minicart': () => this.close(),
-        'remove-product': (event, trigger) => this.removeProduct(trigger),
+        click: {
+            'open-minicart': () => this.open(),
+            'close-minicart': () => this.close(),
+            'remove-product': (event, trigger) => this.removeProduct(trigger),
+        }
     };
 
     constructor() {
@@ -30,7 +32,7 @@ export class MiniCart {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     handleKeydown(event) {

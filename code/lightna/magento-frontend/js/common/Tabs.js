@@ -7,7 +7,9 @@ export class Tabs {
         activeTrigger: 'active',
     }
     actions = {
-        'open-tab': (event, item) => this.openTab(item),
+        click: {
+            'open-tab': (event, item) => this.openTab(item),
+        }
     };
 
     constructor() {
@@ -16,7 +18,7 @@ export class Tabs {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     openTab(item) {
