@@ -53,7 +53,7 @@ export class MiniCart {
 
     async handleAddToCart(event) {
         await this.refresh();
-        if (!event.detail.withMessages) {
+        if (!event.detail.response.messagesHtml) {
             await this.open();
         }
     }
