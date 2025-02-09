@@ -51,7 +51,7 @@ extends:
               - mb-4
               - price-lg
           .price:
-            template: lightna/magento-frontend/product/price.phtml
+            template: lightna/magento-frontend/component/product/price.phtml
             attributes:
               class:
                 - flex
@@ -60,7 +60,7 @@ extends:
                 - gap-x-3
                 - gap-y-1
           .discount:
-            template: lightna/magento-frontend/product/discount.phtml
+            template: lightna/magento-frontend/component/product/discount.phtml
         .cta:
           .add-to-cart:
             template: lightna/magento-frontend/product/cta/add-to-cart.phtml
