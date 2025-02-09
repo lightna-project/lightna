@@ -1,39 +1,50 @@
 import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Tabs {
+    classes = {
+        activeTab: 'active',
+        activeTrigger: 'active',
+    }
+    actions = {
+        'open-tab': (event, item) => this.openTab(item),
+    };
+
     constructor() {
-        this.cjs = $$('.cjs-tabs');
-        this.cjs.forEach((item) => {
-            item.triggers = $$('[data-action="open-tab"]', item);
-            item.tabs = $$('.tab-content', item);
-        });
-        this.bindEvents();
+        this.component = '.cjs-tabs';
+        this.initializeActions();
     }
 
-    bindEvents() {
-        this.cjs.forEach((item) => {
-            item.triggers.forEach((trigger) => {
-                trigger.addEventListener('click', () => {
-                    this.deactivateAll(item);
-                    this.activateCurrent(item, trigger);
-                });
-            });
-        });
+    initializeActions() {
+        ClickEventDelegator.addActions(this.actions);
     }
 
-    deactivateAll(item) {
-        item.triggers.forEach((trigger) => {
-            trigger.classList.remove('active');
-        });
+    openTab(item) {
+        const container = item.closest(this.component);
+        if (!container) return;
 
-        item.tabs.forEach((tab) => {
-            tab.classList.remove('active');
-        });
+        this.deactivateAll(container);
+        this.activateCurrent(item, container);
     }
 
-    activateCurrent(item, trigger) {
-        const index = trigger.dataset.tabIndex;
-        trigger.classList.add('active');
-        $(`[data-tab="${index}"]`, item).classList.add('active');
+    deactivateAll(container) {
+        $$('[data-tab-trigger]', container).forEach(trigger =>
+            trigger.classList.remove(this.classes.activeTrigger)
+        );
+
+        $$('[data-tab]', container).forEach(tab =>
+            tab.classList.remove(this.classes.activeTab)
+        );
+    }
+
+    activateCurrent(trigger, container) {
+        const tabName = trigger.dataset.tabTrigger;
+        if (!tabName) return;
+
+        trigger.classList.add(this.classes.activeTrigger);
+        const targetTab = $(`[data-tab="${tabName}"]`, container);
+        if (targetTab) {
+            targetTab.classList.add(this.classes.activeTab);
+        }
     }
 }
