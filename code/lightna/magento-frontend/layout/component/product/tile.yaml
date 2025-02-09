@@ -24,4 +24,4 @@ attributes:
       class:
         - product-tile__price
     .price:
-      template: lightna/magento-frontend/product/price.phtml
+      template: lightna/magento-frontend/component/product/price.phtml
