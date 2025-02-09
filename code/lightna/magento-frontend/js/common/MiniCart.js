@@ -19,7 +19,7 @@ export class MiniCart {
     };
 
     constructor() {
-        this.miniCart = '.cjs-minicart';
+        this.component = '.cjs-minicart';
         this.initializeEventListeners();
         this.initializeActions();
     }
@@ -94,7 +94,7 @@ export class MiniCart {
     }
 
     fadeOutItem(itemId) {
-        const removedItem = $(`[data-item-id="${itemId}"]`, $(this.miniCart))?.closest('li');
+        const removedItem = $(`[data-item-id="${itemId}"]`, $(this.component))?.closest('li');
         if (removedItem) {
             removedItem.classList.add(this.classes.fade);
         }

@@ -9,8 +9,8 @@ $tabs = $block->{'.'};
     <div class="tabs__headings-container">
         <?php foreach ($tabs as $name => $tab): ?>
             <div class="tab-trigger <?= $tab->active ? 'active' : '' ?>"
-                 data-action="open-tab"
-                 data-tab-index="<?= escape($name) ?>">
+                 data-click-action="open-tab"
+                 data-tab-trigger="<?= escape($name) ?>">
                 <?= phrase($tab->title) ?>
             </div>
         <?php endforeach; ?>
