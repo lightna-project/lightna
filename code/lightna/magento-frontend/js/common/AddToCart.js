@@ -9,7 +9,9 @@ export class AddToCart {
         disabled: 'btn-disabled',
     };
     actions = {
-        'add-to-cart': (event, trigger) => this.onAddProduct(trigger),
+        click: {
+            'add-to-cart': (event, trigger) => this.onAddProduct(trigger),
+        }
     }
 
     constructor() {
@@ -18,7 +20,7 @@ export class AddToCart {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     async onAddProduct(trigger) {

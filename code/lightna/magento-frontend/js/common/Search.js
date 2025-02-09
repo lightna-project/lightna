@@ -14,9 +14,17 @@ export class Search {
         overlayActive: 'search-open',
     };
     actions = {
-        'clear-search': () => { this.onClear() },
-        'open-search': () => { this.open() },
-        'close-search': () => { this.close() },
+        click: {
+            'clear-search': () => {
+                this.onClear()
+            },
+            'open-search': () => {
+                this.open()
+            },
+            'close-search': () => {
+                this.close()
+            },
+        }
     };
 
     constructor() {
@@ -37,7 +45,7 @@ export class Search {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions);
+        ClickEventDelegator.addActions(this.actions.click);
     }
 
     prefillSearchInput() {
