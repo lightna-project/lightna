@@ -15,7 +15,7 @@ export class SearchSuggestions {
     abortController = null;
     actions = {
         click: {
-            'clear-search': () => this.clearSuggestions(),
+            'clear-search': [() => this.clearSuggestions()],
         }
     }
 
@@ -31,7 +31,7 @@ export class SearchSuggestions {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions.click);
+        ClickEventDelegator.add(this.actions.click);
     }
 
     async updateSuggestions() {

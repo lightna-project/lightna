@@ -10,7 +10,7 @@ export class AddToCart {
     };
     actions = {
         click: {
-            'add-to-cart': (event, trigger) => this.onAddProduct(trigger),
+            'add-to-cart': [(event, trigger) => this.onAddProduct(trigger)],
         }
     }
 
@@ -20,7 +20,7 @@ export class AddToCart {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions.click);
+        ClickEventDelegator.add(this.actions.click);
     }
 
     async onAddProduct(trigger) {
