@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 /**
- * Temporary fix
+ * Temporary `resolve` fix
  */
 function postCssImportResolve(id, defaultResolve) {
     try {

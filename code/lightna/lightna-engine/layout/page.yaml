@@ -3,3 +3,7 @@
   .context:
     id: page-context
     template: lightna/lightna-engine/page/context.phtml
+.body:
+  .after:
+    .ssr-time:
+      template: lightna/lightna-engine/page/ssr-time.phtml

@@ -3,7 +3,7 @@ const deepmerge = require('deepmerge');
 
 const editionDir = process.env.LIGHTNA_EDITION_DIR;
 const editionAssetDir = process.env.LIGHTNA_EDITION_ASSET_DIR;
-const modulesConfig = require(editionDir + '/build/webpack/webpack.config.js');
+const modulesConfig = require('./' + editionDir + '/build/webpack/webpack.config.js');
 
 const config = deepmerge(modulesConfig, {
     output: {

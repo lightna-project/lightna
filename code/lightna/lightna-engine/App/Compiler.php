@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Lightna\Engine\App\Build\Config as BuildConfig;
-
 class Compiler extends ObjectA
 {
     protected array $config;
@@ -43,7 +41,6 @@ class Compiler extends ObjectA
     {
         $this->applyBuild();
         $this->applyAssets();
-        $this->applyConfig();
     }
 
     protected function applyBuild(): void
@@ -77,11 +74,6 @@ class Compiler extends ObjectA
 
         rcleandir($this->getAssetOrigBakDir());
         rmdir($this->getAssetOrigBakDir());
-    }
-
-    protected function applyConfig(): void
-    {
-        getobj(BuildConfig::class)->apply();
     }
 
     public function getAssetDir(): string

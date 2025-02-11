@@ -1,9 +1,9 @@
 .body:
   .usp.before:
-    .server-time-container:
-      id: server-time-container
+    .demo-server-time-container:
+      id: demo-server-time-container
       template: lightna/magento-demo/server-time-container.phtml
   .footer.after:
-    .server-time:
-      id: server-time
+    .demo-server-time:
+      id: demo-server-time
       template: lightna/magento-demo/server-time.phtml

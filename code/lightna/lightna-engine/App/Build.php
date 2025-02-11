@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Lightna\Engine\App\Build\Config as BuildConfig;
-
 class Build extends Opcache
 {
     protected string $dir;
@@ -26,14 +24,7 @@ class Build extends Opcache
         if (Bootstrap::getCompilerMode() === 'none') {
             return Bootstrap::getConfig();
         } else {
-            $config = merge(
-                $this->load('config/' . ($area ?? LIGHTNA_AREA)),
-                Bootstrap::getConfig(),
-            );
-
-            BuildConfig::applyDefaults($config);
-
-            return $config;
+            return Bootstrap::getUnappliedAreaConfig($area ?? LIGHTNA_AREA);
         }
     }
 

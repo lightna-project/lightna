@@ -1,3 +1,4 @@
+fpc_compatible: false
 maintenance:
   enabled: false
   # Directory with custom maintenance pages
@@ -44,8 +45,8 @@ router:
     # Project's index.php to handle bypass
     file: null
     cookie:
-      enabled: false
       name: null
+      value: null
 entity:
   state:
     entity: Lightna\Engine\App\Entity\State

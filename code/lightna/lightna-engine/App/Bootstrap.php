@@ -57,9 +57,48 @@ class Bootstrap
     protected static function defineConfig(): void
     {
         if (static::getCompilerMode() === 'none') {
-            static::loadAreaConfig();
+            if (static::isConfigApplyCommand()) {
+                static::loadUnappliedAreaConfig();
+            } else {
+                static::loadAreaConfig();
+            }
         } else {
             static::loadCompilerConfig();
+        }
+    }
+
+    protected static function isConfigApplyCommand(): bool
+    {
+        return PHP_SAPI === 'cli' && ($_SERVER['argv'][1] ?? '') === 'config.apply';
+    }
+
+    protected static function loadUnappliedAreaConfig(): void
+    {
+        static::loadCompilerConfig();
+        static::defineBuild();
+        static::$config = static::getUnappliedAreaConfig(LIGHTNA_AREA);
+    }
+
+    public static function getUnappliedAreaConfig(string $area): array
+    {
+        $config = merge(
+            opcache_load_revalidated(static::$BUILD_DIR . 'config/' . $area . '.php'),
+            opcache_load_revalidated(static::getEditionConfigFile('config.php')),
+            opcache_load_revalidated(static::getEditionConfigFile('env.php')),
+            static::getAdditionalConfig(),
+        );
+
+        static::applyConfigDefaults($config);
+
+        return $config;
+    }
+
+    protected static function applyConfigDefaults(array &$config): void
+    {
+        if ($defaultStorage = $config['default']['storage'] ?? '') {
+            foreach ($config['entity'] as &$entity) {
+                $entity['storage'] ??= $defaultStorage;
+            }
         }
     }
 
@@ -119,7 +158,7 @@ class Bootstrap
         );
     }
 
-    protected static function getAppliedConfigDir(): string
+    public static function getAppliedConfigDir(): string
     {
         return LIGHTNA_ENTRY . 'edition/' . static::$EDITION . '/applied/';
     }
