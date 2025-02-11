@@ -21,6 +21,11 @@ class Router extends ObjectA
     protected Route $route;
     protected Request $request;
 
+    /**
+     * @throws NoRouteException
+     * @throws BypassedException
+     * @throws RedirectedException
+     */
     public function process(): array
     {
         $this->processBypass();
@@ -28,6 +33,10 @@ class Router extends ObjectA
         return $this->resolveAction();
     }
 
+    /**
+     * @throws BypassedException
+     * @throws NoRouteException
+     */
     protected function resolveAction(): array
     {
         if (!$route = $this->resolveRoute()) {
@@ -42,6 +51,9 @@ class Router extends ObjectA
         return $this->resolveHardRoute() ?? $this->resolveSoftRoute();
     }
 
+    /**
+     * @throws RedirectedException
+     */
     protected function resolveRouteAction(array $route): array
     {
         $action = null;
@@ -80,6 +92,11 @@ class Router extends ObjectA
         $this->canBypass() && $this->bypass();
     }
 
+    /**
+     * @throws BypassedException
+     * @throws NoRouteException
+     * @throws Exception
+     */
     protected function processNoRouteRule(): void
     {
         $rule = $this->bypass['rules']['no_route'] ?? '';
@@ -100,15 +117,21 @@ class Router extends ObjectA
             && is_array($bypassUrls) && count($bypassUrls)
             && preg_match('~^(' . implode('|', $bypassUrls) . ')~', $this->request->uriPath);
 
-        $bypass =
-            $bypass || (
-                $this->bypass['cookie']['enabled']
-                && ($_COOKIE[$this->bypass['cookie']['name']] ?? null)
-            );
+        if (!$bypass) {
+            $cookieName = $this->bypass['cookie']['name'] ?? null;
+            $cookieValue = $this->bypass['cookie']['value'] ?? null;
+
+            if ($cookieName && $cookieValue) {
+                $bypass = ($_COOKIE[$cookieName] ?? null) === $cookieValue;
+            }
+        }
 
         return $bypass;
     }
 
+    /**
+     * @throws BypassedException
+     */
     protected function bypass(): void
     {
         Bootstrap::unregister();
@@ -117,6 +140,9 @@ class Router extends ObjectA
         throw new BypassedException();
     }
 
+    /**
+     * @throws RedirectedException
+     */
     protected function redirect(int $type, string $to): void
     {
         if (!preg_match('~^https?://~', $to)) {

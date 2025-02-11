@@ -25,11 +25,11 @@ class BlockHtmlAfter implements ObserverInterface
         if ($this->disabledLane) {
             if ($this->isBlock('cookie-status-check')) {
                 $this->setBlockHtml(
-                    blockhtml('#server-time-container') . $this->getBlockHtml()
+                    blockhtml('#demo-server-time-container') . $this->getBlockHtml()
                 );
             } elseif ($this->isBlock('copyright')) {
                 $this->setBlockHtml(
-                    $this->getBlockHtml() . blockhtml('#server-time')
+                    $this->getBlockHtml() . blockhtml('#demo-server-time')
                 );
             }
         }

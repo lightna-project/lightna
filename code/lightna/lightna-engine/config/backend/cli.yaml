@@ -17,8 +17,8 @@ cli:
     index.update.entity: Lightna\Engine\App\Console\Index\Update\Entity
     index.update.storage: Lightna\Engine\App\Console\Index\Update\Storage
     index.version.bind: Lightna\Engine\App\Console\Index\Version\Bind
-    index.version.next: Lightna\Engine\App\Console\Index\Version\Next
-    index.version.previous: Lightna\Engine\App\Console\Index\Version\Previous
+    index.version.up: Lightna\Engine\App\Console\Index\Version\Up
+    index.version.down: Lightna\Engine\App\Console\Index\Version\Down
     opcache.slap: Lightna\Engine\App\Console\Opcache\Slap
     update: Lightna\Engine\App\Console\Update
   update:

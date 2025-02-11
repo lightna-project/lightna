@@ -20,6 +20,7 @@ _build:
 	make _build.css
 	./cli build.asset.sign
 	./cli build.apply
+	./cli config.apply
 
 _build.js:
 	export LIGHTNA_EDITION_DIR=$$(./cli build.config edition_dir) && \
@@ -39,6 +40,7 @@ _build.update:
 
 __build.update:
 	make _build.compile.direct
+	./cli config.apply
 	make _build.update.js
 	make _build.update.css
 	./cli build.asset.sign --direct

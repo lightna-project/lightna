@@ -7,7 +7,7 @@ namespace Lightna\Engine\App\Console\Index\Version;
 use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\State\Common;
 
-class Next extends CommandA
+class Up extends CommandA
 {
     protected Common $state;
 

@@ -72,7 +72,7 @@ function cli_run_compiler(string $command): void
     } elseif ($command === 'build.validate') {
         (new Compile())->validate();
     } elseif ($command === 'build.apply') {
-        // No "direct" mode for apply command
+        // Deny "direct" mode for apply command
         Bootstrap::setCompilerMode('default');
         (new Compile())->apply();
     }

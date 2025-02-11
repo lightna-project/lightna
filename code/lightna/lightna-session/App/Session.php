@@ -37,15 +37,15 @@ class Session extends ObjectA
         $this->handler = getobj($handler);
     }
 
+    public function getData(): array
+    {
+        return $this->data;
+    }
+
     /** @noinspection PhpUnused */
     protected function defineData(): void
     {
         $this->data = $this->read();
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
     }
 
     protected function read(): array
