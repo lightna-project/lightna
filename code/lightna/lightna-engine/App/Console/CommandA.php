@@ -72,7 +72,7 @@ class CommandA extends ObjectA
 
     protected function printStart($text): void
     {
-        echo str_pad($text, 30, '.');
+        echo str_pad($text, 40, '.');
     }
 
     protected function printEnd(string $additional = ''): void

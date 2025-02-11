@@ -1,0 +1,14 @@
+{
+    "name": "lightna/lightna.magento-pack",
+    "description": "Lightna Magento package",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.8",
+    "require": {
+        "lightna/lightna.magento-frontend": "^1.0.8",
+        "lightna/lightna.magento-frontend-lane": "^1.0.8"
+    },
+    "require-dev": {
+        "lightna/lightna.phpunit": "^1.0.8"
+    }
+}

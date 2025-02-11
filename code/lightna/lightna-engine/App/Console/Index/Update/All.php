@@ -37,7 +37,7 @@ class All extends CommandA
                     continue;
                 }
 
-                $this->printStart('index ' . $entity['storage'] . ' ' . $code);
+                $this->printStart('index ' . $entity['storage'] . ' ' . $code . ' ');
 
                 $this->indexer->reindex($code);
 

@@ -1,0 +1,11 @@
+{
+    "name": "lightna/lightna.elasticsearch",
+    "description": "Lightna Elasticsearch module",
+    "type": "library",
+    "version": "1.0.8",
+    "license": "MIT",
+    "require": {
+        "ext-curl": "*",
+        "lightna/lightna.engine": "^1.0.8"
+    }
+}

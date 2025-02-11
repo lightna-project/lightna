@@ -88,8 +88,8 @@ php project/magento-os/bin/magento setup:upgrade
 
 
 ### Configure Lightna
-* `cp code/lightna/magento-backend/env.php.sample entry/magento-os/edition/main/env.php`
-* Edit `entry/magento-os/env.php` and define `*****` with your values
+* `cp code/lightna/magento-pack/entry/edition/main/env.php entry/magento-os/edition/main/env.php`
+* Edit `entry/magento-os/env.php` and define `****` with your values
 * Ensure that the Elasticsearch and Session settings correspond to the Magento setup, and note that currently, only file storage for sessions is supported
 * Ensure that `session.serialize_handler` value is set to `php_serialize`
 

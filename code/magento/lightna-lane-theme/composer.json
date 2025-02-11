@@ -1,0 +1,15 @@
+{
+    "name": "lightna/magento.lane-theme",
+    "description": "Magento Lane Theme for Lightna",
+    "type": "magento2-theme",
+    "license": "MIT",
+    "version": "1.0.8",
+    "require": {
+        "magento/framework": "^102.0"
+    },
+    "autoload": {
+        "files": [
+            "registration.php"
+        ]
+    }
+}

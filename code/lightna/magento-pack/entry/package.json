@@ -1,0 +1,17 @@
+{
+    "name": "lightna-magento-frontend",
+    "private": true,
+    "devDependencies": {
+        "autoprefixer": "^10.4.20",
+        "deepmerge": "^4.3.1",
+        "postcss-import": "^16.1.0",
+        "prettier": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.5",
+        "tailwindcss": "^3.4.3",
+        "webpack": "^5.91.0",
+        "webpack-cli": "^5.1.4"
+    },
+    "scripts": {
+        "webpack": "webpack"
+    }
+}

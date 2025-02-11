@@ -1,7 +1,4 @@
 {
-    "config": {
-        "process-timeout": 0
-    },
     "require": {
         "laminas/laminas-db": "^2.20"
     },
