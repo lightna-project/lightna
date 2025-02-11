@@ -109,11 +109,8 @@ class Bootstrap
             opcache_load_revalidated(static::getEditionConfigFile('env.php')),
         );
 
-        static::$config = merge(
-            static::$config,
-            static::getAdditionalConfig(),
-            ['enabled_modules' => static::getEnabledModules()],
-        );
+        static::$config = merge(static::$config, static::getAdditionalConfig());
+        static::$config['enabled_modules'] = static::getEnabledModules();
     }
 
     public static function getAdditionalConfig(): array
@@ -267,7 +264,7 @@ class Bootstrap
     protected static function loadEnabledModules(): array
     {
         $enabled = merge(
-            ['lightna/lightna-engine'],
+            ['lightna/' . basename(static::$config['lightna_dir'])],
             static::$config['modules']['enabled'],
         );
 
