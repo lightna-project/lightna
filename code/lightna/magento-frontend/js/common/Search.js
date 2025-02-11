@@ -15,15 +15,9 @@ export class Search {
     };
     actions = {
         click: {
-            'clear-search': () => {
-                this.onClear()
-            },
-            'open-search': () => {
-                this.open()
-            },
-            'close-search': () => {
-                this.close()
-            },
+            'clear-search': [() => this.onClear()],
+            'open-search': [() => this.open()],
+            'close-search': [() => this.close()],
         }
     };
 
@@ -45,7 +39,7 @@ export class Search {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions.click);
+        ClickEventDelegator.add(this.actions.click);
     }
 
     prefillSearchInput() {

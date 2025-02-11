@@ -10,7 +10,7 @@ export class Collapsible {
     };
     actions = {
         click: {
-            'toggle-collapsible': (event, item) => this.toggle(item),
+            'toggle-collapsible': [(event, item) => this.toggle(item)],
         },
     };
 
@@ -20,7 +20,7 @@ export class Collapsible {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions.click);
+        ClickEventDelegator.add(this.actions.click);
     }
 
     toggle(item) {

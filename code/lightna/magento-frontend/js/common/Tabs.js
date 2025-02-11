@@ -8,7 +8,7 @@ export class Tabs {
     }
     actions = {
         click: {
-            'open-tab': (event, item) => this.openTab(item),
+            'open-tab': [(event, item) => this.openTab(item)],
         }
     };
 
@@ -18,7 +18,7 @@ export class Tabs {
     }
 
     initializeActions() {
-        ClickEventDelegator.addActions(this.actions.click);
+        ClickEventDelegator.add(this.actions.click);
     }
 
     openTab(item) {
