@@ -81,12 +81,15 @@ class App extends ObjectA
 
     protected function sendHeaders(): void
     {
-        $this->sendCacheControlHeaders();
-    }
-
-    protected function sendCacheControlHeaders(): void
-    {
-        header('Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private');
+        $headerProviders = [
+            new \Lightna\Engine\App\HeaderProvider\CacheControl(),
+            new \Lightna\Engine\App\HeaderProvider\ContentSecurityPolicy(),
+            new \Lightna\Engine\App\HeaderProvider\XFrameOptions(),
+            new \Lightna\Engine\App\HeaderProvider\XContentTypeOptions(),
+            new \Lightna\Engine\App\HeaderProvider\XssProtection(),
+        ];
+        $headerManager = new \Lightna\Engine\App\HeaderManager($headerProviders);
+        $headerManager->sendHeaders();
     }
 
     protected function processAction(): void
