@@ -2,9 +2,10 @@
 /**
  * Import:
  * @var Lightna\Engine\Data\Context $context
+ * @var Lightna\Engine\Data\Csp $csp
  */
 ?>
 
-<script>
+<script nonce="<?= $csp->nonce() ?>">
     pageContext = <?= $context('json-js') ?>;
 </script>
