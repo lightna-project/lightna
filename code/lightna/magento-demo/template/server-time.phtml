@@ -1,8 +1,14 @@
 <?php
+/**
+ * Import:
+ * @var Lightna\Engine\Data\Csp $csp
+ */
+?>
+<?php
 $serverTime = round((microtime(true) - $GLOBALS['LIGHTNA_START_TIME']) * 1000, 2);
 $elasticTime = round(Lightna\Elasticsearch\App\Client::$timeSpent * 1000, 2);
 ?>
-<script>
+<script nonce="<?= $csp->nonce() ?>">
     const serverTime = <?= escape($serverTime, 'json-js') ?>;
     const elasticTime = <?= escape($elasticTime, 'json-js') ?>;
     const el = document.getElementById('serverTime');
