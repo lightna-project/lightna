@@ -1,5 +1,5 @@
-import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
-import { XSwipeHandler } from 'lightna/lightna-engine/lib/XSwipeHandler';
+import { $, $$ } from 'lightna/engine/lib/utils/dom';
+import { XSwipeHandler } from 'lightna/engine/lib/XSwipeHandler';
 
 export class Gallery {
     constructor() {

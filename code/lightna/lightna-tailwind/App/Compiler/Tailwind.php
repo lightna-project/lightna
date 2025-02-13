@@ -31,7 +31,7 @@ class Tailwind extends CompilerA
     {
         $this->modulesIndex = [];
         foreach ($this->getEnabledModules() as $module) {
-            $this->modulesIndex[$this->getModuleName($module['path'])] = $module['path'];
+            $this->modulesIndex[$module['name']] = $module['path'];
         }
     }
 

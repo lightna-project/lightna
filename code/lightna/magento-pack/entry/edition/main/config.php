@@ -8,14 +8,13 @@ return [
 
         // List of enabled modules
         'enabled' => [
-            'lightna/lightna.session',
-            'lightna/lightna.elasticsearch',
-            'lightna/lightna.webpack',
-            'lightna/lightna.tailwind',
-            'lightna/lightna.phpunit',
-            'lightna/magento.backend',
-            'lightna/magento.frontend',
-            'lightna/magento.frontend-lane',
+            'lightna/webpack',
+            'lightna/tailwind',
+            'lightna/phpunit',
+            'lightna/session',
+            'lightna/magento-backend',
+            'lightna/magento-frontend',
+            'lightna/magento-frontend-lane',
         ],
     ],
 

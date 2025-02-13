@@ -1,4 +1,4 @@
 entry:
   common:
     component:
-      lightna-fpc: lightna/lightna-engine/Fpc
+      lightna-fpc: lightna/engine/Fpc

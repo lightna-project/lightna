@@ -4,4 +4,4 @@ directive:
   .session-updater:
     id: lightna-session-updater
     private: true
-    template: lightna/lightna-session/page/session/updater.phtml
+    template: lightna/session/page/session/updater.phtml

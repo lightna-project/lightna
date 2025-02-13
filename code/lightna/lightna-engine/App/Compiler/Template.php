@@ -24,7 +24,7 @@ class Template extends CompilerA
         $this->walkFilesInModules(
             'template',
             ['phtml'],
-            function ($subPath, $file, $modulePath, $moduleName) use (&$templates, &$schema) {
+            function ($subPath, $file, $moduleName) use (&$templates, &$schema) {
                 $this->templates[$moduleName . '/' . $subPath] = $file;
                 $schema[$moduleName . '/' . $subPath] = $this->getTemplateSchema($file);
             }

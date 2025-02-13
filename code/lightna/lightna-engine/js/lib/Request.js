@@ -1,5 +1,5 @@
-import { FormKey } from 'lightna/lightna-engine/lib/FormKey';
-import { objectToQuery } from 'lightna/lightna-engine/lib/utils/objectToQuery';
+import { FormKey } from 'lightna/engine/lib/FormKey';
+import { objectToQuery } from 'lightna/engine/lib/utils/objectToQuery';
 
 export class Request {
     static headers = {

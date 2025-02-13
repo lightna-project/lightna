@@ -1,6 +1,6 @@
-import { Request } from 'lightna/lightna-engine/lib/Request';
-import { $ } from 'lightna/lightna-engine/lib/utils/dom';
-import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
+import { Request } from 'lightna/engine/lib/Request';
+import { $ } from 'lightna/engine/lib/utils/dom';
+import { Blocks } from 'lightna/engine/lib/Blocks';
 import { PageMessage } from 'lightna/magento-frontend/common/PageMessage';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 

@@ -1,9 +1,9 @@
 {
-    "name": "lightna/magento.frontend",
+    "name": "lightna/magento-module-frontend",
     "description": "Magento Frontend module for Lightna",
     "type": "magento2-module",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "require": {
         "magento/framework": "^102.0"
     },

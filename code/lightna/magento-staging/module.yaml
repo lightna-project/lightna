@@ -1,3 +1,4 @@
+name: lightna/magento-staging
 namespace: Lightna\Magento\Staging
 require:
   - lightna/magento-backend

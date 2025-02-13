@@ -1,3 +1,4 @@
+name: lightna/magento-frontend-lane
 namespace: Lightna\Magento\Frontend\Lane
 require:
   - lightna/magento-frontend

@@ -1,5 +1,5 @@
-import { Cookie } from 'lightna/lightna-engine/lib/Cookie';
-import { randomString } from 'lightna/lightna-engine/lib/utils/randomString';
+import { Cookie } from 'lightna/engine/lib/Cookie';
+import { randomString } from 'lightna/engine/lib/utils/randomString';
 
 export class FormKey {
     static get() {

@@ -1,4 +1,4 @@
-import { $, $$ } from 'lightna/lightna-engine/lib/utils/dom';
+import { $, $$ } from 'lightna/engine/lib/utils/dom';
 import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Search {

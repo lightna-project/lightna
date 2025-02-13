@@ -1,4 +1,4 @@
 entry:
   common:
     component:
-      lightna-session: lightna/lightna-session/Session
+      lightna-session: lightna/session/Session

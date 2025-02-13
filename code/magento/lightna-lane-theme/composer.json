@@ -1,9 +1,9 @@
 {
-    "name": "lightna/magento.lane-theme",
+    "name": "lightna/magento-theme-lane",
     "description": "Magento Lane Theme for Lightna",
     "type": "magento2-theme",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "require": {
         "magento/framework": "^102.0"
     },

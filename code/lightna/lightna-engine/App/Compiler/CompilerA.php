@@ -33,7 +33,7 @@ class CompilerA extends ObjectA
         $this->walkFilesInModules('override', [], $this->processOverride(...));
     }
 
-    protected function processOverride(string $subPath, string $file, string $modulePath, string $moduleName): void
+    protected function processOverride(string $subPath, string $file, string $moduleName): void
     {
         if (count($parts = explode('/', $subPath)) < 4) {
             throw new Exception("Invalid override \"$subPath\" in module\"$moduleName\"");
@@ -78,26 +78,11 @@ class CompilerA extends ObjectA
                     $callback(
                         $subPath,
                         $relPath . $subDir . $subPath,
-                        $this->getModulePath($folder),
-                        $this->getModuleName($folder),
+                        $module['name'],
                         $relPath,
                     );
                 }
             }
         }
-    }
-
-    protected function getModulePath(string $moduleBaseDir): string
-    {
-        $parts = explode('/', trim($moduleBaseDir, '/'));
-
-        return end($parts);
-    }
-
-    protected function getModuleName(string $moduleBaseDir): string
-    {
-        $parts = explode('/', trim($moduleBaseDir, '/'));
-
-        return implode('/', array_slice($parts, -2));
     }
 }

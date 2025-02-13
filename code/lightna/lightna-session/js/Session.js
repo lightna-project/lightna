@@ -1,5 +1,5 @@
-import { $ } from 'lightna/lightna-engine/lib/utils/dom';
-import { Request } from 'lightna/lightna-engine/lib/Request';
+import { $ } from 'lightna/engine/lib/utils/dom';
+import { Request } from 'lightna/engine/lib/Request';
 
 export class Session {
 
