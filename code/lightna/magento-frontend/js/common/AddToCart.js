@@ -1,5 +1,5 @@
-import { UserInput } from 'lightna/lightna-engine/lib/UserInput';
-import { Request } from 'lightna/lightna-engine/lib/Request';
+import { UserInput } from 'lightna/engine/lib/UserInput';
+import { Request } from 'lightna/engine/lib/Request';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class AddToCart {

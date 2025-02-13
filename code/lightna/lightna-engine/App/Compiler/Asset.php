@@ -26,7 +26,7 @@ class Asset extends CompilerA
         );
     }
 
-    protected function processAsset(string $subPath, string $file, string $modulePath, string $moduleName): void
+    protected function processAsset(string $subPath, string $file, string $moduleName): void
     {
         $name = $moduleName . '/' . $subPath;
         if (isset($this->overrides['asset'][$name])) {

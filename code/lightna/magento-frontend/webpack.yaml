@@ -14,5 +14,5 @@ entry:
       magento-product-gallery: lightna/magento-frontend/product/Gallery
       magento-listing-facets: lightna/magento-frontend/listing/Facets
 extend:
-  lightna/lightna-engine/lib/Request:
+  lightna/engine/lib/Request:
     magento-request: lightna/magento-frontend/extend/RequestExtend

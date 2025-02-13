@@ -1,13 +1,10 @@
 {
-    "name": "lightna/lightna.phpunit",
+    "name": "lightna/phpunit",
     "description": "Lightna PHPUnit module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "require": {
-        "lightna/lightna.engine": "^1.0.9"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "^10.5"
+        "lightna/engine": "^1.0.11"
     }
 }

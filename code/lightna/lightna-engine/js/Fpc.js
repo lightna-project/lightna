@@ -1,4 +1,4 @@
-import { Blocks } from 'lightna/lightna-engine/lib/Blocks';
+import { Blocks } from 'lightna/engine/lib/Blocks';
 
 export class Fpc {
 

@@ -1,10 +1,10 @@
 {
-    "name": "lightna/lightna.magento-frontend-lane",
+    "name": "lightna/magento-frontend-lane",
     "description": "Lightna Magento Frontend Lane module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "require": {
-        "lightna/lightna.engine": "^1.0.9"
+        "lightna/magento-frontend": "^1.0.11"
     }
 }

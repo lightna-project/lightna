@@ -1,5 +1,4 @@
-import { $$ } from 'lightna/lightna-engine/lib/utils/dom';
-import { isElementInViewport } from 'lightna/lightna-engine/lib/utils/isElementInViewport';
+import { isElementInViewport } from 'lightna/engine/lib/utils/isElementInViewport';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Collapsible {

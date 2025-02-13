@@ -1,9 +1,9 @@
 {
-    "name": "lightna/lightna.engine",
+    "name": "lightna/engine",
     "description": "Lightna Engine module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "require": {
         "php": "^8.1",
         "ext-yaml": "*",

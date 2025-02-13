@@ -63,7 +63,7 @@ class Webpack extends CompilerA
         );
     }
 
-    protected function indexImport(string $subPath, string $file, string $modulePath, string $moduleName): void
+    protected function indexImport(string $subPath, string $file, string $moduleName): void
     {
         $subPath = preg_replace('~\.js$~', '', $subPath);
         $this->importsIndex[$moduleName . '/' . $subPath] = $moduleName . '/' . $subPath;
@@ -168,11 +168,6 @@ class Webpack extends CompilerA
         $this->build->putFile('webpack/' . $name . '.js', $js);
     }
 
-    protected function getModuleAlias(string $folder): string
-    {
-        return implode('/', array_slice(explode('/', rtrim($folder, '/')), -2));
-    }
-
     protected function getConfigJs(): string
     {
         return $this->getConfigJsHead() .
@@ -230,7 +225,7 @@ class Webpack extends CompilerA
         foreach ($this->getEnabledModules() as $module) {
             $folder = LIGHTNA_ENTRY . $module['path'] . '/';
             if (is_dir($abs = $folder . 'js')) {
-                $aliases[$this->getModuleAlias($folder)] = './' . getRelativePath($wpbDir, $abs);
+                $aliases[$module['name']] = './' . getRelativePath($wpbDir, $abs);
             }
         }
 

@@ -46,11 +46,12 @@ return [
             'dbname' => '****',
         ],
     ],
-    'elasticsearch' => [
-        'connection' => [
-            'host' => 'localhost',
-            'port' => 9200,
-        ],
-        'prefix' => '****',
-    ],
+    // Configure Elasticsearch if needed
+    //'elasticsearch' => [
+    //    'connection' => [
+    //        'host' => 'localhost',
+    //        'port' => 9200,
+    //    ],
+    //    'prefix' => '****',
+    //],
 ];

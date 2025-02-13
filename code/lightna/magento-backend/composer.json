@@ -1,11 +1,11 @@
 {
-    "name": "lightna/lightna.magento-backend",
+    "name": "lightna/magento-backend",
     "description": "Lightna Magento Backend module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.9",
+    "version": "1.0.11",
     "require": {
         "ext-simplexml": "*",
-        "lightna/lightna.engine": "^1.0.9"
+        "lightna/engine": "^1.0.11"
     }
 }

@@ -1,3 +1,4 @@
+name: lightna/magento-frontend
 namespace: Lightna\Magento\Frontend
 require:
   - lightna/magento-backend

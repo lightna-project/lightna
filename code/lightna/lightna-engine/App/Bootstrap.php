@@ -269,12 +269,15 @@ class Bootstrap
         );
 
         $enabledModules = [];
-        foreach ($enabled as $name) {
+        foreach ($enabled as $path) {
+            $config = static::getModuleConfig($path);
+            $name = $config['name'];
+
             if ($enabledModules[$name] ?? false) {
                 throw new Exception("Cannot redeclare module \"$name\"");
             }
 
-            $enabledModules[$name] = static::getModuleConfig($name);
+            $enabledModules[$name] = $config;
         }
 
         static::validateModuleRequirements($enabledModules);
@@ -282,23 +285,26 @@ class Bootstrap
         return $enabledModules;
     }
 
-    protected static function getModuleConfig(string $name): array
+    protected static function getModuleConfig(string $path): array
     {
-        foreach (static::$config['modules']['pool'] as $path) {
-            $configFile = LIGHTNA_ENTRY . $path . "/$name/module.yaml";
+        foreach (static::$config['modules']['pool'] as $pool) {
+            $configFile = LIGHTNA_ENTRY . $pool . "/$path/module.yaml";
             if (!is_file($configFile)) continue;
 
             $config = yaml_parse_file($configFile);
+            if (!isset($config['name'])) {
+                throw new Exception("Module name is not defined in \"$configFile\"");
+            }
             if (!isset($config['namespace'])) {
                 throw new Exception("Module namespace is not defined in \"$configFile\"");
             }
 
-            $config['path'] = "$path/$name";
+            $config['path'] = "$pool/$path";
 
             return $config;
         }
 
-        throw new Exception("Module \"$name\" not found");
+        throw new Exception("Module \"$path\" not found");
     }
 
     protected static function validateModuleRequirements(array $modules): void
