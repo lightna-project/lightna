@@ -4,4 +4,10 @@ declare(strict_types=1);
 
 define('LIGHTNA_ENTRY', realpath(dirname($_SERVER['SCRIPT_FILENAME']) . '/../..') . '/');
 
-require_once __DIR__ . '/../lightna-engine/App/boot.php';
+$modulesDir = __DIR__ . '/../';
+$engineName = 'engine';
+if (!is_dir($modulesDir . $engineName)) {
+    $engineName = 'lightna-engine';
+}
+
+require_once "$modulesDir$engineName/App/boot.php";

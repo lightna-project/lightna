@@ -57,7 +57,7 @@ class PhpUnit extends CompilerA
         $directories = ['unit' => [], 'integration' => []];
         foreach ($this->getEnabledModules() as $module) {
             $dir = $module['path'];
-            if (str_contains($dir, '/vendor/')) {
+            if (preg_match('~(^|/)vendor/~', $dir)) {
                 // Skip testing vendor modules
                 continue;
             }
