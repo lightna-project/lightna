@@ -8,25 +8,38 @@ namespace Lightna\Engine\App\HeaderProvider;
 class ContentSecurityPolicy extends AbstractHeaderProvider
 {
 
-    /**
-     * content-security-policy header name
-     *
-     * @var string
-     */
-    protected string $headerName = 'Content-Security-Policy';
+    protected ContentSecurityPolicy\Csp $csp;
 
-    /**
-     * content-security-policy header value
-     *
-     * @var string
-     */
-    protected string $headerValue;
-
-    /**
-     * @param string $value
-     */
-    public function __construct($value = 'default-src \'self\'')
+    public function __construct()
     {
-        $this->headerValue = $value;
+        $this->csp = new ContentSecurityPolicy\Csp();
+
+        $nonceSource = new ContentSecurityPolicy\NonceSource();
+        $this->csp->setNonceSource($nonceSource);
+    }
+
+    public function addNoncePolicy(): void
+    {
+        $this->csp->addNoncePolicy();
+    }
+
+    public function addPolicy(string $directive, string $value): void
+    {
+        $this->csp->addPolicy($directive, $value);
+    }
+
+    public function setReportOnly($value): void
+    {
+        $this->csp->setReportOnly($value);
+    }
+
+    public function getName(): string
+    {
+        return $this->csp->getName();
+    }
+
+    public function getValue(): string
+    {
+        return $this->csp->getValue();
     }
 }

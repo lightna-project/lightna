@@ -7,18 +7,6 @@ namespace Lightna\Engine\App\HeaderProvider;
  */
 class XContentTypeOptions extends AbstractHeaderProvider
 {
-
-    /**
-     * x-content-type-options Header name
-     *
-     * @var string
-     */
     protected string $headerName = 'X-Content-Type-Options';
-
-    /**
-     * x-content-type-options header value
-     *
-     * @var string
-     */
     protected string $headerValue = 'nosniff';
 }

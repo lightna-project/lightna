@@ -7,19 +7,7 @@ namespace Lightna\Engine\App\HeaderProvider;
  */
 class XFrameOptions extends AbstractHeaderProvider
 {
-
-    /**
-     * x-frame-options Header name
-     *
-     * @var string
-     */
     protected string $headerName = 'X-Frame-Options';
-
-    /**
-     * x-frame-options header value
-     *
-     * @var string
-     */
     protected string $headerValue;
 
     /**

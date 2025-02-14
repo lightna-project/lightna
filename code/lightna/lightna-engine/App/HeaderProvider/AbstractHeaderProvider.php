@@ -9,14 +9,7 @@ use Lightna\Engine\App\ObjectManagerIgnore;
  */
 abstract class AbstractHeaderProvider implements HeaderProviderInterface, ObjectManagerIgnore
 {
-    /**
-     * @var string
-     */
     protected string $headerName = '';
-
-    /**
-     * @var string
-     */
     protected string $headerValue = '';
 
     /**

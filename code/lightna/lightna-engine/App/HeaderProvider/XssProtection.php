@@ -7,11 +7,6 @@ namespace Lightna\Engine\App\HeaderProvider;
  */
 class XssProtection extends AbstractHeaderProvider
 {
-    /**
-     * x-xss-protection header name
-     *
-     * @var string
-     */
     protected string $headerName = 'X-XSS-Protection';
 
     /** Matches IE 8 browsers */
