@@ -6,12 +6,10 @@ namespace Lightna\Engine\App\Build;
 
 use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Build;
-use Lightna\Engine\App\Compiler;
 
 class Config extends Build
 {
     protected string $dir;
-    protected Compiler $compiler;
     protected Build $build;
 
     public function init(array $data = []): void

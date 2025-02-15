@@ -75,6 +75,6 @@ class I18n extends ObjectA
 
     protected function loadLocaleTranslates(string $locale): array
     {
-        return $this->build->load('translate/' . $locale);
+        return $this->build->loadIfExists('translate/' . $locale, []);
     }
 }

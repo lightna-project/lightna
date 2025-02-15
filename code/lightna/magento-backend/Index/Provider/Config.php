@@ -84,7 +84,11 @@ class Config extends ObjectA
     protected function updateNoRoutePageId(array &$config): void
     {
         $identifier = $config['noRoutePageIdentifier'] ?? 'no-route';
+
+        // Parse route in case the value is "identifier|page_id"
+        $identifier = explode('|', $identifier)[0];
+
         unset($config['noRoutePageIdentifier']);
-        $config['noRoutePageId'] = $this->magentoCmsPage->getByIdentifier($identifier)['page_id'];
+        $config['noRoutePageId'] = $this->magentoCmsPage->getByIdentifier($identifier)['page_id'] ?? null;
     }
 }

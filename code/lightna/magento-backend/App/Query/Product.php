@@ -17,6 +17,7 @@ class Product extends ObjectA
         // Composite products must be at the end
         'simple', 'virtual', 'downloadable', 'configurable'
     ];
+    protected array $compositeTypes = ['configurable'];
 
     public function getParentsBatch(array $ids): array
     {
@@ -146,8 +147,18 @@ class Product extends ObjectA
 
     protected function getChildrenRelationsSelect(array $ids): Select
     {
-        $select = $this->db->select('catalog_product_relation');
-        $select->where->in('parent_id', $ids);
+        $select = $this->db->select()
+            ->from(['rel' => 'catalog_product_relation'])
+            ->join(
+                ['p' => 'catalog_product_entity'],
+                'rel.parent_id = p.entity_id',
+                [],
+            );
+
+        $select->where
+            ->in('rel.parent_id', $ids)
+            // Filter by composite types to fix issues when a bit messy in database
+            ->in('p.type_id', $this->compositeTypes);
 
         return $select;
     }

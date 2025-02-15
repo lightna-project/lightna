@@ -3,8 +3,8 @@
     "description": "Lightna PHPUnit module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.14",
+    "version": "1.0.16",
     "require": {
-        "lightna/engine": "^1.0.14"
+        "lightna/engine": "^1.0.16"
     }
 }
