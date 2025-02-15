@@ -5,17 +5,25 @@ namespace Lightna\Engine\App\HeaderProvider;
 /**
  * Adds a Content-Security-Policy header to HTTP responses to safeguard against cross-site scripting.
  */
-class ContentSecurityPolicy extends AbstractHeaderProvider
+class ContentSecurityPolicy extends AbstractHeaderProvider implements HeaderProviderDynamicInterface
 {
 
-    protected ContentSecurityPolicy\Csp $csp;
+    protected Dynamic\ContentSecurityPolicySource $csp;
 
     public function __construct()
     {
-        $this->csp = new ContentSecurityPolicy\Csp();
+        $csp = new Dynamic\ContentSecurityPolicySource();
+        $this->setSource($csp);
+    }
 
-        $nonceSource = new ContentSecurityPolicy\NonceSource();
-        $this->csp->setNonceSource($nonceSource);
+    public function setSource(Dynamic\SourceInterface $source): void
+    {
+        $this->csp = $source;
+    }
+
+    public function getSource(): Dynamic\SourceInterface
+    {
+        return $this->csp;
     }
 
     public function addNoncePolicy(): void
@@ -26,11 +34,6 @@ class ContentSecurityPolicy extends AbstractHeaderProvider
     public function addPolicy(string $directive, string $value): void
     {
         $this->csp->addPolicy($directive, $value);
-    }
-
-    public function setReportOnly($value): void
-    {
-        $this->csp->setReportOnly($value);
     }
 
     public function getName(): string

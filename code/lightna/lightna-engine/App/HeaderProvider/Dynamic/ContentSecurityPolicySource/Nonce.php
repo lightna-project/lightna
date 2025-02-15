@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider\ContentSecurityPolicy;
+namespace Lightna\Engine\App\HeaderProvider\Dynamic\Csp;
 
 use Lightna\Engine\App\ObjectA;
 
-class NonceSource extends ObjectA implements NonceSourceInterface
+class Nonce extends ObjectA implements NonceInterface
 {
     private string $nonce;
 

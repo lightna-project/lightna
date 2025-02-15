@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider\ContentSecurityPolicy;
+namespace Lightna\Engine\App\HeaderProvider\Dynamic\Csp;
 
-interface NonceSourceInterface
+interface NonceInterface
 {
     /**
      * Generate a unique nonce for use in a Content-Security-Policy header.

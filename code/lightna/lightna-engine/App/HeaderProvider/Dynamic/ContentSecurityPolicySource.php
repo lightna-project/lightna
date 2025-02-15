@@ -1,28 +1,28 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider\ContentSecurityPolicy;
+namespace Lightna\Engine\App\HeaderProvider\Dynamic;
 
 use Lightna\Engine\App\ObjectA;
 
-class Csp extends ObjectA implements CspInterface
+class ContentSecurityPolicySource extends ObjectA implements SourceInterface
 {
-    private NonceSourceInterface $nonceSource;
+    private Csp\NonceInterface $nonce;
     private array $policies = [];
     private bool $reportOnly = false;
 
-    public function setNonceSource(NonceSourceInterface $nonce): void
+    public function setNonceSource(Csp\NonceInterface $nonce): void
     {
-        $this->nonceSource = $nonce;
+        $this->nonce = $nonce;
     }
 
     public function getNonce(): string
     {
-        return $this->nonceSource->getNonce();
+        return $this->nonce->getNonce();
     }
 
     public function addNoncePolicy(): void
     {
-        $this->addPolicy('script-src', "'nonce-" . $this->nonceSource->getNonce() . "'");
+        $this->addPolicy('script-src', "'nonce-" . $this->nonce->getNonce() . "'");
     }
 
     public function addPolicy(string $directive, string $value): void
