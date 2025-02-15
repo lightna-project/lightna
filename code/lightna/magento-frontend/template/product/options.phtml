@@ -13,7 +13,7 @@ if (!$options->attributes) {
     <?php foreach ($options->attributes as $attribute) { ?>
         <div class="product-options options-<?= $attribute->code() ?>">
             <div class="product-options__label"><?= $attribute->label() ?>:</div>
-            <input type="hidden" autocomplete="off" id="option_<?= $attribute->code() ?>"
+            <input type="hidden" autocomplete="off" data-option-code="<?= $attribute->code() ?>"
                    name="super_attribute[<?= $attribute->id() ?>]"
                    value="<?= escape($options->getCurrentAttributeValue($attribute->code)) ?>">
             <?php foreach ($options->getAttributeOptions($attribute->code) as $option) { ?>
