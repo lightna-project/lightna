@@ -7,6 +7,7 @@ return [
         'pool' => ['vendor', 'module'],
 
         // List of enabled modules
+        // Use relative to the Lightna entry path to the module (not the name)
         'enabled' => [
             'lightna/webpack',
             'lightna/tailwind',
@@ -34,12 +35,18 @@ return [
     // Example: '..', '../magento
     'project_dir' => '****',
 
-    // Recommended: false
+    // Use fpc_compatible = false unless:
+    // 1) Lightna page is cached by FPC (Varnish, Fastly, Builtin) and it renders private blocks
+    // 2) Lightna Lane page is cached by FPC, and it renders private blocks
     'fpc_compatible' => false,
-    // Check documentation
+
+    // Use false unless you want to enable progressive rendering intentionally, read more in the documentation
     'progressive_rendering' => false,
+
     'maintenance' => [
+        // The directory where custom default.phtml maintenance page can be placed
         'dir' => 'maintenance',
+        // The $_SERVER variable name which is used to define custom maintenance page per website, for example [vary_value].phtml
         'vary_name' => 'MAGE_RUN_CODE',
     ],
     'router' => [

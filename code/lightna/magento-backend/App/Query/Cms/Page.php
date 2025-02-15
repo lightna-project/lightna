@@ -16,9 +16,7 @@ class Page extends ObjectA
 
     public function getByIdentifier(string $identifier): ?array
     {
-        $rows = $this->db->fetch($this->getByIdentifierSelect($identifier));
-
-        return end($rows);
+        return $this->db->fetchOne($this->getByIdentifierSelect($identifier));
     }
 
     protected function getByIdentifierSelect(string $identifier): Select

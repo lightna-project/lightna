@@ -20,6 +20,15 @@ abstract class Opcache extends ObjectA
         return require $this->dir . $this->getFileName($name);
     }
 
+    public function loadIfExists(string $name, mixed $defaultValue = null): mixed
+    {
+        try {
+            return $this->load($name);
+        } catch (Throwable $e) {
+            return $defaultValue;
+        }
+    }
+
     public function loadRevalidated(string $name): mixed
     {
         return opcache_load_revalidated_soft($this->dir . $this->getFileName($name));
