@@ -1,43 +1,49 @@
-import { $, $$ } from 'lightna/engine/lib/utils/dom';
+import { $ } from 'lightna/engine/lib/utils/dom';
 
 export class Facets {
     constructor() {
-        this.jsc = $('.cjs-facets');
-        this.bindEvents();
+        this.component = '.cjs-facets';
+        this.initializeEventListeners();
     }
 
-    bindEvents() {
-        $$('input[type=checkbox]', this.jsc).forEach((element) => {
-            element.addEventListener('change', () => {
+    initializeEventListeners() {
+        $(this.component)?.addEventListener('change', (event) => {
+            const element = event.target;
+            if (element.type === 'checkbox') {
                 this.onChange(element);
-            });
+            }
         });
     }
 
-    onChange(element) {
-        let query = this.getUpdatedQuery(element);
+    onChange(item) {
+        const query = this.getUpdatedQuery(item);
         this.applyQuery(query);
     }
 
-    getUpdatedQuery(element) {
-        let query = new URLSearchParams(location.search);
-        let qValue = query.get(element.name) ?? '';
-        qValue = qValue !== '' ? qValue.split('_') : [];
+    getUpdatedQuery(item) {
+        const query = new URLSearchParams(location.search);
+        let qValue = query.get(item.name) ?? '';
+        qValue = qValue ? qValue.split('_') : [];
 
-        element.checked ? qValue.push(element.value) : qValue.splice(qValue.indexOf(element.value), 1);
-        qValue.sort((a, b) => a - b);
+        if (item.checked) {
+            qValue.push(item.value);
+        } else {
+            qValue.splice(qValue.indexOf(item.value), 1);
+        }
+
+        qValue.sort((a, b) => a.localeCompare(b));
 
         if (qValue.length) {
-            query.set(element.name, qValue.join('_'));
+            query.set(item.name, qValue.join('_'));
         } else {
-            query.delete(element.name);
+            query.delete(item.name);
         }
 
         return query;
     }
 
     applyQuery(query) {
-        let search = query.toString();
+        const search = query.toString();
         if (search) {
             location.search = search;
         } else {
