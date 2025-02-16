@@ -42,6 +42,6 @@
     }
 
     .logo__image {
-        @apply md:max-w-[80px] lg:max-w-none;
+        @apply max-h-12 md:max-w-[80px] lg:max-w-none;
     }
 }
