@@ -1,0 +1,3 @@
+extend:
+  lightna/magento-frontend/common/MiniCart:
+    magento-common-mini-cart-extend: lightna/magento-demo/extend/MiniCartExtend

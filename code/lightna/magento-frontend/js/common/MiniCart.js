@@ -1,5 +1,6 @@
 import { Request } from 'lightna/engine/lib/Request';
 import { $ } from 'lightna/engine/lib/utils/dom';
+import { deepMerge } from 'lightna/engine/lib/utils/deepMerge';
 import { Blocks } from 'lightna/engine/lib/Blocks';
 import { PageMessage } from 'lightna/magento-frontend/common/PageMessage';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
@@ -8,7 +9,7 @@ export class MiniCart {
     blockId = 'minicart';
     removeFromCartUrl = '/checkout/sidebar/removeItem';
     minActionDuration = 200;
-    classes = {
+    static classes = {
         cartOpen: 'minicart-open',
         fade: 'fade-out',
     };
@@ -20,7 +21,12 @@ export class MiniCart {
         }
     };
 
-    constructor() {
+    constructor(overrides = {}) {
+        deepMerge(this, overrides);
+        if (overrides.classes) {
+            MiniCart.classes = deepMerge(MiniCart.classes, overrides.classes);
+        }
+        console.log('MiniCart classes:', MiniCart.classes);
         this.component = '.cjs-minicart';
         this.initializeEventListeners();
         this.initializeActions();
@@ -67,12 +73,12 @@ export class MiniCart {
 
         setTimeout(() => {
             PageMessage.clearAll();
-            document.body.classList.add(this.classes.cartOpen);
+            document.body.classList.add(MiniCart.classes.cartOpen);
         }, this.minActionDuration);
     }
 
     close() {
-        document.body.classList.remove(this.classes.cartOpen);
+        document.body.classList.remove(MiniCart.classes.cartOpen);
     }
 
     async removeProduct(trigger) {
@@ -98,7 +104,7 @@ export class MiniCart {
     fadeOutItem(itemId) {
         const removedItem = $(`[data-item-id="${itemId}"]`, $(this.component))?.closest('li');
         if (removedItem) {
-            removedItem.classList.add(this.classes.fade);
+            removedItem.classList.add(MiniCart.classes.fade);
         }
     }
 }
