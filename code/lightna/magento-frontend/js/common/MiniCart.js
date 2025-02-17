@@ -8,10 +8,11 @@ export class MiniCart {
     blockId = 'minicart';
     removeFromCartUrl = '/checkout/sidebar/removeItem';
     minActionDuration = 200;
-    classes = {
+    static classes = {
         cartOpen: 'minicart-open',
         fade: 'fade-out',
     };
+    component = '.cjs-minicart';
     actions = {
         click: {
             'open-minicart': [() => this.open()],
@@ -21,7 +22,11 @@ export class MiniCart {
     };
 
     constructor() {
-        this.component = '.cjs-minicart';
+        this.initialize();
+    }
+
+    initialize() {
+        console.log('MiniCart classes:', MiniCart.classes);
         this.initializeEventListeners();
         this.initializeActions();
     }
@@ -67,12 +72,12 @@ export class MiniCart {
 
         setTimeout(() => {
             PageMessage.clearAll();
-            document.body.classList.add(this.classes.cartOpen);
+            document.body.classList.add(MiniCart.classes.cartOpen);
         }, this.minActionDuration);
     }
 
     close() {
-        document.body.classList.remove(this.classes.cartOpen);
+        document.body.classList.remove(MiniCart.classes.cartOpen);
     }
 
     async removeProduct(trigger) {
@@ -98,7 +103,7 @@ export class MiniCart {
     fadeOutItem(itemId) {
         const removedItem = $(`[data-item-id="${itemId}"]`, $(this.component))?.closest('li');
         if (removedItem) {
-            removedItem.classList.add(this.classes.fade);
+            removedItem.classList.add(MiniCart.classes.fade);
         }
     }
 }
