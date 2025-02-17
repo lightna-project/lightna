@@ -6,8 +6,9 @@ namespace Lightna\Elasticsearch\App;
 
 use Exception;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Magento\App\Search\ClientInterface as SearchClientInterface;
 
-class Client extends ObjectA
+class Client extends ObjectA implements SearchClientInterface
 {
     static public float $timeSpent = 0;
 
@@ -20,9 +21,9 @@ class Client extends ObjectA
         $this->endpoint = 'http://' . $this->config['connection']['host'] . ':' . $this->config['connection']['port'];
     }
 
-    public function search(string $indexName, array $body): array
+    public function search(string $indexName, array $query): array
     {
-        return $this->request($this->getPrefix() . $indexName . '/document/_search', $body);
+        return $this->request($this->getPrefix() . $indexName . '/document/_search', $query);
     }
 
     public function getPrefix(): string

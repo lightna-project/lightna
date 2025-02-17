@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App;
 
+use Lightna\Elasticsearch\App\Client as ElasticClient;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Elasticsearch\App\Client as ElasticClient;
 use Lightna\Engine\Data\Request;
 use Lightna\Magento\App\Entity\Product as ProductEntity;
+use Lightna\Magento\App\Search\ClientInterface as SearchClientInterface;
 use Lightna\Magento\Data\Category;
 use Lightna\Magento\Data\Config;
 use Lightna\Magento\Data\Content\Category as CategoryContent;
@@ -17,19 +18,13 @@ use Lightna\Magento\Data\Session;
 class Search extends ObjectA
 {
     protected Config $config;
-    protected ElasticClient $client;
+    protected SearchClientInterface $client;
     protected Context $context;
     protected Category $category;
     protected Session $session;
     protected CategoryContent $categoryContent;
     protected Request $request;
     protected int $pageSize;
-
-    /** @noinspection PhpUnused */
-    protected function definePageSize(): void
-    {
-        $this->pageSize = $this->config->product->listing->defaultPageSize;
-    }
 
     public function search(): array
     {
@@ -39,6 +34,18 @@ class Search extends ObjectA
         );
 
         return $this->parseResult($result);
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineClient(): void
+    {
+        $this->client = getobj(ElasticClient::class);
+    }
+
+    /** @noinspection PhpUnused */
+    protected function definePageSize(): void
+    {
+        $this->pageSize = $this->config->product->listing->defaultPageSize;
     }
 
     protected function getIndexName(string $entityName): string

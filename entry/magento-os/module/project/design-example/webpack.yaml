@@ -1,0 +1,3 @@
+extend:
+  lightna/magento-frontend/common/AddToCart:
+    extend-example: project/design-example/extend/AddToCart
