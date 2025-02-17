@@ -5,12 +5,9 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Index\Changelog;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Index\EntityLink;
 
 class Collect extends ObjectA
 {
-    protected EntityLink $entityLink;
-
     public function ids(array $changelog, string $column, string $type = 'int'): array
     {
         $ids = [];
@@ -44,14 +41,6 @@ class Collect extends ObjectA
         $new !== null && $ids[$new] = (string)$new;
 
         return $ids;
-    }
-
-    public function entityIds(string $table, array $changelog): array
-    {
-        $column = $this->entityLink->getColumn($table);
-        $ids = $this->ids($changelog, $column);
-
-        return $this->entityLink->getIds($table, $ids);
     }
 
     public function idsWithIgnore(array $changelog, string $column, array $ignore, string $type = 'int'): array

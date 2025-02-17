@@ -3,9 +3,10 @@
     "description": "Lightna Engine module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.21",
+    "version": "1.0.28",
     "require": {
         "php": "^8.1",
+        "ext-ctype": "*",
         "ext-yaml": "*",
         "ext-pdo": "*",
         "laminas/laminas-db": "^2.20"

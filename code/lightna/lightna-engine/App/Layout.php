@@ -239,7 +239,7 @@ class Layout extends ObjectA
             if (is_a($type, EntityData::class, true)) {
                 $vars[$name] = getobj($this->entities[$this->entityType]['data']);
             }
-            // Other variables will be defined in \Lightna\Engine\App\Template::getTemplateVars
+            // Other variables will be defined in \Lightna\Engine\App\Templating::getTemplateVars
         }
 
         return $vars;
