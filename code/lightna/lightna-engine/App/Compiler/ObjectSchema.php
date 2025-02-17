@@ -99,10 +99,18 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
 
     protected function isPropertyInjectable(LightnaReflectionProperty $property): bool
     {
-        return $property->type
+        $injectable = $property->type
             && ctype_upper($property->type[0])
             && $property->isRequired
             && !$property->isInterface;
+
+        if ($injectable && !class_exists($property->type)) {
+            throw new Exception(
+                "Property type \"{$property->type}\" for {$property->class}::{$property->name} not found.",
+            );
+        }
+
+        return $injectable;
     }
 
     protected function parseAppConfigPath(LightnaReflectionProperty $property): ?string

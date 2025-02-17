@@ -3,8 +3,8 @@
     "description": "Lightna Magento Frontend Lane module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.16",
+    "version": "1.0.21",
     "require": {
-        "lightna/magento-frontend": "^1.0.16"
+        "lightna/magento-frontend": "^1.0.21"
     }
 }

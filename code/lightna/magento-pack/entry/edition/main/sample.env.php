@@ -6,9 +6,8 @@ return [
         'bypass' => [
             'rules' => [
                 'url_starts_with' => [
-                    // Specify admin url here
-                    // Example: 'admin_12345(/|$)'
-                    '****',
+                    // Admin URL prefix
+                    'admin(/|$)',
                 ],
             ],
         ],

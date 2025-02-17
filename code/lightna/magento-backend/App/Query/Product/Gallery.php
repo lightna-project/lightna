@@ -13,6 +13,9 @@ class Gallery extends ObjectA
 {
     protected Database $db;
     protected MagentoConfig $magentoConfig;
+    /** @AppConfig(backend:indexer/product/image) */
+    protected array $imageConfig;
+
     protected string $cryptKey;
     protected string $imageQuality;
     protected int $galleryAttributeId;
@@ -80,9 +83,9 @@ class Gallery extends ObjectA
     public function getCompressedTypes(string $image): array
     {
         return [
-            'tile' => $this->getHash(285, 354) . $image,
-            'preview' => $this->getHash(535, 664) . $image,
-            'thumbnail' => $this->getHash(100, 124) . $image,
+            'tile' => $this->getHash($this->imageConfig['tile']['width'], $this->imageConfig['tile']['height']) . $image,
+            'thumbnail' => $this->getHash($this->imageConfig['thumbnail']['width'], $this->imageConfig['thumbnail']['height']) . $image,
+            'preview' => $this->getHash($this->imageConfig['preview']['width'], $this->imageConfig['preview']['height']) . $image,
         ];
     }
 
