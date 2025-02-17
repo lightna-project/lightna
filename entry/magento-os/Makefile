@@ -6,7 +6,7 @@ install:
 
 self-update:
 	@echo "Checking for updates..."
-	@if composer update lightna/magento-pack --with-all-dependencies --dry-run 2>&1 | grep -q " lightna/magento-pack"; then \
+	@if composer update lightna/magento-pack --with-all-dependencies --dry-run --ignore-platform-reqs 2>&1 | grep -q " lightna/magento-pack"; then \
 		echo "Update found. Making an update..."; \
 		composer update --with-all-dependencies && \
 		cp -r vendor/lightna/magento-pack/entry/. .; \

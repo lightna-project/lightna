@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\App\Index\Changelog\Collector;
 
-use Lightna\Engine\App\Index\Changelog\Collect;
 use Lightna\Engine\App\Index\Changelog\CollectorInterface;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Magento\App\Index\Changelog\Collect;
 
 class Product extends ObjectA implements CollectorInterface
 {

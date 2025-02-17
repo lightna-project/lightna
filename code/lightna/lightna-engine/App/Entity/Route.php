@@ -40,22 +40,22 @@ class Route extends EntityA
         $this->entityRoute->flush();
     }
 
-    protected function getEntityUrls(string $entityName, int $id): array|string
+    protected function getEntityUrls(string $entityName, int|string $id): array|string
     {
         return $this->entityRoute->get($entityName . '.' . $id);
     }
 
-    protected function setEntityUrls(string $entityName, int $id, array $urls): void
+    protected function setEntityUrls(string $entityName, int|string $id, array $urls): void
     {
         $this->entityRoute->set($entityName . '.' . $id, $urls);
     }
 
-    protected function unsetEntityUrls(string $entityName, int $id): void
+    protected function unsetEntityUrls(string $entityName, int|string $id): void
     {
         $this->entityRoute->unset($entityName . '.' . $id);
     }
 
-    public function setEntityRoutes(string $entityName, int $id, array $routes): void
+    public function setEntityRoutes(string $entityName, int|string $id, array $routes): void
     {
         $this->unsetEntityUrls($entityName, $id);
 
@@ -67,7 +67,7 @@ class Route extends EntityA
         $this->setEntityUrls($entityName, $id, $urls);
     }
 
-    public function unsetEntityRoutes(string $entityName, int $id): void
+    public function unsetEntityRoutes(string $entityName, int|string $id): void
     {
         if (($urls = $this->getEntityUrls($entityName, $id)) === "") {
             return;

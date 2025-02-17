@@ -9,7 +9,6 @@ use Lightna\Engine\App\Entity\State;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Index\Queue\Handler as QueueHandler;
-use Lightna\Engine\App\Project\Database;
 use Lightna\Engine\App\Query\Index\Queue as QueueQuery;
 use Lightna\Engine\App\State\Index as IndexState;
 
@@ -32,7 +31,7 @@ class Indexer extends ObjectA
     protected Context $context;
     protected ChangelogHandler $changelogHandler;
     protected QueueHandler $queueHandler;
-    protected Database $db;
+    protected Lock $lock;
     protected State $state;
     protected QueueQuery $queueQuery;
 
@@ -122,14 +121,14 @@ class Indexer extends ObjectA
 
     protected function lockQueue(): void
     {
-        if (!$this->db->getLock(static::QUEUE_LOCK)) {
+        if (!$this->lock->get(static::QUEUE_LOCK)) {
             throw new UserException('Queue is already running or locked by another index command');
         }
     }
 
     protected function unlockQueue(): void
     {
-        $this->db->releaseLock(static::QUEUE_LOCK);
+        $this->lock->release(static::QUEUE_LOCK);
     }
 
     public function blockQueue(int $timeout = 10): void
@@ -143,7 +142,7 @@ class Indexer extends ObjectA
     {
         $this->waitQueueLock($timeout);
         $this->setQueueStopFlag(false);
-        if (!$this->db->getLock(static::QUEUE_LOCK)) {
+        if (!$this->lock->get(static::QUEUE_LOCK)) {
             throw new UserException('Queue stop timeout "' . $timeout . '" exceeded, try again.');
         }
     }
@@ -161,7 +160,7 @@ class Indexer extends ObjectA
         $printedAt = 0;
 
         $this->setQueueStopFlag(true);
-        while ($mcsLeft > 0 && !$this->db->getLock(static::QUEUE_LOCK)) {
+        while ($mcsLeft > 0 && !$this->lock->get(static::QUEUE_LOCK)) {
             usleep($mcsInterval);
             $mcsLeft -= $mcsInterval;
             $waiting = time() - $start;

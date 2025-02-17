@@ -7,5 +7,6 @@
 ?>
 <!DOCTYPE html>
 <html lang="<?= $config->locale->lang() ?>"<?= $block->attributes() ?>>
-<?= block() ?>
+<?php block('head') ?>
+<?php block('body') ?>
 </html>

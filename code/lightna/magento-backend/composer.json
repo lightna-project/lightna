@@ -3,9 +3,9 @@
     "description": "Lightna Magento Backend module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.21",
+    "version": "1.0.28",
     "require": {
         "ext-simplexml": "*",
-        "lightna/engine": "^1.0.21"
+        "lightna/engine": "^1.0.28"
     }
 }

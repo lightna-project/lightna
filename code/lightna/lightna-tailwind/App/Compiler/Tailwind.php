@@ -56,6 +56,7 @@ class Tailwind extends CompilerA
             );
         }
 
+        $this->modulesConfig['entry'] ??= [];
         ArrayDirectives::apply($this->modulesConfig);
 
         // Save result to validate config overrides

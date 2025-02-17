@@ -69,11 +69,15 @@ class Compiler extends ObjectA
             rmdir($this->getAssetOrigBakDir());
         }
 
-        rename($this->getAssetOrigDir(), $this->getAssetOrigBakDir());
+        if (is_dir($this->getAssetOrigDir())) {
+            rename($this->getAssetOrigDir(), $this->getAssetOrigBakDir());
+        }
         rename($this->getAssetBuildingDir(), $this->getAssetOrigDir());
 
-        rcleandir($this->getAssetOrigBakDir());
-        rmdir($this->getAssetOrigBakDir());
+        if (is_dir($this->getAssetOrigBakDir())) {
+            rcleandir($this->getAssetOrigBakDir());
+            rmdir($this->getAssetOrigBakDir());
+        }
     }
 
     public function getAssetDir(): string

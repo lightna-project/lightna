@@ -38,6 +38,7 @@ class Webpack extends CompilerA
             );
         }
 
+        $this->modulesConfig['entry'] ??= [];
         ArrayDirectives::apply($this->modulesConfig);
 
         // Save result to validate config overrides
@@ -106,10 +107,9 @@ class Webpack extends CompilerA
 
     protected function makeEntriesJs(): void
     {
-        $entries = $this->modulesConfig['entry'] ?? [];
         $allImports = [];
 
-        foreach ($entries as $name => $types) {
+        foreach ($this->modulesConfig['entry'] as $name => $types) {
             $components = $types['component'] ?? [];
             unset($types['component']);
 
@@ -189,9 +189,8 @@ class Webpack extends CompilerA
 
     protected function getConfigJsEntries(): string
     {
-        $entries = $this->modulesConfig['entry'] ?? [];
         $js = '';
-        foreach ($entries as $name => $entry) {
+        foreach ($this->modulesConfig['entry'] as $name => $entry) {
             $js .= "config.entry[" . json_pretty($name) . "]" .
                 " = path.resolve(__dirname, " . json_pretty('./' . $name . '.js') . ");\n";
         }

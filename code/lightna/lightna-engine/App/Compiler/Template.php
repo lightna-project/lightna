@@ -90,9 +90,7 @@ class Template extends CompilerA
 
     protected function validateType(string $type, string $template): void
     {
-        try {
-            class_exists($type);
-        } catch (Exception $e) {
+        if (!class_exists($type)) {
             throw new Exception('Type "' . $type . '" not found in template "' . $template);
         }
         if (!str_contains($type, '\\Data\\')) {

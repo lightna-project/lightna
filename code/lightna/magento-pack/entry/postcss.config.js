@@ -3,33 +3,29 @@ const fs = require('fs');
 /**
  * Temporary `resolve` fix
  */
-function postCssImportResolve(id, defaultResolve) {
-    try {
-        return defaultResolve.resolve(id);
-    } catch (e) {
-        if (id.startsWith('~/')) {
-            const basedir = process.cwd() + '/';
-            const filePath = id.slice(2);
-            let checklist = [
-                basedir + filePath,
-                basedir + filePath + '.css',
-                basedir + 'node_modules/' + filePath,
-                basedir + 'node_modules/' + filePath + '.css',
-            ];
+function postCssImportResolve(id) {
+    if (!id.startsWith('~/')) {
+        throw new Error('Can\'t handle import path "' + id + '", it should start with "~/".');
+    }
 
-            let resolvedId;
-            checklist.forEach((file) => {
-                fs.existsSync(file) && (resolvedId = file)
-            });
+    const basedir = process.cwd() + '/';
+    const filePath = id.slice(2);
+    let checklist = [
+        basedir + filePath,
+        basedir + filePath + '.css',
+        basedir + 'node_modules/' + filePath,
+        basedir + 'node_modules/' + filePath + '.css',
+    ];
 
-            if (resolvedId) {
-                return resolvedId;
-            } else {
-                throw e;
-            }
-        }
+    let resolvedId;
+    checklist.forEach((file) => {
+        fs.existsSync(file) && (resolvedId = file)
+    });
 
-        throw e;
+    if (resolvedId) {
+        return resolvedId;
+    } else {
+        throw new Error('Import "' + id + '" not found.');
     }
 }
 
