@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider;
+namespace Lightna\Engine\App\HeaderPool;
 
-interface HeaderProviderInterface
+interface HeaderInterface
 {
     /**
      * Whether the header should be attached to the response

@@ -2,39 +2,26 @@
 
 namespace Lightna\Engine\App;
 
-use Lightna\Engine\App\HeaderProvider\HeaderProviderInterface;
+use Lightna\Engine\App\HeaderPool\HeaderInterface;
 
-class HeaderManager implements ObjectManagerIgnore
+class HeaderManager extends ObjectA
 {
+    protected HeaderPool $headerPool;
 
-    /**
-     * @var \Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface[]
-     */
-    private array $headerProviders;
-
-    /**
-     * @param HeaderProviderInterface[] $headerProviderList
-     *
-     * @throws \Exception
-     */
-    public function __construct(array $headerProviderList = [])
+    public function getHeaders(): array
     {
-        foreach ($headerProviderList as $header) {
-            if (!($header instanceof HeaderProviderInterface)) {
-                throw new \RuntimeException('The header provider is invalid. Verify and try again.');
-            }
-        }
-        $this->headerProviders = $headerProviderList;
-
-
+        return $this->headerPool->getHeaders();
     }
 
-    public function sendHeaders(): void
+    public function isValidHeader($header): bool
     {
-        foreach ($this->headerProviders as $provider) {
-            if ($provider->canApply()) {
-                header($provider->getName() . ': ' . $provider->getValue());
-            }
+        return $header instanceof HeaderInterface;
+    }
+
+    public function sendHeader(HeaderInterface $header): void
+    {
+        if ($header->canApply()) {
+            header($header->getName() . ': ' . $header->getValue());
         }
     }
 }

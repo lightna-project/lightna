@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider;
+namespace Lightna\Engine\App\HeaderPool;
 
-use Lightna\Engine\App\ObjectManagerIgnore;
+use Lightna\Engine\App\ObjectA;
 
 /**
  * Class to be used for setting headers with static values
  */
-abstract class AbstractHeaderProvider implements HeaderProviderInterface, ObjectManagerIgnore
+abstract class AbstractHeader extends ObjectA implements HeaderInterface
 {
     protected string $headerName = '';
     protected string $headerValue = '';

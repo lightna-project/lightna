@@ -1,40 +1,44 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider\Dynamic;
+namespace Lightna\Engine\App\HeaderPool\Dynamic;
 
 use Lightna\Engine\App\ObjectA;
 
-class ContentSecurityPolicySource extends ObjectA implements SourceInterface
+class CspSource extends ObjectA implements SourceInterface
 {
-    private Csp\NonceInterface $nonce;
-    private array $policies = [];
-    private bool $reportOnly = false;
+    protected CspSource\Nonce $nonce;
 
-    public function setNonceSource(Csp\NonceInterface $nonce): void
-    {
-        $this->nonce = $nonce;
-    }
+    private array $policies = [];
+
+    private bool $reportOnly = false;
 
     public function getNonce(): string
     {
         return $this->nonce->getNonce();
     }
 
-    public function addNoncePolicy(): void
+    public function addNoncePolicy(): static
     {
         $this->addPolicy('script-src', "'nonce-" . $this->nonce->getNonce() . "'");
+        $this->addPolicy('style-src', "'nonce-" . $this->nonce->getNonce() . "'");
+
+        return $this;
     }
 
-    public function addPolicy(string $directive, string $value): void
+    public function addPolicy(string $directive, string $value): static
     {
         $this->policies[$directive][] = $value;
         $tmp = array_unique($this->policies[$directive]);
         $this->policies[$directive] = $tmp;
+
+        return $this;
     }
 
-    public function setReportOnly($value): void
+    public function setReportOnly($value): static
     {
         $this->reportOnly = $value;
+
+        return $this;
     }
 
     public function getName(): string

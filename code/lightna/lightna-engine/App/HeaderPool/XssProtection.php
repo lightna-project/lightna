@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider;
+namespace Lightna\Engine\App\HeaderPool;
 
 /**
  * Adds an X-XSS-Protection header to HTTP responses to safeguard against cross-site scripting.
  */
-class XssProtection extends AbstractHeaderProvider
+class XssProtection extends AbstractHeader
 {
     protected string $headerName = 'X-XSS-Protection';
 
@@ -20,14 +20,14 @@ class XssProtection extends AbstractHeaderProvider
 
     /**
      * Header value. Must be disabled for IE 8.
-     *
-     * @return string
      */
-    public function getValue(): string
+    protected function init(array $data = []): void
     {
-        return !str_contains($this->getHttpUserAgent(), self::IE_8_USER_AGENT)
+        $this->headerValue = !str_contains($this->getHttpUserAgent(), self::IE_8_USER_AGENT)
             ? self::HEADER_ENABLED
             : self::HEADER_DISABLED;
+
+        parent::init($data);
     }
 
     protected function getHttpUserAgent()

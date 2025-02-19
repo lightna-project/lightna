@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderProvider\Dynamic\Csp;
+namespace Lightna\Engine\App\HeaderPool\Dynamic\CspSource;
 
 interface NonceInterface
 {

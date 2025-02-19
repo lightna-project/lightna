@@ -11,15 +11,23 @@ use Lightna\Engine\App\Router;
 use Lightna\Engine\App\Router\BypassedException;
 use Lightna\Engine\App\Router\NoRouteException;
 use Lightna\Engine\App\Router\RedirectedException;
+use Lightna\Engine\App\HeaderManager;
 use Throwable;
 
 class App extends ObjectA
 {
     protected Router $router;
+
     protected Context $context;
+
+    protected HeaderManager $headerManager;
+
     protected ?array $action;
+
     protected bool $noRoute = false;
+
     protected bool $redirected = false;
+
     /** @AppConfig(router/action) */
     protected array $actions;
 
@@ -81,32 +89,13 @@ class App extends ObjectA
 
     protected function sendHeaders(): void
     {
-        $cspHeaderProvider = new \Lightna\Engine\App\HeaderProvider\ContentSecurityPolicy();
-        $cspHeaderProvider->addPolicy('default-src', "'self'");
-        $cspHeaderProvider->addPolicy('script-src', "'self'");
-        $cspHeaderProvider->addPolicy('style-src', "'self'");
-        $cspHeaderProvider->addPolicy('img-src', "'self'");
-        $cspHeaderProvider->addPolicy('font-src', "'self'");
-        $cspHeaderProvider->addPolicy('connect-src', "'self'");
-        $cspHeaderProvider->addPolicy('frame-src', "'self'");
-        $cspHeaderProvider->addPolicy('form-action', "'self'");
-        $cspHeaderProvider->addPolicy('base-uri', "'self'");
-        $cspHeaderProvider->addPolicy('frame-ancestors', "'self'");
-        $cspHeaderProvider->addPolicy('media-src', "'self'");
-        $cspHeaderProvider->addPolicy('manifest-src', "'self'");
-        $cspHeaderProvider->addPolicy('child-src', "'self'");
-        $cspHeaderProvider->addPolicy('object-src', "'self'");
-        $cspHeaderProvider->addNoncePolicy();
+        foreach ($this->headerManager->getHeaders() as $header) {
+            if (!$this->headerManager->isValidHeader($header)) {
+                throw new \RuntimeException('Invalid header');
+            }
 
-        $headerProviders = [
-            $cspHeaderProvider,
-            new \Lightna\Engine\App\HeaderProvider\CacheControl(),
-            new \Lightna\Engine\App\HeaderProvider\XFrameOptions(),
-            new \Lightna\Engine\App\HeaderProvider\XContentTypeOptions(),
-            new \Lightna\Engine\App\HeaderProvider\XssProtection(),
-        ];
-        $headerManager = new \Lightna\Engine\App\HeaderManager($headerProviders);
-        $headerManager->sendHeaders();
+            $this->headerManager->sendHeader($header);
+        }
     }
 
     protected function processAction(): void
