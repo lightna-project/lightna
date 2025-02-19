@@ -19,8 +19,8 @@ class CspSource extends ObjectA implements SourceInterface
 
     public function addNoncePolicy(): static
     {
-        $this->addPolicy('script-src', "'nonce-" . $this->nonce->getNonce() . "'");
-        $this->addPolicy('style-src', "'nonce-" . $this->nonce->getNonce() . "'");
+        $this->addPolicy('script-src', "'self' 'nonce-" . $this->nonce->getNonce() . "'");
+        $this->addPolicy('style-src', "'self' 'nonce-" . $this->nonce->getNonce() . "'");
 
         return $this;
     }
