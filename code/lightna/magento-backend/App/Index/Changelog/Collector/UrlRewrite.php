@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Index\Changelog\Collector;
+namespace Lightna\Magento\Backend\App\Index\Changelog\Collector;
 
 use Lightna\Engine\App\Index\Changelog\Collect;
 use Lightna\Engine\App\Index\Changelog\CollectorInterface;

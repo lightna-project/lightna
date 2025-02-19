@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Product;
+namespace Lightna\Magento\Backend\App\Query\Product;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Query\Config as MagentoConfig;
+use Lightna\Magento\Backend\App\Query\Config as MagentoConfig;
 
 class Gallery extends ObjectA
 {

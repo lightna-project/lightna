@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App;
+namespace Lightna\Magento\Backend\App;
 
 use Lightna\Elasticsearch\App\Client as ElasticClient;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\Data\Request;
-use Lightna\Magento\App\Entity\Product as ProductEntity;
-use Lightna\Magento\App\Search\ClientInterface as SearchClientInterface;
-use Lightna\Magento\Data\Category;
-use Lightna\Magento\Data\Config;
-use Lightna\Magento\Data\Content\Category as CategoryContent;
-use Lightna\Magento\Data\Session;
+use Lightna\Magento\Backend\App\Entity\Product as ProductEntity;
+use Lightna\Magento\Backend\App\Search\ClientInterface as SearchClientInterface;
+use Lightna\Magento\Backend\Data\Category;
+use Lightna\Magento\Backend\Data\Config;
+use Lightna\Magento\Backend\Data\Content\Category as CategoryContent;
+use Lightna\Magento\Backend\Data\Session;
 
 class Search extends ObjectA
 {

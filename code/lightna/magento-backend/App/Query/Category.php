@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query;
+namespace Lightna\Magento\Backend\App\Query;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Query\Category\Eav;
+use Lightna\Magento\Backend\App\Query\Category\Eav;
 
 class Category extends ObjectA
 {

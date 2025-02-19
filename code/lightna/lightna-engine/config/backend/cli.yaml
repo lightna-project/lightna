@@ -17,12 +17,13 @@ cli:
     index.update.entity: Lightna\Engine\App\Console\Index\Update\Entity
     index.update.storage: Lightna\Engine\App\Console\Index\Update\Storage
     index.version.bind: Lightna\Engine\App\Console\Index\Version\Bind
-    index.version.up: Lightna\Engine\App\Console\Index\Version\Up
     index.version.down: Lightna\Engine\App\Console\Index\Version\Down
+    index.version.up: Lightna\Engine\App\Console\Index\Version\Up
     opcache.slap: Lightna\Engine\App\Console\Opcache\Slap
-    update: Lightna\Engine\App\Console\Update
-  update:
-    - Lightna\Engine\App\Update\Schema\Index\Changelog
-    - Lightna\Engine\App\Update\Schema\Index\Triggers
-    - Lightna\Engine\App\Update\Schema\Index\Queue
-    - Lightna\Engine\App\Update\Schema\Storage\Database
+    schema.update: Lightna\Engine\App\Console\Schema\Update
+  schema:
+    update:
+      - Lightna\Engine\App\Schema\Index\Changelog
+      - Lightna\Engine\App\Schema\Index\Triggers
+      - Lightna\Engine\App\Schema\Index\Queue
+      - Lightna\Engine\App\Schema\Storage\Database

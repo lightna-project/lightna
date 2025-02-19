@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index\Provider\Content;
+namespace Lightna\Magento\Backend\Index\Provider\Content;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Index\DataProvider\Cms\Block as CmsBlockProvider;
-use Lightna\Magento\App\Query\Product\Eav;
+use Lightna\Magento\Backend\App\Index\DataProvider\Cms\Block as CmsBlockProvider;
+use Lightna\Magento\Backend\App\Query\Product\Eav;
 
 class Product extends ObjectA
 {

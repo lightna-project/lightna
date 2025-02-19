@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query;
+namespace Lightna\Magento\Backend\App\Query;
 
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;

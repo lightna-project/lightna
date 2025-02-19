@@ -60,8 +60,8 @@ _build.compile.direct:
 	./cli build.compile --direct
 	./cli config.apply
 
-update:
-	./cli update
+schema.update:
+	./cli schema.update
 
 config.apply:
 	LIGHTNA_EDITION=main ./cli config.apply

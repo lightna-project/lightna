@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product;
+namespace Lightna\Magento\Backend\Data\Product;
 
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\Request;
-use Lightna\Magento\Data\Product\Options\Attribute;
-use Lightna\Magento\Data\Product\Options\Option;
+use Lightna\Magento\Backend\Data\Product\Options\Attribute;
+use Lightna\Magento\Backend\Data\Product\Options\Option;
 
 /**
  * @property Attribute[] $attributes

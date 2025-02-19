@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Update\Schema\Storage;
+namespace Lightna\Engine\App\Schema\Storage;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\Database\Client as StorageDatabase;

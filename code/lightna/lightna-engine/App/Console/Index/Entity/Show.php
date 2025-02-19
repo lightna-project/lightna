@@ -31,7 +31,7 @@ class Show extends CommandA
             throw new UserException('Class for entity "' . $entity . '" not defined');
         }
 
-        if (!$id = $this->getArg(2)) {
+        if (($id = $this->getArg(2)) === null) {
             throw new UserException('Specify entity ID');
         }
 

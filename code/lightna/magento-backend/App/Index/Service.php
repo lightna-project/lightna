@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Index;
+namespace Lightna\Magento\Backend\App\Index;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\Update\Schema\Index\Triggers;
-use Lightna\Magento\App\Query\Index\Price;
+use Lightna\Engine\App\Schema\Index\Triggers;
+use Lightna\Magento\Backend\App\Query\Index\Price;
 
 class Service extends ObjectA
 {

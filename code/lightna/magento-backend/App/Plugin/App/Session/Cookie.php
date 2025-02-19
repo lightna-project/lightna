@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Plugin\App\Session;
+namespace Lightna\Magento\Backend\App\Plugin\App\Session;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\Data\Config;
+use Lightna\Magento\Backend\Data\Config;
 
 class Cookie extends ObjectA
 {

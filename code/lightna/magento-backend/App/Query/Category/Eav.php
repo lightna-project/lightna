@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Category;
+namespace Lightna\Magento\Backend\App\Query\Category;
 
-use Lightna\Magento\App\Query\EavAbstract;
+use Lightna\Magento\Backend\App\Query\EavAbstract;
 
 class Eav extends EavAbstract
 {

@@ -10,7 +10,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Update;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Engine\App\Update\Schema\Index\Queue as Schema;
+use Lightna\Engine\App\Schema\Index\Queue as Schema;
 
 class Queue extends ObjectA
 {
@@ -120,6 +120,10 @@ class Queue extends ObjectA
 
     public function reset(): void
     {
+        if (!$this->db->isUsed()) {
+            return;
+        }
+
         $this->db->query('truncate table ' . $this->db->quoteIdentifier(Schema::TABLE_NAME));
     }
 

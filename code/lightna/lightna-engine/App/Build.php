@@ -90,7 +90,7 @@ class Build extends Opcache
         foreach ($overrides as $override) {
             $msg .= "\n$t" . $column('Config Key: ') . $override['key'] . "\n";
             $msg .= $t . $column('Previous Value: ') . $override['prev'] . "\n";
-            $msg .= $t . $column('Current Value: ') . $override['curr'] . "\n";
+            $msg .= $t . $column('New Value: ') . $override['curr'] . "\n";
         }
 
         $msg .= cli_warning("\n{$t}This message is shown only in DEV MODE and is intended to prevent accidental configuration overrides due to copy-pasting.\n");

@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data;
+namespace Lightna\Magento\Backend\Data;
 
 use Lightna\Engine\App\Context\Entity\Loader as ContextEntityLoader;
 use Lightna\Engine\Data\EntityData;
 
 /**
- * @property-read string contentHeading
- * @property-read string content
- * @method string contentHeading
- * @method string content
+ * @method string contentHeading(string $escapeMethod = null)
+ * @method string content(string $escapeMethod = null)
  */
 class Cms extends EntityData
 {
+    public string $contentHeading;
+    public string $content;
+
     protected ContextEntityLoader $contextEntityLoader;
 
     protected function init(array $data = []): void

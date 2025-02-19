@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data;
+namespace Lightna\Magento\Backend\Data;
 
-use Lightna\Magento\Data\Session\Cart;
-use Lightna\Magento\Data\Session\Customer;
+use Lightna\Magento\Backend\Data\Session\Cart;
+use Lightna\Magento\Backend\Data\Session\Customer;
 
 class Session extends \Lightna\Session\Data\Session
 {

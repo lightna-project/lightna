@@ -34,7 +34,7 @@ router:
   routes:
     lightna/block: block
   bypass:
-    rules:
+    rule:
       # Regular expressions for URL path, URL path excludes "/" at the beginning
       # Expression is performed after prepending "^" to avoid parsing a whole URL path
       url_starts_with: [ ]

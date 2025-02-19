@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Plugin;
+namespace Lightna\Magento\Backend\App\Plugin;
 
 use Closure;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\Data\Config;
+use Lightna\Magento\Backend\Data\Config;
 
 class App extends ObjectA
 {

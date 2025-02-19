@@ -20,4 +20,18 @@ return [
     'asset_dir' => '../../project/magento-os/pub/static/lightna',
     'doc_dir' => '../../project/magento-os/pub',
     'project_dir' => '../../project/magento-os',
+    'entity' => [
+//        'category' => [
+//            'index' => null,
+//        ],
+//        'content_category' => [
+//            'index' => null,
+//        ],
+//        'cms' => [
+//            'index' => null,
+//        ],
+//        'custom_redirect' => [
+//            'index' => null,
+//        ],
+    ],
 ];

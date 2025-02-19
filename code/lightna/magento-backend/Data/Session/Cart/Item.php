@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Session\Cart;
+namespace Lightna\Magento\Backend\Data\Session\Cart;
 
 use Lightna\Engine\Data\DataA;
 

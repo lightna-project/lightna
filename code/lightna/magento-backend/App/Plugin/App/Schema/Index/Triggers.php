@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Plugin\App\Update\Schema\Index;
+namespace Lightna\Magento\Backend\App\Plugin\App\Schema\Index;
 
 use Closure;
 use Lightna\Engine\App\ObjectA;

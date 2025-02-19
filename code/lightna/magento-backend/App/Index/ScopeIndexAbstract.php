@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Index;
+namespace Lightna\Magento\Backend\App\Index;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Context;

@@ -3,12 +3,17 @@
     "description": "Lightna Engine module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.28",
+    "version": "1.0.32",
     "require": {
         "php": "^8.1",
         "ext-ctype": "*",
         "ext-yaml": "*",
         "ext-pdo": "*",
         "laminas/laminas-db": "^2.20"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lightna\\Engine\\": ""
+        }
     }
 }

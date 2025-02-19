@@ -99,13 +99,13 @@ class Router extends ObjectA
      */
     protected function processNoRouteRule(): void
     {
-        $rule = $this->bypass['rules']['no_route'] ?? '';
+        $rule = $this->bypass['rule']['no_route'] ?? '';
         if ($rule == 404) {
             throw new NoRouteException();
         } elseif ($rule === 'bypass') {
             $this->bypass();
         } else {
-            throw new Exception('Unknown rule for router.bypass.rules.no_route = "' . $rule . '"');
+            throw new Exception('Unknown rule for router.bypass.rule.no_route = "' . $rule . '"');
         }
     }
 
@@ -113,7 +113,7 @@ class Router extends ObjectA
     {
         $bypass =
             ($this->bypass['file'] ?? false)
-            && ($bypassUrls = $this->bypass['rules']['url_starts_with'] ?? false)
+            && ($bypassUrls = $this->bypass['rule']['url_starts_with'] ?? false)
             && is_array($bypassUrls) && count($bypassUrls)
             && preg_match('~^(' . implode('|', $bypassUrls) . ')~', $this->request->uriPath);
 

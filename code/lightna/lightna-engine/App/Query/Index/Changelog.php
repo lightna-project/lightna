@@ -9,7 +9,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Update;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Engine\App\Update\Schema\Index\Changelog as Schema;
+use Lightna\Engine\App\Schema\Index\Changelog as Schema;
 
 class Changelog extends ObjectA
 {
@@ -119,6 +119,10 @@ class Changelog extends ObjectA
 
     public function reset(): void
     {
+        if (!$this->db->isUsed()) {
+            return;
+        }
+
         $this->db->query('truncate table ' . $this->db->quoteIdentifier(Schema::TABLE_NAME));
     }
 

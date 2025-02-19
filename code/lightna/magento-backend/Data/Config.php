@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data;
+namespace Lightna\Magento\Backend\Data;
 
 use Exception;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\Data\DataA;
-use Lightna\Magento\Data\Config\Currency;
-use Lightna\Magento\Data\Config\Favicon;
-use Lightna\Magento\Data\Config\GoogleAnalytics;
-use Lightna\Magento\Data\Config\Logo;
-use Lightna\Magento\Data\Config\Product;
-use Lightna\Magento\Data\Config\Session;
+use Lightna\Magento\Backend\Data\Config\Currency;
+use Lightna\Magento\Backend\Data\Config\Favicon;
+use Lightna\Magento\Backend\Data\Config\GoogleAnalytics;
+use Lightna\Magento\Backend\Data\Config\Logo;
+use Lightna\Magento\Backend\Data\Config\Product;
+use Lightna\Magento\Backend\Data\Config\Session;
 
 /**
  * @method string copyright(string $escapeMethod = null)

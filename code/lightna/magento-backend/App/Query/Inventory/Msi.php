@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Inventory;
+namespace Lightna\Magento\Backend\App\Query\Inventory;
 
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Query\Store;
+use Lightna\Magento\Backend\App\Query\Store;
 
 class Msi extends ObjectA
 {

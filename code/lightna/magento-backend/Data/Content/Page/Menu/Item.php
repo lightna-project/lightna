@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Content\Page\Menu;
+namespace Lightna\Magento\Backend\Data\Content\Page\Menu;
 
 use Lightna\Engine\Data\DataA;
 
 /**
- * @property-read Item[] children
+ * @property Item[] children
  * @method string entityId(string $escapeMethod = null)
  * @method string level(string $escapeMethod = null)
  * @method string name(string $escapeMethod = null)

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Frontend\Plugin;
 
 use Closure;
-use Lightna\Magento\App\Index\Service;
+use Lightna\Magento\Backend\App\Index\Service;
 use Magento\Catalog\Model\Indexer\Product\Price\Action\Full;
 
 /** @noinspection PhpUnused */

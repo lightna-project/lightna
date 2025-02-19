@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Config\Session;
+namespace Lightna\Magento\Backend\Data\Config\Session;
 
 use Lightna\Engine\Data\DataA;
 

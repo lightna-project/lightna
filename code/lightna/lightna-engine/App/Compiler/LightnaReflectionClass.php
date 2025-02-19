@@ -210,8 +210,15 @@ class LightnaReflectionClass
 
         $docs = [];
         foreach (explode("\n", $doc) as $line) {
+            if (!str_contains($line, '@')) {
+                continue;
+            }
+
             $line = trim(preg_replace(['~^.*@~', '~[()]~', '~\s+~'], ' ', $line));
-            $words = explode(' ', $line);
+            if (count($words = explode(' ', $line)) < 2) {
+                continue;
+            }
+
             $docs[array_shift($words)] = $words[0];
         }
 

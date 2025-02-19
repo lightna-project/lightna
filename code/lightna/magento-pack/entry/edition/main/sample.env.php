@@ -1,10 +1,12 @@
 <?php
 
 return [
+
+    // Environment mode: 'dev' | 'prod'
     'mode' => 'dev',
     'router' => [
         'bypass' => [
-            'rules' => [
+            'rule' => [
                 'url_starts_with' => [
                     // Admin URL prefix
                     'admin(/|$)',

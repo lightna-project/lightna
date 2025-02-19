@@ -1,5 +1,5 @@
 maintenance.vary_name: MAGE_RUN_CODE
-router.bypass.rules.url_starts_with:
+router.bypass.rule.url_starts_with:
   - checkout/
   - customer/
   - sales/

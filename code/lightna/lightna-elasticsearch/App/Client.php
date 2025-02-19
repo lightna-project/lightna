@@ -6,7 +6,7 @@ namespace Lightna\Elasticsearch\App;
 
 use Exception;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Search\ClientInterface as SearchClientInterface;
+use Lightna\Magento\Backend\App\Search\ClientInterface as SearchClientInterface;
 
 class Client extends ObjectA implements SearchClientInterface
 {

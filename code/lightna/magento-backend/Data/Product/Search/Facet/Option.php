@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product\Search\Facet;
+namespace Lightna\Magento\Backend\Data\Product\Search\Facet;
 
 use Lightna\Engine\Data\DataA;
 
