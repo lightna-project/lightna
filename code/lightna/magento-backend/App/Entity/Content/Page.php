@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Entity\Content;
+namespace Lightna\Magento\Backend\App\Entity\Content;
 
 use Lightna\Engine\App\Entity\EntityA;
 

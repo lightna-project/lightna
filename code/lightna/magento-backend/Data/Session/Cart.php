@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Session;
+namespace Lightna\Magento\Backend\Data\Session;
 
 use Lightna\Engine\Data\DataA;
-use Lightna\Magento\Data\Session\Cart\Item;
+use Lightna\Magento\Backend\Data\Session\Cart\Item;
 
 /**
  * @property Item[] $items

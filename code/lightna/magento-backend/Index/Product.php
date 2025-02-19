@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index;
+namespace Lightna\Magento\Backend\Index;
 
 use Lightna\Engine\App\Index\IndexAbstract;
-use Lightna\Magento\App\Entity\Product as ProductEntity;
-use Lightna\Magento\App\Query\Product as ProductQuery;
-use Lightna\Magento\App\Query\Url;
-use Lightna\Magento\Index\Provider\Product as ProductDataProvider;
+use Lightna\Magento\Backend\App\Entity\Product as ProductEntity;
+use Lightna\Magento\Backend\App\Query\Product as ProductQuery;
+use Lightna\Magento\Backend\App\Query\Url;
+use Lightna\Magento\Backend\Index\Provider\Product as ProductDataProvider;
 
 class Product extends IndexAbstract
 {

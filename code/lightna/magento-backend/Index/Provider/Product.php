@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index\Provider;
+namespace Lightna\Magento\Backend\Index\Provider;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Query\Inventory;
-use Lightna\Magento\App\Query\Product as ProductQuery;
-use Lightna\Magento\App\Query\Product\Eav;
-use Lightna\Magento\App\Query\Product\Gallery;
-use Lightna\Magento\App\Query\Url;
+use Lightna\Magento\Backend\App\Query\Inventory;
+use Lightna\Magento\Backend\App\Query\Product as ProductQuery;
+use Lightna\Magento\Backend\App\Query\Product\Eav;
+use Lightna\Magento\Backend\App\Query\Product\Gallery;
+use Lightna\Magento\Backend\App\Query\Url;
 
 class Product extends ObjectA
 {

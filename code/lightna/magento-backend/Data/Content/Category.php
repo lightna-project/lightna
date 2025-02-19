@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Content;
+namespace Lightna\Magento\Backend\Data\Content;
 
 use Lightna\Engine\Data\DataA;
-use Lightna\Magento\Data\Content\Product\FilterableAttribute;
+use Lightna\Magento\Backend\Data\Content\Product\FilterableAttribute;
 
 /**
- * @property-read FilterableAttribute[] $filterableAttributes
+ * @property FilterableAttribute[] $filterableAttributes
  */
 class Category extends DataA
 {

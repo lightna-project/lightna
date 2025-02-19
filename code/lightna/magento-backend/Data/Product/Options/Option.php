@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product\Options;
+namespace Lightna\Magento\Backend\Data\Product\Options;
 
 use Lightna\Engine\Data\DataA;
 

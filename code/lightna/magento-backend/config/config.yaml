@@ -1,5 +1,5 @@
 router.bypass:
-  rules.url_starts_with:
+  rule.url_starts_with:
     - soap/
     - rest/
 project:
@@ -11,39 +11,39 @@ project:
     dbname:
 entity:
   run_code:
-    entity: Lightna\Magento\App\Entity\RunCode
-    index: Lightna\Magento\Index\RunCode
+    entity: Lightna\Magento\Backend\App\Entity\RunCode
+    index: Lightna\Magento\Backend\Index\RunCode
   config:
-    entity: Lightna\Magento\App\Entity\Config
-    index: Lightna\Magento\Index\Config
-    data: Lightna\Magento\Data\Config
+    entity: Lightna\Magento\Backend\App\Entity\Config
+    index: Lightna\Magento\Backend\Index\Config
+    data: Lightna\Magento\Backend\Data\Config
   cms:
-    entity: Lightna\Magento\App\Entity\Cms
-    index: Lightna\Magento\Index\Cms
-    data: Lightna\Magento\Data\Cms
+    entity: Lightna\Magento\Backend\App\Entity\Cms
+    index: Lightna\Magento\Backend\Index\Cms
+    data: Lightna\Magento\Backend\Data\Cms
     layout: cms
   product:
-    entity: Lightna\Magento\App\Entity\Product
-    index: Lightna\Magento\Index\Product
-    data: Lightna\Magento\Data\Product
+    entity: Lightna\Magento\Backend\App\Entity\Product
+    index: Lightna\Magento\Backend\Index\Product
+    data: Lightna\Magento\Backend\Data\Product
     layout: product
   category:
-    entity: Lightna\Magento\App\Entity\Category
-    index: Lightna\Magento\Index\Category
-    data: Lightna\Magento\Data\Category
+    entity: Lightna\Magento\Backend\App\Entity\Category
+    index: Lightna\Magento\Backend\Index\Category
+    data: Lightna\Magento\Backend\Data\Category
     layout: category
   custom_redirect:
     entity: Lightna\Engine\App\Entity\Route
-    index: Lightna\Magento\Index\CustomRedirect
+    index: Lightna\Magento\Backend\Index\CustomRedirect
   content_page:
-    entity: Lightna\Magento\App\Entity\Content\Page
-    index: Lightna\Magento\Index\Content\Page
-    data: Lightna\Magento\Data\Content\Page
+    entity: Lightna\Magento\Backend\App\Entity\Content\Page
+    index: Lightna\Magento\Backend\Index\Content\Page
+    data: Lightna\Magento\Backend\Data\Content\Page
   content_product:
-    entity: Lightna\Magento\App\Entity\Content\Product
-    index: Lightna\Magento\Index\Content\Product
-    data: Lightna\Magento\Data\Content\Product
+    entity: Lightna\Magento\Backend\App\Entity\Content\Product
+    index: Lightna\Magento\Backend\Index\Content\Product
+    data: Lightna\Magento\Backend\Data\Content\Product
   content_category:
-    entity: Lightna\Magento\App\Entity\Content\Category
-    index: Lightna\Magento\Index\Content\Category
-    data: Lightna\Magento\Data\Content\Category
+    entity: Lightna\Magento\Backend\App\Entity\Content\Category
+    index: Lightna\Magento\Backend\Index\Content\Category
+    data: Lightna\Magento\Backend\Data\Content\Category

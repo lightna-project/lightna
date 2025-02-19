@@ -8,7 +8,7 @@ use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Query\Flag;
+use Lightna\Magento\Backend\App\Query\Flag;
 use Lightna\Magento\Staging\App\Staging as AppStaging;
 
 class Staging extends ObjectA

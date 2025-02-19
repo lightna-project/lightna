@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index;
+namespace Lightna\Magento\Backend\Index;
 
-use Lightna\Magento\App\Entity\Config as ConfigEntity;
-use Lightna\Magento\App\Index\ScopeIndexAbstract;
-use Lightna\Magento\Index\Provider\Config as ConfigProvider;
+use Lightna\Magento\Backend\App\Entity\Config as ConfigEntity;
+use Lightna\Magento\Backend\App\Index\ScopeIndexAbstract;
+use Lightna\Magento\Backend\Index\Provider\Config as ConfigProvider;
 
 class Config extends ScopeIndexAbstract
 {

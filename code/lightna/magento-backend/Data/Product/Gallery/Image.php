@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product\Gallery;
+namespace Lightna\Magento\Backend\Data\Product\Gallery;
 
 use Lightna\Engine\Data\DataA;
 

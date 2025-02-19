@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index;
+namespace Lightna\Magento\Backend\Index;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Index\IndexAbstract;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Entity\Cms as CmsEntity;
-use Lightna\Magento\App\Query\Url;
+use Lightna\Magento\Backend\App\Entity\Cms as CmsEntity;
+use Lightna\Magento\Backend\App\Query\Url;
 
 class Cms extends IndexAbstract
 {

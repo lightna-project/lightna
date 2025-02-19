@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Update\Schema\Index;
+namespace Lightna\Engine\App\Schema\Index;
 
 use Exception;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Engine\App\Update\Schema\Index\Changelog as ChangelogSchema;
+use Lightna\Engine\App\Schema\Index\Changelog as ChangelogSchema;
 
 class Triggers extends ObjectA
 {

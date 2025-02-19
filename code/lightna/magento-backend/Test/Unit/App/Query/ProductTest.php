@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Test\Unit\App\Query;
+namespace Lightna\Magento\Backend\Test\Unit\App\Query;
 
-use Lightna\Magento\App\Query\Product;
+use Lightna\Magento\Backend\App\Query\Product;
 use Lightna\PhpUnit\App\LightnaTestCase;
 use PHPUnit\Framework\TestCase;
 

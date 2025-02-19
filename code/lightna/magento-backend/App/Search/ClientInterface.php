@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Search;
+namespace Lightna\Magento\Backend\App\Search;
 
 interface ClientInterface
 {

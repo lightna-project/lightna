@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Index;
+namespace Lightna\Magento\Backend\App\Query\Index;
 
 use Laminas\Db\Sql\Delete;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Query\Customer\Group;
-use Lightna\Magento\App\Query\Website;
+use Lightna\Magento\Backend\App\Query\Customer\Group;
+use Lightna\Magento\Backend\App\Query\Website;
 
 class Price extends ObjectA
 {

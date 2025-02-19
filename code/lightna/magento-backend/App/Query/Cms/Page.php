@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Cms;
+namespace Lightna\Magento\Backend\App\Query\Cms;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Context;

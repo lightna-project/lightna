@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Customer;
+namespace Lightna\Magento\Backend\App\Query\Customer;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;

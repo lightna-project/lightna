@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product;
+namespace Lightna\Magento\Backend\Data\Product;
 
 use Lightna\Engine\Data\DataA;
-use Lightna\Magento\Data\Session;
+use Lightna\Magento\Backend\Data\Session;
 
 /**
  * @method string regular(string $escapeMethod = null)

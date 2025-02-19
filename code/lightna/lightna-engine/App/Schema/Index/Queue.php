@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Engine\App\Update\Schema\Index;
+namespace Lightna\Engine\App\Schema\Index;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;

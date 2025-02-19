@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product\Search;
+namespace Lightna\Magento\Backend\Data\Product\Search;
 
 use Lightna\Engine\Data\DataA;
-use Lightna\Magento\Data\Product\Search\Facet\Option;
+use Lightna\Magento\Backend\Data\Product\Search\Facet\Option;
 
 /**
  * @method string type(string $escapeMethod = null)

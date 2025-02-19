@@ -1,17 +1,17 @@
 plugin:
   Lightna\Engine\App:
-    - Lightna\Magento\App\Plugin\App
+    - Lightna\Magento\Backend\App\Plugin\App
   Lightna\Engine\App\Context:
-    - Lightna\Magento\App\Plugin\Context
+    - Lightna\Magento\Backend\App\Plugin\Context
   Lightna\Engine\App\Scope:
-    - Lightna\Magento\App\Plugin\App\Scope
+    - Lightna\Magento\Backend\App\Plugin\App\Scope
   Lightna\Engine\App\Index\Changelog\Handler:
-    - Lightna\Magento\App\Plugin\App\Index\Changelog\Handler
+    - Lightna\Magento\Backend\App\Plugin\App\Index\Changelog\Handler
   Lightna\Session\App\Session\Cookie:
-    - Lightna\Magento\App\Plugin\App\Session\Cookie
-  Lightna\Engine\App\Update\Schema\Index\Triggers:
-    - Lightna\Magento\App\Plugin\App\Update\Schema\Index\Triggers
+    - Lightna\Magento\Backend\App\Plugin\App\Session\Cookie
+  Lightna\Engine\App\Schema\Index\Triggers:
+    - Lightna\Magento\Backend\App\Plugin\App\Schema\Index\Triggers
   Lightna\Engine\App\I18n:
-    - Lightna\Magento\App\Plugin\App\I18n
+    - Lightna\Magento\Backend\App\Plugin\App\I18n
   Lightna\Session\App\Session\DataBuilder:
-    - Lightna\Magento\App\Plugin\App\Session\DataBuilder
+    - Lightna\Magento\Backend\App\Plugin\App\Session\DataBuilder

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Index;
+namespace Lightna\Magento\Backend\Index;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Entity\Product as ProductEntity;
-use Lightna\Magento\App\Query\Quote;
-use Lightna\Magento\Data\Product\Gallery\Image;
+use Lightna\Magento\Backend\App\Entity\Product as ProductEntity;
+use Lightna\Magento\Backend\App\Query\Quote;
+use Lightna\Magento\Backend\Data\Product\Gallery\Image;
 
 class Session extends ObjectA
 {

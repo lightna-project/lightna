@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App;
+namespace Lightna\Magento\Backend\App;
 
 use Exception;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Entity\RunCode as RunCodeEntity;
-use Lightna\Magento\App\Query\Store;
+use Lightna\Magento\Backend\App\Entity\RunCode as RunCodeEntity;
+use Lightna\Magento\Backend\App\Query\Store;
 
 class Scope extends ObjectA
 {

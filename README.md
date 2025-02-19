@@ -94,10 +94,12 @@ php project/magento-os/bin/magento setup:upgrade
 * Ensure that `session.serialize_handler` value is set to `php_serialize`
 
 
-### Build
+### Build & Reindex
 ```
 cd entry/magento-os && \
-make build
+make build && \
+make schema.update && \
+./cli index.update.all
 ```
 
 

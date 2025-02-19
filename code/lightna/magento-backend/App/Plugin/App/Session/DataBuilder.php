@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Plugin\App\Session;
+namespace Lightna\Magento\Backend\App\Plugin\App\Session;
 
 use Closure;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\Index\Session as SessionIndex;
+use Lightna\Magento\Backend\Index\Session as SessionIndex;
 
 class DataBuilder extends ObjectA
 {

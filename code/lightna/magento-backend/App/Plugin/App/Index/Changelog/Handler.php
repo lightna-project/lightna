@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Plugin\App\Index\Changelog;
+namespace Lightna\Magento\Backend\App\Plugin\App\Index\Changelog;
 
 use Closure;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Query\Product;
+use Lightna\Magento\Backend\App\Query\Product;
 
 class Handler extends ObjectA
 {

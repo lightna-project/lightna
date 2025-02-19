@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Inventory;
+namespace Lightna\Magento\Backend\App\Query\Inventory;
 
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;

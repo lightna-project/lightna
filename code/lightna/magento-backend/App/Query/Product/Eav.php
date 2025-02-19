@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query\Product;
+namespace Lightna\Magento\Backend\App\Query\Product;
 
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
-use Lightna\Magento\App\Query\EavAbstract;
+use Lightna\Magento\Backend\App\Query\EavAbstract;
 
 class Eav extends EavAbstract
 {

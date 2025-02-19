@@ -8,7 +8,7 @@ use Generator;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Storage\Database\Client;
-use Lightna\Engine\App\Update\Schema\Storage\Database as Schema;
+use Lightna\Engine\App\Schema\Storage\Database as Schema;
 
 class Database extends ObjectA implements StorageInterface
 {

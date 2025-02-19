@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Data\Product;
+namespace Lightna\Magento\Backend\Data\Product;
 
 use Lightna\Engine\Data\DataA;
-use Lightna\Magento\App\Search as AppSearch;
-use Lightna\Magento\Data\Product as ProductData;
-use Lightna\Magento\Data\Product\Search\Facet as FacetData;
+use Lightna\Magento\Backend\App\Search as AppSearch;
+use Lightna\Magento\Backend\Data\Product as ProductData;
+use Lightna\Magento\Backend\Data\Product\Search\Facet as FacetData;
 
 /**
  * @method string total(string $escapeMethod = null)

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query;
+namespace Lightna\Magento\Backend\App\Query;
 
 use Exception;
 use Laminas\Db\Sql\Expression;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Query;
+namespace Lightna\Magento\Backend\App\Query;
 
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
-use Lightna\Magento\App\Query\Inventory\Msi;
-use Lightna\Magento\App\Query\Inventory\Ssi;
+use Lightna\Magento\Backend\App\Query\Inventory\Msi;
+use Lightna\Magento\Backend\App\Query\Inventory\Ssi;
 
 class Inventory extends ObjectA
 {

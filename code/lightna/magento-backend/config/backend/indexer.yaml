@@ -36,16 +36,16 @@ indexer:
       inventory_reservation: [ sku ]
     batch:
       collectors:
-        lightna_product: Lightna\Magento\App\Index\Changelog\Collector\Product
-        lightna_cms_page: Lightna\Magento\App\Index\Changelog\Collector\CmsPage
-        lightna_stock: Lightna\Magento\App\Index\Changelog\Collector\Stock
-        lightna_inventory: Lightna\Magento\App\Index\Changelog\Collector\Inventory
-        lightna_product_website: Lightna\Magento\App\Index\Changelog\Collector\ProductWebsite
-        lightna_url_rewrite: Lightna\Magento\App\Index\Changelog\Collector\UrlRewrite
-        lightna_config: Lightna\Magento\App\Index\Changelog\Collector\Config
-        lightna_category: Lightna\Magento\App\Index\Changelog\Collector\Category
-        lightna_attributes: Lightna\Magento\App\Index\Changelog\Collector\Attributes
-        lightna_cms_block: Lightna\Magento\App\Index\Changelog\Collector\CmsBlock
+        lightna_product: Lightna\Magento\Backend\App\Index\Changelog\Collector\Product
+        lightna_cms_page: Lightna\Magento\Backend\App\Index\Changelog\Collector\CmsPage
+        lightna_stock: Lightna\Magento\Backend\App\Index\Changelog\Collector\Stock
+        lightna_inventory: Lightna\Magento\Backend\App\Index\Changelog\Collector\Inventory
+        lightna_product_website: Lightna\Magento\Backend\App\Index\Changelog\Collector\ProductWebsite
+        lightna_url_rewrite: Lightna\Magento\Backend\App\Index\Changelog\Collector\UrlRewrite
+        lightna_config: Lightna\Magento\Backend\App\Index\Changelog\Collector\Config
+        lightna_category: Lightna\Magento\Backend\App\Index\Changelog\Collector\Category
+        lightna_attributes: Lightna\Magento\Backend\App\Index\Changelog\Collector\Attributes
+        lightna_cms_block: Lightna\Magento\Backend\App\Index\Changelog\Collector\CmsBlock
   inventory:
     ignore_qty_change: true
   product:

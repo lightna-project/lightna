@@ -18,7 +18,8 @@ if ($error) {
 define('LIGHTNA_ENTRY', realpath($env['lightna_entry']) . '/');
 $edition = $_SERVER['LIGHTNA_EDITION'] ?? 'main';
 
-// Prevent broken bin/magento if Lightna isn't built yet
-if (is_file($configFile = LIGHTNA_ENTRY . "edition/$edition/applied/backend.php")) {
-    require LIGHTNA_ENTRY . (require $configFile)['lightna_dir'] . '/App/boot.php';
+if (!is_file($configFile = LIGHTNA_ENTRY . "edition/$edition/applied/backend.php")) {
+    throw new Exception("Lightna build doesn't exist, have you run make build?");
 }
+
+require LIGHTNA_ENTRY . (require $configFile)['lightna_dir'] . '/App/boot.php';

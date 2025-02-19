@@ -27,6 +27,11 @@ abstract class DatabaseA extends ObjectA
     protected array $connection;
     protected int $discreteLimit = 20000;
 
+    public function isUsed(): bool
+    {
+        return $this->connection['dbname'] !== null;
+    }
+
     /** @noinspection PhpUnused */
     protected function defineAdapter(): void
     {

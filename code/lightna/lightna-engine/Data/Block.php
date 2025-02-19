@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\Data;
 
-/**
- * @property-read array attributes
- */
 class Block extends DataA
 {
+    public DataA $attributes;
+
     public function attributes(): string
     {
-        if (!is_object($this->attributes)) {
+        if (!isset($this->attributes) || !is_object($this->attributes)) {
             return '';
         }
 

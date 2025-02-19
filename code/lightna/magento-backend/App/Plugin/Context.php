@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\App\Plugin;
+namespace Lightna\Magento\Backend\App\Plugin;
 
 use Closure;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\App\Scope as MagentoScope;
+use Lightna\Magento\Backend\App\Scope as MagentoScope;
 
 class Context extends ObjectA
 {

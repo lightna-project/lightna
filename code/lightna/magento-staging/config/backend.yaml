@@ -1,7 +1,7 @@
 plugin:
   Lightna\Engine\App\Project\Database:
     - Lightna\Magento\Staging\App\Plugin\Project\Database
-  Lightna\Magento\App\Index\EntityLink:
+  Lightna\Magento\Backend\App\Index\EntityLink:
     - Lightna\Magento\Staging\App\Plugin\Index\EntityLink
   Lightna\Engine\App\Index\Changelog\Handler:
     - Lightna\Magento\Staging\App\Plugin\Index\Changelog\Handler
