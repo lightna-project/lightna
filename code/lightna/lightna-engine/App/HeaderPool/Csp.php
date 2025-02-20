@@ -12,6 +12,7 @@ class Csp extends AbstractHeader implements HeaderDynamicInterface
 
     protected function init(array $data = []): void
     {
+        $this->getSource()->addPolicy('default-src', "'self'");
         $this->addNoncePolicy();
 
         parent::init($data);
