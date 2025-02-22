@@ -173,7 +173,7 @@ class Layout extends ObjectA
     protected function openBlockWrapper(array $block): void
     {
         if ($this->isBlockWrapperNeeded($block)) {
-            print('<div style="display: contents;" id="block-wrapper-' . escape($block['id']) . '">');
+            print('<div id="block-wrapper-' . escape($block['id']) . '">');
         }
     }
 

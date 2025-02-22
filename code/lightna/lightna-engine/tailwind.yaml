@@ -1,0 +1,4 @@
+entry:
+  common:
+    import:
+      lightna-engine-block-wrapper: lightna/engine/block-wrapper.css

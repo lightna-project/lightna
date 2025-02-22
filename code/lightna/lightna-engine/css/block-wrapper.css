@@ -1,0 +1,3 @@
+[id^="block-wrapper-"] {
+    display: contents;
+}
