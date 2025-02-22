@@ -1,0 +1,8 @@
+entry:
+  common:
+    content:
+      magento-demo-template: lightna/magento-demo/template/**/*.phtml
+tailwind:
+  theme:
+    fontFamily:
+      mono: [ Inconsolata, monospace ]
