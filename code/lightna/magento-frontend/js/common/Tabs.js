@@ -11,11 +11,14 @@ export class Tabs {
             'open-tab': [(event, item) => this.openTab(item)],
         }
     };
+    component = '.cjs-tabs';
 
     constructor() {
-        this.component = '.cjs-tabs';
+        this.extendProperties();
         this.initializeActions();
     }
+
+    extendProperties() {}
 
     initializeActions() {
         ClickEventDelegator.add(this.actions.click);

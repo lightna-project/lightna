@@ -12,11 +12,14 @@ export class Collapsible {
             'toggle-collapsible': [(event, item) => this.toggle(item)],
         },
     };
+    component = '.cjs-collapsible';
 
     constructor() {
-        this.component = '.cjs-collapsible';
+        this.extendProperties();
         this.initializeActions();
     }
+
+    extendProperties() {}
 
     initializeActions() {
         ClickEventDelegator.add(this.actions.click);

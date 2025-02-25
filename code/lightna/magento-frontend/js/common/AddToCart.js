@@ -3,7 +3,7 @@ import { Request } from 'lightna/engine/lib/Request';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class AddToCart {
-    addToCartUrl = '/checkout/cart/add';
+    static CART_ADD_URL= '/checkout/cart/add';
     classes = {
         loading: 'loading',
         disabled: 'btn-disabled',
@@ -13,11 +13,14 @@ export class AddToCart {
             'add-to-cart': [(event, trigger) => this.onAddProduct(trigger)],
         }
     }
+    component = '.cjs-add-to-cart';
 
     constructor() {
-        this.component = '.cjs-add-to-cart';
+        this.extendProperties();
         this.initializeActions();
     }
+
+    extendProperties() {}
 
     initializeActions() {
         ClickEventDelegator.add(this.actions.click);
@@ -36,14 +39,16 @@ export class AddToCart {
     }
 
     async addProduct(component) {
-        const data = {
+        const response = await Request.post(AddToCart.CART_ADD_URL, this.collectData(component));
+        this.addProductSuccess(response);
+    }
+
+    collectData(component) {
+        return {
             ...UserInput.collect(component),
             product: component.dataset.productId,
             noSuccessMessages: true,
         };
-
-        const response = await Request.post(this.addToCartUrl, data);
-        this.addProductSuccess(response);
     }
 
     beforeAddProduct(component, trigger) {

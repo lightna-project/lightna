@@ -5,9 +5,8 @@ import { PageMessage } from 'lightna/magento-frontend/common/PageMessage';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class MiniCart {
-    blockId = 'minicart';
-    removeFromCartUrl = '/checkout/sidebar/removeItem';
-    minActionDuration = 200;
+    static MINICART_BLOCK_ID = 'minicart';
+    static CART_REMOVE_URL = '/checkout/sidebar/removeItem';
     classes = {
         cartOpen: 'minicart-open',
         fade: 'fade-out',
@@ -19,12 +18,15 @@ export class MiniCart {
             'remove-product': [(event, trigger) => this.removeProduct(trigger)],
         }
     };
+    component = '.cjs-minicart';
 
     constructor() {
-        this.component = '.cjs-minicart';
+        this.extendProperties();
         this.initializeEventListeners();
         this.initializeActions();
     }
+
+    extendProperties() {}
 
     initializeEventListeners() {
         document.addEventListener('add-to-cart', (event) => this.handleAddToCart(event));
@@ -47,7 +49,7 @@ export class MiniCart {
 
     async refresh() {
         try {
-            await Blocks.updateHtml([this.blockId]);
+            await Blocks.updateHtml([MiniCart.MINICART_BLOCK_ID]);
         } catch (error) {
             console.error('Error refreshing the minicart:', error);
         }
@@ -65,10 +67,10 @@ export class MiniCart {
             await this.refresh();
         }
 
-        setTimeout(() => {
-            PageMessage.clearAll();
+        PageMessage.clearAll();
+        requestAnimationFrame(() => {
             document.body.classList.add(this.classes.cartOpen);
-        }, this.minActionDuration);
+        });
     }
 
     close() {
@@ -80,7 +82,7 @@ export class MiniCart {
         if (!itemId) return;
 
         try {
-            await Request.post(this.removeFromCartUrl, { item_id: itemId });
+            await Request.post(MiniCart.CART_REMOVE_URL, { item_id: itemId });
             this.afterRemoveProduct(itemId);
         } catch (error) {
             console.error(`Error removing product (ID: ${itemId}) from minicart:`, error);
@@ -88,17 +90,14 @@ export class MiniCart {
     }
 
     afterRemoveProduct(itemId) {
-        this.fadeOutItem(itemId);
+        const itemToRemove = $(`[data-item-id="${itemId}"]`, $(this.component))?.closest('li');
+        if (!itemToRemove) return;
 
-        setTimeout(() => {
-            this.refresh();
-        }, this.minActionDuration);
+        itemToRemove.addEventListener('animationend', () => this.refresh(), { once: true });
+        this.fadeOutItem(itemToRemove);
     }
 
-    fadeOutItem(itemId) {
-        const removedItem = $(`[data-item-id="${itemId}"]`, $(this.component))?.closest('li');
-        if (removedItem) {
-            removedItem.classList.add(this.classes.fade);
-        }
+    fadeOutItem(item) {
+        item.classList.add(this.classes.fade);
     }
 }

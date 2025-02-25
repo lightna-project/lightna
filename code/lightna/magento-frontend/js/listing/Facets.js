@@ -1,10 +1,14 @@
 import { $ } from 'lightna/engine/lib/utils/dom';
 
 export class Facets {
+    component = '.cjs-facets';
+
     constructor() {
-        this.component = '.cjs-facets';
+        this.extendProperties();
         this.initializeEventListeners();
     }
+
+    extendProperties() {}
 
     initializeEventListeners() {
         $(this.component)?.addEventListener('change', (event) => {

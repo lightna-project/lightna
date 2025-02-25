@@ -2,7 +2,7 @@ import { $, $$ } from 'lightna/engine/lib/utils/dom';
 import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Search {
-    static minChars = 3;
+    static MIN_CHARS = 3;
     static selectors = {
         input: '#search',
         wrapper: '.search__wrap',
@@ -20,9 +20,10 @@ export class Search {
             'close-search': [() => this.close()],
         }
     };
+    component = '.cjs-search';
 
     constructor() {
-        this.component = '.cjs-search';
+        this.extendProperties();
         if (!$(this.component)) return;
 
         this.search = $(Search.selectors.input);
@@ -33,6 +34,8 @@ export class Search {
         this.initializeActions();
         this.prefillSearchInput();
     }
+    
+    extendProperties() {}
 
     initializeEventListeners() {
         this.search.addEventListener('input', (event) => { this.onInput(event) });
@@ -54,7 +57,7 @@ export class Search {
 
     onInput(event) {
         this.toggleClearAction(!event.target.value);
-        this.toggleSearchAction(event.target.value.length < Search.minChars);
+        this.toggleSearchAction(event.target.value.length < Search.MIN_CHARS);
     }
 
     onClear() {

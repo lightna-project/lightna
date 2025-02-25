@@ -5,11 +5,10 @@ import { Search } from 'lightna/magento-frontend/common/Search';
 import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class SearchSuggestions {
-    searchSuggestUrl = '/search/ajax/suggest';
+    static SEARCH_SUGGEST_URL= '/search/ajax/suggest';
+    static SUGGESTIONS_BLOCK_ID= 'search-suggestions';
+    static MAX_SUGGESTIONS= 7;
     suggestions = [];
-    maxSuggestions = 7;
-    blockId = 'search-suggestions';
-    component = '.cjs-search-suggestions';
     debounceTimer = null;
     debounceTimeout = 300;
     abortController = null;
@@ -18,16 +17,22 @@ export class SearchSuggestions {
             'clear-search': [() => this.clearSuggestions()],
         }
     }
+    component = '.cjs-search-suggestions';
 
     constructor() {
+        this.extendProperties();
         this.search = $(Search.selectors.input);
         if (!this.search) return;
         this.initializeEventListeners();
         this.initializeActions();
     }
 
+    extendProperties() {}
+
     initializeEventListeners() {
-        this.search.addEventListener('input', async () => { await this.updateSuggestions(); });
+        this.search.addEventListener('input', async () => {
+            await this.updateSuggestions();
+        });
     }
 
     initializeActions() {
@@ -37,7 +42,7 @@ export class SearchSuggestions {
     async updateSuggestions() {
         clearTimeout(this.debounceTimer);
 
-        if (this.search.value.length < Search.minChars) {
+        if (this.search.value.length < Search.MIN_CHARS) {
             if (this.suggestions.length) {
                 this.clearSuggestions();
             }
@@ -55,20 +60,20 @@ export class SearchSuggestions {
         this.abortController?.abort();
         this.abortController = new AbortController();
         this.suggestions = await Request.get(
-            `${this.searchSuggestUrl}?q=${encodeURIComponent(this.search.value)}`,
+            `${SearchSuggestions.SEARCH_SUGGEST_URL}?q=${encodeURIComponent(this.search.value)}`,
             { signal: this.abortController.signal }
         ) || [];
     }
 
     async updateSuggestionsHtml() {
-        return Blocks.updateHtml([this.blockId], {
+        return Blocks.updateHtml([SearchSuggestions.SUGGESTIONS_BLOCK_ID], {
             suggestions: this.limitSuggestions(),
             query: this.search.value,
         });
     }
 
     limitSuggestions() {
-        return this.suggestions.slice(0, this.maxSuggestions);
+        return this.suggestions.slice(0, SearchSuggestions.MAX_SUGGESTIONS);
     }
 
     clearSuggestions() {
