@@ -13,8 +13,11 @@ export class MobileOverlay {
     };
 
     constructor() {
+        this.extendProperties();
         this.initializeActions();
     }
+
+    extendProperties() {}
 
     initializeActions() {
         ClickEventDelegator.add(this.actions.click);
