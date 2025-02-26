@@ -25,9 +25,11 @@ export class Options {
 
     async onOptionClick(event, component) {
         const option = event.target.closest('[data-option]');
-        const isActive = option.classList.contains(this.classes.active);
-        const isDisabled = option.classList.contains(this.classes.disabled);
-        if (!option || isActive || isDisabled) return;
+        if (!option ||
+            option.classList.contains(this.classes.active) ||
+            option.classList.contains(this.classes.disabled)) {
+            return;
+        }
 
         let optionData;
         try {
