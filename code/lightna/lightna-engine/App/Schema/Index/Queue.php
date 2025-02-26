@@ -17,6 +17,10 @@ class Queue extends ObjectA
 
     public function update(): void
     {
+        if (!$this->db->isUsed()) {
+            return;
+        }
+
         $statement = $this->getQueueTableStatement();
         $currentStatement = $this->getCurrentQueueTableStatement();
         if ($currentStatement !== $statement) {

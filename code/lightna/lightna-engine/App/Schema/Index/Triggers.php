@@ -52,6 +52,7 @@ class Triggers extends ObjectA
     /** @noinspection PhpUnused */
     protected function defineWatchedTables(): void
     {
+        $this->watchedTables = [];
         foreach ($this->tablesConfig as $table => $forcedColumns) {
             if (!isset($this->allTables[$table])) {
                 continue;
@@ -64,6 +65,7 @@ class Triggers extends ObjectA
     /** @noinspection PhpUnused */
     protected function defineWatchedColumns(): void
     {
+        $this->watchedColumns = [];
         foreach ($this->db->structure->getColumnsInfo() as $table => $columns) {
             $this->watchedColumns[$table] = [];
             foreach ($columns as $column => $info) {
@@ -80,6 +82,10 @@ class Triggers extends ObjectA
 
     public function update(): void
     {
+        if (!$this->db->isUsed()) {
+            return;
+        }
+
         $this->updateTriggers();
         $this->removeTriggersFromUnwatchedTables();
     }
