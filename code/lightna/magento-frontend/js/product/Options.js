@@ -3,35 +3,40 @@ import { Blocks } from 'lightna/engine/lib/Blocks';
 import { UserInput } from 'lightna/engine/lib/UserInput';
 
 export class Options {
-    cjs = '.cjs-product-options';
-    blockId = 'product-options';
+    static blockId = 'product-options';
+    static classes = {
+        disabled: 'disabled',
+    };
 
     constructor() {
-        this.init();
+        this.component = '.cjs-product-options';
+        this.initializeEventListeners();
     }
 
-    init() {
-        this.component = $(this.cjs);
-        this.bindEvents();
-    }
-
-    bindEvents() {
-        $$('[data-option]', this.component).forEach((element) => {
-            if (element.classList.contains('disabled')) {
-                return;
-            }
-            const option = JSON.parse(element.dataset.option);
-
-            element.addEventListener('click', () => {
-                this.optionClick(element, option);
-            });
+    initializeEventListeners() {
+        $$(this.component).forEach((component) => {
+            component.addEventListener('click', (event) => this.onOptionClick(event, component));
         });
     }
 
-    async optionClick(element, option) {
-        $('#option_' + option.attributeCode).value = option.id;
-        await Blocks.updateHtml([this.blockId], UserInput.collect(this.component));
+    async onOptionClick(event, component) {
+        const option = event.target.closest('[data-option]');
+        if (!option || option.classList.contains(Options.classes.disabled)) return;
 
-        this.init();
+        let optionData;
+        try {
+            optionData = JSON.parse(option.dataset.option);
+        } catch (error) {
+            console.error('Invalid JSON in data-option attribute', error);
+            return;
+        }
+
+        const optionInput = $(`[data-option-code="${CSS.escape(optionData.attributeCode)}"]`, component);
+        if (optionInput) {
+            optionInput.value = optionData.id;
+        }
+
+        await Blocks.updateHtml([Options.blockId], UserInput.collect(component));
+        this.initializeEventListeners();
     }
 }

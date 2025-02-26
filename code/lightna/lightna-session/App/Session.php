@@ -10,6 +10,7 @@ use Lightna\Engine\App\ObjectA;
 use Lightna\Session\App\Handler\HandlerInterface;
 use Lightna\Session\App\Session\Cookie;
 use Lightna\Session\App\Session\DataBuilder;
+use Lightna\Session\App\Session\Serializer;
 use Throwable;
 
 class Session extends ObjectA
@@ -24,6 +25,8 @@ class Session extends ObjectA
     protected Cookie $cookie;
     protected Context $context;
     protected DataBuilder $dataBuilder;
+    protected Serializer $serializer;
+
     protected array $data;
     protected bool $isReindexRequired = false;
 
@@ -45,16 +48,16 @@ class Session extends ObjectA
     /** @noinspection PhpUnused */
     protected function defineData(): void
     {
-        $this->data = $this->read();
+        $this->data = $this->readData();
     }
 
-    protected function read(): array
+    protected function readData(): array
     {
         if (!$this->canRead()) {
             throw new Exception('Reading the session on public pages is not allowed in FPC-compatible mode.');
         }
 
-        $srz = $this->handler->read();
+        $srz = $this->readContent();
         $this->dataBuilder->setSessionData($this->getSessionData($this->unserialize($srz)));
         $scopeData = $this->dataBuilder->getScopeData();
         $this->isReindexRequired = $this->dataBuilder->getIsReindexRequired();
@@ -65,6 +68,11 @@ class Session extends ObjectA
     public function canRead(): bool
     {
         return !$this->fpcCompatible || $this->context->visibility === 'private';
+    }
+
+    protected function readContent(): string
+    {
+        return $this->handler->read();
     }
 
     public function prolong(): void
@@ -78,9 +86,8 @@ class Session extends ObjectA
         if ($srz === '') return [];
 
         try {
-            $data = unserialize($srz, ['allowed_classes' => false]);
+            $data = $this->serializer->unserialize($srz);
         } catch (Throwable $e) {
-            // By default, only session.serialize_handler = php_serialize is supported
             throw new Exception('Failed to unserialized session.');
         }
 

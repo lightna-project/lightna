@@ -1,36 +1,45 @@
 import { $ } from 'lightna/engine/lib/utils/dom';
 
 export class PageMessage {
-    removeTimeout = 5000;
+    classes = {
+        fadeOut: 'fade-out',
+    };
+    selectors = {
+        messageCloseButton: '.message__close',
+        messageContent: '.message__content',
+    }
     static container = $('.page-messages');
 
-    constructor(html) {
+    constructor(html, removeTimeout = 5000) {
+        this.removeTimeout = removeTimeout;
         this.messageHtml = html;
         this.message = this.attachToDom();
-        this.closeButton = $('.message__close', this.message);
-        this.addCloseListener();
-        setTimeout(() => this.remove(), this.removeTimeout);
+        this.closeButton = $(this.selectors.messageCloseButton, this.message);
+        this.initializeEventListeners();
+        if (this.removeTimeout) {
+            setTimeout(() => this.remove(), this.removeTimeout);
+        }
     }
 
     attachToDom() {
         const message = document.createElement('div');
         message.innerHTML = this.messageHtml;
         PageMessage.container.prepend(message);
-
         return message;
     }
 
-    addCloseListener() {
+    initializeEventListeners() {
         this.closeButton.addEventListener('click', () => this.remove());
     }
 
     remove() {
-        if ($('.message__content', this.message).matches(':hover')) {
+        const messageHasHover = $(this.selectors.messageContent, this.message).matches(':hover');
+        if (this.removeTimeout && messageHasHover) {
             setTimeout(() => this.remove(), this.removeTimeout);
             return;
         }
-        this.message.classList.add('fade-out');
-        setTimeout(() => this.message.remove(), 400);
+        this.message.classList.add(this.classes.fadeOut);
+        this.message.addEventListener('transitionend', () => this.message.remove(), { once: true });
     }
 
     static clearAll() {
