@@ -18,6 +18,10 @@ class Changelog extends ObjectA
 
     public function update(): void
     {
+        if (!$this->db->isUsed()) {
+            return;
+        }
+
         $statement = $this->getChangelogTableStatement();
         $currentStatement = $this->getCurrentChangelogTableStatement();
         if ($currentStatement !== $statement) {

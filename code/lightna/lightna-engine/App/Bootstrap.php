@@ -48,6 +48,10 @@ class Bootstrap
     {
         set_error_handler(
             function ($errNo, $errMsg, $errFile, $errLine) {
+                if (!(error_reporting() & $errNo)) {
+                    return true;
+                }
+
                 throw new \ErrorException($errMsg, 0, $errNo, $errFile, $errLine);
             },
             E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED

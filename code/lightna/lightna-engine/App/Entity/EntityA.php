@@ -59,7 +59,7 @@ class EntityA extends ObjectA
         $this->validatePrefix();
 
         $data = array_filter_recursive($data, function ($k, $v) {
-            return $v !== null && $v !== '';
+            return $v !== null;
         });
 
         $this->storage->set($this->getKey($id), $data);
