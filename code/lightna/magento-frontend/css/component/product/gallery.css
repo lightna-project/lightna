@@ -88,6 +88,6 @@
     }
 
     .gallery-progress {
-        @apply h-[2px] rounded-sm bg-primary-main transition-all duration-500;
+        @apply h-[2px] w-0 rounded-sm bg-primary-main transition-all duration-500;
     }
 }
