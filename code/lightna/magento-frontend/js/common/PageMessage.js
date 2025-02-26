@@ -1,4 +1,5 @@
 import { $ } from 'lightna/engine/lib/utils/dom';
+import { resolveAnimationEnd } from 'lightna/engine/lib/utils/resolveAnimationEnd';
 
 export class PageMessage {
     static container = $('.page-messages');
@@ -18,7 +19,7 @@ export class PageMessage {
         this.closeButton = $(PageMessage.selectors.messageCloseButton, this.message);
         this.initializeEventListeners();
         if (this.removeTimeout) {
-            setTimeout(() => this.remove(), this.removeTimeout);
+            setTimeout(() => this.removeMessage(), this.removeTimeout);
         }
     }
 
@@ -32,17 +33,18 @@ export class PageMessage {
     }
 
     initializeEventListeners() {
-        this.closeButton.addEventListener('click', () => this.remove());
+        this.closeButton.addEventListener('click', () => this.removeMessage());
     }
 
-    remove() {
+    async removeMessage() {
         const messageHasHover = $(PageMessage.selectors.messageContent, this.message).matches(':hover');
         if (this.removeTimeout && messageHasHover) {
-            setTimeout(() => this.remove(), this.removeTimeout);
+            setTimeout(() => this.removeMessage(), this.removeTimeout);
             return;
         }
         this.message.classList.add(this.classes.fadeOut);
-        this.message.addEventListener('animationend', () => this.message.remove(), { once: true });
+        await resolveAnimationEnd(this.message);
+        this.message.remove();
     }
 
     static clearAll() {
