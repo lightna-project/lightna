@@ -24,7 +24,7 @@ class Layout extends MagentoLayout
         if ($lightnaBlockId = $this->getLightnaBlockId($name)) {
             return blockhtml('#' . $lightnaBlockId);
         } else {
-            return parent::renderElement($name, $useCache);
+            return (string)parent::renderElement($name, $useCache);
         }
     }
 
