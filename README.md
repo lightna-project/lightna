@@ -22,6 +22,7 @@ Readiness of MVP for Magento 2 - 75%.
  | <a href="https://lightna.com/contact.html">Contact</a>
 </p>
 
+<h2 align="center">Getting Started</h2>
 <ul>
     <li><a href="https://lightna.com/doc/setup/magento.html">Integrating Lightna with a Magento Project</a></li>
     <li><a href="https://lightna.com/doc/setup/project.html">Setting Up Lightna for a New Project</a></li>
