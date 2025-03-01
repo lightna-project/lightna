@@ -13,10 +13,6 @@ class Config extends CommandA
 
     public function run(): void
     {
-        if (!$this->getArgs()) {
-            throw new UserException('Specify config patch');
-        }
-
         $path = str_replace('.', '/', $this->getArgs()[0]);
         $value = $this->config->get($path);
 

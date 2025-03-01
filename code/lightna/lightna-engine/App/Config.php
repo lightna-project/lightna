@@ -25,7 +25,7 @@ class Config extends ObjectA
 
     public function get(string $path = ''): mixed
     {
-        return $this->map[$path] ?? null;
+        return $path === '' ? $this->config : ($this->map[$path] ?? null);
     }
 
     protected function map($config = null, string $location = ''): void

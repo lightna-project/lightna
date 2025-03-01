@@ -14,6 +14,7 @@ use SplFileInfo;
 class ClassMap extends CompilerA implements ObjectManagerIgnore
 {
     protected array $classes = [];
+    protected string $currentModuleFolder;
 
     public function make(): void
     {
@@ -37,6 +38,7 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
                 $path = preg_replace('~^' . preg_quote($root) . '~', '', $folder);
                 $path = trim($path, '/') . '/';
 
+                $this->currentModuleFolder = $folder;
                 $iterator = $this->getDirectoryIterator($folder);
                 foreach ($iterator as $file) {
                     $this->mapFile($file, $ns, $path, $iterator);
@@ -81,7 +83,17 @@ class ClassMap extends CompilerA implements ObjectManagerIgnore
 
     protected function recursiveDirectoryIteratorCallback(SplFileInfo $current): bool
     {
-        return true;
+        $subPath = preg_replace(
+            '~^' . preg_quote($this->currentModuleFolder, '~') . '/~',
+            '',
+            $current->getPathname(),
+        );
+
+        if (!ctype_upper($subPath[0])) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     protected function mapFile(SplFileInfo $file, string $ns, string $path, RecursiveIteratorIterator $iterator): void
