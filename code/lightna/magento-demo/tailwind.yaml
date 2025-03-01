@@ -2,6 +2,9 @@ entry:
   common:
     content:
       magento-demo-template: lightna/magento-demo/template/**/*.phtml
+  lane:
+    content:
+      magento-demo-template: lightna/magento-demo/template/**/*.phtml
 tailwind:
   theme:
     fontFamily:
