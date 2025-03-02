@@ -6,80 +6,69 @@ export class Request {
         'Content-Type': 'application/x-www-form-urlencoded',
         'X-Request-With': 'Lightna',
     };
-    static _lock = null;
+    static _lock = new Map();
 
     static get(url, options = {}) {
-        return this.fetch(url, {
-            ...options,
-            method: 'GET',
-        });
+        return this._send(url, { ...options, method: 'GET' });
     }
 
-    static post(url, data, options = {}) {
-        data ??= {};
-
-        if (!data.form_key) {
-            data.form_key = FormKey.get();
-        }
-
-        return this.fetch(url, {
-            ...options,
-            body: objectToQuery(data),
-            method: 'POST',
-        });
+    static post(url, data = {}, options = {}) {
+        data.form_key ??= FormKey.get();
+        return this._send(url, { ...options, body: objectToQuery(data), method: 'POST' });
     }
 
-    static async fetch(url, options = {}) {
-        if (options.top && this._lock) {
-            throw new Error(
-                `Request: Can't send new top level request for "${url}" until no response from previous`,
-            );
-        }
+    static async _send(url, options) {
+        this._checkLock(url, options);
         options.headers = { ...this.headers, ...options.headers };
 
         try {
-            this._lock = fetch(url, {
-                ...options,
-                headers: options.headers,
-            });
-
-            const response = await this._lock;
-            this._lock = null;
-
-            if (response.status === 503) {
-                if (confirm('The service is under maintenance. Reload the page?')) {
-                    document.location.reload()
-                } else {
-                    throw new Error('The service is under maintenance. Terminated.');
-                }
-            }
-
-            return await this._handleJson(response);
+            const response = await this._performRequest(url, options);
+            this._handleMaintenance(response);
+            return this._processResponse(response);
         } finally {
-            this._lock = null;
+            this._lock.delete(url);
         }
     }
 
-    static async _handleJson(response) {
+    static _checkLock(url, options) {
+        const isTop = options.top ?? true;
+        if (isTop && this._lock.has(url)) {
+            throw new Error(`Request: Can't send new top-level request for "${url}" until the previous one completes.`);
+        }
+    }
+
+    static async _performRequest(url, options) {
+        const requestPromise = fetch(url, options);
+        this._lock.set(url, requestPromise);
+        return await requestPromise;
+    }
+
+    static async _processResponse(response) {
+        const json = await this._parseJson(response);
+        response.ok ? this._onSuccess(json) : this._onError(json);
+        return json;
+    }
+
+    static _handleMaintenance(response) {
+        if (response.status === 503) {
+            if (confirm('The service is under maintenance. Reload the page?')) {
+                document.location.reload();
+            }
+            throw new Error('The service is under maintenance. Terminated.');
+        }
+    }
+
+    static async _parseJson(response) {
         if (response.headers.get('Content-Type') !== 'application/json') {
-            throw new Error('JSON expected');
+            throw new Error('Expected JSON response');
         }
 
-        let responseJson;
         try {
-            responseJson = await response.clone().json();
+            return await response.clone().json();
         } catch (e) {
-            let text = await response.clone().text();
-            throw new Error(`Invalid response JSON received: "${text}"`);
+            const text = await response.clone().text();
+            throw new Error(`Invalid JSON received: "${text}"`);
         }
-
-        if (response.ok) {
-            this._onSuccess(responseJson);
-        } else {
-            this._onError(responseJson);
-        }
-
-        return responseJson;
     }
 
     static _onSuccess(response) {
