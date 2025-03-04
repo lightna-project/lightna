@@ -1,7 +1,7 @@
 MAKEFLAGS += --no-print-directory
 
 install:
-	composer install
+	composer install && \
 	npm install
 
 self-update:
@@ -63,8 +63,24 @@ _build.compile.direct:
 schema.update:
 	./cli schema.update
 
+index.update:
+	./cli index.update.all
+
 config.apply:
 	LIGHTNA_EDITION=main ./cli config.apply
+
+sync:
+	make install && \
+	make build && \
+	make schema.update
+
+sync-i:
+	make sync && \
+	make index.update
+
+compile-i:
+	make compile && \
+	make index.update
 
 test.unit:
 	LIGHTNA_EDITION=main make _test.unit
