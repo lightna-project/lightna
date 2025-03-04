@@ -3,7 +3,7 @@
     "description": "Magento Frontend module for Lightna",
     "type": "magento2-module",
     "license": "MIT",
-    "version": "1.0.35",
+    "version": "1.0.37",
     "autoload": {
         "files": [
             "registration.php"
