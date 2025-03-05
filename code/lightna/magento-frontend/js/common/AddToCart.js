@@ -1,6 +1,7 @@
 import { UserInput } from 'lightna/engine/lib/UserInput';
 import { Request } from 'lightna/engine/lib/Request';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
+import { Cookie } from 'lightna/engine/lib/Cookie';
 
 export class AddToCart {
     static CART_ADD_URL= '/checkout/cart/add';
@@ -59,6 +60,7 @@ export class AddToCart {
         document.dispatchEvent(new CustomEvent('add-to-cart', {
             detail: { response }
         }));
+        this.updateMagentoCartSectionId();
     }
 
     afterAddProduct(component, trigger) {
@@ -68,5 +70,16 @@ export class AddToCart {
     toggleAnimation(element, isLoading) {
         element.classList.toggle(this.classes.loading, isLoading);
         element.classList.toggle(this.classes.disabled, isLoading);
+    }
+
+    updateMagentoCartSectionId() {
+        let sids = Cookie.get('section_data_ids');
+        sids = sids ? JSON.parse(decodeURIComponent(sids)) : {};
+        sids.cart = sids.cart ? sids.cart + 1000 : 1;
+
+        Cookie.set(
+            'section_data_ids',
+            encodeURIComponent(JSON.stringify(sids)),
+        );
     }
 }
