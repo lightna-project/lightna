@@ -3,9 +3,9 @@
     "description": "Lightna Session module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.37",
+    "version": "1.0.38",
     "require": {
-        "lightna/engine": "^1.0.37"
+        "lightna/engine": "^1.0.38"
     },
     "autoload": {
         "psr-4": {

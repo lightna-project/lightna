@@ -229,8 +229,9 @@ class Config extends ObjectA
     protected function getEtcConfig(): array
     {
         $config = require $this->projectDir . 'app/etc/config.php';
+
+        // env.php might not exist on build environment
         if (is_file($envFile = $this->projectDir . 'app/etc/env.php')) {
-            // env.php might not exist on build environment
             $config = merge($config, require $envFile);
         }
 

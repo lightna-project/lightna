@@ -34,4 +34,12 @@ return [
 //            'index' => null,
 //        ],
     ],
+    'storage' => [
+        'opcache' => [
+            'options' => [
+                'dir' => '../../generated/magento-os/storage',
+//                'is_read_only' => true,
+            ],
+        ],
+    ],
 ];

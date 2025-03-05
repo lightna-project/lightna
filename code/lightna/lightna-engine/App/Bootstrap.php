@@ -31,8 +31,9 @@ class Bootstrap
         static::defineConfig();
         static::defineBuild();
 
-        define('IS_DEV_MODE', static::$config['mode'] === 'dev');
-        define('IS_PROD_MODE', static::$config['mode'] === 'prod');
+        $mode = static::$config['mode'] ?? 'prod';
+        define('IS_DEV_MODE', $mode === 'dev');
+        define('IS_PROD_MODE', $mode === 'prod');
         !defined('TEST_MODE') && define('TEST_MODE', null);
         define(
             'IS_PROGRESSIVE_RENDERING',
@@ -87,8 +88,8 @@ class Bootstrap
     {
         $config = merge(
             opcache_load_revalidated(static::$BUILD_DIR . 'config/' . $area . '.php'),
-            opcache_load_revalidated(static::getEditionConfigFile('config.php')),
-            opcache_load_revalidated(static::getEditionConfigFile('env.php')),
+            static::getEditionConfig('config.php'),
+            static::getEditionConfig('env.php'),
             static::getAdditionalConfig(),
         );
 
@@ -109,8 +110,8 @@ class Bootstrap
     protected static function loadCompilerConfig(): void
     {
         static::$config = merge(
-            opcache_load_revalidated(static::getEditionConfigFile('config.php')),
-            opcache_load_revalidated(static::getEditionConfigFile('env.php')),
+            static::getEditionConfig('config.php'),
+            static::getEditionConfig('env.php'),
         );
 
         static::$config = merge(static::$config, static::getAdditionalConfig());
@@ -135,7 +136,22 @@ class Bootstrap
         );
     }
 
-    public static function getEditionConfigFile(string $fileName): string
+    public static function getEditionConfig(string $fileName): array
+    {
+        $file = static::getEditionConfigFile($fileName);
+        if (is_null($file)) {
+            if ($fileName === 'env.php') {
+                // env.php doesn't exist on build environment
+                return [];
+            } else {
+                throw new Exception('Config file "' . $fileName . '" not found.');
+            }
+        }
+
+        return opcache_load_revalidated($file);
+    }
+
+    public static function getEditionConfigFile(string $fileName): ?string
     {
         $paths = [
             'edition/' . static::$EDITION . '/' . $fileName,
@@ -149,7 +165,7 @@ class Bootstrap
             }
         }
 
-        throw new Exception('Config file "' . $fileName . '" not found.');
+        return null;
     }
 
     protected static function loadAreaConfig(): void
