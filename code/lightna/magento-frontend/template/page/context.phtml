@@ -2,8 +2,9 @@
 /**
  * Import:
  * @var Lightna\Magento\Backend\Data\Context $context
+ * @var Lightna\Engine\Data\Csp $csp
  */
 ?>
-<script>
+<script nonce="<?= $csp->nonce() ?>">
     magentoContext = <?= $context('json-js') ?>;
 </script>
