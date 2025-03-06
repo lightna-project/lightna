@@ -1,5 +1,8 @@
 template: lightna/magento-frontend/page.phtml
 .head:
+  .magento-context:
+    id: magento-context
+    template: lightna/magento-frontend/page/context.phtml
   .title:
     template: lightna/magento-frontend/page/head/title.phtml
   .meta:

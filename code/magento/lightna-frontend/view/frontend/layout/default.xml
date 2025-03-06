@@ -8,6 +8,11 @@
                     <argument name="lightna_block_id" xsi:type="string">page-context</argument>
                 </arguments>
             </block>
+            <block name="magento_page_context">
+                <arguments>
+                    <argument name="lightna_block_id" xsi:type="string">magento-context</argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

@@ -1,10 +1,10 @@
 import { UserInput } from 'lightna/engine/lib/UserInput';
 import { Request } from 'lightna/engine/lib/Request';
-import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
+import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 import { Cookie } from 'lightna/engine/lib/Cookie';
 
 export class AddToCart {
-    static CART_ADD_URL= '/checkout/cart/add';
+    static CART_ADD_URL = '/checkout/cart/add';
     classes = {
         loading: 'loading',
         disabled: 'btn-disabled',
@@ -21,7 +21,8 @@ export class AddToCart {
         this.initializeActions();
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeActions() {
         ClickEventDelegator.add(this.actions.click);
@@ -57,10 +58,10 @@ export class AddToCart {
     }
 
     addProductSuccess(response) {
+        this.updateMagentoCartSectionId();
         document.dispatchEvent(new CustomEvent('add-to-cart', {
             detail: { response }
         }));
-        this.updateMagentoCartSectionId();
     }
 
     afterAddProduct(component, trigger) {
@@ -76,10 +77,12 @@ export class AddToCart {
         let sids = Cookie.get('section_data_ids');
         sids = sids ? JSON.parse(decodeURIComponent(sids)) : {};
         sids.cart = sids.cart ? sids.cart + 1000 : 1;
+        const hours = magentoContext.cookie.lifetime / 3600;
 
         Cookie.set(
             'section_data_ids',
             encodeURIComponent(JSON.stringify(sids)),
+            hours,
         );
     }
 }

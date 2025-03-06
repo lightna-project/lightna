@@ -20,7 +20,6 @@ export class Cookie {
         }
 
         document.cookie = name + '=' + (value || '') + expires
-            + '; domain=' + window.location.hostname
             + '; path=/; SameSite=Lax';
     }
 }
