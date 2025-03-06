@@ -54,6 +54,7 @@ class PhpUnit extends CompilerA
 
     protected function getTestDirectories(): array
     {
+        $search = ['Test', 'App/Test'];
         $directories = ['unit' => [], 'integration' => []];
         foreach ($this->getEnabledModules() as $module) {
             $dir = $module['path'];
@@ -61,11 +62,13 @@ class PhpUnit extends CompilerA
                 // Skip testing vendor modules
                 continue;
             }
-            if ($directory = realpath(LIGHTNA_ENTRY . $dir . '/Test/Unit')) {
-                $directories['unit'][] = $directory;
-            }
-            if ($directory = realpath(LIGHTNA_ENTRY . $dir . '/Test/Integration')) {
-                $directories['integration'][] = $directory;
+            foreach ($search as $folder) {
+                if ($directory = realpath(LIGHTNA_ENTRY . $dir . "/$folder/Unit")) {
+                    $directories['unit'][] = $directory;
+                }
+                if ($directory = realpath(LIGHTNA_ENTRY . $dir . "/$folder/Integration")) {
+                    $directories['integration'][] = $directory;
+                }
             }
         }
 
