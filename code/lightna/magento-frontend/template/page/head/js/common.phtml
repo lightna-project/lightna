@@ -2,6 +2,11 @@
 /**
  * Import:
  * @var Lightna\Engine\Data\Url $url
+ * @var Lightna\Engine\Data\Csp $csp
  */
 ?>
-<script type="text/javascript" src="<?= $url->asset('build/js/common.js') ?>" defer></script>
+<script type="text/javascript"
+        src="<?= $url->asset('build/js/common.js') ?>"
+        nonce="<?= $csp->nonce() ?>"
+        defer>
+</script>
