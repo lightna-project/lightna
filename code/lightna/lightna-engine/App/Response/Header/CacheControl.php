@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Lightna\Engine\App\HeaderPool;
+namespace Lightna\Engine\App\Response\Header;
 
 /**
  * Adds a Cache-Control header to HTTP responses consisting of a set of directives that allow you to specify when/how
@@ -8,7 +8,6 @@ namespace Lightna\Engine\App\HeaderPool;
  */
 class CacheControl extends AbstractHeader
 {
-    protected string $headerName = 'Cache-Control';
-
-    protected string $headerValue = 'max-age=0, no-cache, no-store, must-revalidate, private';
+    protected string $name = 'Cache-Control';
+    protected string $value = 'max-age=0, no-cache, no-store, must-revalidate, private';
 }

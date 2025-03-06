@@ -1,4 +1,4 @@
-import { $ } from 'lightna/engine/lib/utils/dom';
+import { $, $$ } from 'lightna/engine/lib/utils/dom';
 
 export class Facets {
     component = '.cjs-facets';
@@ -17,6 +17,13 @@ export class Facets {
             if (element.type === 'checkbox') {
                 this.onChange(element);
             }
+        });
+
+        $$(this.component + ' .toggle-link').forEach((toggle) => {
+            toggle.addEventListener('click', (event) => {
+                event.preventDefault();
+                toggle.classList.toggle('active');
+            });
         });
     }
 

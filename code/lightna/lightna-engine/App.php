@@ -7,29 +7,30 @@ namespace Lightna\Engine;
 use JetBrains\PhpStorm\NoReturn;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
+use Lightna\Engine\App\Response;
 use Lightna\Engine\App\Router;
 use Lightna\Engine\App\Router\BypassedException;
 use Lightna\Engine\App\Router\NoRouteException;
 use Lightna\Engine\App\Router\RedirectedException;
-use Lightna\Engine\App\HeaderManager;
 use Throwable;
 
 class App extends ObjectA
 {
+    /**
+     * Dependencies section
+     */
     protected Router $router;
-
     protected Context $context;
-
-    protected HeaderManager $headerManager;
-
-    protected ?array $action;
-
-    protected bool $noRoute = false;
-
-    protected bool $redirected = false;
-
+    protected Response $response;
     /** @AppConfig(router/action) */
     protected array $actions;
+
+    /**
+     * Internal properties section
+     */
+    protected ?array $action;
+    protected bool $noRoute = false;
+    protected bool $redirected = false;
 
     public function run(): void
     {
@@ -89,13 +90,7 @@ class App extends ObjectA
 
     protected function sendHeaders(): void
     {
-        foreach ($this->headerManager->getHeaders() as $header) {
-            if (!$this->headerManager->isValidHeader($header)) {
-                throw new \RuntimeException('Invalid header');
-            }
-
-            $this->headerManager->sendHeader($header);
-        }
+        $this->response->sendHeaders();
     }
 
     protected function processAction(): void
