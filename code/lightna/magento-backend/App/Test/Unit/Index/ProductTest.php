@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lightna\Magento\Backend\Test\Unit\Index;
+namespace Lightna\Magento\Backend\App\Test\Unit\Index;
 
 use Lightna\Magento\Backend\Index\Provider\Product;
 use Lightna\PhpUnit\App\LightnaTestCase;
