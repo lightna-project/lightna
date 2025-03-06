@@ -11,15 +11,23 @@ use Lightna\Engine\App\Router;
 use Lightna\Engine\App\Router\BypassedException;
 use Lightna\Engine\App\Router\NoRouteException;
 use Lightna\Engine\App\Router\RedirectedException;
+use Lightna\Engine\App\HeaderManager;
 use Throwable;
 
 class App extends ObjectA
 {
     protected Router $router;
+
     protected Context $context;
+
+    protected HeaderManager $headerManager;
+
     protected ?array $action;
+
     protected bool $noRoute = false;
+
     protected bool $redirected = false;
+
     /** @AppConfig(router/action) */
     protected array $actions;
 
@@ -81,12 +89,13 @@ class App extends ObjectA
 
     protected function sendHeaders(): void
     {
-        $this->sendCacheControlHeaders();
-    }
+        foreach ($this->headerManager->getHeaders() as $header) {
+            if (!$this->headerManager->isValidHeader($header)) {
+                throw new \RuntimeException('Invalid header');
+            }
 
-    protected function sendCacheControlHeaders(): void
-    {
-        header('Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private');
+            $this->headerManager->sendHeader($header);
+        }
     }
 
     protected function processAction(): void
