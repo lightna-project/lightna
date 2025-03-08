@@ -3,7 +3,7 @@
     "description": "Lightna Engine module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.39",
+    "version": "1.0.40",
     "require": {
         "php": "^8.1",
         "ext-ctype": "*",
