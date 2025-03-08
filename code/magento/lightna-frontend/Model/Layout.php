@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Lightna\Frontend\Model;
 
-use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Context as LightnaContext;
+use Lightna\Engine\App\Scope as LightnaScope;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Layout as MagentoLayout;
 
 class Layout extends MagentoLayout
 {
+    protected bool $isLightnaLaneAvailable;
     protected bool $isLightnaPageContextInitialized = false;
     protected const LAYOUT_LIGHTNA_TYPE = [
         'catalog_product_view' => 'product',
@@ -21,7 +23,10 @@ class Layout extends MagentoLayout
     {
         $this->initLightnaPageContext();
 
-        if ($lightnaBlockId = $this->getLightnaBlockId($name)) {
+        if (
+            $this->isLightnaLaneAvailable()
+            && ($lightnaBlockId = $this->getLightnaBlockId($name))
+        ) {
             return blockhtml('#' . $lightnaBlockId);
         } else {
             return (string)parent::renderElement($name, $useCache);
@@ -34,13 +39,27 @@ class Layout extends MagentoLayout
             return;
         }
 
-        $context = getobj(Context::class);
+        $context = getobj(LightnaContext::class);
         $type = $this->getLightnaEntityType();
         $context->entity->type = $type;
         $context->entity->id = $this->getLightnaEntityId($type);
         $context->mode = 'lane';
 
         $this->isLightnaPageContextInitialized = true;
+    }
+
+    protected function isLightnaLaneAvailable(): bool
+    {
+        if (!isset($this->isLightnaLaneAvailable)) {
+            $lightnaScope = getobj(LightnaScope::class);
+            $lightnaContext = getobj(LightnaContext::class);
+            $this->isLightnaLaneAvailable = in_array(
+                $lightnaContext->scope,
+                $lightnaScope->getList(),
+            );
+        }
+
+        return $this->isLightnaLaneAvailable;
     }
 
     protected function getLightnaEntityType(): string
