@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Schema\Index;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
+use Lightna\Engine\App\Project\Database\SchemaUpdater;
 
 class Queue extends ObjectA
 {
@@ -14,6 +15,7 @@ class Queue extends ObjectA
     /** @AppConfig(entity) */
     protected array $entity;
     protected Database $db;
+    protected SchemaUpdater $schemaUpdater;
 
     public function update(): void
     {
@@ -21,43 +23,26 @@ class Queue extends ObjectA
             return;
         }
 
-        $statement = $this->getQueueTableStatement();
-        $currentStatement = $this->getCurrentQueueTableStatement();
-        if ($currentStatement !== $statement) {
-            if ($currentStatement !== '') {
-                echo cli_warning("\nWARNING: Table " . static::TABLE_NAME . " has been recreated.\n");
-                $this->db->query('DROP TABLE ' . static::TABLE_NAME);
-            }
-            $this->db->query($statement);
-        }
-    }
+        $table = $this->schemaUpdater->createTable(static::TABLE_NAME);
 
-    protected function getCurrentQueueTableStatement(): string
-    {
-        if (!($this->db->structure->getTableNames()[static::TABLE_NAME] ?? false)) {
-            return '';
-        }
+        $table->addColumn('entity', 'enum')->setValues($this->getEntityColumnValues());
+        $table->addColumn('entity_id', 'bigint', ['unsigned' => true]);
+        $table->addColumn('status', 'enum')->setValues(['pending', 'processing']);
+        $table->setPrimaryKey(['status', 'entity', 'entity_id']);
 
-        return $this->db->structure->getCreateTable(static::TABLE_NAME);
-    }
-
-    protected function getQueueTableStatement(): string
-    {
-        $tableName = static::TABLE_NAME;
-        $enumEntitiesExpr = "'" . implode("','", $this->getEntityColumnValues()) . "'";
-
-        return <<<SQL
-CREATE TABLE `$tableName` (
-  `entity` enum($enumEntitiesExpr) NOT NULL,
-  `entity_id` bigint(20) NOT NULL,
-  `status` enum('pending','processing') NOT NULL,
-  PRIMARY KEY (`status`,`entity`,`entity_id`)
-)
-SQL;
+        $this->schemaUpdater->update($table);
     }
 
     protected function getEntityColumnValues(): array
     {
-        return array_keys($this->entity);
+        $values = merge(
+            $this->schemaUpdater->getExistingEnumValues(static::TABLE_NAME, 'entity'),
+            array_keys($this->entity),
+        );
+
+        $values = array_unique($values);
+        sort($values);
+
+        return $values;
     }
 }

@@ -6,6 +6,7 @@ namespace Lightna\Engine\App\Schema\Index;
 
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
+use Lightna\Engine\App\Project\Database\SchemaUpdater;
 use Lightna\Engine\App\Schema\Index\Triggers as TriggersSchema;
 
 class Changelog extends ObjectA
@@ -15,6 +16,7 @@ class Changelog extends ObjectA
 
     protected Database $db;
     protected TriggersSchema $triggersSchema;
+    protected SchemaUpdater $schemaUpdater;
 
     public function update(): void
     {
@@ -22,48 +24,53 @@ class Changelog extends ObjectA
             return;
         }
 
-        $statement = $this->getChangelogTableStatement();
-        $currentStatement = $this->getCurrentChangelogTableStatement();
-        if ($currentStatement !== $statement) {
-            if ($currentStatement !== '') {
-                echo cli_warning("\nWARNING: Table " . static::TABLE_NAME . " has been recreated.\n");
-                $this->db->query('DROP TABLE ' . static::TABLE_NAME);
-            }
-            $this->db->query($statement);
-        }
-    }
+        $table = $this->schemaUpdater->createTable(static::TABLE_NAME);
 
-    protected function getCurrentChangelogTableStatement(): string
-    {
-        if (!($this->db->structure->getTableNames()[static::TABLE_NAME] ?? false)) {
-            return '';
-        }
+        $table->addColumn('table', 'enum')->setValues($this->getTableColumnValues());
+        $table->addColumn('column', 'enum')->setValues($this->getColumnColumnValues());
+        $table->addColumn('primary_key', 'bigint', ['unsigned' => true]);
+        $table->addColumn('status', 'enum')->setValues(['pending', 'processing']);
+        $table->addColumn('old_value', 'string', ['length' => static::VALUE_MAX_LENGTH, 'notnull' => false]);
+        $table->addColumn('new_value', 'string', ['length' => static::VALUE_MAX_LENGTH, 'notnull' => false]);
+        $table->setPrimaryKey(['status', 'table', 'primary_key', 'column']);
 
-        return $this->db->structure->getCreateTable(static::TABLE_NAME);
-    }
-
-    protected function getChangelogTableStatement(): string
-    {
-        $tablesEnumExpr = "'" . implode("','", $this->getTableColumnValues()) . "'";
-        $maxColumnLength = $this->triggersSchema->getMaxColumnLength();
-        $tableName = static::TABLE_NAME;
-        $maxLength = static::VALUE_MAX_LENGTH;
-
-        return <<<SQL
-CREATE TABLE `$tableName` (
-  `table` enum($tablesEnumExpr) NOT NULL,
-  `column` varchar($maxColumnLength) NOT NULL,
-  `primary_key` bigint(20) unsigned NOT NULL,
-  `status` enum('pending','processing') NOT NULL,
-  `old_value` varchar($maxLength) DEFAULT NULL,
-  `new_value` varchar($maxLength) DEFAULT NULL,
-  PRIMARY KEY (`status`,`table`,`primary_key`,`column`)
-)
-SQL;
+        $this->schemaUpdater->update($table);
     }
 
     protected function getTableColumnValues(): array
     {
-        return $this->triggersSchema->getWatchedTables();
+        // Add new values and keep existing values to avoid errors
+        $values = merge(
+            array_values($this->triggersSchema->getWatchedTables()),
+            array_values($this->schemaUpdater->getExistingEnumValues(static::TABLE_NAME, 'table')),
+        );
+
+        $values = array_unique($values);
+        sort($values);
+
+        return $values;
+    }
+
+    protected function getColumnColumnValues(): array
+    {
+        $watchedTables = $this->triggersSchema->getWatchedTables();
+        $columns = [];
+        foreach ($this->triggersSchema->getWatchedColumns() as $watchedTable => $watchedColumn) {
+            if (!isset($watchedTables[$watchedTable])) {
+                continue;
+            }
+            $columns = merge($columns, $watchedColumn);
+        }
+
+        // Add new values and keep existing values to avoid errors
+        $values = merge(
+            array_values($columns),
+            array_values($this->schemaUpdater->getExistingEnumValues(static::TABLE_NAME, 'column')),
+        );
+
+        $values = array_unique($values);
+        sort($values);
+
+        return $values;
     }
 }
