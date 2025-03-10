@@ -19,8 +19,8 @@ class Session extends ObjectA
     protected array $config;
     /** @AppConfig(session_handler) */
     protected array $handlers;
-    /** @AppConfig(fpc_compatible) */
-    protected bool $fpcCompatible;
+    /** @AppConfig(page_cache) */
+    protected array $pageCacheConfig;
     protected HandlerInterface $handler;
     protected Cookie $cookie;
     protected Context $context;
@@ -67,7 +67,7 @@ class Session extends ObjectA
 
     public function canRead(): bool
     {
-        return !$this->fpcCompatible || $this->context->visibility === 'private';
+        return !$this->pageCacheConfig['type'] || $this->context->visibility === 'private';
     }
 
     protected function readContent(): string

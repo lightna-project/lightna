@@ -14,8 +14,8 @@ class Context extends DataA
     public string $mode = '';
     public array $privateBlocks;
 
-    /** @AppConfig(fpc_compatible) */
-    protected bool $isFpcCompatible;
+    /** @AppConfig(page_cache) */
+    protected array $pageCacheConfig;
     protected AppContext $appContext;
     protected Layout $layout;
 
@@ -35,7 +35,7 @@ class Context extends DataA
     protected function definePrivateBlocks(): void
     {
         $this->privateBlocks =
-            $this->isFpcCompatible && $this->appContext->visibility === 'public'
+            $this->pageCacheConfig['type'] && $this->appContext->visibility === 'public'
                 ? $this->layout->getPrivateBlockIds()
                 : [];
     }

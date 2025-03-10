@@ -16,7 +16,7 @@ class Router extends ObjectA
 {
     /** @AppConfig(router/bypass) */
     protected ?array $bypass;
-    /** @AppConfig(router/routes) */
+    /** @AppConfig(router/route) */
     protected array $routes;
     protected Route $route;
     protected Request $request;
@@ -111,9 +111,12 @@ class Router extends ObjectA
 
     protected function canBypass(): bool
     {
+        if(!$this->bypass['file']) {
+            return false;
+        }
+
         $bypass =
-            ($this->bypass['file'] ?? false)
-            && ($bypassUrls = $this->bypass['rule']['url_starts_with'] ?? false)
+            ($bypassUrls = $this->bypass['rule']['url_starts_with'])
             && is_array($bypassUrls) && count($bypassUrls)
             && preg_match('~^(' . implode('|', $bypassUrls) . ')~', $this->request->uriPath);
 
