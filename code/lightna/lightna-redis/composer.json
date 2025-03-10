@@ -3,10 +3,10 @@
     "description": "Lightna Redis module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.41",
+    "version": "1.0.42",
     "require": {
         "ext-redis": "*",
-        "lightna/engine": "^1.0.41"
+        "lightna/engine": "^1.0.42"
     },
     "autoload": {
         "psr-4": {

@@ -31,10 +31,13 @@ return [
     // Relative path to Magento directory, required for indexer to collect data from Magento modules
     'project_dir' => '..',
 
-    // Use fpc_compatible = false unless:
-    // 1) Lightna page is cached by FPC (Varnish, Fastly, Builtin) and it renders private blocks
-    // 2) Lightna Lane page is cached by FPC, and it renders private blocks
-    'fpc_compatible' => false,
+    // Use page_cache.type = null unless:
+    //   - Lightna page is cached by FPC (Varnish, Fastly, Builtin) and it renders private blocks
+    //   - Lightna Lane page is cached by FPC, and it renders private blocks
+    // Possible values: custom, edge
+    'page_cache' => [
+        'type' => null,
+    ],
 
     // Use false unless you want to enable progressive rendering intentionally, read more in the documentation
     'progressive_rendering' => false,

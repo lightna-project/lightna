@@ -1,4 +1,5 @@
-fpc_compatible: false
+page_cache:
+  type: null
 maintenance:
   enabled: false
   # Directory with custom maintenance pages
@@ -31,7 +32,7 @@ router:
   action:
     page: Lightna\Engine\App\Router\Action\Page
     block: Lightna\Engine\App\Router\Action\Block
-  routes:
+  route:
     lightna/block: block
   bypass:
     rule:
