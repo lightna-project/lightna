@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Schema\Storage;
 
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\Storage\Database\Client as StorageDatabase;
-use Lightna\Engine\App\UserException;
+use Lightna\Engine\App\Storage\Database\SchemaUpdater;
 
 class Database extends ObjectA
 {
     public const TABLE_NAME = 'lightna_storage';
-    protected StorageDatabase $storageDatabase;
     /** @AppConfig(storage/database/options/dbname) */
     protected string $storageDbname;
+    protected SchemaUpdater $schemaUpdater;
 
     public function update(): void
     {
@@ -29,33 +28,14 @@ class Database extends ObjectA
 
     protected function updateSchema(): void
     {
-        if ($this->getCurrentSchema() !== $this->getRequiredSchema()) {
-            throw new UserException(
-                "\nTable schema for \"" . static::TABLE_NAME . "\" requires changes:"
-                . "\n\nActual:"
-                . "\n\n    " . str_replace("\n", "\n    ", $this->getCurrentSchema())
-                . "\n\nExpected:"
-                . "\n\n    " . str_replace("\n", "\n    ", $this->getRequiredSchema())
-                . "\n\n"
-            );
-        }
-    }
+        $table = $this->schemaUpdater->createTable(static::TABLE_NAME);
 
-    protected function getRequiredSchema(): string
-    {
-        return 'CREATE TABLE `lightna_storage` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `key` varchar(255) NOT NULL,
-  `value` mediumblob DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`)
-)';
-    }
+        $table->addColumn('id', 'bigint', ['unsigned' => true, 'autoincrement' => true]);
+        $table->addColumn('key', 'string', ['length' => 255, 'notnull' => true]);
+        $table->addColumn('value', 'blob', ['length' => 16777215, 'notnull' => false]);
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['key']);
 
-    protected function getCurrentSchema(): string
-    {
-        return $this->storageDatabase->structure->tableExists(static::TABLE_NAME)
-            ? $this->storageDatabase->structure->getCreateTable(static::TABLE_NAME)
-            : '';
+        $this->schemaUpdater->update($table);
     }
 }

@@ -1,6 +1,7 @@
 {
     "require": {
-        "laminas/laminas-db": "^2.20"
+        "laminas/laminas-db": "^2.20",
+        "doctrine/dbal": "^4.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.5"

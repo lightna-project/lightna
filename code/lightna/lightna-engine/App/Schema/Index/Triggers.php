@@ -271,17 +271,9 @@ class Triggers extends ObjectA
         return $this->watchedTables;
     }
 
-    public function getMaxColumnLength(): int
+    public function getWatchedColumns(): array
     {
-        $max = 1;
-        foreach ($this->watchedColumns as $columns) {
-            foreach ($columns as $column) {
-                $len = strlen($column);
-                $max = max($len, $max);
-            }
-        }
-
-        return $max;
+        return $this->watchedColumns;
     }
 
     public function unwatchTable(string $table): void
