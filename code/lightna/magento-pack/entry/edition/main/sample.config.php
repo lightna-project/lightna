@@ -19,16 +19,16 @@ return [
         ],
     ],
 
-    // Relative path to the directory where Lightna will make its build
+    // Relative to the Lightna entry folder, the path to the directory where Lightna will make its build
     'compiler_dir' => 'generated/compiled',
 
-    // Relative path to the directory where Lightna will move built assets (CSS, JS, fonts, images, etc)
+    // Relative to the Lightna entry folder, the path to the directory where Lightna will move built assets (CSS, JS, fonts, images, etc)
     'asset_dir' => '../pub/lightna',
 
-    // Relative path to the document root, required to build the correct URLs to the assets
+    // Relative to the Lightna entry folder, the path to the document root, required to build the correct URLs to the assets
     'doc_dir' => '../pub',
 
-    // Relative path to Magento directory, required for indexer to collect data from Magento modules
+    // Relative to the Lightna entry folder, the path to the Magento directory, required for indexer to collect data from Magento modules
     'project_dir' => '..',
 
     // Use page_cache.type = null unless:
@@ -53,7 +53,7 @@ return [
     'router' => [
         'bypass' => [
 
-            // Relative path to Magento index.php file
+            // Relative to the Lightna entry folder, the path to the Magento index.php file
             'file' => '../pub/magento_index.php',
             'rule' => [
 
@@ -67,7 +67,7 @@ return [
         'opcache' => [
             'options' => [
 
-                // Relative path to indexer opcache files
+                // Relative to the Lightna entry folder, the path to the indexer opcache files
                 'dir' => 'generated/storage',
             ],
         ],
