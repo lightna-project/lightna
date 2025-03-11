@@ -6,8 +6,9 @@ namespace Lightna\Magento\Backend\Data;
 
 use Lightna\Magento\Backend\Data\Session\Cart;
 use Lightna\Magento\Backend\Data\Session\Customer;
+use Lightna\Session\Data\Session as SessionData;
 
-class Session extends \Lightna\Session\Data\Session
+class Session extends SessionData
 {
     public Customer $customer;
     public Cart $cart;

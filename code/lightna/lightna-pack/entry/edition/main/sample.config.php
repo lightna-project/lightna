@@ -15,17 +15,17 @@ return [
         ],
     ],
 
-    // Relative path to the directory where Lightna will make its build
+    // Relative to the Lightna entry folder, the path where the compiled build will be stored
     'compiler_dir' => 'generated/compiled',
 
-    // Relative path to the directory where Lightna will move built assets (CSS, JS, fonts, images, etc.)
+    // Relative to the Lightna entry folder, the path to the directory where Lightna will move built assets (CSS, JS, fonts, images, etc)
     'asset_dir' => 'pub/lightna',
 
-    // Relative path to the document root, required to build the correct URLs to the assets
+    // Relative to the Lightna entry folder, the path to the document root, required to generate correct asset URLs
     'doc_dir' => 'pub',
 
     // If used together with another platform:
-    // Relative path to app directory, can be used by indexer to collect data from the app
+    // Relative to the Lightna entry folder, the path to app directory, can be used by indexer to collect data from the app
     'project_dir' => '.',
 
     // Use page_cache.type = null unless:
@@ -50,7 +50,8 @@ return [
     'router' => [
         'bypass' => [
 
-            // Relative path to the fallback file, if you have an app under hood to handle some of the requests
+            // Relative to the Lightna entry folder, the path to the fallback file,
+            // if you have an app under hood to handle some of the requests
             'file' => null,
             'rule' => [
 
@@ -64,7 +65,7 @@ return [
         'opcache' => [
             'options' => [
 
-                // Relative path to indexer opcache files
+                // Relative to the Lightna entry folder, the path to the indexer opcache files
                 'dir' => 'generated/storage',
             ],
         ],
