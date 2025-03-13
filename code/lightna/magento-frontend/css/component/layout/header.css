@@ -16,7 +16,7 @@
     }
 
     .header__right {
-        @apply flex items-center justify-end gap-5;
+        @apply flex items-center justify-end gap-5 md:py-5;
     }
 
     .header__icon {
