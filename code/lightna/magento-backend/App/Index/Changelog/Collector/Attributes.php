@@ -9,9 +9,11 @@ use Lightna\Engine\App\ObjectA;
 
 class Attributes extends ObjectA implements CollectorInterface
 {
+    protected array $watchedTables = ['eav_attribute', 'catalog_eav_attribute'];
+
     public function collect(string $table, array $changelog): array
     {
-        if (str_contains($table, 'eav_attribute')) {
+        if (in_array($table, $this->watchedTables)) {
             return [
                 'content_product' => [1], // Update visible attributes
                 'content_category' => [1], // Update filterable attributes

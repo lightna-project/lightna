@@ -8,12 +8,14 @@ use Exception;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Engine\App\Schema\Index\Changelog as ChangelogSchema;
+use Lightna\Engine\App\Scope;
 
 class Triggers extends ObjectA
 {
+    protected Database $db;
+    protected Scope $scope;
     /** @AppConfig(backend:indexer/changelog/tables) */
     protected array $tablesConfig = [];
-    protected Database $db;
     protected array $allTables;
     protected array $tableKeys;
     protected array $triggers = [];
@@ -53,13 +55,26 @@ class Triggers extends ObjectA
     protected function defineWatchedTables(): void
     {
         $this->watchedTables = [];
-        foreach ($this->tablesConfig as $table => $forcedColumns) {
-            if (!isset($this->allTables[$table])) {
-                continue;
+        foreach ($this->tablesConfig as $tablePattern => $forcedColumns) {
+            foreach ($this->getTablesByPattern($tablePattern) as $table) {
+                if (!isset($this->allTables[$table])) {
+                    continue;
+                }
+                $this->watchedTables[$table] = $table;
+                $this->forcedColumns[$table] = array_combine($forcedColumns, $forcedColumns);
             }
-            $this->watchedTables[$table] = $table;
-            $this->forcedColumns[$table] = array_combine($forcedColumns, $forcedColumns);
         }
+    }
+
+    public function getTablesByPattern(string $tablePattern): array
+    {
+        $tables = [];
+        foreach ($this->scope->getList() as $scopeId) {
+            $table = preg_replace('~<scope_id>~', (string)$scopeId, $tablePattern);
+            $tables[$table] = $table;
+        }
+
+        return $tables;
     }
 
     /** @noinspection PhpUnused */
@@ -276,28 +291,32 @@ class Triggers extends ObjectA
         return $this->watchedColumns;
     }
 
-    public function unwatchTable(string $table): void
+    public function unwatchTable(string $tablePattern): void
     {
-        $triggerNames = [];
-        foreach (['update', 'delete', 'insert'] as $event) {
-            $triggerNames[] = $this->getTriggerName($table, $event);
-        }
-        foreach ($triggerNames as $triggerName) {
-            if (isset($this->triggers[$triggerName])) {
-                $this->db->query('DROP TRIGGER ' . $triggerName);
-                unset($this->triggers[$triggerName]);
+        foreach ($this->getTablesByPattern($tablePattern) as $table) {
+            $triggerNames = [];
+            foreach (['update', 'delete', 'insert'] as $event) {
+                $triggerNames[] = $this->getTriggerName($table, $event);
+            }
+            foreach ($triggerNames as $triggerName) {
+                if (isset($this->triggers[$triggerName])) {
+                    $this->db->query('DROP TRIGGER ' . $triggerName);
+                    unset($this->triggers[$triggerName]);
+                }
             }
         }
     }
 
-    public function watchTable(string $table): void
+    public function watchTable(string $tablePattern): void
     {
-        if (!isset($this->watchedTables[$table])) {
-            throw new Exception('Table ' . $table . ' isn\'t declared as watched.');
-        }
+        foreach ($this->getTablesByPattern($tablePattern) as $table) {
+            if (!isset($this->watchedTables[$table])) {
+                throw new Exception('Table ' . $table . ' isn\'t declared as watched.');
+            }
 
-        foreach (['insert', 'update', 'delete'] as $event) {
-            $this->updateTrigger($table, $event);
+            foreach (['insert', 'update', 'delete'] as $event) {
+                $this->updateTrigger($table, $event);
+            }
         }
     }
 }

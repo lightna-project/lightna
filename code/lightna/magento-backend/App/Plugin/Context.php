@@ -15,10 +15,10 @@ class Context extends ObjectA
     /** @noinspection PhpUnused */
     public function defineScopeExtended(): Closure
     {
-        $resolveScope = $this->magentoScope->resolve(...);
+        $magentoScope = $this->magentoScope;
 
-        return function () use ($resolveScope) {
-            $this->scope = $resolveScope();
+        return function () use ($magentoScope) {
+            $this->scope = $magentoScope->resolve();
         };
     }
 }

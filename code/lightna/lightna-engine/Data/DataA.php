@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\Data;
 
 use AllowDynamicProperties;
+use Exception;
 use Lightna\Engine\App\ObjectA;
 
 #[AllowDynamicProperties]
@@ -86,7 +87,7 @@ class DataA extends ObjectA
     public function __call(string $name, array $arguments)
     {
         if (!isset($this->{$name})) {
-            return null;
+            throw new Exception('Invoking undefined property or method ' . $this::class . '::' . $name);
         }
         if (is_scalar($this->{$name}) || is_array($this->{$name})) {
             return escape($this->{$name}, ...$arguments);

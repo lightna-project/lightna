@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Backend\App\Query;
 
+use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\ObjectA;
@@ -66,10 +67,27 @@ class Category extends ObjectA
         return $select;
     }
 
-    public function getList(array $ids): array
+    public function getAllAccessible(): array
+    {
+        return $this->db->fetch($this->getAllAccessibleSelect(), 'entity_id');
+    }
+
+    protected function getAllAccessibleSelect(): Select
+    {
+        $select = $this->getAllSelect();
+
+        $isActive = $this->eav->joinAttribute('is_active', $select);
+        $this->eav->joinAttribute('name', $select);
+        $this->eav->joinUrl($select);
+        $select->where("$isActive = 1");
+
+        return $select;
+    }
+
+    public function getBatch(array $ids): array
     {
         $result = merge(
-            $this->db->fetch($this->getListSelect($ids), 'entity_id'),
+            $this->db->fetch($this->getBatchSelect($ids), 'entity_id'),
             $this->eav->getAttributeValues($ids, []),
         );
 
@@ -79,7 +97,7 @@ class Category extends ObjectA
         return $result;
     }
 
-    protected function getListSelect(array $ids): Select
+    protected function getBatchSelect(array $ids): Select
     {
         $select = $this->getAllSelect();
         $select->where->in('e.entity_id', $ids);

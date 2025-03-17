@@ -6,13 +6,13 @@ namespace Lightna\Frontend\Plugin;
 
 use Closure;
 use Lightna\Magento\Backend\App\Index\Service;
-use Magento\Catalog\Model\Indexer\Product\Price\Action\Full;
+use Magento\Catalog\Model\Indexer\Category\Product\Action\Full;
 
 /** @noinspection PhpUnused */
 
-class PriceFullReindex
+class CategoryProductFullReindex
 {
-    protected const TABLE = 'catalog_product_index_price';
+    protected const TABLE = 'catalog_category_product_index_store<scope_id>';
     protected Service $service;
 
     public function __construct()
@@ -20,7 +20,7 @@ class PriceFullReindex
         $this->service = getobj(Service::class);
     }
 
-    public function aroundExecute(Full $subject, Closure $proceed, $ids = null): void
+    public function aroundExecute(Full $subject, Closure $proceed, $ids = null): Full
     {
         // Remove triggers from replica to avoid spam in changelog and retarded reindex
         $this->service->unwatchReplica(static::TABLE);
@@ -32,5 +32,7 @@ class PriceFullReindex
 
         // Sync replica and price index to generate elegant changelog
         $this->service->sync(static::TABLE);
+
+        return $subject;
     }
 }

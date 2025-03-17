@@ -34,6 +34,8 @@ indexer:
       cms_block_store: [ block_id ]
       inventory_source_item: [ sku ]
       inventory_reservation: [ sku ]
+      catalog_category_product_index_store<scope_id>: [ ]
+      catalog_category_product_index_store<scope_id>_replica: [ ]
     batch:
       collectors:
         lightna_product: Lightna\Magento\Backend\App\Index\Changelog\Collector\Product
@@ -46,6 +48,7 @@ indexer:
         lightna_category: Lightna\Magento\Backend\App\Index\Changelog\Collector\Category
         lightna_attributes: Lightna\Magento\Backend\App\Index\Changelog\Collector\Attributes
         lightna_cms_block: Lightna\Magento\Backend\App\Index\Changelog\Collector\CmsBlock
+        lightna_category_products: Lightna\Magento\Backend\App\Index\Changelog\Collector\CategoryProducts
   inventory:
     ignore_qty_change: true
   product:

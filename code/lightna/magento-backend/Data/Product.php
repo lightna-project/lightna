@@ -15,6 +15,7 @@ use Lightna\Magento\Backend\Data\Product\Price as ProductPrice;
  * @property Image[] gallery
  * @method string attributeSetId(string $escapeMethod = null)
  * @method string children(string $escapeMethod = null)
+ * @method string categories(string $escapeMethod = null)
  * @method string description(string $escapeMethod = null)
  * @method string entityId(string $escapeMethod = null)
  * @method string name(string $escapeMethod = null)
@@ -30,6 +31,7 @@ class Product extends EntityData
     public ProductPrice $price;
     public ProductInventory $inventory;
     public ProductOptions $options;
+    public array $categories;
     public array $gallery;
     public int $attributeSetId;
     public int $entityId;

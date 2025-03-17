@@ -33,6 +33,7 @@ class Product extends ObjectA
     protected array $options;
     protected array $variantValueIds;
     protected array $galleryItems;
+    protected array $categories;
     /** Result */
     protected array $data = [];
 
@@ -72,6 +73,7 @@ class Product extends ObjectA
         $this->loadOptions();
         $this->loadVariantValueIds();
         $this->loadGallery();
+        $this->loadCategories();
     }
 
     protected function isProductIndexable(array $product): bool
@@ -113,6 +115,7 @@ class Product extends ObjectA
         $this->collectUrl($product, $id);
         $this->collectOptions($product, $id);
         $this->collectGallery($product, $id);
+        $this->collectCategories($product, $id);
     }
 
     protected function applyProductData($product, $id): void
@@ -297,6 +300,11 @@ class Product extends ObjectA
         $product['gallery'] = $gallery;
     }
 
+    protected function collectCategories(array &$product, int $id): void
+    {
+        $product['categories'] = $this->categories[$id] ?? [];
+    }
+
     protected function loadVariantValueIds(): void
     {
         $entityIds = [];
@@ -324,5 +332,10 @@ class Product extends ObjectA
     protected function loadGallery(): void
     {
         $this->galleryItems = $this->gallery->getItems($this->allIds);
+    }
+
+    protected function loadCategories(): void
+    {
+        $this->categories = $this->product->getCategoriesBatch($this->allIds);
     }
 }

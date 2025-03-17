@@ -200,4 +200,35 @@ class Product extends ObjectA
 
         return $select;
     }
+
+    public function getCategoriesBatch(array $ids): array
+    {
+        $batch = [];
+        foreach ($this->db->fetch($this->getCategoriesBatchSelect($ids)) as $row) {
+            $batch[$row['product_id']][] = $row['category_id'];
+        }
+
+        return $batch;
+    }
+
+    protected function getCategoriesBatchSelect(array $ids): Select
+    {
+        $storeId = $this->store->get()['store_id'];
+        $select = $this->db
+            ->select(['i' => 'catalog_category_product_index_store' . $storeId])
+            ->columns(['category_id', 'product_id'])
+            ->join(
+                ['e' => 'catalog_category_entity'],
+                'e.entity_id = i.category_id',
+                [],
+            )
+            ->where(['store_id = ?' => $storeId])
+            ->order(['e.level']);
+
+        $select->where
+            ->in('visibility', [2, 4])
+            ->in('product_id', $ids);
+
+        return $select;
+    }
 }

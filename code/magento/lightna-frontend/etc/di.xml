@@ -17,4 +17,7 @@
     <type name="Magento\Catalog\Model\Indexer\Product\Price\Action\Full">
         <plugin name="lightna_price_full_reindex" type="Lightna\Frontend\Plugin\PriceFullReindex"/>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Full">
+        <plugin name="lightna_category_product_full_reindex" type="Lightna\Frontend\Plugin\CategoryProductFullReindex"/>
+    </type>
 </config>

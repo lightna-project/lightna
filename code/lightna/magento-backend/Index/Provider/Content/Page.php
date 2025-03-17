@@ -24,7 +24,10 @@ class Page extends ObjectA
     {
         return merge(
             $this->cmsBlockProvider->getData($this->blocks),
-            ['menu' => $this->getCategoriesTree()],
+            [
+                'menu' => $this->getCategoriesTree(),
+                'category' => $this->category->getAllAccessible(),
+            ],
         );
     }
 
