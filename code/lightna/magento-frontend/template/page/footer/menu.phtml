@@ -4,8 +4,8 @@
  * @var Lightna\Magento\Backend\Data\Content\Page $page
  */
 ?>
-<?php if ($footerLinksHtml = $page->footerLinksHtml) : ?>
+<?php if ($page->footerLinksHtml) : ?>
     <div class="footer-columns">
-        <?= $footerLinksHtml ?>
+        <?= $page->footerLinksHtml ?>
     </div>
 <?php endif; ?>

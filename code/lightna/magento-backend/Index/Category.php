@@ -21,7 +21,7 @@ class Category extends IndexAbstract
 
     public function getDataBatch(array $ids): array
     {
-        return $this->query->getList($ids);
+        return $this->query->getBatch($ids);
     }
 
     public function getRoutesBatch(array $ids): array

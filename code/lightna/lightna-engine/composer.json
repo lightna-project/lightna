@@ -3,12 +3,13 @@
     "description": "Lightna Engine module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.43",
+    "version": "1.0.44",
     "require": {
         "php": "^8.1",
         "ext-ctype": "*",
         "ext-yaml": "*",
         "ext-pdo": "*",
+        "ext-zend-opcache": "*",
         "laminas/laminas-db": "^2.20",
         "doctrine/dbal": "^4.2"
     },

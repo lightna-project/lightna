@@ -114,11 +114,21 @@ class ObjectA implements JsonSerializable
 
     protected function checkAccessibilityInDevMode(string $name): void
     {
-        $inside = ($caller = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 3)[2]['object'] ?? null)
-            && $caller::class === $this::class;
+        $caller = null;
+        $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 10);
+        foreach ($backtrace as $i => $details) {
+            if (($details['function'] ?? null) === '__get') {
+                $caller = $backtrace[$i + 1]['object'] ?? null;
+                break;
+            }
+        }
 
+        $inside = $caller && $caller::class === $this::class;
         if (!$inside) {
-            throw new Exception('Attempt to access property outside ' . $this::class . '::' . $name);
+            throw new Exception(
+                'Attempt to access protected property ' . $this::class . '::' . $name
+                . ' from ' . ($caller ? $caller::class : 'undefined')
+            );
         }
     }
 

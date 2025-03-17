@@ -1,0 +1,15 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Magento\Backend\Data\Product\Breadcrumbs $breadcrumbs
+ */
+
+if (!$breadcrumbs->trail) {
+    return;
+}
+?>
+
+<?php foreach ($breadcrumbs->trail as $i => $breadcrumb): ?>
+    <?= $i > 0 ? ' / ' : '' ?>
+    <a href="<?= $breadcrumb->url() ?>"><?= $breadcrumb->name() ?></a>
+<?php endforeach; ?>

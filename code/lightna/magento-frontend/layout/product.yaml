@@ -11,6 +11,9 @@ extends:
     class:
       - product
   .main:
+    .breadcrumbs:
+      id: breadcrumbs
+      template: lightna/magento-frontend/product/breadcrumbs.phtml
     .content:
       container: div
       attributes:

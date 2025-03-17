@@ -3,9 +3,9 @@
     "description": "Magento Lane Theme for Lightna",
     "type": "magento2-theme",
     "license": "MIT",
-    "version": "1.0.43",
+    "version": "1.0.44",
     "require": {
-        "lightna/magento-theme": "^1.0.43"
+        "lightna/magento-theme": "^1.0.44"
     },
     "autoload": {
         "files": [

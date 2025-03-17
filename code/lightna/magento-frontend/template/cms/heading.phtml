@@ -4,8 +4,8 @@
  * @var Lightna\Magento\Backend\Data\Cms $entity
  */
 ?>
-<?php if ($heading = $entity->contentHeading()) { ?>
+<?php if ($entity->contentHeading) { ?>
     <h1>
-        <?= $heading ?>
+        <?= $entity->contentHeading ?>
     </h1>
 <?php } ?>
