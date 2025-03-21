@@ -28,7 +28,8 @@ export class MiniCart {
         this.initializeActions();
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeEventListeners() {
         document.addEventListener('add-to-cart', (event) => this.handleAddToCart(event));

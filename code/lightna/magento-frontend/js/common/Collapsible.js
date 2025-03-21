@@ -19,7 +19,8 @@ export class Collapsible {
         this.initializeActions();
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeActions() {
         ClickEventDelegator.add(this.actions.click);

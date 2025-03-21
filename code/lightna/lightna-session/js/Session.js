@@ -4,7 +4,11 @@ import { Request } from 'lightna/engine/lib/Request';
 export class Session {
 
     constructor() {
+        this.extendProperties();
         this.initializeEventListeners();
+    }
+
+    extendProperties() {
     }
 
     initializeEventListeners() {

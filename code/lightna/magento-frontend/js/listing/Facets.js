@@ -8,7 +8,8 @@ export class Facets {
         this.initializeEventListeners();
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeEventListeners() {
         $(this.component)?.addEventListener('change', (event) => {
