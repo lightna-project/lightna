@@ -1,5 +1,6 @@
 const path = require('path');
 const deepmerge = require('deepmerge');
+const optimizationConfig = require('./webpack.config.optimization');
 
 const editionDir = process.env.LIGHTNA_EDITION_DIR;
 const editionAssetDir = process.env.LIGHTNA_EDITION_ASSET_DIR;
@@ -10,6 +11,7 @@ const config = deepmerge(modulesConfig, {
         filename: '[name].js',
         path: path.resolve(__dirname, editionAssetDir + '/build/js'),
     },
+    optimization: optimizationConfig,
     mode: 'production'
 });
 
