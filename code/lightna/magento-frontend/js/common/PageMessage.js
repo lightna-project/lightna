@@ -23,7 +23,8 @@ export class PageMessage {
         }
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     attachToDom() {
         const message = document.createElement('div');

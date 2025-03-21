@@ -3,6 +3,7 @@ import { XSwipeHandler } from 'lightna/engine/lib/XSwipeHandler';
 
 export class Gallery {
     constructor() {
+        this.extendProperties();
         this.offset = 1;
         this.cjs = '.cjs-gallery';
         if (!$(this.cjs)) {
@@ -18,6 +19,9 @@ export class Gallery {
         this.updateTransitionStep();
         this.handleTouch();
         this.changeImage(this.currentImage);
+    }
+
+    extendProperties() {
     }
 
     init() {

@@ -5,6 +5,14 @@ export class ClickEventDelegator {
     dataAttribute = 'data-click-action';
 
     constructor() {
+        this.extendProperties();
+        this.initializeEventListeners();
+    }
+
+    extendProperties() {
+    }
+
+    initializeEventListeners() {
         document.addEventListener('click', (event) => this.handleClick(event));
     }
 

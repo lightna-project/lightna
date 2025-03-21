@@ -27,7 +27,8 @@ export class SearchSuggestions {
         this.initializeActions();
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeEventListeners() {
         this.search.addEventListener('input', async () => {

@@ -35,7 +35,8 @@ export class Search {
         this.prefillSearchInput();
     }
     
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeEventListeners() {
         this.search.addEventListener('input', (event) => { this.onInput(event) });

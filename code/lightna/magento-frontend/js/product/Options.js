@@ -15,7 +15,8 @@ export class Options {
         this.initializeEventListeners();
     }
 
-    extendProperties() {}
+    extendProperties() {
+    }
 
     initializeEventListeners() {
         $$(this.component).forEach((component) => {
