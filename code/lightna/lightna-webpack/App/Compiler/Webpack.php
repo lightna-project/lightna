@@ -114,7 +114,11 @@ class Webpack extends CompilerA
             $components = $types['component'] ?? [];
             unset($types['component']);
 
-            foreach ($types as $imports) {
+            foreach ($types as $key => $imports) {
+                if (!in_array($key, ['component', 'import'])) {
+                    continue;
+                }
+
                 $allImports = merge($allImports, $imports);
             }
             $this->createEntryJs($name, $allImports, $components);
@@ -174,6 +178,7 @@ class Webpack extends CompilerA
         return $this->getConfigJsHead() .
             $this->getConfigJsEntries() .
             $this->getConfigJsAliases() .
+            $this->getConfigJsOptimizationSplitChunks() .
             $this->getConfigJsExports();
     }
 
@@ -181,9 +186,9 @@ class Webpack extends CompilerA
     {
         $js = "const path = require('path');\n";
         $js .= "let config = " . json_pretty($this->modulesConfig['webpack'] ?? new stdClass()) . ";\n";
-        $js .= "config.entry = config.entry || {};\n";
-        $js .= "config.resolve = config.resolve || {};\n";
-        $js .= "config.resolve.alias = config.resolve.alias || {};\n\n";
+        $js .= "config.entry ||= {};\n";
+        $js .= "config.resolve ||= {};\n";
+        $js .= "config.resolve.alias ||= {};\n\n";
 
         return $js;
     }
@@ -192,11 +197,36 @@ class Webpack extends CompilerA
     {
         $js = '';
         foreach ($this->modulesConfig['entry'] as $name => $entry) {
-            $js .= "config.entry[" . json_pretty($name) . "]" .
-                " = path.resolve(__dirname, " . json_pretty('./' . $name . '.js') . ");\n";
+            $js .= "var entry = config.entry[" . json_pretty($name) . "] ||= {};\n";
+            $js .= "entry['import'] = path.resolve(__dirname, " . json_pretty('./' . $name . '.js') . ");\n";
+            $js .= $this->getConfigJsEntryFields($name);
+            $js .= "\n";
         }
 
         return $js;
+    }
+
+    protected function getConfigJsEntryFields(string $name): string
+    {
+        $js = '';
+        foreach ($this->modulesConfig['entry'][$name] as $field => $value) {
+            if (in_array($field, ['component', 'import'])) {
+                continue;
+            }
+            $js .= $this->getConfigJsEntryField($field, $value);
+        }
+
+        return $js;
+    }
+
+    protected function getConfigJsEntryField(string $field, mixed $value): string
+    {
+        $field = match ($field) {
+            'depends_on' => 'dependOn',
+            default => $field,
+        };
+
+        return "entry[" . json_pretty($field) . "] = " . json_pretty($value) . ";\n";
     }
 
     protected function getConfigJsAliases(): string
@@ -206,6 +236,7 @@ class Webpack extends CompilerA
             $js .= "config.resolve.alias[" . json_pretty($alias) . "]" .
                 " = path.resolve(__dirname, " . json_pretty($path) . ");\n";
         }
+        $js .= "\n";
 
         return $js;
     }
@@ -230,6 +261,32 @@ class Webpack extends CompilerA
         }
 
         return $aliases;
+    }
+
+    protected function getConfigJsOptimizationSplitChunks(): string
+    {
+        $chunks = $this->getChunks();
+        $js = "config.optimization ||= {};\n";
+        $js .= "var splitChunks = config.optimization.splitChunks ||= {};\n";
+        $js .= "splitChunks.chunks = (chunk) => " . json_pretty($chunks) . ".includes(chunk.name);\n";
+        $js .= "splitChunks.minSize = 0;\n";
+
+        return $js;
+    }
+
+    protected function getChunks(): array
+    {
+        $chunks = [];
+        foreach ($this->modulesConfig['entry'] as $name => $entry) {
+            if (!$dependsOn = ($entry['depends_on'] ?? null) ?? ($entry['dependOn'] ?? null)) {
+                continue;
+            }
+
+            $chunks[$name] = 1;
+            $chunks[$dependsOn] = 1;
+        }
+
+        return array_keys($chunks);
     }
 
     protected function getConfigJsExports(): string
