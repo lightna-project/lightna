@@ -15,8 +15,13 @@ const config = deepmerge(modulesConfig, {
 
 module.exports = (env, argv) => {
     if (argv.mode === 'development') {
-        config.devtool = 'inline-source-map';
-        config.watch = true;
+        const devOptions = {
+            devtool: 'inline-source-map',
+            watch: true,
+            cache: false,
+        };
+
+        Object.assign(config, devOptions);
     }
 
     return config;
