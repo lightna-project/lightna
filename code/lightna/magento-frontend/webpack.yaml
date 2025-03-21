@@ -10,10 +10,13 @@ entry:
       magento-common-tabs: lightna/magento-frontend/common/Tabs
       magento-common-search: lightna/magento-frontend/common/Search
       magento-common-search-suggestions: lightna/magento-frontend/common/SearchSuggestions
+      magento-listing-facets: lightna/magento-frontend/listing/Facets
+  product:
+    depends_on: common
+    component:
       magento-product-options: lightna/magento-frontend/product/Options
       magento-product-gallery: lightna/magento-frontend/product/Gallery
       magento-product-wishlist: lightna/magento-frontend/product/Wishlist
-      magento-listing-facets: lightna/magento-frontend/listing/Facets
 extend:
   lightna/engine/lib/Request:
     magento-request: lightna/magento-frontend/extend/RequestExtend

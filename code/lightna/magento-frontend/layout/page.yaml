@@ -22,7 +22,8 @@ template: lightna/magento-frontend/page.phtml
     .stylesheet:
       template: lightna/magento-frontend/page/head/link/style/common.phtml
   .script:
-    template: lightna/magento-frontend/page/head/js/common.phtml
+    .common:
+      template: lightna/magento-frontend/page/head/js/common.phtml
 .body:
   container: body
   .usp:
