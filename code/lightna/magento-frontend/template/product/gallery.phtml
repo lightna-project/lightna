@@ -1,6 +1,7 @@
 <?php
 /**
  * Import:
+ * @var Lightna\Engine\Data\Block $block
  * @var Lightna\Magento\Backend\Data\Product $product
  */
 $imageCount = count($product->gallery);
@@ -10,7 +11,9 @@ $imageCount = count($product->gallery);
         <div class="gallery-thumbnails">
             <?php foreach ($product->gallery as $image) { ?>
                 <div class="gallery-thumbnail">
-                    <img src="<?= $image->thumbnail() ?>" width="100" height="124"
+                    <img src="<?= $image->thumbnail() ?>"
+                         width="<?= $block->image->thumbnail->width() ?>"
+                         height="<?= $block->image->thumbnail->height() ?>"
                          alt="" loading="lazy">
                 </div>
             <?php } ?>
@@ -26,7 +29,9 @@ $imageCount = count($product->gallery);
         <div class="gallery-slider">
             <?php foreach ($product->gallery as $index => $image) { ?>
                 <div class="gallery-slide">
-                    <img src="<?= $image->preview() ?>" width="535" height="664"
+                    <img src="<?= $image->preview() ?>"
+                         width="<?= $block->image->preview->width() ?>"
+                         height="<?= $block->image->preview->height() ?>"
                          alt="<?= $product->name() ?>"
                          loading="<?= $index > 0 ? 'lazy' : 'eager' ?>">
                 </div>

@@ -1,14 +1,16 @@
 <?php
 /**
  * Import:
+ * @var Lightna\Engine\Data\Block $block
  * @var Lightna\Magento\Backend\Data\Product $product
  * @var int $index
  */
 ?>
 <?php $mainImage = reset($product->gallery) ?>
-<a class="block" href="<?= $product->url() ?>" title="<?= $product->name() ?>">
+<a href="<?= $product->url() ?>" title="<?= $product->name() ?>">
     <img class="product-tile__image"
          loading="<?= $index > 2 ? 'lazy' : 'eager' ?>"
-         width="285" height="354"
+         width="<?= $block->image->tile->width() ?>"
+         height="<?= $block->image->tile->height() ?>"
          src="<?= $mainImage->tile() ?>" alt="<?= $product->name() ?>">
 </a>
