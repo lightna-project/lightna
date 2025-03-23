@@ -5,3 +5,4 @@ module.exports = {
         minSize: 0,
     },
 }
+// yaml? enable/disable? check for number of entries? autoload shared.js?
