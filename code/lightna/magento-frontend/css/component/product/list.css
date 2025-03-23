@@ -8,7 +8,7 @@
     }
 
     .product-list__item__image {
-        @apply mt-[5px] h-16 w-16 shrink-0 rounded-sm bg-primary-main/10;
+        @apply mt-[5px] w-16 shrink-0 rounded-sm bg-primary-main/10;
     }
 
     .product-list__item__info {

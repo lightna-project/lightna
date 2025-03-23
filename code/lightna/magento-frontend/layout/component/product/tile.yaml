@@ -9,6 +9,10 @@ attributes:
       - product-tile__top
   .image:
     template: lightna/magento-frontend/component/product/tile/image.phtml
+    image:
+      tile:
+        width: 285
+        height: 354
 .bottom:
   container: div
   attributes:
