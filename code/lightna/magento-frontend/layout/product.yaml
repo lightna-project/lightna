@@ -30,6 +30,7 @@ extends:
           class:
             - relative
         .gallery:
+          id: image-gallery
           template: lightna/magento-frontend/product/gallery.phtml
       .right-container:
         container: div
@@ -38,8 +39,10 @@ extends:
             - md:sticky
             - top-[88px]
         .sku:
+          id: product-sku
           template: lightna/magento-frontend/product/attributes/sku.phtml
         .name:
+          id: product-name
           template: lightna/magento-frontend/product/attributes/name.phtml
         .price-and-discount:
           container: div
@@ -54,6 +57,7 @@ extends:
               - mb-4
               - price-lg
           .price:
+            id: product-price
             template: lightna/magento-frontend/component/product/price.phtml
             attributes:
               class:
@@ -63,9 +67,11 @@ extends:
                 - gap-x-3
                 - gap-y-1
           .discount:
+            id: product-discount
             template: lightna/magento-frontend/component/product/discount.phtml
         .cta:
           .add-to-cart:
+            id: product-add-to-cart
             template: lightna/magento-frontend/product/cta/add-to-cart.phtml
             attributes:
               class:
@@ -85,15 +91,20 @@ extends:
                   - flex-col
                   - gap-2
         .stock:
+          id: product-stock
           template: lightna/magento-frontend/product/stock.phtml
         .usp:
+          id: product-usp
           template: lightna/magento-frontend/product/usp.phtml
       .details:
+        id: product-details
         template: lightna/magento-frontend/product/tabs.phtml
         .description:
+          id: product-description
           title: "Description"
           active: true
           template: lightna/magento-frontend/product/description.phtml
         .specifications:
+          id: product-specifications
           title: "Specifications"
           template: lightna/magento-frontend/product/attributes/all-visible.phtml

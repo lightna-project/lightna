@@ -8,6 +8,7 @@ attributes:
     class:
       - product-tile__top
   .image:
+    id: product-tile-image
     template: lightna/magento-frontend/component/product/tile/image.phtml
 .bottom:
   container: div
@@ -15,8 +16,10 @@ attributes:
     class:
       - product-tile__bottom
   .sku:
+    id: product-tile-sku
     template: lightna/magento-frontend/product/attributes/sku.phtml
   .name:
+    id: product-tile-name
     template: lightna/magento-frontend/component/product/tile/name.phtml
   .price-container:
     container: div
@@ -24,4 +27,5 @@ attributes:
       class:
         - product-tile__price
     .price:
+      id: product-tile-price
       template: lightna/magento-frontend/component/product/price.phtml

@@ -26,8 +26,10 @@ template: lightna/magento-frontend/page.phtml
 .body:
   container: body
   .usp:
+    id: header-usp
     template: lightna/magento-frontend/page/usp.phtml
   .header:
+    id: page-header
     container: header
     attributes:
       class:
@@ -47,8 +49,10 @@ template: lightna/magento-frontend/page.phtml
         .search:
           template: lightna/magento-frontend/page/header/search.phtml
       .logo:
+        id: logo
         template: lightna/magento-frontend/page/header/logo.phtml
       .menu:
+        id: main-menu
         template: lightna/magento-frontend/page/menu.phtml
         .item:
           template: lightna/magento-frontend/page/menu/item.phtml
@@ -64,8 +68,10 @@ template: lightna/magento-frontend/page.phtml
           private: true
           template: lightna/magento-frontend/page/header/account.phtml
           .guest:
+            id: account-guest
             template: lightna/magento-frontend/page/header/account/dropdown-guest.phtml
           .customer:
+            id: account-customer
             template: lightna/magento-frontend/page/header/account/dropdown-customer.phtml
             links:
               overview:
@@ -96,6 +102,7 @@ template: lightna/magento-frontend/page.phtml
             .empty:
               template: lightna/magento-frontend/page/header/minicart/empty.phtml
             .products:
+              id: minicart-products
               template: lightna/magento-frontend/page/header/minicart/products-list.phtml
               .item:
                 container: li
@@ -127,6 +134,7 @@ template: lightna/magento-frontend/page.phtml
           class:
             - search__wrap
         .form:
+          id: search-form
           template: lightna/magento-frontend/page/header/search/form.phtml
         .suggestions:
           id: search-suggestions
@@ -135,6 +143,7 @@ template: lightna/magento-frontend/page.phtml
       .search-overlay:
         template: lightna/magento-frontend/page/header/search/overlay.phtml
     .messages-container:
+      id: page-messages
       container: div
       attributes:
         class:
@@ -148,8 +157,11 @@ template: lightna/magento-frontend/page.phtml
       class:
         - page-container
   .footer:
+    id: page-footer
     container: footer
     .menu:
+      id: footer-menu
       template: lightna/magento-frontend/page/footer/menu.phtml
     .copyright:
+      id: copyright
       template: lightna/magento-frontend/page/footer/copyright.phtml
