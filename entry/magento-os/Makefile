@@ -50,6 +50,8 @@ __build.update:
 	./cli build.asset.sign --direct
 
 _build.update.js:
+	export LIGHTNA_EDITION_DIR=$$(./cli config edition_dir); \
+	export LIGHTNA_EDITION_ASSET_DIR=$$(./cli config edition_asset_dir); \
 	npm run webpack -- --config webpack.config.direct.js
 
 _build.update.css:
