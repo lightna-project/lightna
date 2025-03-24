@@ -6,6 +6,9 @@ extends:
   .link:
     .product:
       template: lightna/magento-frontend/page/head/link/style/product.phtml
+  .script:
+    .product:
+      template: lightna/magento-frontend/page/head/js/product.phtml
 .body:
   attributes:
     class:
