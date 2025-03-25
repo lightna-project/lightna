@@ -18,6 +18,7 @@ class Product extends ObjectA
         'simple', 'virtual', 'downloadable', 'configurable'
     ];
     protected array $compositeTypes = ['configurable'];
+    protected array $linkType = ['related' => 1, 'upsell' => 4];
 
     public function getParentsBatch(array $ids): array
     {
@@ -228,6 +229,57 @@ class Product extends ObjectA
         $select->where
             ->in('visibility', [2, 4])
             ->in('product_id', $ids);
+
+        return $select;
+    }
+
+    public function getLinkedProductsBatch(array $ids, string $type, int $limit): array
+    {
+        $batch = [];
+        foreach ($this->db->fetch($this->getLinkedProductsBatchSelect($ids, $type)) as $row) {
+            if (isset($batch[$row['product_id']]) && count($batch[$row['product_id']]) >= $limit) {
+                continue;
+            }
+            $batch[$row['product_id']][] = $row['linked_product_id'];
+        }
+
+        return $batch;
+    }
+
+    protected function getLinkedProductsBatchSelect(array $ids, string $type): Select
+    {
+        $select = $this->db
+            ->select(['l' => 'catalog_product_link'])
+            ->columns(['product_id', 'linked_product_id'])
+            ->join(
+            // Filter N/A products
+                ['price' => 'catalog_product_index_price'],
+                'price.entity_id = l.linked_product_id',
+                [],
+            )
+            ->where(['link_type_id' => $this->linkType[$type]])
+            ->group(['l.product_id', 'l.linked_product_id']);
+
+        $select->where->in('product_id', $ids);
+
+        return $select;
+    }
+
+    public function getRelatedParentsBatch(array $ids): array
+    {
+        return $this->db->fetchCol(
+            $this->getRelatedParentsBatchSelect($ids),
+            'product_id',
+            'product_id',
+        );
+    }
+
+    protected function getRelatedParentsBatchSelect(array $ids): Select
+    {
+        $select = $this->db
+            ->select('catalog_product_link')
+            ->columns(['product_id']);
+        $select->where->in('linked_product_id', $ids);
 
         return $select;
     }

@@ -115,3 +115,6 @@ extends:
           id: product-specifications
           title: "Specifications"
           template: lightna/magento-frontend/product/attributes/all-visible.phtml
+    .related-products:
+      id: related-products
+      template: lightna/magento-frontend/product/related.phtml

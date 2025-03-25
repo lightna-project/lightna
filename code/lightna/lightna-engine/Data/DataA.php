@@ -87,12 +87,17 @@ class DataA extends ObjectA
     public function __call(string $name, array $arguments)
     {
         if (!isset($this->{$name})) {
-            throw new Exception('Invoking undefined property or method ' . $this::class . '::' . $name);
+            if (!property_exists($this, $name)) {
+                throw new Exception('Invoking undefined property ' . $this::class . '::' . $name);
+            } else {
+                return '';
+            }
         }
+
         if (is_scalar($this->{$name}) || is_array($this->{$name})) {
             return escape($this->{$name}, ...$arguments);
         } else {
-            // Call property __invoke
+            // Object, call property __invoke
             return ($this->{$name})(...$arguments);
         }
     }

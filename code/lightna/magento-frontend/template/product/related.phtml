@@ -1,0 +1,18 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Magento\Backend\Data\Product\Related $related
+ */
+?>
+
+<div style="border: 1px solid red; display: flex; padding: 20px 0">
+    <?php foreach ($related->products as $product): ?>
+        <?php $image = reset($product->gallery) ?>
+        <div>
+            <a href="<?= $product->url() ?>">
+                <?= $product->name() ?>
+                <img src="<?= $image->tile() ?>"/>
+            </a>
+        </div>
+    <?php endforeach; ?>
+</div>

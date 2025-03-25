@@ -60,9 +60,12 @@ class Config extends ObjectA
     {
         if (!empty($config['logo']['src'])) {
             $config['logo']['src'] = '/media/logo/' . $config['logo']['src'];
-        } else {
-            $config['logo'] = $this->defaultLogo;
         }
+
+        $config['logo'] = merge(
+            $this->defaultLogo,
+            array_filter($config['logo']),
+        );
     }
 
     protected function updateFavicon(array &$config): void
