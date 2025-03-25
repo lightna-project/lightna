@@ -1,0 +1,13 @@
+@layer components {
+    .breadcrumbs {
+        @apply mb-4 flex gap-x-2 gap-y-1 flex-wrap text-sm;
+    }
+
+    .breadcrumbs__item {
+        @apply after:content-['/'] after:ml-2 last:after:content-none;
+    }
+
+    .breadcrumbs__link {
+        @apply hover:text-primary-alt;
+    }
+}

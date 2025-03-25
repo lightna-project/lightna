@@ -58,6 +58,7 @@ entry:
       magento-base-icons: lightna/magento-frontend/base/icons.css
       magento-base-utilities: lightna/magento-frontend/base/utilities.css
       ## Layout
+      magento-component-layout-breadcrumbs: lightna/magento-frontend/component/layout/breadcrumbs.css
       magento-component-layout-grid: lightna/magento-frontend/component/layout/grid.css
       # Components
       magento-component-tabs: lightna/magento-frontend/component/tabs.css
