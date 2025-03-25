@@ -8,8 +8,10 @@ if (!$breadcrumbs->trail) {
     return;
 }
 ?>
-
-<?php foreach ($breadcrumbs->trail as $i => $breadcrumb): ?>
-    <?= $i > 0 ? ' / ' : '' ?>
-    <a href="<?= $breadcrumb->url() ?>"><?= $breadcrumb->name() ?></a>
+<ul class="breadcrumbs">
+<?php foreach ($breadcrumbs->trail as $breadcrumb): ?>
+    <li class="breadcrumbs__item">
+        <a class="breadcrumbs__link" href="<?= $breadcrumb->url() ?>"><?= $breadcrumb->name() ?></a>
+    </li>
 <?php endforeach; ?>
+</ul>
