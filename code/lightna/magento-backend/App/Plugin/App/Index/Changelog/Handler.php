@@ -12,12 +12,22 @@ class Handler extends ObjectA
 {
     protected Product $productQuery;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App\Index\Changelog\Handler::addIndexBatchDependencies
+     * @noinspection PhpUnused
+     */
     public function addIndexBatchDependenciesExtended(Closure $proceed, array &$indexBatch): void
     {
-        $productIds = $indexBatch['product'] ?? [];
-        $parentIds = $productIds ? $this->productQuery->getParentsBatch($productIds) : [];
-        $indexBatch['product'] = merge($productIds, $parentIds);
+        if (!$productIds = ($indexBatch['product'] ?? [])) {
+            $proceed();
+            return;
+        }
+
+        $indexBatch['product'] = merge(
+            $productIds,
+            $this->productQuery->getParentsBatch($productIds),
+            $this->productQuery->getRelatedParentsBatch($productIds),
+        );
 
         $proceed();
     }
