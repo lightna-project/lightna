@@ -12,4 +12,5 @@ class Session extends SessionData
 {
     public Customer $customer;
     public Cart $cart;
+    public Cart $wishlist;
 }

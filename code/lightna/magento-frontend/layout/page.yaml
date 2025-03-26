@@ -81,7 +81,7 @@ template: lightna/magento-frontend/page.phtml
                 url: /sales/order/history
                 label: My Orders
               wishlist:
-                url: /wishlist
+                url: /wishlist/
                 label: My Wishlist
               logout:
                 url: /customer/account/logout

@@ -7,11 +7,13 @@ namespace Lightna\Magento\Backend\Index;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Magento\Backend\App\Entity\Product as ProductEntity;
 use Lightna\Magento\Backend\App\Query\Quote;
+use Lightna\Magento\Backend\App\Query\Wishlist;
 use Lightna\Magento\Backend\Data\Product\Gallery\Image;
 
 class Session extends ObjectA
 {
     protected Quote $quote;
+    protected Wishlist $wishlist;
     protected ProductEntity $productEntity;
     /** @AppConfig(cart/item/fields) */
     protected array $itemFields;
@@ -21,6 +23,7 @@ class Session extends ObjectA
         return array_camel([
             'customer' => $this->getCustomerData($sessionData),
             'cart' => $this->getCartData($sessionData),
+            'wishlist' => $this->getWishlistData($sessionData),
         ]);
     }
 
@@ -93,5 +96,16 @@ class Session extends ObjectA
             'url' => $product['url'],
             'thumbnail' => $thumbnail,
         ]);
+    }
+
+    protected function getWishlistData(array $sessionData): array
+    {
+        if (!$customerId = ($sessionData['customer_id'] ?? null)) {
+            return [];
+        }
+
+        return [
+            'items' => $this->wishlist->getItems($customerId),
+        ];
     }
 }
