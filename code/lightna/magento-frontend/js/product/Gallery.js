@@ -170,14 +170,6 @@ export class Gallery {
         });
     }
 
-    updateThumbnailsScrollPosition() {
-        const activeThumbnail = this.elements.thumbnails[this.currentImage];
-        activeThumbnail.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-        });
-    }
-
     activateArrows() {
         this.elements.arrowNext.classList.remove('hidden');
         this.elements.arrowPrev.classList.remove('hidden');
@@ -195,6 +187,5 @@ export class Gallery {
         this.updateNavigation('thumbnails');
         this.updateNavigation('dots');
         this.updateProgress();
-        this.updateThumbnailsScrollPosition();
     }
 }
