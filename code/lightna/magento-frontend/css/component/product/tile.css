@@ -7,6 +7,10 @@
         @apply flex aspect-[285/354] items-center border-b;
     }
 
+    .product-tile__top a {
+        @apply w-full;
+    }
+
     .product-tile__image {
         @apply w-full;
     }

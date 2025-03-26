@@ -65,7 +65,9 @@ entry:
       ## Product
       magento-component-product-attributes-list: lightna/magento-frontend/component/product/attributes-list.css
       magento-component-product-gallery: lightna/magento-frontend/component/product/gallery.css
+      magento-component-product-grid: lightna/magento-frontend/component/product/grid.css
       magento-component-product-options: lightna/magento-frontend/component/product/options.css
+      magento-component-product-related: lightna/magento-frontend/component/product/related.css
       magento-component-product-sku: lightna/magento-frontend/component/product/sku.css
       magento-component-product-stock: lightna/magento-frontend/component/product/stock.css
       magento-component-product-usp: lightna/magento-frontend/component/product/usp.css

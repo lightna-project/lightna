@@ -1,0 +1,9 @@
+@layer components {
+    .related-products {
+        @apply my-8 md:my-12 lg:my-16;
+    }
+
+    .related-products__title {
+        @apply border-b pb-4 text-xl md:text-3xl font-semibold;
+    }
+}

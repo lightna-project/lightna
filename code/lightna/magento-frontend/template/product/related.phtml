@@ -3,16 +3,15 @@
  * Import:
  * @var Lightna\Magento\Backend\Data\Product\Related $related
  */
+if (count($related->products) === 0) {
+    return;
+}
 ?>
-
-<div style="border: 1px solid red; display: flex; padding: 20px 0">
-    <?php foreach ($related->products as $product): ?>
-        <?php $image = reset($product->gallery) ?>
-        <div>
-            <a href="<?= $product->url() ?>">
-                <?= $product->name() ?>
-                <img src="<?= $image->tile() ?>"/>
-            </a>
-        </div>
-    <?php endforeach; ?>
+<div class="related-products">
+    <div class="related-products__title"><?= phrase('Related Products') ?></div>
+    <ul class="products-grid--wide">
+        <?php foreach ($related->products as $index => $product): ?>
+            <?= block('item', compact('index', 'product')) ?>
+        <?php endforeach; ?>
+    </ul>
 </div>
