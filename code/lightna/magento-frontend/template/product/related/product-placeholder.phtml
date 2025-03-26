@@ -7,7 +7,7 @@
 $maxPlaceholderItems = min(count($product->relatedIds), $block->max);
 ?>
 <div <?= $block->attributes() ?>>
-    <ul class="products-grid--wide">
+    <ul class="products-grid--carousel">
         <?php for ($i = 0; $i < $maxPlaceholderItems; $i++): ?>
             <li class="product-tile__placeholder"></li>
         <?php endfor; ?>

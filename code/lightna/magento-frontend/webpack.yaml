@@ -7,6 +7,7 @@ entry:
       magento-common-mobile-overlay: lightna/magento-frontend/common/MobileOverlay
       magento-common-mini-cart: lightna/magento-frontend/common/MiniCart
       magento-common-add-to-cart: lightna/magento-frontend/common/AddToCart
+      magento-common-carousel: lightna/magento-frontend/common/Carousel
       magento-common-collapsible: lightna/magento-frontend/common/Collapsible
       magento-common-tabs: lightna/magento-frontend/common/Tabs
       magento-common-search: lightna/magento-frontend/common/Search

@@ -4,8 +4,20 @@
  * @var Lightna\Magento\Backend\Data\Product\Related $related
  */
 ?>
-<ul class="products-grid--wide related-products__products-grid">
-    <?php foreach ($related->products as $index => $product): ?>
-        <?= block('item', compact('index', 'product')) ?>
-    <?php endforeach; ?>
-</ul>
+<div class="cjs-carousel carousel-container related-products__products-grid">
+    <div class="carousel-controls">
+        <div class="carousel-arrow previous" data-click-action="carousel-slide-left">
+            <span class="icon icon-arrow-left"></span>
+        </div>
+        <div class="carousel-arrow next" data-click-action="carousel-slide-right">
+            <span class="icon icon-arrow-right"></span>
+        </div>
+    </div>
+    <ul class="carousel">
+        <?php foreach ($related->products as $index => $product): ?>
+            <div class="carousel-item">
+                <?= block('item', compact('index', 'product')) ?>
+            </div>
+        <?php endforeach; ?>
+    </ul>
+</div>
