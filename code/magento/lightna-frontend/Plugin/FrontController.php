@@ -9,9 +9,9 @@ use Magento\Framework\App\FrontControllerInterface;
 use Magento\Framework\App\Request\Http as RequestHttp;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\ResponseInterface;
-use Magento\Framework\Controller\Result\Json as ResultJson;
-use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
+use Magento\Framework\App\Response\HttpFactory as ResponseHttpFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Message\InterpretationMediator;
@@ -19,12 +19,12 @@ use Magento\Framework\View\Element\Message\InterpretationMediator;
 class FrontController
 {
     public function __construct(
-        protected ResultJsonFactory $resultJsonFactory,
         protected MessageManager $messageManager,
         protected InterpretationMediator $interpretationMediator,
         protected RequestHttp $request,
         protected LightnaSessionManager $lightnaSessionManager,
         protected ResourceConnection $resource,
+        protected ResponseHttpFactory $responseHttpFactory,
     ) {
     }
 
@@ -65,7 +65,12 @@ class FrontController
             if ($messages = $this->prepareMessages()) {
                 $data['messagesHtml'] = blockhtml('#messages', compact('messages'));
             }
-            $result = $this->resultJsonFactory->create()->setData($data);
+
+            // Avoid JsonFactory as it doesn't suppress redirect
+            $result = $this->responseHttpFactory->create()
+                ->setHeader('Content-Type', 'application/json')
+                ->setHeader('Cache-Control', 'private')
+                ->setBody(json_encode($data));
         }
 
         return $result;

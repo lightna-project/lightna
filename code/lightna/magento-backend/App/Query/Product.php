@@ -214,7 +214,7 @@ class Product extends ObjectA
 
     protected function getCategoriesBatchSelect(array $ids): Select
     {
-        $storeId = $this->store->get()['store_id'];
+        $storeId = $this->store->getId();
         $select = $this->db
             ->select(['i' => 'catalog_category_product_index_store' . $storeId])
             ->columns(['category_id', 'product_id'])

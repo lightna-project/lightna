@@ -41,6 +41,11 @@ class Store extends ObjectA
         return $this->stores[$id ?? $this->context->scope];
     }
 
+    public function getId(): int
+    {
+        return $this->get()['store_id'];
+    }
+
     public function getWebsiteId(): int
     {
         return $this->get()['website_id'];

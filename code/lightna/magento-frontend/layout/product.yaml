@@ -97,6 +97,10 @@ extends:
                   - flex
                   - flex-col
                   - gap-2
+            .wishlist:
+              id: wishlist-button
+              private: true
+              template: lightna/magento-frontend/product/wishlist.phtml
         .stock:
           id: product-stock
           template: lightna/magento-frontend/product/stock.phtml

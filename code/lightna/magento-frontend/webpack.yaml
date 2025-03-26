@@ -12,6 +12,7 @@ entry:
       magento-common-search-suggestions: lightna/magento-frontend/common/SearchSuggestions
       magento-product-options: lightna/magento-frontend/product/Options
       magento-product-gallery: lightna/magento-frontend/product/Gallery
+      magento-product-wishlist: lightna/magento-frontend/product/Wishlist
       magento-listing-facets: lightna/magento-frontend/listing/Facets
 extend:
   lightna/engine/lib/Request:

@@ -1,0 +1,13 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Magento\Backend\Data\Product $product
+ * @var Lightna\Magento\Backend\Data\Session $session
+ */
+
+$inWishlist = isset($session->wishlist->items[$product->entityId()]);
+?>
+<span style="color: <?= $inWishlist ? 'red' : 'black' ?>; font-size: 2rem" class="cjs-wishlist-button"
+      data-product-id="<?= $product->entityId() ?>">
+♥
+</span>
