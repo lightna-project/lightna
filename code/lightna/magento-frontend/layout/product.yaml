@@ -122,3 +122,4 @@ extends:
     .related-products:
       id: related-products
       template: lightna/magento-frontend/product/related.phtml
+      .item: component/product/tile.yaml
