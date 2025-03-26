@@ -20,7 +20,8 @@
     }
 
     .gallery-thumbnail.active {
-        @apply before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block before:rounded-sm before:bg-primary-main before:opacity-10;
+        @apply before:absolute before:bottom-0 before:left-0 before:right-0 before:top-0 before:block
+        before:rounded-sm before:bg-primary-main before:opacity-10;
     }
 
     .gallery-thumbnails-arrow {
@@ -56,7 +57,9 @@
     }
 
     .gallery-arrow {
-        @apply absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 transform cursor-pointer items-center justify-center rounded-full border bg-white bg-opacity-50 shadow-md shadow-primary-main/5 hover:shadow-lg lg:h-12 lg:w-12;
+        @apply absolute top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 transform cursor-pointer
+        items-center justify-center rounded-full border bg-white bg-opacity-50 shadow-md
+        shadow-primary-main/5 hover:shadow-lg lg:h-12 lg:w-12;
     }
 
     .gallery-arrow.previous {

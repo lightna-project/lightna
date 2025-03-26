@@ -1,6 +1,6 @@
 @layer components {
     .product-tile {
-        @apply grid grid-rows-[auto_1fr];
+        @apply flex flex-col;
     }
 
     .product-tile__top {
@@ -33,5 +33,9 @@
 
     .product-tile__placeholder {
         @apply bg-primary-bg rounded-sm animate-bg-pulse aspect-[290/465];
+    }
+
+    .products-grid--carousel .product-tile__placeholder {
+        @apply mr-6 w-[calc(65%_-_24px)] sm:w-[calc(40%_-_24px)] md:w-[calc(25%_-_24px)] shrink-0;
     }
 }

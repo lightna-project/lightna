@@ -1,0 +1,26 @@
+@layer components {
+    .carousel-container {
+        @apply relative w-full overflow-hidden pt-14 -mt-14;
+    }
+
+    .carousel {
+        @apply flex overflow-x-auto no-scrollbar snap-x snap-mandatory scroll-smooth -mr-6;
+    }
+
+    .carousel-item {
+        @apply snap-start mr-6 w-[calc(65%_-_24px)] sm:w-[calc(40%_-_24px)] md:w-[calc(25%_-_24px)] shrink-0;
+    }
+
+    .carousel-controls {
+        @apply hidden md:flex absolute top-0 right-0 items-center justify-between gap-x-2;
+    }
+
+    .carousel-arrow {
+        @apply flex h-10 w-10 p-0 cursor-pointer items-center justify-center rounded-full border
+        bg-white bg-opacity-50 shadow-md shadow-primary-main/5 hover:shadow-lg lg:h-12 lg:w-12;
+    }
+
+    .carousel-arrow.disabled {
+        @apply pointer-events-none cursor-default opacity-20;
+    }
+}

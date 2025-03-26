@@ -4,7 +4,7 @@
     }
 
     .related-products__title {
-        @apply border-b pb-4 text-xl md:text-3xl font-semibold;
+        @apply border-b pb-4 text-xl md:text-3xl font-semibold md:pr-24;
     }
 
     .related-products__products-grid + .products-placeholder,
