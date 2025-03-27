@@ -1,0 +1,9 @@
+@layer utilities {
+    .product-actions-row {
+        @apply w-full flex gap-3 items-center;
+    }
+
+    .product-actions-row .wishlist__icon {
+        @apply shrink-0;
+    }
+}

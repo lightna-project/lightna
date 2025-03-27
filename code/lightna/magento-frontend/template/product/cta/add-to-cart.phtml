@@ -7,8 +7,10 @@
 ?>
 <div <?= $block->attributes() ?> data-product-id="<?= $product->entityId() ?>">
     <?= block('options') ?>
-    <button type="button" class="btn-cart" data-click-action="add-to-cart">
-        <span><?= phrase('Add to Cart') ?></span>
-    </button>
-    <?= block('wishlist') ?>
+    <div class="product-actions-row">
+        <button type="button" class="btn-cart" data-click-action="add-to-cart">
+            <span><?= phrase('Add to Cart') ?></span>
+        </button>
+        <?= block('wishlist') ?>
+    </div>
 </div>

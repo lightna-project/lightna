@@ -1,0 +1,22 @@
+@layer components {
+    .wishlist__button {
+        @apply block h-full flex items-center justify-center aspect-square cursor-pointer
+        rounded-full border hover:shadow-md;
+    }
+
+    .wishlist__icon {
+        @apply icon icon-heart__outline;
+    }
+
+    .wishlist__button.added .wishlist__icon{
+        @apply icon-heart__filled;
+    }
+
+    .wishlist__button.animated {
+        @apply pointer-events-none;
+    }
+
+    .wishlist__button.animated .wishlist__icon {
+        @apply pulse;
+    }
+}

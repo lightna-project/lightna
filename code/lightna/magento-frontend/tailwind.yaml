@@ -54,6 +54,7 @@ entry:
       tailwind-components: tailwindcss/components
       tailwind-utilities: tailwindcss/utilities
       # Base
+      magento-base-animation: lightna/magento-frontend/base/animation.css
       magento-base-buttons: lightna/magento-frontend/base/buttons.css
       magento-base-icons: lightna/magento-frontend/base/icons.css
       magento-base-utilities: lightna/magento-frontend/base/utilities.css
@@ -71,6 +72,9 @@ entry:
       magento-component-product-sku: lightna/magento-frontend/component/product/sku.css
       magento-component-product-stock: lightna/magento-frontend/component/product/stock.css
       magento-component-product-usp: lightna/magento-frontend/component/product/usp.css
+      magento-component-product-wishlist: lightna/magento-frontend/component/product/wishlist.css
+      # Page
+      magento-page-product: lightna/magento-frontend/page/product.css
   listing:
     content:
       magento-product-template: lightna/magento-frontend/template/category/**/*.phtml

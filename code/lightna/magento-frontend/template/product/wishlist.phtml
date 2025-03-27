@@ -4,10 +4,19 @@
  * @var Lightna\Magento\Backend\Data\Product $product
  * @var Lightna\Magento\Backend\Data\Session $session
  */
-
-$inWishlist = isset($session->wishlist->items[$product->entityId()]);
+$wishlistItems = $session->wishlist->items;
+$inWishlist = isset($wishlistItems[$product->entityId()]);
 ?>
-<span style="color: <?= $inWishlist ? 'red' : 'black' ?>; font-size: 2rem" class="cjs-wishlist-button"
-      data-product-id="<?= $product->entityId() ?>">
-♥
-</span>
+<?php if ($inWishlist): ?>
+    <div class="wishlist__button added"
+         data-click-action="wishlist-remove"
+         data-item-id="<?= $wishlistItems[$product->entityId()]->id() ?>">
+        <span class="wishlist__icon"></span>
+    </div>
+<?php else: ?>
+    <div class="wishlist__button"
+         data-click-action="wishlist-add"
+         data-product-id="<?= $product->entityId() ?>">
+        <span class="wishlist__icon"></span>
+    </div>
+<?php endif; ?>

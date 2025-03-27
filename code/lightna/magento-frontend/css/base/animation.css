@@ -1,4 +1,4 @@
-@layer base {
+@layer components {
     .animate-fade-in {
         animation: fade-in .2s ease-in-out forwards;
     }
@@ -31,6 +31,9 @@
         @apply animate-fade-out;
     }
 
+    .pulse {
+        animation: pulse .5s infinite;
+    }
 }
 
 @keyframes fade-in {
@@ -170,5 +173,20 @@
 
     to {
         transform: translateX(-400%)
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(0.7);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
     }
 }

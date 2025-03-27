@@ -1,32 +1,52 @@
-import { $$ } from 'lightna/engine/lib/utils/dom';
 import { Blocks } from 'lightna/engine/lib/Blocks';
 import { Request } from 'lightna/engine/lib/Request';
+import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Wishlist {
-    component = '.cjs-wishlist-button';
-    BLOCK_ID = 'wishlist-button';
+    static WISHLIST_ADD_URL = '/wishlist/index/add';
+    static WISHLIST_REMOVE_URL = 'wishlist/index/remove/';
+    static WISHLIST_BLOCK_ID = 'wishlist-button';
+    classes = {
+        animated: 'animated',
+    };
+    actions = {
+        click: {
+            'wishlist-add': [(event, component) => this.addProduct(component)],
+            'wishlist-remove': [(event, component) => this.removeProduct(component)],
+        },
+    };
 
     constructor() {
         this.extendProperties();
-        document.addEventListener('page-ready', this.initializeEventListeners.bind(this));
+        document.addEventListener('page-ready', () => this.initializeActions());
     }
 
     extendProperties() {
     }
 
-    initializeEventListeners() {
-        $$(this.component).forEach((component) => {
-            component.addEventListener('click', (event) => this.onClick(event, component));
-        });
+    initializeActions() {
+        ClickEventDelegator.add(this.actions.click);
     }
 
-    async onClick(event, component) {
-        // wishlist/index/remove/ item: 2
+    async addProduct(component) {
+        this.animateButton(component);
         await Request.post(
-            '/wishlist/index/add',
+            Wishlist.WISHLIST_ADD_URL,
             { product: component.dataset.productId },
         );
-        await Blocks.updateHtml([this.BLOCK_ID]);
-        this.initializeEventListeners();
+        await Blocks.updateHtml([Wishlist.WISHLIST_BLOCK_ID]);
+    }
+
+    async removeProduct(component) {
+        this.animateButton(component);
+        await Request.post(
+            Wishlist.WISHLIST_REMOVE_URL,
+            { item: component.dataset.itemId },
+        );
+        await Blocks.updateHtml([Wishlist.WISHLIST_BLOCK_ID]);
+    }
+
+    animateButton(button) {
+        button.classList.add(this.classes.animated);
     }
 }
