@@ -11,7 +11,10 @@ class Scope extends ObjectA
 {
     protected MagentoScope $magentoScope;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App\Scope::getList()
+     * @noinspection PhpUnused
+     */
     public function getListExtended(): array
     {
         return $this->magentoScope->getList();

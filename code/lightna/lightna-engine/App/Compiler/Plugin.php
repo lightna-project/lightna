@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use ReflectionClass;
 use ReflectionNamedType;
 
@@ -37,7 +37,7 @@ class Plugin extends CompilerA
 
         foreach ($plugins as $className => $pluginClasses) {
             if (!is_array($pluginClasses)) {
-                throw new Exception('Invalid plugin value for '
+                throw new LightnaException('Invalid plugin value for '
                     . $className . ':' . var_export($pluginClasses, true));
             }
 
@@ -45,7 +45,7 @@ class Plugin extends CompilerA
 
             foreach ($pluginClasses as $name => $pluginClass) {
                 if (!is_string($pluginClass)) {
-                    throw new Exception('Invalid plugin value for '
+                    throw new LightnaException('Invalid plugin value for '
                         . $className . '.' . $name . ':' . var_export($pluginClass, true));
                 }
 
@@ -67,7 +67,7 @@ class Plugin extends CompilerA
 
                     if (!$method['isPublic']) {
                         if (preg_match('~extended$~i', $uname)) {
-                            throw new Exception("Plugin method $plugin::{$method['name']} must be public or omit the \"Extended\" suffix.");
+                            throw new LightnaException("Plugin method $plugin::{$method['name']} must be public or omit the \"Extended\" suffix.");
                         }
                         continue;
                     }
@@ -75,11 +75,11 @@ class Plugin extends CompilerA
                     $count = 0;
                     $origUname = preg_replace('~extended$~i', '', $uname, -1, $count);
                     if ($count !== 1) {
-                        throw new Exception("Plugin method $plugin::{$method['name']} name must end with \"Extended\"");
+                        throw new LightnaException("Plugin method $plugin::{$method['name']} name must end with \"Extended\"");
                     }
 
                     if (!isset($classMethods[$origUname])) {
-                        throw new Exception("Plugin method $plugin::{$method['name']} has no available method to plugin in $class");
+                        throw new LightnaException("Plugin method $plugin::{$method['name']} has no available method to plugin in $class");
                     }
 
                     $methodRef = &$this->methods[$class][$origUname];
@@ -245,11 +245,11 @@ PROCEED_CODE;
     {
         if ($class[0] === '\\') {
             // Avoid incorrect config merges in advance
-            throw new Exception('Class name shouldn\'t start with "\\", please fix for "' . $class . '"');
+            throw new LightnaException('Class name shouldn\'t start with "\\", please fix for "' . $class . '"');
         }
 
         if (!isset($this->classMap[$class])) {
-            throw new Exception('Class ' . $class . ' not found');
+            throw new LightnaException('Class ' . $class . ' not found');
         }
     }
 }

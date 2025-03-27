@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\CliInputException;
 
 class Cli extends ObjectA
 {
@@ -14,7 +14,7 @@ class Cli extends ObjectA
     public function run(string $command): void
     {
         if (!isset($this->commands[$command])) {
-            throw new Exception('Command "' . $command . '" not defined');
+            throw new CliInputException('Command "' . $command . '" not defined');
         }
 
         getobj($this->commands[$command])->run();

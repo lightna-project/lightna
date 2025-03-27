@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Entity;
 
-use Exception;
 use Generator;
 use Lightna\Engine\App\Config as AppConfig;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\State\Common;
 use Lightna\Engine\App\StoragePool;
@@ -127,7 +127,7 @@ class EntityA extends ObjectA
         $actualDepth = substr_count($this->getFullPrefix(), '_') + 1;
 
         if ($actualDepth !== $expectedDepth) {
-            throw new Exception('Invalid depth for prefix "' . $this->getFullPrefix() . '". Make sure "_" isn\'t overused.');
+            throw new LightnaException('Invalid depth for prefix "' . $this->getFullPrefix() . '". Make sure "_" isn\'t overused.');
         }
     }
 

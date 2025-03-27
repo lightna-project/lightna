@@ -6,6 +6,7 @@ namespace Lightna\Engine;
 
 use JetBrains\PhpStorm\NoReturn;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Response;
 use Lightna\Engine\App\Router;
@@ -29,49 +30,41 @@ class App extends ObjectA
      * Internal properties section
      */
     protected ?array $action;
-    protected bool $noRoute = false;
-    protected bool $redirected = false;
+    protected bool $isNoRoute = false;
+    protected bool $isRedirect = false;
+    protected array $noRouteAction;
+    protected array $defaultNoRouteAction = [
+        'name' => 'page',
+        'params' => ['type' => 'no-route'],
+    ];
 
     public function run(): void
     {
-        $this->startRendering();
+        $this->startOutput();
         try {
             try {
                 $this->action = $this->router->process();
             } catch (NoRouteException) {
-                $this->noRoute = true;
-            } catch (BypassedException|RedirectedException) {
+                $this->isNoRoute = true;
+            } catch (RedirectedException) {
+                $this->isRedirect = true;
+            } catch (BypassedException) {
                 return;
             }
 
             $this->process();
         } catch (Throwable $e) {
-            $this->cleanRendering();
+            $this->cleanOutput();
             $this->renderError500($e);
         }
 
-        $this->finishRendering();
-    }
-
-    protected function startRendering(): void
-    {
-        !IS_PROGRESSIVE_RENDERING && ob_start();
-    }
-
-    protected function cleanRendering(): void
-    {
-        !IS_PROGRESSIVE_RENDERING && ob_end_clean();
-    }
-
-    protected function finishRendering(): void
-    {
-        !IS_PROGRESSIVE_RENDERING && ob_end_flush();
+        $this->finishOutput();
     }
 
     protected function createAction(): object
     {
         if (!$className = ($this->actions[$this->action['name']] ?? null)) {
-            throw new \Exception('Router action class for "' . $this->action['name'] . '" not defined');
+            throw new LightnaException('Router action class for "' . $this->action['name'] . '" not defined');
         }
 
         return getobj($className, $this->action['params']);
@@ -79,13 +72,37 @@ class App extends ObjectA
 
     protected function process(): void
     {
-        $this->sendHeaders();
-
-        if ($this->noRoute) {
+        if ($this->isNoRoute) {
             $this->processNoRoute();
-        } elseif (isset($this->action)) {
+        } elseif ($this->isRedirect) {
+            $this->processRedirect();
+        } else {
             $this->processAction();
         }
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineNoRouteAction(): void
+    {
+        $this->noRouteAction ??= $this->defaultNoRouteAction;
+    }
+
+    protected function processNoRoute(): void
+    {
+        $this->response->setStatus(404);
+        $this->sendHeaders();
+        $this->renderNoRoute();
+    }
+
+    protected function processRedirect(): void
+    {
+        $this->sendHeaders();
+    }
+
+    protected function processAction(): void
+    {
+        $this->sendHeaders();
+        $this->createAction()->process();
     }
 
     protected function sendHeaders(): void
@@ -93,25 +110,26 @@ class App extends ObjectA
         $this->response->sendHeaders();
     }
 
-    protected function processAction(): void
+    protected function renderNoRoute(): void
     {
+        $this->action = $this->noRouteAction;
+
         $this->createAction()->process();
     }
 
-    protected function processNoRoute(): void
+    protected function startOutput(): void
     {
-        http_response_code(404);
-        $this->renderNoRoute();
+        !IS_PROGRESSIVE_RENDERING && ob_start();
     }
 
-    protected function renderNoRoute(): void
+    protected function cleanOutput(): void
     {
-        $this->action = [
-            'name' => 'page',
-            'params' => ['type' => 'no-route'],
-        ];
+        !IS_PROGRESSIVE_RENDERING && ob_end_clean();
+    }
 
-        $this->processAction();
+    protected function finishOutput(): void
+    {
+        !IS_PROGRESSIVE_RENDERING && ob_end_flush();
     }
 
     #[NoReturn]

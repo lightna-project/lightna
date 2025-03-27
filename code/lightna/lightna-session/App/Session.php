@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Session\App;
 
-use Exception;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Session\App\Handler\HandlerInterface;
 use Lightna\Session\App\Session\Cookie;
@@ -34,7 +34,7 @@ class Session extends ObjectA
     protected function defineHandler(): void
     {
         if (!$handler = $this->handlers[$this->config['handler']] ?? null) {
-            throw new Exception('Unknown session handler "' . $this->config['handler'] . '"');
+            throw new LightnaException('Unknown session handler "' . $this->config['handler'] . '"');
         }
 
         $this->handler = getobj($handler);
@@ -54,7 +54,7 @@ class Session extends ObjectA
     protected function readData(): array
     {
         if (!$this->canRead()) {
-            throw new Exception('Reading the session on public pages is not allowed in FPC-compatible mode.');
+            throw new LightnaException('Reading the session on public pages is not allowed in FPC-compatible mode.');
         }
 
         $srz = $this->readContent();
@@ -88,7 +88,7 @@ class Session extends ObjectA
         try {
             $data = $this->serializer->unserialize($srz);
         } catch (Throwable $e) {
-            throw new Exception('Failed to unserialized session.');
+            throw new LightnaException('Failed to unserialized session.');
         }
 
         return $data;

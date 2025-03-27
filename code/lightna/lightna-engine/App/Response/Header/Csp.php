@@ -10,44 +10,16 @@ use Lightna\Engine\App\Security\Csp as SecurityCsp;
 class Csp extends AbstractHeader
 {
     protected SecurityCsp $securityCsp;
-
     protected string $name = 'Content-Security-Policy';
-    protected array $policies = [
-        "default-src" => [
-            "'self'" => true,
-        ],
-        "script-src" => [
-            "'self'" => true,
-            "'strict-dynamic'" => true,
-        ],
-    ];
-
-    public function setPolicy(string $name, string $value, bool $enabled = true): static
-    {
-        $this->policies[$name][$value] = $enabled;
-
-        return $this;
-    }
-
-    protected function init(array $data = []): void
-    {
-        $this->addNoncePolicy();
-
-        parent::init($data);
-    }
-
-    protected function addNoncePolicy(): void
-    {
-        $nonce = $this->securityCsp->getNonce();
-        $this->setPolicy('default-src', "'nonce-$nonce'");
-        $this->setPolicy('script-src', "'nonce-$nonce'");
-    }
 
     public function getValue(): string
     {
         $directives = [];
-        foreach ($this->policies as $name => $values) {
-            $directives[] = $name . ' ' . implode(' ', array_keys(array_filter($values)));
+        foreach ($this->securityCsp->getPolicies() as $name => $values) {
+            $filteredValues = array_keys(array_filter($values));
+            if (count($filteredValues)) {
+                $directives[] = $name . ' ' . implode(' ', $filteredValues);
+            }
         }
 
         return implode('; ', $directives);

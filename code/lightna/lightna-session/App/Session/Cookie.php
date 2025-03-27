@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Session\App\Session;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\Data\Request;
 
@@ -43,7 +43,7 @@ class Cookie extends ObjectA
     {
         $secure = $this->request->isSecure;
         if (!$secure && !IS_DEV_MODE) {
-            throw new Exception('Can\'t set unsecure session cookie');
+            throw new LightnaException('Can\'t set unsecure session cookie');
         }
 
         return $secure;

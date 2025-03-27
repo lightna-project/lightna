@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Lightna\Tailwind\App\Compiler;
 
-use Exception;
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Compiler\CompilerA;
 use Lightna\Engine\App\Config as AppConfig;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Tailwind extends CompilerA
 {
@@ -85,7 +85,7 @@ class Tailwind extends CompilerA
         }
 
         if (!file_exists($absFile = LIGHTNA_ENTRY . $path['fullPath'])) {
-            throw new Exception("Import \"$import\" not found. Expected file \"$absFile\"");
+            throw new LightnaException("Import \"$import\" not found. Expected file \"$absFile\"");
         }
 
         return $this->modulesIndex[$path['module']] . '/' . $path['path'];
@@ -95,12 +95,12 @@ class Tailwind extends CompilerA
     {
         $parts = explode('/', $path);
         if (count($parts) < 3) {
-            throw new Exception("Invalid Tailwind path \"$path\". Have you specified the module namespace?");
+            throw new LightnaException("Invalid Tailwind path \"$path\". Have you specified the module namespace?");
         }
 
         $module = implode('/', array_slice($parts, 0, 2));
         if (!isset($this->modulesIndex[$module])) {
-            throw new Exception("Invalid Tailwind path \"$path\". The module \"$module\" was not found.");
+            throw new LightnaException("Invalid Tailwind path \"$path\". The module \"$module\" was not found.");
         }
 
         $subPath = implode('/', array_slice($parts, 2));

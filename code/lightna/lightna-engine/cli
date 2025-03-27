@@ -4,7 +4,7 @@
 declare(strict_types=1);
 
 use Lightna\Engine\App\Cli;
-use Lightna\Engine\App\UserException;
+use Lightna\Engine\App\Exception\CliInputException;
 
 require __DIR__ . '/App/lib/cli.php';
 
@@ -28,7 +28,7 @@ require_once __DIR__ . '/App/boot.php';
 
 try {
     getobj(Cli::class)->run($command);
-} catch (UserException $e) {
+} catch (CliInputException $e) {
     echo cli_error($e->getMessage()) . "\n";
     exit(1);
 }

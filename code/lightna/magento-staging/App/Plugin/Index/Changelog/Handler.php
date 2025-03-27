@@ -12,7 +12,10 @@ class Handler extends ObjectA
 {
     protected Staging $staging;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App\Index\Changelog\Handler::process()
+     * @noinspection PhpUnused
+     */
     public function processExtended(Closure $proceed): void
     {
         $this->staging->applyNewVersion();

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Backend\Data;
 
-use Exception;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\Data\DataA;
 use Lightna\Magento\Backend\Data\Config\Currency;
 use Lightna\Magento\Backend\Data\Config\Favicon;
@@ -42,7 +42,7 @@ class Config extends DataA
     protected function getEntityData(): array
     {
         if (!$data = getobj($this->configEntity)->get(1)) {
-            throw new Exception('Config data for scope ' . $this->context->scope . ' not found');
+            throw new LightnaException('Config data for scope ' . $this->context->scope . ' not found');
         }
 
         return $data;

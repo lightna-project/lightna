@@ -12,7 +12,10 @@ class DataBuilder extends ObjectA
 {
     protected SessionIndex $sessionIndex;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Session\App\Session\DataBuilder::isReindexRequired()
+     * @noinspection PhpUnused
+     */
     public function isReindexRequiredExtended(Closure $proceed, array $origData, array $newData): bool
     {
         $hasChange = array_is_fields_changed(
@@ -24,7 +27,10 @@ class DataBuilder extends ObjectA
         return $proceed() || $hasChange;
     }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Session\App\Session\DataBuilder::reindex()
+     * @noinspection PhpUnused
+     */
     public function reindexExtended(Closure $proceed, array $data): array
     {
         return merge($proceed(), $this->sessionIndex->getData($data));

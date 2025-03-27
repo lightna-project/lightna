@@ -6,6 +6,7 @@ namespace Lightna\Webpack\App\Compiler;
 
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Compiler\CompilerA;
+use Lightna\Engine\App\Exception\LightnaException;
 use stdClass;
 
 class Webpack extends CompilerA
@@ -157,7 +158,7 @@ class Webpack extends CompilerA
     protected function getImport(string $import): string
     {
         if (!isset($this->importsIndex[$import])) {
-            throw new \Exception('Webpack compiler: import "' . $import . '" not found');
+            throw new LightnaException('Webpack compiler: import "' . $import . '" not found');
         }
 
         return $this->importsIndex[$import];

@@ -5,6 +5,7 @@
     "license": "MIT",
     "version": "1.0.44",
     "require": {
+        "ext-yaml": "*",
         "lightna/engine": "^1.0.44"
     },
     "autoload": {

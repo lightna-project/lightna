@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Template extends CompilerA
 {
@@ -41,7 +41,7 @@ class Template extends CompilerA
     protected function getTemplateSchema(string $template): array
     {
         if (!is_file($file = LIGHTNA_ENTRY . $template)) {
-            throw new Exception('Template "' . $template . '" not found');
+            throw new LightnaException('Template "' . $template . '" not found');
         }
 
         $vars = [];
@@ -91,10 +91,10 @@ class Template extends CompilerA
     protected function validateType(string $type, string $template): void
     {
         if (!class_exists($type)) {
-            throw new Exception('Type "' . $type . '" not found in template "' . $template);
+            throw new LightnaException('Type "' . $type . '" not found in template "' . $template);
         }
         if (!str_contains($type, '\\Data\\')) {
-            throw new Exception('Not allowed object "' . $type . '" requested in template "' . $template . '"');
+            throw new LightnaException('Not allowed object "' . $type . '" requested in template "' . $template . '"');
         }
     }
 

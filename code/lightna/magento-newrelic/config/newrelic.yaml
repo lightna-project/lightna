@@ -1,0 +1,8 @@
+newrelic:
+  transaction:
+    name_mapping:
+      lightna/page/home: cms/index/index
+      lightna/page/cms: cms/page/view
+      lightna/page/no-route: cms/noroute/index
+      lightna/page/product: catalog/product/view
+      lightna/page/category: catalog/category/view

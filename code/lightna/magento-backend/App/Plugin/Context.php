@@ -12,7 +12,10 @@ class Context extends ObjectA
 {
     protected MagentoScope $magentoScope;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App\Context::defineScope()
+     * @noinspection PhpUnused
+     */
     public function defineScopeExtended(): Closure
     {
         $magentoScope = $this->magentoScope;

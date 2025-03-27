@@ -10,6 +10,8 @@ return [
             'lightna/lightna-webpack',
             'lightna/lightna-tailwind',
             'lightna/lightna-phpunit',
+            'lightna/lightna-newrelic',
+            'lightna/magento-newrelic',
             'lightna/magento-backend',
             'lightna/magento-frontend',
             'lightna/magento-frontend-lane',

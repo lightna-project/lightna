@@ -33,7 +33,6 @@ class Product extends EntityData
     public ProductInventory $inventory;
     public ProductOptions $options;
     public array $categories;
-    public array $related;
     public array $gallery;
     public int $attributeSetId;
     public int $entityId;
@@ -43,6 +42,7 @@ class Product extends EntityData
     public string $sku;
     public string $typeId;
     public string $url;
+    public array $related = [];
 
     protected ContextEntityLoader $contextEntityLoader;
 

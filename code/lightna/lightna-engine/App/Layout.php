@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\Data\Block as BlockData;
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\EntityData;
@@ -111,7 +111,7 @@ class Layout extends ObjectA
     protected function resolveBlockId(string $blockId): array
     {
         if (!$blockPath = $this->layout['blockById'][$blockId] ?? null) {
-            throw new Exception('Block id "' . $blockId . '" not found');
+            throw new LightnaException('Block id "' . $blockId . '" not found');
         }
         list($child, $parent) = $this->parseBlockPath($blockPath);
 
@@ -128,7 +128,7 @@ class Layout extends ObjectA
             $block = $current ?: $this->layout;
         }
         if (!$block) {
-            throw new Exception("Block \"$blockName\" not found");
+            throw new LightnaException("Block \"$blockName\" not found");
         }
 
         return $block;

@@ -13,7 +13,7 @@ class Handler extends ObjectA
     protected Product $productQuery;
 
     /**
-     * @see          \Lightna\Engine\App\Index\Changelog\Handler::addIndexBatchDependencies
+     * @see          \Lightna\Engine\App\Index\Changelog\Handler::addIndexBatchDependencies()
      * @noinspection PhpUnused
      */
     public function addIndexBatchDependenciesExtended(Closure $proceed, array &$indexBatch): void

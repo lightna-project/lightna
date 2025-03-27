@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -61,7 +61,7 @@ class LightnaReflectionClass
 
         foreach ($this->reflectionClass->getProperties() as $property) {
             if (!$property->getType()) {
-                throw new Exception('Property ' . $property->getDeclaringClass()->getName()
+                throw new LightnaException('Property ' . $property->getDeclaringClass()->getName()
                     . '::' . $property->getName() . ' must have a type. If there is no specific type, use "mixed".');
             }
 

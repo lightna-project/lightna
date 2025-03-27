@@ -12,14 +12,14 @@ $error = match (true) {
 };
 
 if ($error) {
-    throw new Exception($error);
+    throw new LogicException($error);
 }
 
 define('LIGHTNA_ENTRY', realpath($etcConfig['lightna_entry']) . '/');
 $edition = $_SERVER['LIGHTNA_EDITION'] ?? 'main';
 
 if (!is_file($configFile = LIGHTNA_ENTRY . "edition/$edition/applied/backend.php")) {
-    throw new Exception("Lightna build doesn't exist, have you run make build?");
+    throw new LogicException("Lightna build doesn't exist, have you run make build?");
 }
 
 require LIGHTNA_ENTRY . (require $configFile)['lightna_dir'] . '/App/boot.php';

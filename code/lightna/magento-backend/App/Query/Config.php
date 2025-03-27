@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Backend\App\Query;
 
-use Exception;
 use Laminas\Db\Sql\Expression;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use stdClass;
@@ -35,7 +35,7 @@ class Config extends ObjectA
         $enabledModules = $this->getEnabledModules();
         foreach ($enabledModules as $name) {
             if (!isset($allModules[$name])) {
-                throw new Exception("Module source for '{$name}' not resolved");
+                throw new LightnaException("Module source for '{$name}' not resolved");
             }
             $this->modules[$name] = $allModules[$name];
         }

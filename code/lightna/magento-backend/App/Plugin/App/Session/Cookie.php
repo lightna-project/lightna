@@ -12,7 +12,10 @@ class Cookie extends ObjectA
 {
     protected Config $config;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Session\App\Session\Cookie::getOptions()
+     * @noinspection PhpUnused
+     */
     public function getOptionsExtended(Closure $proceed): array
     {
         $options = $proceed();

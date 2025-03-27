@@ -16,6 +16,7 @@ use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Sql;
 use Laminas\Db\Sql\Update;
 use Lightna\Engine\App\Database\Structure;
+use Lightna\Engine\App\Exception\LightnaException;
 use PDO;
 
 abstract class DatabaseA extends ObjectA
@@ -113,7 +114,7 @@ abstract class DatabaseA extends ObjectA
         try {
             return $this->sql->prepareStatementForSqlObject($sql)->execute();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage() . ".\nSQL was: " . $this->buildSqlString($sql));
+            throw new LightnaException($e->getMessage() . ".\nSQL was: " . $this->buildSqlString($sql));
         }
     }
 
@@ -122,7 +123,7 @@ abstract class DatabaseA extends ObjectA
         try {
             return $this->adapter->createStatement($sql, $bind)->execute();
         } catch (Exception $e) {
-            throw new Exception($e->getMessage() . ".\nSQL was: " . $sql);
+            throw new LightnaException($e->getMessage() . ".\nSQL was: " . $sql);
         }
     }
 
@@ -179,7 +180,7 @@ abstract class DatabaseA extends ObjectA
         $required = ['host', 'port', 'username'];
         foreach ($required as $field) {
             if (empty($this->connection[$field])) {
-                throw new Exception('Field "connection.' . $field . '" is required');
+                throw new LightnaException('Field "connection.' . $field . '" is required');
             }
         }
     }

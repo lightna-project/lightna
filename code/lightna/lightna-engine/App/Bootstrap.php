@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
+use ErrorException;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Bootstrap
 {
@@ -53,7 +54,7 @@ class Bootstrap
                     return true;
                 }
 
-                throw new \ErrorException($errMsg, 0, $errNo, $errFile, $errLine);
+                throw new ErrorException($errMsg, 0, $errNo, $errFile, $errLine);
             },
             E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED
         );
@@ -144,7 +145,7 @@ class Bootstrap
                 // env.php doesn't exist on build environment
                 return [];
             } else {
-                throw new Exception('Config file "' . $fileName . '" not found.');
+                throw new LightnaException('Config file "' . $fileName . '" not found.');
             }
         }
 
@@ -227,7 +228,7 @@ class Bootstrap
     public static function setCompilerMode(string $mode): void
     {
         if (!in_array($mode, ['none', 'default', 'direct'])) {
-            throw new Exception('Unknown compiler mode');
+            throw new LightnaException('Unknown compiler mode');
         }
 
         static::$COMPILER_MODE = $mode;
@@ -294,7 +295,7 @@ class Bootstrap
             $name = $config['name'];
 
             if ($enabledModules[$name] ?? false) {
-                throw new Exception("Cannot redeclare module \"$name\"");
+                throw new LightnaException("Cannot redeclare module \"$name\"");
             }
 
             $enabledModules[$name] = $config;
@@ -313,10 +314,10 @@ class Bootstrap
 
             $config = yaml_parse_file($configFile);
             if (!isset($config['name'])) {
-                throw new Exception("Module name is not defined in \"$configFile\"");
+                throw new LightnaException("Module name is not defined in \"$configFile\"");
             }
             if (!isset($config['namespace'])) {
-                throw new Exception("Module namespace is not defined in \"$configFile\"");
+                throw new LightnaException("Module namespace is not defined in \"$configFile\"");
             }
 
             $config['path'] = "$pool/$path";
@@ -324,7 +325,7 @@ class Bootstrap
             return $config;
         }
 
-        throw new Exception("Module \"$path\" not found");
+        throw new LightnaException("Module \"$path\" not found");
     }
 
     protected static function validateModuleRequirements(array $modules): void
@@ -336,10 +337,10 @@ class Bootstrap
             foreach ($module['require'] as $requirement) {
                 $requirementPosition = array_search($requirement, array_keys($modules));
                 if ($requirementPosition === false) {
-                    throw new Exception("The requirement \"$requirement\" for \"$name\" was not found among the modules.");
+                    throw new LightnaException("The requirement \"$requirement\" for \"$name\" was not found among the modules.");
                 }
                 if ($requirementPosition > $modulePosition) {
-                    throw new Exception("The module \"$name\" should be declared after \"$requirement\" in modules sequence, as it depends on it.");
+                    throw new LightnaException("The module \"$name\" should be declared after \"$requirement\" in modules sequence, as it depends on it.");
                 }
             }
         }

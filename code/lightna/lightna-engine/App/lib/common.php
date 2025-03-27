@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\I18n;
 use Lightna\Engine\App\ObjectManager;
 
@@ -131,7 +132,7 @@ function instance_of(object $object, string $class): bool
 {
     // instanceof must fail if $class not undefined
     if (!class_exists($class)) {
-        throw new Exception('Class "' . $class . '" not found');
+        throw new LightnaException('Class "' . $class . '" not found');
     }
 
     return $object instanceof $class;
@@ -195,11 +196,11 @@ function getRelativePath(string $from, string $to, bool $useReal = true): string
 {
     $f = $useReal ? realpath($from) : normalpath($from);
     if ($f === false) {
-        throw new Exception('Path "' . $from . '" doesn\'t exist');
+        throw new LightnaException('Path "' . $from . '" doesn\'t exist');
     }
     $t = $useReal ? realpath($to) : normalpath($to);
     if ($t === false) {
-        throw new Exception('Path "' . $to . '" doesn\'t exist');
+        throw new LightnaException('Path "' . $to . '" doesn\'t exist');
     }
 
     $f = rtrim($f, '/');
@@ -227,7 +228,7 @@ function getRelativePath(string $from, string $to, bool $useReal = true): string
 function normalpath(string $path): string
 {
     if ($path[0] !== '/') {
-        throw new Exception('Path "' . $path . '" is not a valid absolute path');
+        throw new LightnaException('Path "' . $path . '" is not a valid absolute path');
     }
     do {
         $path = preg_replace(['~/{2,}~', '~^\./~', '~/\./~'], ['/', '', '/'], $path, -1, $count);

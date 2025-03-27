@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Index;
 
+use Lightna\Engine\App\Exception\CliInputException;
 use Lightna\Engine\App\Indexer;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\UserException;
 
 class ValidEntityCodes extends ObjectA
 {
@@ -18,12 +18,12 @@ class ValidEntityCodes extends ObjectA
     {
         $entities = [];
         if (empty($args)) {
-            throw new UserException('Specify entity codes');
+            throw new CliInputException('Specify entity codes');
         }
 
         foreach ($args as $code) {
             if (!isset($this->entities[$code]) || !$this->indexer->getEntityIndex($code)) {
-                throw new UserException('Invalid entity code "' . $code . '"');
+                throw new CliInputException('Invalid entity code "' . $code . '"');
             }
             $entities[] = $code;
         }

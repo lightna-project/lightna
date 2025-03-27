@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Compiler;
 
 use Closure;
-use Exception;
 use Lightna\Engine\App\Bootstrap;
 use Lightna\Engine\App\Build;
 use Lightna\Engine\App\Compiler;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -36,7 +36,7 @@ class CompilerA extends ObjectA
     protected function processOverride(string $subPath, string $file, string $moduleName): void
     {
         if (count($parts = explode('/', $subPath)) < 4) {
-            throw new Exception("Invalid override \"$subPath\" in module\"$moduleName\"");
+            throw new LightnaException("Invalid override \"$subPath\" in module\"$moduleName\"");
         }
 
         $module = $parts[0] . '/' . $parts[1];

@@ -1,0 +1,20 @@
+security:
+  csp:
+    policy:
+      default-src:
+        "'none'": true
+      script-src:
+        "'strict-dynamic'": true
+        "'nonce'": true
+      style-src:
+        "'nonce'": true
+      img-src:
+        "'self'": true
+      font-src:
+        "'self'": true
+      connect-src:
+        "'self'": true
+      base-uri:
+        "'none'": true
+      object-src:
+        "'none'": true

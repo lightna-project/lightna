@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Escaper extends ObjectA
 {
     public function escape(mixed $var, ?string $method = 'html'): string
     {
         if (($escaped = $this->escapeValue($var, $method)) === null) {
-            throw new Exception('Unknown escape method "' . $method . '"');
+            throw new LightnaException('Unknown escape method "' . $method . '"');
         }
 
         return $escaped;

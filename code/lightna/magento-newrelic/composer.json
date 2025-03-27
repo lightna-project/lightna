@@ -1,0 +1,19 @@
+{
+    "name": "lightna/magento-newrelic",
+    "description": "Lightna Magento Newrelic module",
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.44",
+    "require": {
+        "lightna/newrelic": "^1.0.44",
+        "lightna/magento-frontend": "^1.0.44"
+    },
+    "autoload": {
+        "psr-4": {
+            "Lightna\\Magento\\Newrelic\\": ""
+        }
+    },
+    "suggest": {
+        "ext-newrelic": "Used for APM monitoring via New Relic"
+    }
+}

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
 use JsonSerializable;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class ObjectA implements JsonSerializable
 {
@@ -24,10 +24,11 @@ class ObjectA implements JsonSerializable
         $this->unsetProperties();
     }
 
-    final public function initialize(array $data = []): void
+    /** @internal */
+    final public function __initialize(array $data = []): void
     {
         if ($this->isInitialized) {
-            throw new Exception($this::class . ' already initialized');
+            throw new LightnaException($this::class . ' already initialized');
         }
 
         $this->init($data);
@@ -39,15 +40,16 @@ class ObjectA implements JsonSerializable
         // Extension point
     }
 
-    final public function mock(array $dependencies): static
+    /** @internal */
+    final public function __mock(array $dependencies): static
     {
         if (!TEST_MODE) {
-            throw new Exception('mock method is allowed in TEST_MODE only');
+            throw new LightnaException('mock method is allowed in TEST_MODE only');
         }
 
         foreach ($dependencies as $name => $value) {
-            if (!$this->getPropertySchema($name)) {
-                throw new Exception('Unknown dependency "' . $name . '" for ' . $this::class);
+            if (!$this->__getPropertySchema($name)) {
+                throw new LightnaException('Unknown dependency "' . $name . '" for ' . $this::class);
             }
             $this->{$name} = $value;
         }
@@ -57,17 +59,18 @@ class ObjectA implements JsonSerializable
 
     public function &__get($name)
     {
-        if ($this->defineProperty($name)) {
+        if ($this->__defineProperty($name)) {
             return $this->$name;
         } else {
             return $this->__get_fallback($name);
         }
     }
 
-    protected function defineProperty(string $name): bool
+    /** @internal */
+    protected function __defineProperty(string $name): bool
     {
-        if ($prop = $this->getPropertySchema($name)) {
-            IS_DEV_MODE && $prop[2] !== 'pb' && $this->checkAccessibilityInDevMode($name);
+        if ($prop = $this->__getPropertySchema($name)) {
+            IS_DEV_MODE && $prop[2] !== 'pb' && $this->__checkAccessibilityInDevMode($name);
 
             if ($prop[0] === 'c') {
                 $this->$name = getconf($prop[1]);
@@ -83,24 +86,27 @@ class ObjectA implements JsonSerializable
         return false;
     }
 
-    protected function issetProperty(string $name): bool
+    final public function issetProperty(string $name): bool
     {
+        // True if exists, as it will be defined by OM
         return isset($this->properties[$name]);
     }
 
-    protected function unsetProperties(): void
+    private function unsetProperties(): void
     {
         foreach ($this->properties as $name => $property) {
             unset($this->$name);
         }
     }
 
-    protected function getPropertySchema(string $name): ?array
+    /** @internal */
+    protected function __getPropertySchema(string $name): ?array
     {
         return $this->properties[$name] ?? null;
     }
 
-    protected function setPropertyData(string $name, array $data): void
+    /** @internal */
+    protected function __setPropertyData(string $name, array $data): void
     {
         if ($this->properties[$name]) {
             $this->properties[$name]['data'] = $data;
@@ -109,10 +115,11 @@ class ObjectA implements JsonSerializable
 
     protected function &__get_fallback(string $name): mixed
     {
-        throw new Exception('Attempt to access undefined property ' . $this::class . '::' . $name);
+        throw new LightnaException('Attempt to access undefined property ' . $this::class . '::' . $name);
     }
 
-    protected function checkAccessibilityInDevMode(string $name): void
+    /** @internal */
+    protected function __checkAccessibilityInDevMode(string $name): void
     {
         $caller = null;
         $backtrace = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 10);
@@ -125,7 +132,7 @@ class ObjectA implements JsonSerializable
 
         $inside = $caller && $caller::class === $this::class;
         if (!$inside) {
-            throw new Exception(
+            throw new LightnaException(
                 'Attempt to access protected property ' . $this::class . '::' . $name
                 . ' from ' . ($caller ? $caller::class : 'undefined')
             );

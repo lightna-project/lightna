@@ -66,7 +66,7 @@ class FrontController
                 $data['messagesHtml'] = blockhtml('#messages', compact('messages'));
             }
 
-            // Avoid JsonFactory as it doesn't suppress redirect
+            // Avoid JsonFactory as it doesn't replace redirect
             $result = $this->responseHttpFactory->create()
                 ->setHeader('Content-Type', 'application/json')
                 ->setHeader('Cache-Control', 'private')

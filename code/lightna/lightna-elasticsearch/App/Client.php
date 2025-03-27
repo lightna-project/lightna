@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Elasticsearch\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Magento\Backend\App\Search\ClientInterface as SearchClientInterface;
 
@@ -44,7 +44,7 @@ class Client extends ObjectA implements SearchClientInterface
         $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
         if ($responseCode !== 200) {
-            throw new Exception('Elasticsearch respond HTTP ' . $responseCode . ':' . $response);
+            throw new LightnaException('Elasticsearch respond HTTP ' . $responseCode . ':' . $response);
         }
 
         return json_decode($response, true);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class ArrayDirectives implements ObjectManagerIgnore
 {
@@ -35,7 +35,7 @@ class ArrayDirectives implements ObjectManagerIgnore
             } elseif ($directive === 'move') {
                 static::applyMove($data, $words);
             } else {
-                throw new Exception('Unsupported directive "' . $directiveText . '"');
+                throw new LightnaException('Unsupported directive "' . $directiveText . '"');
             }
         }
     }
@@ -47,17 +47,17 @@ class ArrayDirectives implements ObjectManagerIgnore
 
         $path = array_shift($params);
         if (!is_string($path)) {
-            throw new Exception($topic . ': Invalid path parameter' . $context);
+            throw new LightnaException($topic . ': Invalid path parameter' . $context);
         }
 
         $pathS = static::dot2slash($path);
         if (!array_path_exists($data, $pathS)) {
-            throw new Exception($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
+            throw new LightnaException($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
         }
 
         $position = array_shift($params);
         if (!in_array($position, ['last', 'first', 'after', 'before'])) {
-            throw new Exception($topic . ': unexpected value for position "' . $position . '"' . $context);
+            throw new LightnaException($topic . ': unexpected value for position "' . $position . '"' . $context);
         }
 
         $path = new ArrayPath($pathS);
@@ -67,19 +67,19 @@ class ArrayDirectives implements ObjectManagerIgnore
         if (in_array($position, ['after', 'before'])) {
             $dest = array_shift($params);
             if ($dest === null) {
-                throw new Exception($topic . ': undefined destination' . $context);
+                throw new LightnaException($topic . ': undefined destination' . $context);
             }
             if ($dest === $path->key) {
-                throw new Exception($topic . ': specified destination must differ from operand' . $context);
+                throw new LightnaException($topic . ': specified destination must differ from operand' . $context);
             }
         }
 
         if (in_array($position, ['after', 'before']) && !array_key_exists($dest, $parent)) {
-            throw new Exception($topic . ': undefined destination "' . $dest . '"' . $context);
+            throw new LightnaException($topic . ': undefined destination "' . $dest . '"' . $context);
         }
 
         if (!in_array($position, ['last', 'first', 'before', 'after'])) {
-            throw new Exception($topic . ': unsupported position "' . $position . '"' . $context);
+            throw new LightnaException($topic . ': unsupported position "' . $position . '"' . $context);
         }
 
         static::makePosition($data, $path, $position, $dest);
@@ -113,28 +113,28 @@ class ArrayDirectives implements ObjectManagerIgnore
 
         $mode = array_shift($params);
         if (!in_array($mode, ['key', 'value'])) {
-            throw new Exception($topic . ': unexpected mode "' . $mode . '"' . $context);
+            throw new LightnaException($topic . ': unexpected mode "' . $mode . '"' . $context);
         }
 
         $path = array_shift($params);
         if (empty($path)) {
-            throw new Exception($topic . ': Invalid path parameter "' . $path . '"' . $context);
+            throw new LightnaException($topic . ': Invalid path parameter "' . $path . '"' . $context);
         }
 
         $pathS = static::dot2slash($path);
         if (!array_path_exists($data, $pathS)) {
-            throw new Exception($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
+            throw new LightnaException($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
         }
 
         $path = new ArrayPath($pathS);
         $value = null;
         if ($mode === 'value') {
             if (!is_array(array_path_get($data, $path->path))) {
-                throw new Exception($topic . ': specified path "' . $path->path . '" isn\'t array' . $context);
+                throw new LightnaException($topic . ': specified path "' . $path->path . '" isn\'t array' . $context);
             }
             $value = array_shift($params);
             if ($value === null) {
-                throw new Exception($topic . ': undefined value' . $context);
+                throw new LightnaException($topic . ': undefined value' . $context);
             }
         }
 
@@ -180,37 +180,37 @@ class ArrayDirectives implements ObjectManagerIgnore
 
         $mode = array_shift($params);
         if ($mode !== 'value') {
-            throw new Exception($topic . ': unexpected mode "' . $mode . '"' . $context);
+            throw new LightnaException($topic . ': unexpected mode "' . $mode . '"' . $context);
         }
 
         $value = array_shift($params);
         if (!is_string($value) || $value === '') {
-            throw new Exception($topic . ': value is expected' . $context);
+            throw new LightnaException($topic . ': value is expected' . $context);
         }
 
         $to = array_shift($params);
         if ($to !== 'to') {
-            throw new Exception($topic . ': "to" is expected' . $context);
+            throw new LightnaException($topic . ': "to" is expected' . $context);
         }
 
         $newValue = array_shift($params);
         if (!is_string($newValue) || $newValue === '') {
-            throw new Exception($topic . ': replacement is expected' . $context);
+            throw new LightnaException($topic . ': replacement is expected' . $context);
         }
 
         $in = array_shift($params);
         if ($in !== 'in') {
-            throw new Exception($topic . ': "in" is expected' . $context);
+            throw new LightnaException($topic . ': "in" is expected' . $context);
         }
 
         $path = array_shift($params);
         if (empty($path)) {
-            throw new Exception($topic . ': path is expected' . $context);
+            throw new LightnaException($topic . ': path is expected' . $context);
         }
 
         $pathS = static::dot2slash($path);
         if (!array_path_exists($data, $pathS)) {
-            throw new Exception($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
+            throw new LightnaException($topic . ': path "' . $pathS . '" doesn\'t exist' . $context);
         }
 
         $path = new ArrayPath($pathS);
@@ -241,31 +241,31 @@ class ArrayDirectives implements ObjectManagerIgnore
 
         $from = array_shift($params);
         if (!is_string($from)) {
-            throw new Exception($topic . ': Invalid path parameter"' . $from . '"' . $context);
+            throw new LightnaException($topic . ': Invalid path parameter"' . $from . '"' . $context);
         }
 
         $to = array_shift($params);
         if ($to !== 'to') {
-            throw new Exception($topic . ': "to" expected after "' . $from . '"' . $context);
+            throw new LightnaException($topic . ': "to" expected after "' . $from . '"' . $context);
         }
 
         $to = array_shift($params);
         if (!is_string($to)) {
-            throw new Exception($topic . ': Undefined "to" path parameter"' . $to . '"' . $context);
+            throw new LightnaException($topic . ': Undefined "to" path parameter"' . $to . '"' . $context);
         }
 
         $from = new ArrayPath(static::dot2slash($from));
         if (!array_path_exists($data, $from->path)) {
-            throw new Exception($topic . ': path "' . $from->path . '" doesn\'t exist' . $context);
+            throw new LightnaException($topic . ': path "' . $from->path . '" doesn\'t exist' . $context);
         }
 
         $to = new ArrayPath(static::dot2slash($to));
         if (array_path_exists($data, $to->path)) {
-            throw new Exception($topic . ': "to" path "' . $to->path . '" exists and can\'t be overwritten' . $context);
+            throw new LightnaException($topic . ': "to" path "' . $to->path . '" exists and can\'t be overwritten' . $context);
         }
 
         if (!array_path_exists($data, $to->parent)) {
-            throw new Exception($topic . ': "to" path "' . $to->path . '" doesn\'t exist' . $context);
+            throw new LightnaException($topic . ': "to" path "' . $to->path . '" doesn\'t exist' . $context);
         }
 
         static::makeMove($data, $from, $to);

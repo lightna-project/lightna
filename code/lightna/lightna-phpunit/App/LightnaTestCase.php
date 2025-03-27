@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lightna\PhpUnit\App;
 
 use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\ObjectManager;
 
@@ -19,7 +20,7 @@ trait LightnaTestCase
     protected function newSubject(string $type, array $methods = [], array $dependencies = []): object
     {
         if (!$schema = ObjectManager::getClassSchema($type)) {
-            throw new Exception('Class schema for "' . $type . '" not found');
+            throw new LightnaException('Class schema for "' . $type . '" not found');
         }
 
         /** @var ObjectA $subject */
@@ -35,7 +36,7 @@ trait LightnaTestCase
         $deps = [];
         foreach ($dependencies as $property => $value) {
             if (!isset($schema[$property])) {
-                throw new Exception('Property ' . $property . ' is not a dependency');
+                throw new LightnaException('Property ' . $property . ' is not a dependency');
             }
             if ($schema[$property][0] != 'o' || !is_array($value)) {
                 $deps[$property] = $value;
@@ -48,6 +49,6 @@ trait LightnaTestCase
             }
         }
 
-        return $subject->mock($deps);
+        return $subject->__mock($deps);
     }
 }

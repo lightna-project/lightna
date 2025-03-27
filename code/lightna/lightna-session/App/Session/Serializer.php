@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Session\App\Session;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 
 class Serializer extends ObjectA
@@ -26,7 +26,7 @@ class Serializer extends ObjectA
         };
 
         if (!is_array($data)) {
-            throw new Exception('Unknown session serialization method');
+            throw new LightnaException('Unknown session serialization method');
         }
 
         return $data;
@@ -43,7 +43,7 @@ class Serializer extends ObjectA
         $offset = 0;
         while ($offset < strlen($srz)) {
             if (!str_contains(substr($srz, $offset), "|")) {
-                throw new Exception("Invalid session data");
+                throw new LightnaException("Invalid session data");
             }
             $pos = strpos($srz, "|", $offset);
             $num = $pos - $offset;

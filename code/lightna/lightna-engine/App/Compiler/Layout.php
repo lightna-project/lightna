@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Layout extends CompilerA
 {
@@ -88,7 +88,7 @@ class Layout extends CompilerA
             }
             $id = substr($key, 3);
             if (!isset($ids[$id])) {
-                throw new Exception("Block id not found in '{$key}'");
+                throw new LightnaException("Block id not found in '{$key}'");
             }
             $path = str_replace('/', '/./', $ids[$id]);
             $block = merge(array_path_get($data, $path), $value);
@@ -145,10 +145,10 @@ class Layout extends CompilerA
                 $path .= '.' . $name;
                 $component = preg_replace('~\.yaml$~', '', $child, -1, $c);
                 if ($c !== 1) {
-                    throw new Exception("Invalid component reference \"$child\" for \"$path\" - unknown extension.");
+                    throw new LightnaException("Invalid component reference \"$child\" for \"$path\" - unknown extension.");
                 }
                 if (!isset($this->layouts[$component])) {
-                    throw new Exception("Invalid component reference \"$child\" for \"$path\" - path not found.");
+                    throw new LightnaException("Invalid component reference \"$child\" for \"$path\" - path not found.");
                 }
 
                 $childData = $this->layouts[$component]['data'];
@@ -176,7 +176,7 @@ class Layout extends CompilerA
     {
         $extends = [];
         if (!isset($this->layouts[$key])) {
-            throw new Exception('Layout extend "' . $key . '" not found');
+            throw new LightnaException('Layout extend "' . $key . '" not found');
         }
         $layout = $this->layouts[$key]['data'];
         if (isset($layout['extends']) && is_array($layout['extends'])) {
@@ -196,7 +196,7 @@ class Layout extends CompilerA
     protected function alignValues(array $layout, bool $isBlocksNode = false, string $path = ''): array
     {
         if (preg_match('~\w+/\w+/[.]$~', $path)) {
-            throw new Exception('Unexpected "." node in "' . ltrim($path, '/') . '"');
+            throw new LightnaException('Unexpected "." node in "' . ltrim($path, '/') . '"');
         }
 
         $aligned = [];
@@ -206,7 +206,7 @@ class Layout extends CompilerA
 
         foreach ($layout as $key => $value) {
             if (is_null($value) && $isBlocksNode) {
-                throw new Exception("Block \"$path/$key\" is NULL");
+                throw new LightnaException("Block \"$path/$key\" is NULL");
             } elseif (is_array($value)) {
                 $aligned[$key] = $this->alignValues($value, $key === '.', $path . '/' . $key);
                 if ($isBlocksNode && !isset($value['.'])) {
@@ -216,7 +216,7 @@ class Layout extends CompilerA
                 if ($key === 'template') {
                     $value = ltrim($value, '/');
                     if (!isset($this->templateMap[$value])) {
-                        throw new Exception('Template "' . $value . '" not found');
+                        throw new LightnaException('Template "' . $value . '" not found');
                     }
                 }
                 $aligned[$key] = $value;
@@ -286,7 +286,7 @@ class Layout extends CompilerA
             $requiresId = ($block['private'] ?? false) || in_array($block['type'] ?? '', ['dynamic', 'lazy']);
 
             if (!$hasId && $requiresId) {
-                throw new Exception(
+                throw new LightnaException(
                     'The block "' . $name . ':' . ($path . '/' . $key)
                     . '" is missing a required "id" attribute. Please define an "id" for this block.',
                 );

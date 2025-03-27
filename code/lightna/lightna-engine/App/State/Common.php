@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\State;
 
-use Exception;
 use Lightna\Engine\App\Entity\State as StateEntity;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\State\Common\Index;
 use Lightna\Engine\App\State\Common\Opcache;
 use Lightna\Engine\App\State\Common\Session;
@@ -27,7 +27,7 @@ class Common extends DataA
     public function save(): void
     {
         if (LIGHTNA_AREA === 'frontend') {
-            throw new Exception('State save is not available on Frontend');
+            throw new LightnaException('State save is not available on Frontend');
         }
 
         $this->entity->set('common', o2a($this));
