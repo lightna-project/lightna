@@ -1,10 +1,10 @@
 @layer components {
     .icon {
-        @apply h-6 w-6;
+        @apply block h-6 w-6;
     }
 
     .icon-sm {
-        @apply h-4 w-4;
+        @apply block h-4 w-4;
     }
 
     .icon-cart {
@@ -84,5 +84,15 @@
     .icon-counter {
         @apply ml-3 flex h-4 w-4 items-center justify-center rounded-full bg-primary-main
         text-xs font-normal text-white;
+    }
+
+    .icon-heart__outline {
+        background: url('../../lightna/magento-frontend/image/icon/heart.svg')
+        center / 24px 24px no-repeat;
+    }
+
+    .icon-heart__filled {
+        background: url('../../lightna/magento-frontend/image/icon/heart-filled.svg')
+        center / 24px 24px no-repeat;
     }
 }
