@@ -2,7 +2,9 @@
 /**
  * Import:
  * @var Lightna\Engine\Data\Url $url
+ * @var Lightna\Engine\Data\Csp $csp
  */
 ?>
 <link rel="stylesheet" type="text/css" media="all"
-      href="<?= $url->asset('build/style/product.css') ?>">
+      href="<?= $url->asset('build/style/product.css') ?>"
+      nonce="<?= $csp->nonce() ?>">

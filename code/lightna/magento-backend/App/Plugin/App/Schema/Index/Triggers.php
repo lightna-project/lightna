@@ -9,7 +9,10 @@ use Lightna\Engine\App\ObjectA;
 
 class Triggers extends ObjectA
 {
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App\Schema\Index\Triggers::getTableAlias()
+     * @noinspection PhpUnused
+     */
     public function getTableAliasExtended(Closure $proceed, string $table): string
     {
         return preg_replace('~_replica$~', '', $table);

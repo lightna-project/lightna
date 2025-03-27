@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Console\Index\Update;
 
-use Lightna\Engine\App\UserException;
+use Lightna\Engine\App\Exception\CliInputException;
 
 class Storage extends UpdateA
 {
@@ -38,12 +38,12 @@ class Storage extends UpdateA
         $storages = [];
         $codes = $this->getArgs();
         if (empty($codes)) {
-            throw new UserException('Specify storage codes');
+            throw new CliInputException('Specify storage codes');
         }
 
         foreach ($codes as $code) {
             if (!isset($this->storages[$code])) {
-                throw new UserException('Invalid storage code "' . $code . '"');
+                throw new CliInputException('Invalid storage code "' . $code . '"');
             }
             $storages[] = $code;
         }

@@ -7,6 +7,7 @@ namespace Lightna\Engine\App\Compiler;
 use Exception;
 use Lightna\Engine\App\ArrayDirectives;
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectManagerIgnore;
 
 class Config extends CompilerA implements ObjectManagerIgnore
@@ -129,7 +130,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
         $fullConfig = merge($config, Bootstrap::getConfig());
 
         if (!$docDir = realpath($docDirConfig = LIGHTNA_ENTRY . $fullConfig['doc_dir'])) {
-            throw new Exception('Invalid doc_dir [' . $docDirConfig . ']');
+            throw new LightnaException('Invalid doc_dir [' . $docDirConfig . ']');
         }
 
         $assetDir = Bootstrap::getAssetDir();
@@ -140,7 +141,7 @@ class Config extends CompilerA implements ObjectManagerIgnore
             } catch (Exception $e) {
             }
             if (!is_dir($assetDir)) {
-                throw new Exception('Invalid asset_dir "' . $assetDir . '"');
+                throw new LightnaException('Invalid asset_dir "' . $assetDir . '"');
             }
         }
 

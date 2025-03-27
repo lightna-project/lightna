@@ -14,7 +14,10 @@ class I18n extends ObjectA
     protected Config $config;
     protected array $scopeConfig;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see           \Lightna\Engine\App\I18n::getScopeLocale()
+     * @noinspection  PhpUnused
+     */
     public function getScopeLocaleExtended(): string
     {
         if (LIGHTNA_AREA === 'frontend') {

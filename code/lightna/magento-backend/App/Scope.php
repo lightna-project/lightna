@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Backend\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Magento\Backend\App\Entity\RunCode as RunCodeEntity;
 use Lightna\Magento\Backend\App\Query\Store;
@@ -25,7 +25,7 @@ class Scope extends ObjectA
         }
 
         if (!$scope = $this->runCodes[$this->runType][$this->runCode] ?? null) {
-            throw new Exception('Undefined run code "' . $this->runCode . '"');
+            throw new LightnaException('Undefined run code "' . $this->runCode . '"');
         }
 
         return $scope;
@@ -41,7 +41,7 @@ class Scope extends ObjectA
     {
         $this->runType = $_SERVER['MAGE_RUN_TYPE'] ?? '';
         if (!in_array($this->runType, ['website', 'store'])) {
-            throw new Exception('Unsupported MAGE_RUN_TYPE value');
+            throw new LightnaException('Unsupported MAGE_RUN_TYPE value');
         }
     }
 

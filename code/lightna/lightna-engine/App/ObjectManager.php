@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
 use Lightna\Engine\App\Config as AppConfig;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class ObjectManager
 {
@@ -19,7 +19,7 @@ class ObjectManager
     public static function init(): void
     {
         if (!class_exists(ObjectA::class)) {
-            throw new Exception(ObjectA::class . ' needs to be defined');
+            throw new LightnaException(ObjectA::class . ' needs to be defined');
         }
         static::$schema = require Bootstrap::getBuildDir() . 'object/schema.php';
         static::$extended = require Bootstrap::getBuildDir() . 'object/extended.php';
@@ -39,7 +39,7 @@ class ObjectManager
             }
         }
 
-        throw new Exception('Class ' . $className . ' not found by ObjectManager');
+        throw new LightnaException('Class ' . $className . ' not found by ObjectManager');
     }
 
     protected static function producer(string $className, $data = []): ?object
@@ -57,7 +57,7 @@ class ObjectManager
         if (count($data) === 0 && isset($schema['data'])) {
             $data = $schema['data'];
         }
-        $instance->initialize($data);
+        $instance->__initialize($data);
 
         return $instance;
     }
@@ -97,7 +97,7 @@ class ObjectManager
     public static function getClassSchema(string $className): ?array
     {
         if (!TEST_MODE) {
-            throw new Exception('ObjectManager::getClassSchema is allowed only in TEST_MODE');
+            throw new LightnaException('ObjectManager::getClassSchema is allowed only in TEST_MODE');
         }
 
         return isset(static::$schema[$className]) ? static::$schema[$className]['p'] : null;

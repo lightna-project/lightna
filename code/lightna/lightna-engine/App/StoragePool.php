@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\Storage\StorageInterface;
 
 class StoragePool extends ObjectA
@@ -20,7 +20,7 @@ class StoragePool extends ObjectA
         }
 
         if (!isset($this->storages[$code])) {
-            throw new Exception("Storage \"$code\" not found.");
+            throw new LightnaException("Storage \"$code\" not found.");
         }
 
         $this->adapters[$code] = newobj(

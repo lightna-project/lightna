@@ -1,13 +1,43 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Engine\Data\Csp $csp
+ */
+?>
 <!DOCTYPE html>
-<html lang="en" style="height: 100%">
+<html lang="en">
 <head>
     <title>404 Not Found</title>
     <meta charset="utf-8">
+    <style nonce="<?= $csp->nonce() ?>">
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content {
+            text-align: center;
+            padding: 8vh 20vw
+        }
+
+        .title {
+            font-size: xx-large;
+        }
+
+        .details {
+            font-size: large;
+        }
+    </style>
 </head>
-<body style="height: 100%; padding: 0; margin: 0;">
-<div style="text-align: center; padding: 8vh 20vw">
-    <span style="font-size: xx-large">404 Not Found</span>
+<body>
+<div class="content">
+    <span class="title">404 Not Found</span>
     <hr/>
-    <span style="font-size: large">The page you requested was not found</span>
+    <span class="details">The page you requested was not found</span>
 </div>
 </body>

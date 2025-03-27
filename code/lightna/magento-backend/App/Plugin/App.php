@@ -12,13 +12,16 @@ class App extends ObjectA
 {
     protected Config $config;
 
-    /** @noinspection PhpUnused */
-    public function renderNoRouteExtended(): Closure
+    /**
+     * @see          \Lightna\Engine\App::defineNoRouteAction()
+     * @noinspection PhpUnused
+     */
+    public function defineNoRouteActionExtended(Closure $proceed): Closure
     {
         $config = $this->config;
 
-        return function () use ($config) {
-            $this->action = [
+        return function () use ($proceed, $config) {
+            $this->noRouteAction = [
                 'name' => 'page',
                 'params' => [
                     'type' => 'cms',
@@ -26,7 +29,7 @@ class App extends ObjectA
                 ],
             ];
 
-            $this->processAction();
+            $proceed();
         };
     }
 }

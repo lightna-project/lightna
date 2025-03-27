@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Translate extends CompilerA
 {
@@ -36,7 +36,7 @@ class Translate extends CompilerA
         while (($row = fgetcsv($handle)) !== false) {
             if (empty($row) || $row === [null]) continue;
             if (count($row) !== 2) {
-                throw new Exception(
+                throw new LightnaException(
                     'Invalid language file: ' . $file . '. Expected 2 values in the row, actual row: '
                     . var_export($row, true)
                 );

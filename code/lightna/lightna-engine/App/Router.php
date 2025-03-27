@@ -6,11 +6,11 @@ namespace Lightna\Engine\App;
 
 use Exception;
 use Lightna\Engine\App\Entity\Route;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\Router\BypassedException;
 use Lightna\Engine\App\Router\NoRouteException;
 use Lightna\Engine\App\Router\RedirectedException;
 use Lightna\Engine\Data\Request;
-use const FILTER_SANITIZE_URL;
 
 class Router extends ObjectA
 {
@@ -20,6 +20,7 @@ class Router extends ObjectA
     protected array $routes;
     protected Route $route;
     protected Request $request;
+    protected Response $response;
 
     /**
      * @throws NoRouteException
@@ -64,7 +65,7 @@ class Router extends ObjectA
         } elseif ($route['action'] == Route::ACTION_CUSTOM) {
             $action = ['name' => $route['params'][0], 'params' => $route['params'][1]];
         } else {
-            throw new Exception('Unknown router action "' . $route['action'] . '"');
+            throw new LightnaException('Unknown router action "' . $route['action'] . '"');
         }
 
         return $action;
@@ -105,13 +106,13 @@ class Router extends ObjectA
         } elseif ($rule === 'bypass') {
             $this->bypass();
         } else {
-            throw new Exception('Unknown rule for router.bypass.rule.no_route = "' . $rule . '"');
+            throw new LightnaException('Unknown rule for router.bypass.rule.no_route = "' . $rule . '"');
         }
     }
 
     protected function canBypass(): bool
     {
-        if(!$this->bypass['file']) {
+        if (!$this->bypass['file']) {
             return false;
         }
 
@@ -146,14 +147,9 @@ class Router extends ObjectA
     /**
      * @throws RedirectedException
      */
-    protected function redirect(int $type, string $to): void
+    protected function redirect(int $code, string $url): void
     {
-        if (!preg_match('~^https?://~', $to)) {
-            // Add slash to relative URL
-            $to = $to[0] !== '/' ? '/' . $to : $to;
-        }
-
-        header('Location: ' . filter_var($to, FILTER_SANITIZE_URL), true, $type);
+        $this->response->redirect($url, $code);
 
         throw new RedirectedException();
     }

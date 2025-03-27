@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Lightna\Magento\Staging\App;
 
-use Exception;
 use Laminas\Db\Sql\AbstractPreparableSql;
 use Laminas\Db\Sql\Combine;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\TableIdentifier;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\ObjectA;
 
@@ -152,14 +152,14 @@ class Staging extends ObjectA
         } elseif (instance_of($name, TableIdentifier::class)) {
             return [$name->getTable(), $name->getTable()];
         } else {
-            throw new \Exception('Unknown table name type');
+            throw new LightnaException('Unknown table name type');
         }
     }
 
     protected function validateMainStagingTable(string $table): void
     {
         if ($parent = $this->getTableParent($table)) {
-            throw new Exception(
+            throw new LightnaException(
                 'Table "' . $table . '" is used as the first staging table in SELECT statement but it has parent table.'
                 . ' Please use "' . $parent . '" as a main table to make staging functioning.'
             );

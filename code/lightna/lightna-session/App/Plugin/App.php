@@ -12,7 +12,10 @@ class App extends ObjectA
 {
     protected Session $session;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App::process()
+     * @noinspection PhpUnused
+     */
     public function processExtended(Closure $proceed): void
     {
         $this->session->prolong();

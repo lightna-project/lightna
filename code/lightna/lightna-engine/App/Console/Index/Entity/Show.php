@@ -7,7 +7,7 @@ namespace Lightna\Engine\App\Console\Index\Entity;
 use Lightna\Engine\App\Console\CommandA;
 use Lightna\Engine\App\Context;
 use Lightna\Engine\App\Entity\EntityA;
-use Lightna\Engine\App\UserException;
+use Lightna\Engine\App\Exception\CliInputException;
 
 class Show extends CommandA
 {
@@ -20,19 +20,19 @@ class Show extends CommandA
         $entity = $this->getArg(1);
 
         if (is_null($entity)) {
-            throw new UserException('Specify entity');
+            throw new CliInputException('Specify entity');
         }
 
         if (!isset($this->entities[$entity])) {
-            throw new UserException('Unknown entity "' . $entity . '"');
+            throw new CliInputException('Unknown entity "' . $entity . '"');
         }
 
         if (!$class = $this->entities[$entity]['entity'] ?? null) {
-            throw new UserException('Class for entity "' . $entity . '" not defined');
+            throw new CliInputException('Class for entity "' . $entity . '" not defined');
         }
 
         if (($id = $this->getArg(2)) === null) {
-            throw new UserException('Specify entity ID');
+            throw new CliInputException('Specify entity ID');
         }
 
         /** @var EntityA $entity */
@@ -41,7 +41,7 @@ class Show extends CommandA
         if ($entity::SCOPED) {
             $scope = (int)$this->getOpt(['scope', 's']);
             if ($scope === 0) {
-                throw new UserException('Specify scope');
+                throw new CliInputException('Specify scope');
             }
 
             $this->context->scope = $scope;

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use Exception;
 use Lightna\Engine\App\Autoloader;
 use Lightna\Engine\App\Bootstrap;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\ObjectManager;
 use Lightna\Engine\App\ObjectManagerIgnore;
@@ -105,7 +105,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
             && !$property->isInterface;
 
         if ($injectable && !class_exists($property->type)) {
-            throw new Exception(
+            throw new LightnaException(
                 "Property type \"{$property->type}\" for {$property->class}::{$property->name} not found.",
             );
         }
@@ -129,7 +129,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         }
 
         if ($property->isRequired && ($this->getConfigValue($area, $path) === null)) {
-            throw new Exception('Config value ' . $path . ' required for ' . $property->class);
+            throw new LightnaException('Config value ' . $path . ' required for ' . $property->class);
         }
 
         return $path;
@@ -153,7 +153,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
             && !is_a($class->getName(), ObjectA::class, true)
             && !is_a($class->getName(), ObjectManagerIgnore::class, true)
         ) {
-            throw new Exception(
+            throw new LightnaException(
                 'Class "' . $class->getName() . '" needs to extend ' . ObjectA::class
                 . ' or implement ' . ObjectManagerIgnore::class . ' interface'
             );

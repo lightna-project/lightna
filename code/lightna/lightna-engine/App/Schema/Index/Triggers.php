@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Schema\Index;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Project\Database;
 use Lightna\Engine\App\Schema\Index\Changelog as ChangelogSchema;
@@ -263,7 +263,7 @@ class Triggers extends ObjectA
     {
         $keys = $this->tableKeys[$table] ?? [];
         if (count($keys) === 0) {
-            throw new Exception('Primary key for table "' . $table . '" not defined');
+            throw new LightnaException('Primary key for table "' . $table . '" not defined');
         }
 
         return $keys;
@@ -311,7 +311,7 @@ class Triggers extends ObjectA
     {
         foreach ($this->getTablesByPattern($tablePattern) as $table) {
             if (!isset($this->watchedTables[$table])) {
-                throw new Exception('Table ' . $table . ' isn\'t declared as watched.');
+                throw new LightnaException('Table ' . $table . ' isn\'t declared as watched.');
             }
 
             foreach (['insert', 'update', 'delete'] as $event) {

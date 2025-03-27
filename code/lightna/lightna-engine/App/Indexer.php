@@ -6,6 +6,7 @@ namespace Lightna\Engine\App;
 
 use Lightna\Engine\App\Entity\EntityA;
 use Lightna\Engine\App\Entity\State;
+use Lightna\Engine\App\Exception\CliInputException;
 use Lightna\Engine\App\Index\Changelog\Handler as ChangelogHandler;
 use Lightna\Engine\App\Index\IndexInterface;
 use Lightna\Engine\App\Index\Queue\Handler as QueueHandler;
@@ -122,7 +123,7 @@ class Indexer extends ObjectA
     protected function lockQueue(): void
     {
         if (!$this->lock->get(static::QUEUE_LOCK)) {
-            throw new UserException('Queue is already running or locked by another index command');
+            throw new CliInputException('Queue is already running or locked by another index command');
         }
     }
 
@@ -143,7 +144,7 @@ class Indexer extends ObjectA
         $this->waitQueueLock($timeout);
         $this->setQueueStopFlag(false);
         if (!$this->lock->get(static::QUEUE_LOCK)) {
-            throw new UserException('Queue stop timeout "' . $timeout . '" exceeded, try again.');
+            throw new CliInputException('Queue stop timeout "' . $timeout . '" exceeded, try again.');
         }
     }
 
@@ -186,7 +187,7 @@ class Indexer extends ObjectA
     public function validateQueueBlock(bool $required): void
     {
         if ($this->isQueueBlocked() !== $required) {
-            throw new UserException(
+            throw new CliInputException(
                 $required ?
                     'Queue must be blocked, run index.queue.block to block.' :
                     'Queue is blocked, run index.queue.unblock to unblock.'
@@ -210,7 +211,7 @@ class Indexer extends ObjectA
         }
 
         if ($this->isQueueStopped()) {
-            throw new UserException('Queue has been stopped by another index command.');
+            throw new CliInputException('Queue has been stopped by another index command.');
         }
         $lastCheckMct = microtime(true);
     }

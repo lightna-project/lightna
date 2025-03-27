@@ -16,13 +16,19 @@ class EntityLink extends ObjectA
     protected Staging $staging;
     protected StagingQuery $stagingQuery;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Magento\Backend\App\Index\EntityLink::getColumn()
+     * @noinspection PhpUnused
+     */
     public function getColumnExtended(Closure $proceed, string $table): string
     {
         return $this->staging->getTableParent($table) ? 'row_id' : $proceed();
     }
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Magento\Backend\App\Index\EntityLink::getIds()
+     * @noinspection PhpUnused
+     */
     public function getIdsExtended(Closure $proceed, string $table, array $ids): array
     {
         return $this->staging->getTableParent($table)

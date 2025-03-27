@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\Data;
 
-use Exception;
 use Lightna\Engine\App\Build;
+use Lightna\Engine\App\Exception\LightnaException;
 
 class Url extends DataA
 {
@@ -24,7 +24,7 @@ class Url extends DataA
     {
         $url = $this->parseAssetUrl($url);
         if (!isset($this->assetHashes[$url->path])) {
-            throw new Exception('Unknown asset "' . $url->orig . '", make sure it contains path to the module and is relative"');
+            throw new LightnaException('Unknown asset "' . $url->orig . '", make sure it contains path to the module and is relative"');
         }
 
         $url->params['ch'] = $this->assetHashes[$url->path];

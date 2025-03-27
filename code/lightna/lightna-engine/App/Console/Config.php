@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console;
 
 use Lightna\Engine\App\Config as AppConfig;
-use Lightna\Engine\App\UserException;
 
 class Config extends CommandA
 {

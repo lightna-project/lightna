@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Lightna\Engine\Data;
 
 use AllowDynamicProperties;
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 
 #[AllowDynamicProperties]
@@ -13,24 +13,25 @@ class DataA extends ObjectA
 {
     protected function init(array $data = []): void
     {
-        foreach ($this->objectify($data) as $key => $value) {
+        foreach ($this->__objectify($data) as $key => $value) {
             $this->{$key} = $value;
         }
     }
 
-    protected function objectify(array $data): array
+    /** @internal */
+    protected function __objectify(array $data): array
     {
         $result = [];
         foreach ($data as $key => $value) {
             if (is_array($value)) {
                 if (is_string($key) && $this->issetProperty($key)) {
-                    $this->setPropertyData($key, $value);
+                    $this->__setPropertyData($key, $value);
                 } elseif (!count($value)) {
                     $result[$key] = [];
                 } elseif (is_string(array_key_first($value))) {
                     $result[$key] = newobj(DataA::class, $value);
                 } else {
-                    $result[$key] = $this->objectify($value);
+                    $result[$key] = $this->__objectify($value);
                 }
             } else {
                 $result[$key] = $value;
@@ -40,9 +41,9 @@ class DataA extends ObjectA
         return $result;
     }
 
-    protected function defineProperty(string $name): bool
+    protected function __defineProperty(string $name): bool
     {
-        if (!$prop = $this->getPropertySchema($name)) {
+        if (!$prop = $this->__getPropertySchema($name)) {
             return false;
         }
 
@@ -58,7 +59,7 @@ class DataA extends ObjectA
             }
             return true;
         } else {
-            return parent::defineProperty($name);
+            return parent::__defineProperty($name);
         }
     }
 
@@ -88,7 +89,7 @@ class DataA extends ObjectA
     {
         if (!isset($this->{$name})) {
             if (!property_exists($this, $name)) {
-                throw new Exception('Invoking undefined property ' . $this::class . '::' . $name);
+                throw new LightnaException('Invoking undefined property ' . $this::class . '::' . $name);
             } else {
                 return '';
             }

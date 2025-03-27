@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Lightna\Engine\App\Console\Index\Update;
 
 use Lightna\Engine\App\Console\CommandA;
+use Lightna\Engine\App\Exception\CliInputException;
 use Lightna\Engine\App\Indexer;
 use Lightna\Engine\App\Query\Index\Queue;
 use Lightna\Engine\App\State\Common;
-use Lightna\Engine\App\UserException;
 
 class UpdateA extends CommandA
 {
@@ -23,7 +23,7 @@ class UpdateA extends CommandA
     public function updateEntities(array $entities, bool $multi = false, ?int $onlyScope = null): void
     {
         if (!$multi && $onlyScope) {
-            throw new UserException('Scope can be specified only in multi mode');
+            throw new CliInputException('Scope can be specified only in multi mode');
         }
 
         $wasBlockedByCommand = false;

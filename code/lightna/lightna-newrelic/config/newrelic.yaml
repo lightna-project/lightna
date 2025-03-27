@@ -1,0 +1,3 @@
+newrelic:
+  transaction:
+    name_mapping: [ ]

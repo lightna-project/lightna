@@ -53,11 +53,14 @@ abstract class ReplicaAbstract extends ObjectA
 
     protected function getNextToQuery(): string
     {
+        $offsetFieldExpr = $this->db->quoteIdentifier($this->offsetField);
+        $tableExpr = $this->db->quoteIdentifier($this->table);
+
         return
-            "select max({$this->offsetField}) as \"to\" from (" .
-            "    select distinct {$this->offsetField} from {$this->table}" .
-            "    where {$this->offsetField} >= ?" .
-            "    order by {$this->offsetField}" .
+            "select max($offsetFieldExpr) as \"to\" from (" .
+            "    select distinct $offsetFieldExpr from $tableExpr" .
+            "    where $offsetFieldExpr >= ?" .
+            "    order by $offsetFieldExpr" .
             "    limit ?" .
             ") as t";
     }
@@ -109,11 +112,15 @@ abstract class ReplicaAbstract extends ObjectA
 
     protected function getCleanReplicaQuery(): string
     {
+        $offsetFieldExpr = $this->db->quoteIdentifier($this->offsetField);
+        $tableExpr = $this->db->quoteIdentifier($this->table);
+        $tableReplicaExpr = $this->db->quoteIdentifier($this->table . '_replica');
+
         return
             "DELETE replica " .
-            "FROM {$this->table}_replica replica " .
-            "LEFT JOIN {$this->table} origin USING ({$this->offsetField}) " .
-            "WHERE replica.{$this->offsetField} >= ? AND replica.{$this->offsetField} <= ? AND origin.{$this->offsetField} IS NULL";
+            "FROM $tableReplicaExpr replica " .
+            "LEFT JOIN $tableExpr origin USING ($offsetFieldExpr) " .
+            "WHERE replica.$offsetFieldExpr >= ? AND replica.$offsetFieldExpr <= ? AND origin.$offsetFieldExpr IS NULL";
     }
 
     protected function cleanReplicaRemainder(int $from): void

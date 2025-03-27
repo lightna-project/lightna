@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Router\Action;
 
-use Exception;
+use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\Layout;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Response;
 use Lightna\Engine\Data\Request;
 
 class Block extends ObjectA
 {
     protected Context $context;
     protected Request $request;
+    protected Response $response;
     protected Layout $layout;
 
     protected function init(array $data = []): void
@@ -33,10 +35,10 @@ class Block extends ObjectA
     protected function validateRequest(): void
     {
         if (!$this->request->isPost) {
-            throw new Exception('Block request method must be POST');
+            throw new LightnaException('Block request method must be POST');
         }
         if (!$this->request->param->blockIds) {
-            throw new Exception('blockIds parameter is missing in request');
+            throw new LightnaException('blockIds parameter is missing in request');
         }
     }
 
@@ -51,8 +53,10 @@ class Block extends ObjectA
 
     protected function render(): void
     {
-        header('Content-type: application/json');
-        echo json($this->getBlocksHtmlData());
+        $this->response
+            ->setHeader('Content-Type', 'application/json')
+            ->setBody(json($this->getBlocksHtmlData()))
+            ->send();
     }
 
     protected function getBlocksHtmlData(): mixed

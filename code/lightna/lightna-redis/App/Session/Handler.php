@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightna\Redis\App\Session;
 
-use Exception;
+use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\StoragePool;
 use Lightna\Engine\App\Storage\StorageInterface;
@@ -48,7 +48,7 @@ class Handler extends ObjectA implements HandlerInterface
         return match ($this->storageOptions['data_type']) {
             'string' => $this->redis->get($this->getKey()),
             'hash' => $this->redis->getHashField($this->getKey(), $this->storageOptions['data_hash_field']),
-            default => throw new Exception('Unknown data_type for session_redis storage'),
+            default => throw new LightnaException('Unknown data_type for session_redis storage'),
         };
     }
 

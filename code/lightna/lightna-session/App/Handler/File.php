@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Lightna\Session\App\Handler;
 
-use Exception;
-use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Context;
+use Lightna\Engine\App\Exception\LightnaException;
+use Lightna\Engine\App\ObjectA;
 
 class File extends ObjectA implements HandlerInterface
 {
@@ -44,7 +44,7 @@ class File extends ObjectA implements HandlerInterface
     protected function getFilename(): string
     {
         if (preg_match('~[^a-z0-9]~iu', $this->sessionId)) {
-            throw new Exception('Invalid session ID');
+            throw new LightnaException('Invalid session ID');
         }
 
         return session_save_path() . '/sess_' . $this->sessionId;

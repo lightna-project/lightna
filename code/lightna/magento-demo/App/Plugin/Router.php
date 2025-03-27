@@ -12,7 +12,10 @@ class Router extends ObjectA
 {
     protected Request $request;
 
-    /** @noinspection PhpUnused */
+    /**
+     * @see          \Lightna\Engine\App\Router::canBypass()
+     * @noinspection PhpUnused
+     */
     public function canBypassExtended(Closure $proceed): bool
     {
         $disableLightna = !is_null($this->request->param->disable_lightna);
