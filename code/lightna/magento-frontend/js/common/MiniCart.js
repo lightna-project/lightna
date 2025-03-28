@@ -6,8 +6,8 @@ import { PageMessage } from 'lightna/magento-frontend/common/PageMessage';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class MiniCart {
-    static MINICART_BLOCK_ID = 'minicart';
-    static CART_REMOVE_URL = '/checkout/sidebar/removeItem';
+    static BLOCK_ID = 'minicart';
+    static URL_REMOVE_ITEM = '/checkout/sidebar/removeItem';
     classes = {
         cartOpen: 'minicart-open',
         fade: 'fade-out',
@@ -52,7 +52,7 @@ export class MiniCart {
 
     async refresh() {
         try {
-            await Blocks.updateHtml([MiniCart.MINICART_BLOCK_ID]);
+            await Blocks.updateHtml([MiniCart.BLOCK_ID]);
         } catch (error) {
             console.error('Error refreshing the minicart:', error);
         }
@@ -87,7 +87,7 @@ export class MiniCart {
     }
 
     async removeProduct(itemId) {
-        const response = await Request.post(MiniCart.CART_REMOVE_URL, {
+        const response = await Request.post(MiniCart.URL_REMOVE_ITEM, {
             item_id: itemId,
         });
         if (!response.success) {

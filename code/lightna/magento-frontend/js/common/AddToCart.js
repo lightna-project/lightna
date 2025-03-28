@@ -4,7 +4,7 @@ import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventD
 import { Cookie } from 'lightna/engine/lib/Cookie';
 
 export class AddToCart {
-    static CART_ADD_URL = '/checkout/cart/add';
+    static URL_ADD_PRODUCT = '/checkout/cart/add';
     classes = {
         loading: 'loading',
         disabled: 'btn-disabled',
@@ -41,7 +41,7 @@ export class AddToCart {
     }
 
     async addProduct(component) {
-        const response = await Request.post(AddToCart.CART_ADD_URL, this.collectData(component));
+        const response = await Request.post(AddToCart.URL_ADD_PRODUCT, this.collectData(component));
         this.addProductSuccess(response);
     }
 

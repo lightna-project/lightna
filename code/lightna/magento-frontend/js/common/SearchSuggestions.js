@@ -5,8 +5,8 @@ import { Search } from 'lightna/magento-frontend/common/Search';
 import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class SearchSuggestions {
-    static SEARCH_SUGGEST_URL= '/search/ajax/suggest';
-    static SUGGESTIONS_BLOCK_ID= 'search-suggestions';
+    static URL_SUGGEST = '/search/ajax/suggest';
+    static BLOCK_ID = 'search-suggestions';
     static MAX_SUGGESTIONS= 7;
     suggestions = [];
     debounceTimer = null;
@@ -61,13 +61,13 @@ export class SearchSuggestions {
         this.abortController?.abort();
         this.abortController = new AbortController();
         this.suggestions = await Request.get(
-            `${SearchSuggestions.SEARCH_SUGGEST_URL}?q=${encodeURIComponent(this.search.value)}`,
+            `${SearchSuggestions.URL_SUGGEST}?q=${encodeURIComponent(this.search.value)}`,
             { signal: this.abortController.signal }
         ) || [];
     }
 
     async updateSuggestionsHtml() {
-        return Blocks.updateHtml([SearchSuggestions.SUGGESTIONS_BLOCK_ID], {
+        return Blocks.updateHtml([SearchSuggestions.BLOCK_ID], {
             suggestions: this.limitSuggestions(),
             query: this.search.value,
         });
