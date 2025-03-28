@@ -3,7 +3,7 @@ import { Blocks } from 'lightna/engine/lib/Blocks';
 import { UserInput } from 'lightna/engine/lib/UserInput';
 
 export class Options {
-    static OPTIONS_BLOCK_ID = 'product-options';
+    static BLOCK_ID = 'product-options';
     classes = {
         active: 'active',
         disabled: 'disabled',
@@ -45,7 +45,7 @@ export class Options {
             optionInput.value = optionData.id;
         }
 
-        await Blocks.updateHtml([Options.OPTIONS_BLOCK_ID], UserInput.collect(component));
+        await Blocks.updateHtml([Options.BLOCK_ID], UserInput.collect(component));
         this.initializeEventListeners();
     }
 }

@@ -3,9 +3,9 @@ import { Request } from 'lightna/engine/lib/Request';
 import { ClickEventDelegator} from 'lightna/magento-frontend/common/ClickEventDelegator';
 
 export class Wishlist {
-    static WISHLIST_ADD_URL = '/wishlist/index/add';
-    static WISHLIST_REMOVE_URL = 'wishlist/index/remove/';
-    static WISHLIST_BLOCK_ID = 'wishlist-button';
+    static URL_ADD = '/wishlist/index/add';
+    static URL_REMOVE = 'wishlist/index/remove/';
+    static BLOCK_ID = 'wishlist-button';
     classes = {
         animated: 'animated',
     };
@@ -31,19 +31,19 @@ export class Wishlist {
     async addProduct(component) {
         this.animateButton(component);
         await Request.post(
-            Wishlist.WISHLIST_ADD_URL,
+            Wishlist.URL_ADD,
             { product: component.dataset.productId },
         );
-        await Blocks.updateHtml([Wishlist.WISHLIST_BLOCK_ID]);
+        await Blocks.updateHtml([Wishlist.BLOCK_ID]);
     }
 
     async removeProduct(component) {
         this.animateButton(component);
         await Request.post(
-            Wishlist.WISHLIST_REMOVE_URL,
+            Wishlist.URL_REMOVE,
             { item: component.dataset.itemId },
         );
-        await Blocks.updateHtml([Wishlist.WISHLIST_BLOCK_ID]);
+        await Blocks.updateHtml([Wishlist.BLOCK_ID]);
     }
 
     animateButton(button) {
