@@ -74,6 +74,7 @@ entry:
       magento-component-product-stock: lightna/magento-frontend/component/product/stock.css
       magento-component-product-usp: lightna/magento-frontend/component/product/usp.css
       magento-component-product-wishlist: lightna/magento-frontend/component/product/wishlist.css
+      magento-component-product-tile: lightna/magento-frontend/component/product/tile.css
       # Page
       magento-page-product: lightna/magento-frontend/page/product.css
   listing:

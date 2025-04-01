@@ -30,4 +30,8 @@
     .product-tile__price {
         @apply mt-auto;
     }
+
+    .product-tile__placeholder {
+        @apply bg-primary-bg rounded-sm animate-bg-pulse aspect-[290/465];
+    }
 }

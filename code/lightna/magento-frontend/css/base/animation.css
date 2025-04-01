@@ -23,6 +23,10 @@
         animation: slide-5 15s ease-in-out infinite;
     }
 
+    .animate-bg-pulse {
+        animation: bg-pulse 1.5s infinite;
+    }
+
     .fade-in {
         @apply animate-fade-in;
     }
@@ -188,5 +192,17 @@
     100% {
         transform: scale(1);
         opacity: 1;
+    }
+}
+
+@keyframes bg-pulse {
+    0% {
+        background-color: #FAF8F8;
+    }
+    50% {
+        background-color: #f2f2f2;
+    }
+    100% {
+        background-color: #FAF8F8;
     }
 }

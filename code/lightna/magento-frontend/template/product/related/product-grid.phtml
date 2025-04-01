@@ -1,0 +1,11 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Magento\Backend\Data\Product\Related $related
+ */
+?>
+<ul class="products-grid--wide related-products__products-grid">
+    <?php foreach ($related->products as $index => $product): ?>
+        <?= block('item', compact('index', 'product')) ?>
+    <?php endforeach; ?>
+</ul>

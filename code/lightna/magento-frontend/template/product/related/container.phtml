@@ -1,0 +1,14 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Magento\Backend\Data\Product $product
+ */
+if (count($product->related) === 0) {
+    return;
+}
+?>
+<div class="related-products">
+    <div class="related-products__title"><?= phrase('Related Products') ?></div>
+    <?= block('product-grid') ?>
+    <?= block('product-placeholder') ?>
+</div>
