@@ -120,6 +120,13 @@ extends:
           title: "Specifications"
           template: lightna/magento-frontend/product/attributes/all-visible.phtml
     .related-products:
-      id: related-products
-      template: lightna/magento-frontend/product/related.phtml
-      .item: component/product/tile.yaml
+      template: lightna/magento-frontend/product/related/container.phtml
+      .product-placeholder:
+        max: 4
+        for: related-products
+        template: lightna/magento-frontend/product/related/product-placeholder.phtml
+      .product-grid:
+        id: related-products
+        type: lazy
+        template: lightna/magento-frontend/product/related/product-grid.phtml
+        .item: component/product/tile.yaml

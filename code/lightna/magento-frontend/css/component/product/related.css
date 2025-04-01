@@ -6,4 +6,9 @@
     .related-products__title {
         @apply border-b pb-4 text-xl md:text-3xl font-semibold;
     }
+
+    .related-products__products-grid + .products-placeholder,
+    #block-wrapper-related-products:has(.related-products__products-grid) + .products-placeholder {
+        @apply hidden;
+    }
 }
