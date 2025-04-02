@@ -4,11 +4,16 @@ import { Request } from 'lightna/engine/lib/Request';
 export class Blocks {
 
     static async getHtml(blockIds, data = {}) {
-        data.blockIds = blockIds;
-        data.entityType = pageContext.entity.type;
-        data.entityId = pageContext.entity.id;
+        const { type: entityType, id: entityId } = pageContext.entity;
+        const requestData = {
+            ...data,
+            blockIds,
+            entityType,
+            entityId
+        };
+        const requestOptions = { top: false };
 
-        return Request.post('/lightna/block', data);
+        return Request.post('/lightna/block', requestData, requestOptions);
     }
 
     static async updateHtml(blockIds = [], data = {}) {
