@@ -3,10 +3,10 @@
     "description": "Lightna Webpack module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.45",
+    "version": "1.0.46",
     "require": {
         "ext-yaml": "*",
-        "lightna/engine": "^1.0.45"
+        "lightna/engine": "^1.0.46"
     },
     "autoload": {
         "psr-4": {

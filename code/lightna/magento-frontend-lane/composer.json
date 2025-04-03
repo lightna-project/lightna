@@ -3,9 +3,9 @@
     "description": "Lightna Magento Frontend Lane module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.45",
+    "version": "1.0.46",
     "require": {
-        "lightna/magento-frontend": "^1.0.45"
+        "lightna/magento-frontend": "^1.0.46"
     },
     "autoload": {
         "psr-4": {

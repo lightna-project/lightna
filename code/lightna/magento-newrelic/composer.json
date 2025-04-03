@@ -3,10 +3,10 @@
     "description": "Lightna Magento Newrelic module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.45",
+    "version": "1.0.46",
     "require": {
-        "lightna/newrelic": "^1.0.45",
-        "lightna/magento-frontend": "^1.0.45"
+        "lightna/newrelic": "^1.0.46",
+        "lightna/magento-frontend": "^1.0.46"
     },
     "autoload": {
         "psr-4": {
