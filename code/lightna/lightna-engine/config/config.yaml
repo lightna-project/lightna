@@ -1,6 +1,8 @@
 page_cache:
   type: null
   max_age: 900
+bfcache:
+  enabled: false
 maintenance:
   enabled: false
   # Directory with custom maintenance pages
