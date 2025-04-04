@@ -2,6 +2,8 @@ entry:
   common:
     content:
       magento-demo-template: lightna/magento-demo/template/**/*.phtml
+    import:
+      magento-demo-home: lightna/magento-demo/home.css
   lane:
     content:
       magento-demo-template: lightna/magento-demo/template/**/*.phtml
