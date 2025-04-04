@@ -5,8 +5,9 @@ entry:
       magento-cms-template: lightna/magento-frontend/template/cms/**/*.phtml
       magento-component-template: lightna/magento-frontend/template/component/**/*.phtml
       magento-page-template: lightna/magento-frontend/template/page/**/*.phtml
-      magento-common-layout: lightna/magento-frontend/layout/**/*.yaml
-      magento-cms-layout: lightna/magento-frontend/layout/**/*.yaml
+      magento-common-layout: lightna/magento-frontend/layout/page.yaml
+      magento-cms-layout: lightna/magento-frontend/layout/cms.yaml
+      magento-component-layout: lightna/magento-frontend/layout/component/**/*.yaml
       magento-common-js: lightna/magento-frontend/js/common/*.js
     import:
       tailwind-base: tailwindcss/base
