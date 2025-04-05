@@ -25,7 +25,7 @@ export class Carousel {
     constructor() {
         this.extendProperties();
         this.initializeActions();
-        this.observeDOM();
+        this.observeDom();
         this.setupAll();
         this.initializeResizeListener();
     }
@@ -37,7 +37,7 @@ export class Carousel {
         ClickEventDelegator.add(this.actions.click);
     }
 
-    observeDOM() {
+    observeDom() {
         const observer = new MutationObserver((mutations) => {
             mutations.forEach(({ addedNodes }) => {
                 addedNodes.forEach((node) => {

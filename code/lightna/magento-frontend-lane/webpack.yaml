@@ -1,7 +1,7 @@
 entry:
   lane:
     component:
-      lightna-fpc: lightna/engine/Fpc
+      lightna-pagecache: lightna/engine/PageCache
       lightna-session: lightna/session/Session
       magento-common-click-delegator: lightna/magento-frontend/common/ClickEventDelegator
       magento-common-lazy-content: lightna/magento-frontend/common/LazyContent

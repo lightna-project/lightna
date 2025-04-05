@@ -1,4 +1,4 @@
 entry:
   common:
     component:
-      lightna-fpc: lightna/engine/Fpc
+      lightna-pagecache: lightna/engine/PageCache

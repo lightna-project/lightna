@@ -54,7 +54,7 @@ class Session extends ObjectA
     protected function readData(): array
     {
         if (!$this->canRead()) {
-            throw new LightnaException('Reading the session on public pages is not allowed in FPC-compatible mode.');
+            throw new LightnaException('Reading session data on publicly cacheable pages is not permitted.');
         }
 
         $srz = $this->readContent();

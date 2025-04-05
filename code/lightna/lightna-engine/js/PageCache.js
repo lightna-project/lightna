@@ -1,6 +1,6 @@
 import { Blocks } from 'lightna/engine/lib/Blocks';
 
-export class Fpc {
+export class PageCache {
 
     constructor() {
         this.extendProperties();
