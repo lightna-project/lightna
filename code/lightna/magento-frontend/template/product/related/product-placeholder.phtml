@@ -4,7 +4,7 @@
  * @var Lightna\Magento\Backend\Data\Product $product
  * @var Lightna\Engine\Data\Block $block
  */
-$maxPlaceholderItems = min(count($product->related), $block->max);
+$maxPlaceholderItems = min(count($product->relatedIds), $block->max);
 ?>
 <div <?= $block->attributes() ?>>
     <ul class="products-grid--wide">

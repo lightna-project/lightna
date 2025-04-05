@@ -10,6 +10,7 @@ use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Response;
 use Lightna\Engine\App\Router;
+use Lightna\Engine\App\Router\Action\ActionInterface;
 use Lightna\Engine\App\Router\BypassedException;
 use Lightna\Engine\App\Router\NoRouteException;
 use Lightna\Engine\App\Router\RedirectedException;
@@ -61,7 +62,7 @@ class App extends ObjectA
         $this->finishOutput();
     }
 
-    protected function createAction(): object
+    protected function createAction(): ActionInterface
     {
         if (!$className = ($this->actions[$this->action['name']] ?? null)) {
             throw new LightnaException('Router action class for "' . $this->action['name'] . '" not defined');
@@ -101,7 +102,6 @@ class App extends ObjectA
 
     protected function processAction(): void
     {
-        $this->sendHeaders();
         $this->createAction()->process();
     }
 

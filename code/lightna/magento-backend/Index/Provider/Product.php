@@ -34,7 +34,7 @@ class Product extends ObjectA
     protected array $variantValueIds;
     protected array $galleryItems;
     protected array $categories;
-    protected array $related;
+    protected array $relatedIds;
     /** Result */
     protected array $data = [];
 
@@ -75,7 +75,7 @@ class Product extends ObjectA
         $this->loadVariantValueIds();
         $this->loadGallery();
         $this->loadCategories();
-        $this->loadRelated();
+        $this->loadRelatedIds();
     }
 
     protected function isProductIndexable(array $product): bool
@@ -118,7 +118,7 @@ class Product extends ObjectA
         $this->collectOptions($product, $id);
         $this->collectGallery($product, $id);
         $this->collectCategories($product, $id);
-        $this->collectRelated($product, $id);
+        $this->collectRelatedIds($product, $id);
     }
 
     protected function applyProductData($product, $id): void
@@ -308,9 +308,9 @@ class Product extends ObjectA
         $product['categories'] = $this->categories[$id] ?? [];
     }
 
-    protected function collectRelated(array &$product, int $id): void
+    protected function collectRelatedIds(array &$product, int $id): void
     {
-        $product['related'] = $this->related[$id] ?? [];
+        $product['relatedIds'] = $this->relatedIds[$id] ?? [];
     }
 
     protected function loadVariantValueIds(): void
@@ -347,8 +347,8 @@ class Product extends ObjectA
         $this->categories = $this->product->getCategoriesBatch($this->allIds);
     }
 
-    protected function loadRelated(): void
+    protected function loadRelatedIds(): void
     {
-        $this->related = $this->product->getLinkedProductsBatch($this->allIds, 'related', 25);
+        $this->relatedIds = $this->product->getLinkedProductsBatch($this->allIds, 'related', 25);
     }
 }

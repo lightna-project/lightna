@@ -156,7 +156,7 @@ class ProductTest extends TestCase
                     ],
                     'gallery' => [['max' => 'coming-soon.jpg']],
                     'categories' => [],
-                    'related' => [],
+                    'relatedIds' => [],
                 ],
             ],
             $subject->getData([1, 2, 3, 4]),
@@ -268,7 +268,7 @@ class ProductTest extends TestCase
                 'options' => ['attributes' => []],
                 'gallery' => [['max' => 'coming-soon.jpg']],
                 'categories' => [],
-                'related' => [],
+                'relatedIds' => [],
             ],
         ];
     }
