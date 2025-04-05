@@ -11,7 +11,7 @@ use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Response;
 use Lightna\Engine\Data\Request;
 
-class Block extends ObjectA
+class Block extends ObjectA implements ActionInterface
 {
     protected Context $context;
     protected Request $request;
@@ -28,6 +28,7 @@ class Block extends ObjectA
     public function process(): void
     {
         $this->validateRequest();
+        $this->setHeaders();
         $this->configureLayout();
         $this->render();
     }
@@ -42,6 +43,11 @@ class Block extends ObjectA
         }
     }
 
+    protected function setHeaders(): void
+    {
+        $this->response->setHeader('Content-Type', 'application/json');
+    }
+
     protected function configureLayout(): void
     {
         $this->layout->setRenderLazyBlocks(true);
@@ -54,7 +60,6 @@ class Block extends ObjectA
     protected function render(): void
     {
         $this->response
-            ->setHeader('Content-Type', 'application/json')
             ->setBody(json($this->getBlocksHtmlData()))
             ->send();
     }

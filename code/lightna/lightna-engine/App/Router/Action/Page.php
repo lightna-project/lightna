@@ -11,7 +11,7 @@ use Lightna\Engine\App\ObjectA;
 use Lightna\Engine\App\Response;
 use Lightna\Engine\Data\Request;
 
-class Page extends ObjectA
+class Page extends ObjectA implements ActionInterface
 {
     protected Layout $layout;
     protected Context $context;
@@ -36,7 +36,7 @@ class Page extends ObjectA
     public function process(): void
     {
         $this->validateRequest();
-        $this->addPageHeaders();
+        $this->setHeaders();
         $this->layout->page();
     }
 
@@ -47,19 +47,18 @@ class Page extends ObjectA
         }
     }
 
-    protected function addPageHeaders(): void
+    protected function setHeaders(): void
     {
-        $this->addCacheControlHeader();
+        $this->setCacheControlHeader();
+        $this->response->sendHeaders();
     }
 
-    protected function addCacheControlHeader(): void
+    protected function setCacheControlHeader(): void
     {
-        $this->response
-            ->setHeader(
-                'Cache-Control',
-                implode(', ', $this->getCacheControlValues())
-            )
-            ->sendHeaders();
+        $this->response->setHeader(
+            'Cache-Control',
+            implode(', ', $this->getCacheControlValues())
+        );
     }
 
     protected function getCacheControlValues(): array

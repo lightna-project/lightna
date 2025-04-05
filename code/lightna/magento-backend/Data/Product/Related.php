@@ -23,7 +23,7 @@ class Related extends DataA
     protected function defineProducts(): void
     {
         $this->products = [];
-        $productIds = array_slice($this->product->related, 0, $this->limit);
+        $productIds = array_slice($this->product->relatedIds, 0, $this->limit);
         foreach ($this->productEntity->getList($productIds) as $productId => $productData) {
             if (!$productData) {
                 continue;
