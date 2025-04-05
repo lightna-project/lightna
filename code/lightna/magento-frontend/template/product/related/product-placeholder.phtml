@@ -6,7 +6,7 @@
  */
 $maxPlaceholderItems = min(count($product->related), $block->max);
 ?>
-<div class="cjs-lazy products-placeholder" data-lazy-block-id="<?= $block->for() ?>">
+<div <?= $block->attributes() ?>>
     <ul class="products-grid--wide">
         <?php for ($i = 0; $i < $maxPlaceholderItems; $i++): ?>
             <li class="product-tile__placeholder"></li>

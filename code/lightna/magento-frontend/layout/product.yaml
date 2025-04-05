@@ -125,9 +125,11 @@ extends:
     .related-products:
       template: lightna/magento-frontend/product/related/container.phtml
       .product-placeholder:
-        max: 4
-        for: related-products
         template: lightna/magento-frontend/product/related/product-placeholder.phtml
+        max: 4
+        attributes:
+          class: [ cjs-lazy, products-placeholder ]
+          data-lazy-block-id: related-products
       .product-grid:
         id: related-products
         type: lazy

@@ -24,8 +24,8 @@ export class LazyContent {
     async handleIntersection(entries, observer) {
         for (const entry of entries) {
             if (entry.isIntersecting) {
-                await this.load(entry.target);
                 observer.unobserve(entry.target);
+                await this.load(entry.target);
             }
         }
     }
