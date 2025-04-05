@@ -32,8 +32,8 @@ return [
     'project_dir' => '..',
 
     // Use page_cache.type = null unless:
-    //   - Lightna page is cached by FPC (Varnish, Fastly, Builtin) and it renders private blocks
-    //   - Lightna Lane page is cached by FPC, and it renders private blocks
+    //   - Lightna page is cached by Page Cache (Varnish, Fastly, Builtin) and it renders private blocks
+    //   - Lightna Lane page is cached by Page Cache, and it renders private blocks
     // Possible values: custom, edge
     'page_cache' => [
         'type' => null,

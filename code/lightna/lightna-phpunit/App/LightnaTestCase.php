@@ -38,14 +38,18 @@ trait LightnaTestCase
             if (!isset($schema[$property])) {
                 throw new LightnaException('Property ' . $property . ' is not a dependency');
             }
-            if ($schema[$property][0] != 'o' || !is_array($value)) {
-                $deps[$property] = $value;
-            } else {
-                $mock = $this->createMock($schema[$property][1]);
-                foreach ($value as $method => $return) {
-                    $mock->method($method)->willReturn($return);
+            if ($schema[$property][0] === 'o') {
+                if (is_object($value)) {
+                    $deps[$property] = $value;
+                } else {
+                    $mock = $this->createMock($schema[$property][1]);
+                    foreach ($value as $method => $return) {
+                        $mock->method($method)->willReturn($return);
+                    }
+                    $deps[$property] = $mock;
                 }
-                $deps[$property] = $mock;
+            } else {
+                $deps[$property] = $value;
             }
         }
 
