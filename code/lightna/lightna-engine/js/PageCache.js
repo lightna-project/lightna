@@ -1,11 +1,12 @@
 import { Blocks } from 'lightna/engine/lib/Blocks';
+import { pageReady } from "lightna/engine/PageReady";
 
 export class PageCache {
 
     constructor() {
         this.extendProperties();
         this.handlePrivateBlocks().then(() => {
-            document.dispatchEvent(new CustomEvent('page-ready'));
+            pageReady.trigger();
         });
     }
 
