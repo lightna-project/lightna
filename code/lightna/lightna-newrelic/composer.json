@@ -3,9 +3,9 @@
     "description": "Lightna Newrelic module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.47",
+    "version": "1.0.48",
     "require": {
-        "lightna/engine": "^1.0.47"
+        "lightna/engine": "^1.0.48"
     },
     "autoload": {
         "psr-4": {

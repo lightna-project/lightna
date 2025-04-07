@@ -3,19 +3,56 @@
  * @var string $title
  * @var string $logId
  */
+
+use Lightna\Engine\App\Security\Csp;
+
+try {
+    $nonce = getobj(Csp::class)->getNonce();
+} catch (Throwable $t) {
+}
+
 ?>
 <!DOCTYPE html>
-<html lang="en" style="height: 100%">
+<html lang="en">
 <head>
     <title>500 - <?= htmlspecialchars($title) ?></title>
     <meta charset="utf-8">
+    <style <?= ($nonce ?? null) ? "nonce=\"$nonce\"" : '' ?>>
+        html {
+            height: 100%;
+        }
+
+        body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        .content {
+            text-align: center;
+            padding: 8vh 20vw
+        }
+
+        .title {
+            font-size: xx-large;
+        }
+
+        .subtitle {
+            font-size: large;
+        }
+
+        .details {
+            font-size: medium;
+            color: gray;
+        }
+    </style>
 </head>
-<body style="height: 100%; padding: 0; margin: 0;">
-<div style="text-align: center; padding: 8vh 20vw">
-    <span style="font-size: xx-large">Error 500</span>
+<body>
+<div class="content">
+    <span class="title">Error 500</span>
     <hr/>
-    <span style="font-size: large"><?= htmlspecialchars($title) ?></span><br>
-    <span style="font-size: medium; color: gray">
+    <span class="subtitle"><?= htmlspecialchars($title) ?></span><br>
+    <span class="details">
         Find details in the log: <?= htmlspecialchars($logId) ?>
     </span>
 </div>
