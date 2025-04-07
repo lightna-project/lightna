@@ -9,7 +9,7 @@ self-update:
 	@if composer update lightna/pack --with-all-dependencies --dry-run --ignore-platform-reqs 2>&1 | grep -q " lightna/pack"; then \
 		echo "Update found. Making an update..."; \
 		composer update --with-all-dependencies && \
-		cp -r vendor/lightna/pack/entry/. .; \
+		rsync -K -a vendor/lightna/pack/entry/. .; \
 	else \
 		echo "No updates found."; \
 	fi
