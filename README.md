@@ -7,9 +7,7 @@
 <h1 align="center">Welcome to the Lightna project!</h1>
 
 <p align="center">
-We develop Lightna Engine and MVP for Magento 2 Storefront.<br>
-Readiness of Lightna and Lightna Lane - 90%.<br>
-Readiness of MVP for Magento 2 - 75%.
+Lightna Engine & Magento 2 Storefront (MVP)
 </p>
 
 <p align="center">
