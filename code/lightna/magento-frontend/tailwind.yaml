@@ -22,7 +22,6 @@ entry:
       magento-base-typography: lightna/magento-frontend/base/typography.css
       magento-base-utilities: lightna/magento-frontend/base/utilities.css
       # Components
-      magento-component-carousel: lightna/magento-frontend/component/carousel.css
       magento-component-collapsible: lightna/magento-frontend/component/collapsible.css
       magento-component-dropdown: lightna/magento-frontend/component/dropdown.css
       magento-component-messages: lightna/magento-frontend/component/messages.css

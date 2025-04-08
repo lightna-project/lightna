@@ -1,6 +1,10 @@
 @layer components {
     .carousel-container {
-        @apply relative w-full overflow-hidden pt-14 -mt-14;
+        @apply relative w-full pt-14 -mt-14;
+    }
+
+    .carousel-viewport {
+        @apply w-full overflow-hidden;
     }
 
     .carousel {

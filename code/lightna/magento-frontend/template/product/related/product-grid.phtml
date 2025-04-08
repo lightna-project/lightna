@@ -13,11 +13,13 @@
             <span class="icon icon-arrow-right"></span>
         </div>
     </div>
-    <ul class="carousel">
-        <?php foreach ($related->products as $index => $product): ?>
-            <div class="carousel-item">
-                <?= block('item', compact('index', 'product')) ?>
-            </div>
-        <?php endforeach; ?>
-    </ul>
+    <div class="carousel-viewport">
+        <ul class="carousel">
+            <?php foreach ($related->products as $index => $product): ?>
+                <div class="carousel-item">
+                    <?= block('item', compact('index', 'product')) ?>
+                </div>
+            <?php endforeach; ?>
+        </ul>
+    </div>
 </div>
