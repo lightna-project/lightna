@@ -2,11 +2,11 @@
     "name": "lightna/elasticsearch",
     "description": "Lightna Elasticsearch module",
     "type": "library",
-    "version": "1.0.49",
+    "version": "1.0.50",
     "license": "MIT",
     "require": {
         "ext-curl": "*",
-        "lightna/engine": "^1.0.49"
+        "lightna/engine": "^1.0.50"
     },
     "autoload": {
         "psr-4": {

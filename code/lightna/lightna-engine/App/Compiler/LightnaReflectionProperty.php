@@ -4,20 +4,16 @@ declare(strict_types=1);
 
 namespace Lightna\Engine\App\Compiler;
 
-use ReflectionClass;
-
-/**
- * @property-read string name
- * @property-read string class
- * @property-read array doc
- * @property-read ?string type
- * @property-read bool isRequired
- * @property-read bool isArrayOf
- * @property-read ?string arrayItemType
- * @property-read bool isInterface
- * @property-read string visibility
- * @property-read bool hasLazyDefiner
- */
 class LightnaReflectionProperty
 {
+    public string $class;
+    public string $name;
+    public ?string $type;
+    public string $visibility;
+    public array $doc;
+    public bool $isArrayOf;
+    public bool $isInterface;
+    public bool $isRequired;
+    public ?string $arrayItemType;
+    public bool $hasLazyDefiner;
 }
