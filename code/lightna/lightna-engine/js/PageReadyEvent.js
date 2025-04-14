@@ -1,28 +1,22 @@
-/**
- * Use PageReady as the global instance of PageReadyEvent.
- */
 export class PageReadyEvent {
-    #listeners = [];
-    #isTriggered = false;
+    static listeners = [];
+    static isTriggered = false;
 
-    extendProperties() {
-    }
-
-    addListener(listener) {
-        if (!this.#isTriggered) {
-            this.#listeners.push(listener);
+    static addListener(listener) {
+        if (!PageReadyEvent.isTriggered) {
+            PageReadyEvent.listeners.push(listener);
         } else {
             listener();
         }
     }
 
-    trigger() {
-        if (this.#isTriggered) return;
+    static trigger() {
+        if (PageReadyEvent.isTriggered) return;
 
-        for (const listener of this.#listeners) {
+        for (const listener of PageReadyEvent.listeners) {
             listener();
         }
 
-        this.#isTriggered = true;
+        PageReadyEvent.isTriggered = true;
     }
 }

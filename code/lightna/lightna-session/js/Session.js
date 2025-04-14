@@ -1,6 +1,6 @@
 import { $ } from 'lightna/engine/lib/utils/dom';
 import { Request } from 'lightna/engine/lib/Request';
-import { pageReady } from "lightna/engine/PageReady";
+import { PageReadyEvent } from 'lightna/engine/PageReadyEvent';
 
 export class Session {
 
@@ -13,7 +13,7 @@ export class Session {
     }
 
     initializeEventListeners() {
-        pageReady.addListener(this.onPageReady.bind(this));
+        PageReadyEvent.addListener(this.onPageReady.bind(this));
     }
 
     onPageReady() {
