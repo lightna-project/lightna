@@ -1,7 +1,7 @@
 import { Blocks } from 'lightna/engine/lib/Blocks';
 import { ClickEventDelegator } from 'lightna/magento-frontend/common/ClickEventDelegator';
 import { Request } from 'lightna/engine/lib/Request';
-import { pageReady } from "lightna/engine/PageReady";
+import { PageReadyEvent } from 'lightna/engine/PageReadyEvent';
 
 export class Wishlist {
     static URL_ADD = '/wishlist/index/add';
@@ -19,7 +19,7 @@ export class Wishlist {
 
     constructor() {
         this.extendProperties();
-        pageReady.addListener(this.initializeActions.bind(this));
+        PageReadyEvent.addListener(this.initializeActions.bind(this));
     }
 
     extendProperties() {
