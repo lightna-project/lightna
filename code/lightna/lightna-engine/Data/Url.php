@@ -10,6 +10,7 @@ use Lightna\Engine\App\Exception\LightnaException;
 class Url extends DataA
 {
     protected Build $build;
+    protected Request $request;
     protected array $assetHashes;
     /** @AppConfig(asset_base) */
     protected string $assetBase;
@@ -54,5 +55,21 @@ class Url extends DataA
         }
 
         return $result;
+    }
+
+    public function current(array $update = []): string
+    {
+        $params = $_GET;
+        foreach ($update as $name => $value) {
+            if (is_null($value) || $value === '') {
+                unset($params[$name]);
+            } else {
+                $params[$name] = $value;
+            }
+        }
+
+        $query = http_build_query($params);
+
+        return '/' . $this->request->uriPath . ($query !== '' ? '?' . $query : '');
     }
 }
