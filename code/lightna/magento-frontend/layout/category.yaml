@@ -29,6 +29,12 @@ extends:
           .toggle-facets:
             template: lightna/magento-frontend/component/toggle-link.phtml
         .result:
-          id: products-grid
-          template: lightna/magento-frontend/category/result.phtml
-          .item: component/product/tile.yaml
+          container: div
+          .result:
+            template: lightna/magento-frontend/category/result.phtml
+            .grid:
+              id: products-grid
+              template: lightna/magento-frontend/category/result/grid.phtml
+              .item: component/product/tile.yaml
+          .toolbar-bottom:
+            template: lightna/magento-frontend/category/toolbar/bottom.phtml

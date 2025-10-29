@@ -55,6 +55,7 @@ export class Facets {
     }
 
     applyQuery(query) {
+        query.delete('p');
         const search = query.toString();
         if (search) {
             location.search = search;

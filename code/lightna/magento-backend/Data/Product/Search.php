@@ -10,15 +10,17 @@ use Lightna\Magento\Backend\Data\Product as ProductData;
 use Lightna\Magento\Backend\Data\Product\Search\Facet as FacetData;
 
 /**
- * @method string total(string $escapeMethod = null)
+ * @method string currentPage(string $escapeMethod = null)
  * @method string pageSize(string $escapeMethod = null)
+ * @method string total(string $escapeMethod = null)
  * @property ProductData[] $result
  * @property FacetData[] $facets
  */
 class Search extends DataA
 {
-    public int $total;
+    public int $currentPage;
     public int $pageSize;
+    public int $total;
     public array $result;
     public array $facets;
 

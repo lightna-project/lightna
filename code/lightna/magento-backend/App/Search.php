@@ -25,6 +25,7 @@ class Search extends ObjectA
     protected CategoryContent $categoryContent;
     protected Request $request;
     protected int $pageSize;
+    protected int $currentPage;
 
     public function search(): array
     {
@@ -40,6 +41,12 @@ class Search extends ObjectA
     protected function defineClient(): void
     {
         $this->client = getobj(ElasticClient::class);
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineCurrentPage(): void
+    {
+        $this->currentPage = abs((int)($this->request->param->p ?? 1));
     }
 
     /** @noinspection PhpUnused */
@@ -66,7 +73,7 @@ class Search extends ObjectA
         $categoryId = $this->category->entityId;
 
         return [
-            'from' => 0,
+            'from' => ($this->currentPage - 1) * $this->pageSize,
             'size' => $this->pageSize,
             'stored_fields' => '_none_',
             'docvalue_fields' => ['_id', '_score'],
@@ -118,6 +125,7 @@ class Search extends ObjectA
     {
         return [
             'total' => $result['hits']['total']['value'],
+            'currentPage' => $this->currentPage,
             'pageSize' => $this->pageSize,
             'result' => $this->parseResultItems($result),
             'facets' => $this->parseResultFacets($result),
