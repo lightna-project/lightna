@@ -36,5 +36,6 @@ extends:
               id: products-grid
               template: lightna/magento-frontend/category/result/grid.phtml
               .item: component/product/tile.yaml
-          .toolbar-bottom:
-            template: lightna/magento-frontend/category/toolbar/bottom.phtml
+          .toolbar:
+            .pagination:
+              template: lightna/magento-frontend/category/toolbar/pagination.phtml
