@@ -90,6 +90,7 @@ entry:
       magento-base-icons: lightna/magento-frontend/base/icons.css
       # Components
       magento-component-collapsible: lightna/magento-frontend/component/collapsible.css
+      magento-component-pagination: lightna/magento-frontend/component/pagination.css
       magento-component-toggle-link: lightna/magento-frontend/component/toggle-link.css
       ## Layout
       magento-component-layout-toolbar: lightna/magento-frontend/component/layout/toolbar.css

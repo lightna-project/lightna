@@ -1,0 +1,32 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Engine\Data\Url $url
+ * @var Lightna\Magento\Backend\Data\Product\Search $search
+ */
+
+$pageCount = ceil($search->total / $search->pageSize);
+$currentPage = $search->currentPage;
+if ($pageCount <= 1) {
+    return;
+}
+?>
+<nav class="pagination">
+    <ul class="pagination__list">
+        <li class="pagination__item pagination__item--prev <?= $currentPage === 1 ? 'pagination__item--disabled' : '' ?>">
+            <a class="pagination__link" href="<?= escape($url->current(['p' => $currentPage - 1])) ?>">
+                <span class="icon icon-arrow-left"></span>
+            </a>
+        </li>
+        <?php for ($i = 1; $i <= $pageCount; $i++) { ?>
+        <li class="pagination__item <?= $currentPage === $i ? 'pagination__item--active' : '' ?>">
+            <a class="pagination__link" href="<?= escape($url->current(['p' => $i])) ?>"><?= escape($i) ?></a>
+        </li>
+        <?php } ?>
+        <li class="pagination__item pagination__item--next <?= $currentPage === (int) $pageCount ? 'pagination__item--disabled' : '' ?>">
+            <a class="pagination__link" href="<?= escape($url->current(['p' => $currentPage + 1])) ?>">
+                <span class="icon icon-arrow-right"></span>
+            </a>
+        </li>
+    </ul>
+</nav>

@@ -1,0 +1,27 @@
+@layer components {
+    .pagination__list {
+        @apply flex flex-wrap items-center justify-center gap-2 py-8;
+    }
+
+    .pagination__item {
+        @apply flex h-10 w-10 rounded-sm items-center justify-center border bg-white
+        transition-colors duration-200 hover:border-primary-alt/70;
+    }
+
+    .pagination__link {
+        @apply w-full h-full flex items-center justify-center;
+    }
+
+    .pagination__item--active {
+        @apply text-primary-alt font-semibold border-primary-alt pointer-events-none;
+    }
+
+    .pagination__item--disabled {
+        @apply cursor-not-allowed opacity-50 pointer-events-none;
+    }
+
+    .pagination__item--next,
+    .pagination__item--prev {
+        @apply sm:mx-2 rounded-full;
+    }
+}
