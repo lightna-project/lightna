@@ -3,7 +3,7 @@
     "description": "Magento Theme for Lightna",
     "type": "magento2-theme",
     "license": "MIT",
-    "version": "1.0.50",
+    "version": "1.0.52",
     "autoload": {
         "files": [
             "registration.php"
