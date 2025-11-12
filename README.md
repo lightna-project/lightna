@@ -15,7 +15,7 @@ Lightna Engine & Magento 2 Storefront (MVP)
  | <a href="https://lightna.com/lightna-engine.html">Lightna Engine</a>
  | <a href="https://lightna.com/lightna-lane.html">Lightna Lane</a>
  | <a href="https://lightna.com/magento.html">Magento 2 MVP</a>
- | <a href="https://lightna.com/performance.html">Performance.html</a>
+ | <a href="https://lightna.com/performance.html">Performance</a>
  | <a href="https://lightna.com/doc/introduction/getting-started.html">Documentation</a>
  | <a href="https://lightna.com/contact.html">Contact</a>
 </p>
