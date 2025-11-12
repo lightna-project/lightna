@@ -46,7 +46,7 @@ class Search extends ObjectA
     /** @noinspection PhpUnused */
     protected function defineCurrentPage(): void
     {
-        $this->currentPage = abs((int)($this->request->param->p ?? 1));
+        $this->currentPage = max(abs((int)($this->request->param->p ?? 1)), 1);
     }
 
     /** @noinspection PhpUnused */
