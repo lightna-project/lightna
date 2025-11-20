@@ -1,0 +1,19 @@
+<?php
+/**
+ * Import:
+ * @var Lightna\Engine\Data\Url $url
+ * @var Lightna\Magento\Backend\Data\Product\Search $search
+ */
+
+if (!$search->total) {
+    return;
+}
+?>
+<hr>
+<?php
+foreach ($search->getSortingOptions() as $i => $option) { ?>
+    <?php $style = $search->getCurrentSortingOption() === $i ? 'font-bold' : '' ?>
+    <a href="<?= $url->current(['p' => null] + $option->params) ?>" class="<?= $style ?>">
+        <?= phrase($option->label) ?>
+    </a>
+<?php } ?>

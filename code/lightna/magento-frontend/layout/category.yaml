@@ -30,12 +30,20 @@ extends:
             template: lightna/magento-frontend/component/toggle-link.phtml
         .result:
           container: div
+          .toolbar:
+            id: category-toolbar
+            .summary:
+              id: toolbar-summary
+              template: lightna/magento-frontend/category/toolbar/summary.phtml
+            .sorting:
+              id: toolbar-sorting
+              template: lightna/magento-frontend/category/toolbar/sorting.phtml
           .result:
             template: lightna/magento-frontend/category/result.phtml
             .grid:
               id: products-grid
               template: lightna/magento-frontend/category/result/grid.phtml
               .item: component/product/tile.yaml
-          .toolbar:
-            .pagination:
-              template: lightna/magento-frontend/category/toolbar/pagination.phtml
+          .pagination:
+            id: products-pagination
+            template: lightna/magento-frontend/category/pagination.phtml

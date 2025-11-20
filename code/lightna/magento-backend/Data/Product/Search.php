@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Lightna\Magento\Backend\Data\Product;
 
 use Lightna\Engine\Data\DataA;
+use Lightna\Engine\Data\Request;
 use Lightna\Magento\Backend\App\Search as AppSearch;
 use Lightna\Magento\Backend\Data\Product as ProductData;
 use Lightna\Magento\Backend\Data\Product\Search\Facet as FacetData;
+use Lightna\Magento\Backend\Data\Product\Search\Sorting\Option as SortingOption;
 
 /**
  * @method string currentPage(string $escapeMethod = null)
@@ -25,11 +27,66 @@ class Search extends DataA
     public array $facets;
 
     protected int $paginationMaxLinks = 9; // odd only and >=7
+    protected array $sortingOptions;
+    protected int $currentSortingOption;
     protected AppSearch $appSearch;
+    protected Request $request;
 
     protected function init(array $data = []): void
     {
         parent::init($this->appSearch->search());
+    }
+
+    /**
+     * @return SortingOption[]
+     */
+    public function getSortingOptions(): array
+    {
+        return $this->sortingOptions;
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineSortingOptions(): void
+    {
+        $this->sortingOptions = [
+            newobj(SortingOption::class, [
+                'label' => 'Relevance',
+                'params' => ['product_list_order' => null, 'product_list_dir' => null],
+            ]),
+            newobj(SortingOption::class, [
+                'label' => 'Cheap',
+                'params' => ['product_list_order' => 'price', 'product_list_dir' => null],
+            ]),
+            newobj(SortingOption::class, [
+                'label' => 'Expensive',
+                'params' => ['product_list_order' => 'price', 'product_list_dir' => 'desc'],
+            ]),
+        ];
+    }
+
+    public function getCurrentSortingOption(): int
+    {
+        return $this->currentSortingOption;
+    }
+
+    /** @noinspection PhpUnused */
+    protected function defineCurrentSortingOption(): void
+    {
+        foreach ($this->sortingOptions as $i => $sortingOption) {
+            $match = true;
+            foreach ($sortingOption->params as $key => $value) {
+                if ($this->request->param->{$key} !== $value) {
+                    $match = false;
+                    break;
+                }
+            }
+            if ($match) {
+                $this->currentSortingOption = $i;
+                return;
+            }
+        }
+
+        $this->currentSortingOption = -1;
     }
 
     public function getPagination(): array

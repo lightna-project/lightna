@@ -21,7 +21,9 @@ if ($pageCount <= 1) {
         <?php foreach ($search->getPagination() as $pageNum => $pageLabel) { ?>
             <li class="pagination__item <?= $currentPage === $pageNum ? 'pagination__item--active' : '' ?>">
                 <a class="pagination__link"
-                   href="<?= escape($url->current(['p' => $pageNum])) ?>"><?= escape($pageLabel) ?></a>
+                   href="<?= escape($url->current(['p' => $pageNum == 1 ? null : $pageNum])) ?>">
+                    <?= escape($pageLabel) ?>
+                </a>
             </li>
         <?php } ?>
         <li class="pagination__item pagination__item--next <?= $currentPage === (int)$pageCount ? 'pagination__item--disabled' : '' ?>">
