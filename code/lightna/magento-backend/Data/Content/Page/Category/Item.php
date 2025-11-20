@@ -8,14 +8,14 @@ use Lightna\Engine\Data\DataA;
 
 /**
  * @method string entityId(string $escapeMethod = null)
+ * @method string parentId(string $escapeMethod = null)
  * @method string name(string $escapeMethod = null)
  * @method string url(string $escapeMethod = null)
- * @method string parentId(string $escapeMethod = null)
  */
 class Item extends DataA
 {
     public int $entityId;
+    public int $parentId;
     public string $name;
     public string $url;
-    public string $parentId;
 }

@@ -65,9 +65,11 @@ class LightnaReflectionClass
                     . '::' . $property->getName() . ' must have a type. If there is no specific type, use "mixed".');
             }
 
+            $this->currPropertyDoc = $this->getPropertyDoc($property);
+
             $this->properties[$property->getName()] = a2o(
                 [
-                    'doc' => $this->getPropertyDoc($property),
+                    'doc' => $this->currPropertyDoc,
                     'name' => $property->getName(),
                     'class' => $this->getName(),
                     'visibility' => $property->isPublic() ? 'pb' : ($property->isProtected() ? 'pt' : ($property->isPrivate() ? 'pv' : null)),
