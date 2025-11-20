@@ -13,6 +13,7 @@ use Lightna\Magento\Backend\App\Search\ClientInterface as SearchClientInterface;
 use Lightna\Magento\Backend\Data\Category;
 use Lightna\Magento\Backend\Data\Config;
 use Lightna\Magento\Backend\Data\Content\Category as CategoryContent;
+use Lightna\Magento\Backend\Data\Content\Product\FilterableAttribute;
 use Lightna\Magento\Backend\Data\Session;
 
 class Search extends ObjectA
@@ -62,26 +63,13 @@ class Search extends ObjectA
 
     protected function buildQuery(): array
     {
-        $query = $this->_buildQuery();
-        $this->applyFilters($query);
-
-        return $query;
-    }
-
-    protected function _buildQuery(): array
-    {
-        $categoryId = $this->category->entityId;
-
         return [
             'from' => ($this->currentPage - 1) * $this->pageSize,
             'size' => $this->pageSize,
             'stored_fields' => '_none_',
             'docvalue_fields' => ['_id', '_score'],
             'sort' => $this->buildQuerySorting(),
-            'query' => ['bool' => ['must' => [
-                ['term' => ['category_ids' => $categoryId]],
-                ['terms' => ['visibility' => ['2', '4']]],
-            ]]],
+            'query' => $this->buildQueryFilters(),
             'aggregations' => $this->buildQueryAggregations(),
         ];
     }
@@ -91,22 +79,94 @@ class Search extends ObjectA
         $order = $this->request->param->product_list_dir === 'desc' ? 'desc' : 'asc';
 
         return match ($this->request->param->product_list_order) {
-            'price' => [['price_' . $this->session->customer->groupId . '_' . $this->context->scope => ['order' => $order]]],
+            'price' => [[$this->getQueryField('price') => ['order' => $order]]],
             default => [['position_category_' . $this->category->entityId => ['order' => 'asc']]],
         };
     }
 
-    protected function applyFilters(array &$query): void
+    protected function buildQueryFilters(): array
     {
-        $must = &$query['query']['bool']['must'];
+        $filters = ['bool' => ['must' => [
+            ['term' => ['category_ids' => $this->category->entityId]],
+            ['terms' => ['visibility' => ['2', '4']]],
+        ]]];
+
         foreach ($this->categoryContent->filterableAttributes as $attribute) {
             if ($this->request->param->{$attribute->code} === null) {
                 continue;
             }
-            $values = explode('_', $this->request->param->{$attribute->code});
-            foreach ($values as $value) {
-                $must[] = ['term' => [$attribute->code => $value]];
+
+            foreach ($this->buildQueryAttributeFilters($attribute) as $must) {
+                $filters['bool']['must'][] = $must;
             }
+        }
+
+        return $filters;
+    }
+
+    protected function buildQueryAttributeFilters(FilterableAttribute $attribute): array
+    {
+        if ($this->isRangeAttribute($attribute)) {
+            return $this->buildQueryRangeAttributeFilters($attribute);
+        } else {
+            return $this->buildQueryOptionAttributeFilters($attribute);
+        }
+    }
+
+    protected function buildQueryOptionAttributeFilters(FilterableAttribute $attribute): array
+    {
+        $values = explode('_', $this->request->param->{$attribute->code});
+        $must = [];
+        foreach ($values as $value) {
+            $must[] = [
+                'term' => [
+                    $attribute->code => $value,
+                ],
+            ];
+        }
+
+        return $must;
+    }
+
+    protected function buildQueryRangeAttributeFilters(FilterableAttribute $attribute): array
+    {
+        $values = array_filter(
+            explode('-', $this->request->param->{$attribute->code}),
+            fn($value) => is_numeric($value),
+        );
+
+        if (!count($values)) {
+            return [];
+        }
+
+        $cond = [];
+        if (isset($values[0])) {
+            $cond['gte'] = $values[0];
+        }
+        if (isset($values[1])) {
+            $cond['lte'] = $values[1];
+        }
+
+        return [
+            [
+                'range' => [
+                    $this->getQueryField($attribute->code) => $cond,
+                ],
+            ],
+        ];
+    }
+
+    protected function isRangeAttribute(FilterableAttribute $attribute): bool
+    {
+        return $attribute->frontendInput === 'price';
+    }
+
+    protected function getQueryField(string $attributeCode): string
+    {
+        if ($attributeCode === 'price') {
+            return 'price_' . $this->session->customer->groupId . '_' . $this->context->scope;
+        } else {
+            return $attributeCode;
         }
     }
 
@@ -114,7 +174,7 @@ class Search extends ObjectA
     {
         $facets = [
             'price_bucket' => [
-                'extended_stats' => ['field' => 'price_' . $this->session->customer->groupId . '_' . $this->context->scope],
+                'extended_stats' => ['field' => $this->getQueryField('price')],
             ],
             'category_bucket' => [
                 'terms' => ['field' => 'category_ids', 'size' => 500],
