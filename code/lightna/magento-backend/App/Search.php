@@ -77,13 +77,23 @@ class Search extends ObjectA
             'size' => $this->pageSize,
             'stored_fields' => '_none_',
             'docvalue_fields' => ['_id', '_score'],
-            'sort' => [['position_category_' . $categoryId => ['order' => 'asc']]],
+            'sort' => $this->buildQuerySorting(),
             'query' => ['bool' => ['must' => [
                 ['term' => ['category_ids' => $categoryId]],
                 ['terms' => ['visibility' => ['2', '4']]],
             ]]],
             'aggregations' => $this->buildQueryAggregations(),
         ];
+    }
+
+    protected function buildQuerySorting(): array
+    {
+        $order = $this->request->param->product_list_dir === 'desc' ? 'desc' : 'asc';
+
+        return match ($this->request->param->product_list_order) {
+            'price' => [['price_' . $this->session->customer->groupId . '_' . $this->context->scope => ['order' => $order]]],
+            default => [['position_category_' . $this->category->entityId => ['order' => 'asc']]],
+        };
     }
 
     protected function applyFilters(array &$query): void
