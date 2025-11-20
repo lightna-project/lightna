@@ -29,4 +29,11 @@ class Currency extends DataA
             $this->config->currency->default,
         ));
     }
+
+    public function renderSymbol(): string
+    {
+        $symbol = $this->numberFormatter->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
+
+        return escape($symbol);
+    }
 }

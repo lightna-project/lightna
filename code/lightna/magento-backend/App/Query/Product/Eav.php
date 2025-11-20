@@ -57,7 +57,7 @@ class Eav extends EavAbstract
             ->join(
                 ['a' => 'eav_attribute'],
                 'a.attribute_id = ca.attribute_id',
-                ['id' => 'attribute_id', 'code' => 'attribute_code'],
+                ['id' => 'attribute_id', 'code' => 'attribute_code', 'backend_type', 'frontend_input'],
             )
             ->join(
                 ['l' => 'eav_attribute_label'],
