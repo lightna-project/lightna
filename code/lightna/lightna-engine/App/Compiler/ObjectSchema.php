@@ -28,7 +28,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
     public function make(): void
     {
         $this->init();
-        $this->makeObjects();
+        $this->makeSchema();
     }
 
     protected function init(array $data = []): void
@@ -50,7 +50,7 @@ class ObjectSchema extends CompilerA implements ObjectManagerIgnore
         $this->moduleClassRx = "~^($rx)~";
     }
 
-    protected function makeObjects(): void
+    protected function makeSchema(): void
     {
         $classes = $this->build->load('object/map');
         $objects = [];

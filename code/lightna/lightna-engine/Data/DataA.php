@@ -19,19 +19,20 @@ class DataA extends ObjectA
     }
 
     /** @internal */
-    protected function __objectify(array $data): array
+    protected function __objectify(array $data, bool $isRootLevel = true): array
     {
         $result = [];
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                if (is_string($key) && $this->issetProperty($key)) {
+                if ($isRootLevel && is_string($key) && $this->issetProperty($key)) {
                     $this->__setPropertyData($key, $value);
-                } elseif (!count($value)) {
-                    $result[$key] = [];
+                } elseif ($isRootLevel && property_exists($this, $key)) {
+                    // Plain array property
+                    $result[$key] = $this->__objectify($value, false);
                 } elseif (is_string(array_key_first($value))) {
                     $result[$key] = newobj(DataA::class, $value);
                 } else {
-                    $result[$key] = $this->__objectify($value);
+                    $result[$key] = $this->__objectify($value, false);
                 }
             } else {
                 $result[$key] = $value;
@@ -95,7 +96,7 @@ class DataA extends ObjectA
             }
         }
 
-        if (is_scalar($this->{$name}) || is_array($this->{$name})) {
+        if (is_null($this->{$name}) || is_scalar($this->{$name}) || is_array($this->{$name})) {
             return escape($this->{$name}, ...$arguments);
         } else {
             // Object, call property __invoke
