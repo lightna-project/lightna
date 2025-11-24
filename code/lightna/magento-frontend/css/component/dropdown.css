@@ -8,7 +8,12 @@
     }
 
     .dropdown__wrap {
-        @apply hidden md:block overflow-hidden max-h-0 absolute top-[calc(100%+10px)] transition-[max-height] duration-300 ease-in-out z-10 -right-4;
+        @apply overflow-hidden max-h-0 absolute top-[100%]
+        transition-[max-height] duration-300 ease-in-out z-10 right-0;
+    }
+
+    .icon-dropdown .dropdown__wrap {
+        @apply top-[calc(100%+10px)] -right-4 hidden md:block;
     }
 
     .dropdown__content {

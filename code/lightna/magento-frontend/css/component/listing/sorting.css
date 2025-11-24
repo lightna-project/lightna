@@ -1,0 +1,35 @@
+@layer components {
+    .sorting {
+        @apply flex flex-col gap-2;
+    }
+
+    .sorting__option {
+        @apply list-none;
+    }
+
+    .sorting__option:hover .sorting__radio,
+    .sorting__option--active .sorting__radio {
+        @apply border-primary-main;
+    }
+
+    .sorting__option--active .sorting__label {
+        @apply font-medium;
+    }
+
+    .sorting__option--active .sorting__radio:before {
+        content: '';
+        @apply absolute top-[3px] left-[3px] flex h-4 w-4 items-center justify-center rounded-full bg-primary-main;
+    }
+
+    .sorting__control {
+        @apply flex items-center gap-2 cursor-pointer;
+    }
+
+    .sorting__radio {
+        @apply relative h-6 w-6 shrink-0 rounded-full border hover:border-primary-main;
+    }
+
+    .sorting__opener {
+        @apply flex items-center gap-2 cursor-pointer px-2 py-1;
+    }
+}
