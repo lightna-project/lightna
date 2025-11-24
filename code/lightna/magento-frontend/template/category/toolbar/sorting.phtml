@@ -8,12 +8,30 @@
 if (!$search->total) {
     return;
 }
+$activeOption = $search->getSortingOptions()[$search->getCurrentSortingOption()]->label;
 ?>
-<hr>
-<?php
-foreach ($search->getSortingOptions() as $i => $option) { ?>
-    <?php $style = $search->getCurrentSortingOption() === $i ? 'font-bold' : '' ?>
-    <a href="<?= $url->current(['p' => null] + $option->params) ?>" class="<?= $style ?>">
-        <?= phrase($option->label) ?>
-    </a>
-<?php } ?>
+<div class="dropdown">
+    <div class="sorting__opener">
+        <span class="icon-sm icon-sort"></span>
+        <span><?= phrase($activeOption) ?></span>
+        <span class="icon-sm icon-chevron-down"></span>
+    </div>
+    <div class="dropdown__wrap">
+        <div class="dropdown__content">
+            <ul class="sorting">
+                <?php foreach ($search->getSortingOptions() as $i => $option) { ?>
+                    <li class="sorting__option <?= $search->getCurrentSortingOption() === $i ? 'sorting__option--active' : '' ?>">
+                        <a href="<?= $url->current(['p' => null] + $option->params) ?>">
+                            <span class="sorting__control">
+                                <span class="sorting__radio"></span>
+                                <span class="sorting__label">
+                                    <?= phrase($option->label) ?>
+                                </span>
+                            </span>
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -98,6 +98,7 @@ entry:
       magento-component-product-grid: lightna/magento-frontend/component/product/grid.css
       ## Listing
       magento-component-listing-facets: lightna/magento-frontend/component/listing/facets.css
+      magento-component-listing-sorting: lightna/magento-frontend/component/listing/sorting.css
       # Page
       magento-page-category: lightna/magento-frontend/page/category.css
 tailwind:

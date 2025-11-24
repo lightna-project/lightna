@@ -36,6 +36,11 @@
             center / contain no-repeat;
     }
 
+    .icon-sort {
+        background: url('../../lightna/magento-frontend/image/icon/sort.svg')
+            center / contain no-repeat;
+    }
+
     .icon-chevron-down {
         background: url('../../lightna/magento-frontend/image/icon/angle-small-down.svg')
             center / contain no-repeat;
