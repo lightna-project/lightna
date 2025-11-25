@@ -88,6 +88,7 @@ entry:
       tailwind-utilities: tailwindcss/utilities
       # Base
       magento-base-icons: lightna/magento-frontend/base/icons.css
+      magento-base-buttons: lightna/magento-frontend/base/buttons.css
       # Components
       magento-component-collapsible: lightna/magento-frontend/component/collapsible.css
       magento-component-pagination: lightna/magento-frontend/component/pagination.css
