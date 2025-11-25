@@ -24,14 +24,20 @@
             <?php $collapsibleActive = $facet->position < 5 || $facet->isInUse ?>
             <div class="cjs-collapsible facets__item__container <?= $collapsibleActive ? 'collapsible--active' : '' ?>">
                 <?php if ($facet->type === 'range') { ?>
-                    <div class="facet-range py-4" data-facet-code="<?= $facet->code() ?>">
-                        <span class="font-normal">
-                            <?= $facet->label() ?>
-                            (<?= $facet->min() ?> - <?= $facet->max() ?>):<br>
-                            <input type="text" value="<?= $facet->currMin() ?>" size="3"/> -
-                            <input type="text" value="<?= $facet->currMax() ?>" size="3"/>
-                            <?= $currency->renderSymbol() ?>
-                        </span>
+                    <div class="collapsible__trigger facets__item__title" data-click-action="toggle-collapsible">
+                        <?= $facet->label() ?>, <?= $currency->renderSymbol() ?>
+                        <span class="icon" aria-hidden="true"></span>
+                    </div>
+                    <div class="cjs-collapsible-content collapsible__content">
+                        <div class="facet__item--range" data-facet-type="range" data-facet-code="<?= $facet->code() ?>">
+                            <input type="text" value="<?= $facet->currMin() ?>" autocomplete="off"
+                                   data-current="<?= $facet->currMin() ?>"
+                                   placeholder="<?= $facet->min() ?>" /> -
+                            <input type="text" value="<?= $facet->currMax() ?>" autocomplete="off"
+                                   data-current="<?= $facet->currMax() ?>"
+                                   placeholder="<?= $facet->max() ?>" />
+                            <button type="button" disabled><?= phrase('OK') ?> </button>
+                        </div>
                     </div>
                 <?php } ?>
                 <?php if ($facet->type === 'option') { ?>

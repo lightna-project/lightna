@@ -15,6 +15,18 @@
         @apply ml-4 icon-filter;
     }
 
+    .facet__item--range {
+        @apply flex items-center gap-3 pb-3;
+    }
+
+    .facet__item--range input {
+        @apply w-full;
+    }
+
+    .facet__item--range button {
+        @apply btn-s mb-0;
+    }
+
     .facets__item__container {
         @apply border-t px-2 last:border-b;
     }

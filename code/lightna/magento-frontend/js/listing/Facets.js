@@ -26,13 +26,29 @@ export class Facets {
             });
         });
 
-        $$(this.component + ' .facet-range').forEach((range) => {
-            $$('input', range).forEach((input) => {
+        $$(this.component + ' [data-facet-type=range]').forEach((range) => {
+            const applyButton = $('button', range);
+            const rangeInputs = $$('input', range);
+            const minInput = rangeInputs[0];
+            const maxInput = rangeInputs[1];
+
+            rangeInputs.forEach((input) => {
                 input.addEventListener('keypress', (event) => {
                     if (event.key === 'Enter') {
                         this.onRangeChange(range);
                     }
                 });
+
+                input.addEventListener('input', (event) => {
+                    const toDisable =
+                        minInput.value === minInput.dataset['current'] &&
+                        maxInput.value === maxInput.dataset['current'];
+                    applyButton.toggleAttribute('disabled', toDisable);
+                });
+            });
+
+            applyButton.addEventListener('click', () => {
+                this.onRangeChange(range);
             });
         });
     }
