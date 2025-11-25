@@ -1,5 +1,13 @@
 @layer components {
     .toolbar {
-        @apply mb-4 mt-8 border-t border-stone-200 py-4;
+        @apply flex items-center justify-between gap-4 mb-6;
+    }
+
+    .toolbar--bottom {
+        @apply mt-8 py-4;
+    }
+
+    .toolbar--top {
+        @apply border-b md:border-t md:py-2;
     }
 }
