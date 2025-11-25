@@ -32,15 +32,7 @@ extends:
           container: div
           .toolbar:
             id: category-toolbar
-            container: div
-            attributes:
-              class:
-                - mb-6
-                - flex
-                - items-center
-                - justify-between
-                - gap-4
-                - border-b
+            template: lightna/magento-frontend/category/toolbar.phtml
             .summary:
               id: toolbar-summary
               template: lightna/magento-frontend/category/toolbar/summary.phtml
