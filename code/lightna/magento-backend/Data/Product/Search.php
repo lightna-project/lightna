@@ -26,7 +26,7 @@ class Search extends DataA
     public array $result;
     public array $facets;
 
-    protected int $paginationMaxLinks = 9; // odd only and >=7
+    protected int $paginationMaxLinks = 5; // odd only and >=3
     protected array $sortingOptions;
     protected int $currentSortingOption;
     protected AppSearch $appSearch;
