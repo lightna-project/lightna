@@ -4,6 +4,13 @@ const fs = require('fs');
  * Temporary `resolve` fix
  */
 function postCssImportResolve(id) {
+    const TAILWIND_IMPORTS = [
+        'tailwindcss/base',
+        'tailwindcss/components',
+        'tailwindcss/utilities',
+    ];
+    TAILWIND_IMPORTS.includes(id) && (id = id.replace('tailwindcss/', '~/tailwindcss/'));
+
     if (!id.startsWith('~/')) {
         throw new Error('Can\'t handle import path "' + id + '", it should start with "~/".');
     }
