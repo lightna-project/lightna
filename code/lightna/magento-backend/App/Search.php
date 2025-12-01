@@ -32,7 +32,7 @@ class Search extends ObjectA
     {
         $result = $this->client->search(
             $this->getIndexName('product'),
-            $this->buildQuery()
+            $this->buildBody()
         );
 
         return $this->parseResult($result);
@@ -61,7 +61,7 @@ class Search extends ObjectA
         return $entityName . '_' . $this->context->scope;
     }
 
-    protected function buildQuery(): array
+    protected function buildBody(): array
     {
         return [
             'from' => ($this->currentPage - 1) * $this->pageSize,
@@ -69,7 +69,7 @@ class Search extends ObjectA
             'stored_fields' => '_none_',
             'docvalue_fields' => ['_id', '_score'],
             'sort' => $this->buildQuerySorting(),
-            'query' => $this->buildQueryFilters(),
+            'query' => ['bool' => ['must' => array_values($this->buildQueryFilters())]],
             'aggregations' => $this->buildQueryAggregations(),
         ];
     }
@@ -86,18 +86,30 @@ class Search extends ObjectA
 
     protected function buildQueryFilters(): array
     {
-        $filters = ['bool' => ['must' => [
-            ['term' => ['category_ids' => $this->category->entityId]],
-            ['terms' => ['visibility' => ['2', '4']]],
-        ]]];
+        return array_merge(
+            $this->buildQueryBaseFilters(),
+            $this->buildQueryAttributesFilters(),
+        );
+    }
 
+    protected function buildQueryBaseFilters(): array
+    {
+        return [
+            'category_ids' => ['term' => ['category_ids' => $this->category->entityId]],
+            'visibility' => ['terms' => ['visibility' => ['2', '4']]],
+        ];
+    }
+
+    protected function buildQueryAttributesFilters(): array
+    {
+        $filters = [];
         foreach ($this->categoryContent->filterableAttributes as $attribute) {
             if ($this->request->param->{$attribute->code} === null) {
                 continue;
             }
 
             foreach ($this->buildQueryAttributeFilters($attribute) as $must) {
-                $filters['bool']['must'][] = $must;
+                $filters[$attribute->code] = $must;
             }
         }
 
@@ -116,16 +128,12 @@ class Search extends ObjectA
     protected function buildQueryOptionAttributeFilters(FilterableAttribute $attribute): array
     {
         $values = explode('_', $this->request->param->{$attribute->code});
-        $must = [];
-        foreach ($values as $value) {
-            $must[] = [
-                'term' => [
-                    $attribute->code => $value,
-                ],
-            ];
-        }
 
-        return $must;
+        return [[
+            'terms' => [
+                $attribute->code => $values,
+            ],
+        ]];
     }
 
     protected function buildQueryRangeAttributeFilters(FilterableAttribute $attribute): array
@@ -172,7 +180,7 @@ class Search extends ObjectA
 
     protected function buildQueryAggregations(): array
     {
-        $facets = [
+        $aggs = [
             'price_bucket' => [
                 'extended_stats' => ['field' => $this->getQueryField('price')],
             ],
@@ -181,14 +189,27 @@ class Search extends ObjectA
             ],
         ];
 
+        $filters = $this->buildQueryFilters();
         foreach ($this->categoryContent->filterableAttributes as $attribute) {
-            if (isset($facets[$key = $attribute->code . '_bucket'])) {
+            if (isset($aggs[$key = $attribute->code . '_bucket'])) {
                 continue;
             }
-            $facets[$key] = ['terms' => ['field' => $attribute->code, 'size' => 500]];
+
+            $aggFilter = $filters;
+            unset($aggFilter[$attribute->code]);
+
+            $aggs[$key] = [
+                'global' => (object)[],
+                'aggs' => [
+                    'filtered' => [
+                        'filter' => ['bool' => ['filter' => array_values($aggFilter)]],
+                        'aggs' => [$attribute->code => ['terms' => ['field' => $attribute->code, 'size' => 500]]],
+                    ],
+                ],
+            ];
         }
 
-        return $facets;
+        return $aggs;
     }
 
     protected function parseResult(array $result): array
@@ -233,11 +254,12 @@ class Search extends ObjectA
         $facets = [];
         $position = 0;
         foreach ($result['aggregations'] as $key => $agg) {
+            $code = preg_replace('~_bucket$~', '', $key);
+            $agg = $agg['filtered'][$code] ?? $agg;
             if (empty($agg['min']) && empty($agg['buckets'])) {
                 continue;
             }
 
-            $code = preg_replace('~_bucket$~', '', $key);
             $facet = ['code' => $code];
 
             if (!empty($agg['min'])) {
