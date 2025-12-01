@@ -3,11 +3,11 @@
     "description": "Lightna package for new project",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.53",
+    "version": "1.0.54",
     "require": {
-        "lightna/engine": "^1.0.53",
-        "lightna/tailwind": "^1.0.53",
-        "lightna/webpack": "^1.0.53",
-        "lightna/phpunit": "^1.0.53"
+        "lightna/engine": "^1.0.54",
+        "lightna/tailwind": "^1.0.54",
+        "lightna/webpack": "^1.0.54",
+        "lightna/phpunit": "^1.0.54"
     }
 }
