@@ -6,7 +6,7 @@ namespace Lightna\Magento\Backend\Data\Product;
 
 use Lightna\Engine\Data\DataA;
 use Lightna\Engine\Data\Request;
-use Lightna\Magento\Backend\App\Search as AppSearch;
+use Lightna\Magento\Backend\App\Search\Adapter as SearchAdapter;
 use Lightna\Magento\Backend\Data\Product as ProductData;
 use Lightna\Magento\Backend\Data\Product\Search\Facet as FacetData;
 use Lightna\Magento\Backend\Data\Product\Search\Sorting\Option as SortingOption;
@@ -15,7 +15,7 @@ use Lightna\Magento\Backend\Data\Product\Search\Sorting\Option as SortingOption;
  * @method string currentPage(string $escapeMethod = null)
  * @method string pageSize(string $escapeMethod = null)
  * @method string total(string $escapeMethod = null)
- * @property ProductData[] $result
+ * @property ProductData[] $items
  * @property FacetData[] $facets
  */
 class Search extends DataA
@@ -23,26 +23,18 @@ class Search extends DataA
     public int $currentPage;
     public int $pageSize;
     public int $total;
-    public array $result;
+    public array $items;
     public array $facets;
 
     protected int $paginationMaxLinks = 5; // odd only and >=3
     protected array $sortingOptions;
     protected int $currentSortingOption;
-    protected AppSearch $appSearch;
+    protected SearchAdapter $searchAdapter;
     protected Request $request;
 
     protected function init(array $data = []): void
     {
-        parent::init($this->appSearch->search());
-    }
-
-    /**
-     * @return SortingOption[]
-     */
-    public function getSortingOptions(): array
-    {
-        return $this->sortingOptions;
+        parent::init($this->searchAdapter->search());
     }
 
     /** @noinspection PhpUnused */
@@ -64,9 +56,12 @@ class Search extends DataA
         ];
     }
 
-    public function getCurrentSortingOption(): int
+    /**
+     * @return SortingOption[]
+     */
+    public function getSortingOptions(): array
     {
-        return $this->currentSortingOption;
+        return $this->sortingOptions;
     }
 
     /** @noinspection PhpUnused */
@@ -87,6 +82,11 @@ class Search extends DataA
         }
 
         $this->currentSortingOption = -1;
+    }
+
+    public function getCurrentSortingOption(): int
+    {
+        return $this->currentSortingOption;
     }
 
     public function getPagination(): array

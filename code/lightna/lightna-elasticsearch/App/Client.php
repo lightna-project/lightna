@@ -6,9 +6,8 @@ namespace Lightna\Elasticsearch\App;
 
 use Lightna\Engine\App\Exception\LightnaException;
 use Lightna\Engine\App\ObjectA;
-use Lightna\Magento\Backend\App\Search\ClientInterface as SearchClientInterface;
 
-class Client extends ObjectA implements SearchClientInterface
+class Client extends ObjectA
 {
     static public float $timeSpent = 0;
 
