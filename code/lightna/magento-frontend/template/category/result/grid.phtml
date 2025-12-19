@@ -5,7 +5,7 @@
  */
 ?>
 <ul class="products-grid">
-    <?php foreach ($search->result as $index => $product) { ?>
+    <?php foreach ($search->items as $index => $product) { ?>
         <?= block('item', compact('index', 'product')) ?>
     <?php } ?>
 </ul>
