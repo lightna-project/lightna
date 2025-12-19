@@ -16,7 +16,7 @@ self-update:
 
 build:
 	LIGHTNA_EDITION=main make _build
-	LIGHTNA_EDITION=design-example make _build
+	#LIGHTNA_EDITION=design-example make _build
 
 _build:
 	./cli build.compile
@@ -35,7 +35,7 @@ _build.css:
 
 build.update:
 	LIGHTNA_EDITION=main make _build.update
-	LIGHTNA_EDITION=design-example make _build.update
+	#LIGHTNA_EDITION=design-example make _build.update
 
 _build.update:
 	export LIGHTNA_EDITION_DIR=$$(./cli config edition_dir) && \
@@ -57,7 +57,7 @@ _build.update.css:
 
 compile:
 	LIGHTNA_EDITION=main make _build.compile.direct
-	LIGHTNA_EDITION=design-example make _build.compile.direct
+	#LIGHTNA_EDITION=design-example make _build.compile.direct
 
 _build.compile.direct:
 	./cli build.compile --direct
@@ -71,7 +71,7 @@ index.update:
 
 config.apply:
 	LIGHTNA_EDITION=main ./cli config.apply
-	LIGHTNA_EDITION=design-example ./cli config.apply
+	#LIGHTNA_EDITION=design-example ./cli config.apply
 
 sync:
 	make install && \
@@ -88,14 +88,14 @@ compile-i:
 
 test.unit:
 	LIGHTNA_EDITION=main make _test.unit
-	LIGHTNA_EDITION=design-example make _test.unit
+	#LIGHTNA_EDITION=design-example make _test.unit
 
 _test.unit:
 	vendor/bin/phpunit -c `./cli config edition_dir`/build/phpunit/config.unit.xml
 
 test.integration:
 	LIGHTNA_EDITION=main make _test.integration
-	LIGHTNA_EDITION=design-example make _test.integration
+	#LIGHTNA_EDITION=design-example make _test.integration
 
 _test.integration:
 	vendor/bin/phpunit -c `./cli config edition_dir`/build/phpunit/config.integration.xml
