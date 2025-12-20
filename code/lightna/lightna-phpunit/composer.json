@@ -3,9 +3,9 @@
     "description": "Lightna PHPUnit module",
     "type": "library",
     "license": "MIT",
-    "version": "1.0.54",
+    "version": "1.0.56",
     "require": {
-        "lightna/engine": "^1.0.54",
+        "lightna/engine": "^1.0.56",
         "ext-simplexml": "*"
     },
     "autoload": {
