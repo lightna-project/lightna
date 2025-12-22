@@ -19,25 +19,83 @@ abstract class EavAbstract extends ObjectA
     protected Database $db;
     protected Context $context;
     protected array $attributes;
-    protected array $attributesById;
+    protected array $scopeAttributes;
+    protected array $attributeCodeById;
 
+    /** @noinspection PhpUnused */
     protected function defineAttributes(): void
     {
-        $select = $this->db
-            ->select(['a' => 'eav_attribute'])
-            ->where(['a.entity_type_id = ?' => $this::ENTITY_TYPE]);
-
-        $this->attributes = $this->db->fetch($select, 'attribute_code');
-
-        foreach ($this->attributes as $attribute) {
-            $this->attributesById[$attribute['attribute_id']] = $attribute;
-        }
+        $this->attributes = $this->db->fetch($this->getAttributesSelect(), 'attribute_code');
     }
 
     /** @noinspection PhpUnused */
-    protected function defineAttributesById(): void
+    protected function defineAttributeCodeById(): void
     {
-        $this->defineAttributes();
+        foreach ($this->attributes as $attribute) {
+            $this->attributeCodeById[$attribute['attribute_id']] = $attribute['attribute_code'];
+        }
+    }
+
+    public function getScopeAttributes(): array
+    {
+        if (isset($this->scopeAttributes[$this->context->scope])) {
+            return $this->scopeAttributes[$this->context->scope];
+        }
+
+        return $this->scopeAttributes[$this->context->scope] = $this->loadScopeAttributes();
+    }
+
+    protected function loadScopeAttributes(): array
+    {
+        $attributes = [];
+        $labels = $this->loadAttributeLabels();
+        foreach ($this->attributes as $code => $attribute) {
+            $id = $attribute['attribute_id'];
+
+            $attributes[$code] = merge(
+                $attribute,
+                [
+                    'id' => $id,
+                    'code' => $code,
+                    'label' => $labels[$id] ?? $code,
+                ],
+            );
+        }
+
+        return $attributes;
+    }
+
+    protected function getAttributesSelect(): Select
+    {
+        return $this->db
+            ->select(['a' => 'eav_attribute'])
+            ->where(['a.entity_type_id = ?' => $this::ENTITY_TYPE])
+            ->join(
+                ['ca' => 'catalog_eav_attribute'],
+                'ca.attribute_id = a.attribute_id',
+            );
+    }
+
+    protected function loadAttributeLabels(): array
+    {
+        return $this->db->fetchCol($this->getAttributeLabelsSelect(), 'label', 'attribute_id');
+    }
+
+    protected function getAttributeLabelsSelect(): Select
+    {
+        return $this->getAttributesSelect()
+            ->columns(['attribute_id'])
+            ->join(
+                ['l' => 'eav_attribute_label'],
+                'l.attribute_id = a.attribute_id',
+                ['label' => new Expression('ifnull(l.value, a.frontend_label)')],
+                Select::JOIN_LEFT,
+            )
+            ->where([
+                '(l.store_id is null or l.store_id = ?)' => $this->context->scope,
+            ])
+            // Default first, store specific - second
+            ->order(['l.store_id']);
     }
 
     public function getAttributeValues(array $entityIds, array $attributeCodes, array $rawValueAttributes = []): array
@@ -82,8 +140,11 @@ abstract class EavAbstract extends ObjectA
                     // Skip raw values
                     continue;
                 }
+                if (!$attribute = $this->getAttributeById($data['attribute_id'])) {
+                    continue;
+                }
 
-                $isMultiselect = $this->attributesById[$data['attribute_id']]['frontend_input'] === 'multiselect';
+                $isMultiselect = $attribute['frontend_input'] === 'multiselect';
                 $values = $isMultiselect ? explode(',', (string)$data['value']) : [$data['value']];
 
                 foreach ($values as &$value) {
@@ -92,6 +153,13 @@ abstract class EavAbstract extends ObjectA
                 $data = implode(', ', $values);
             }
         }
+    }
+
+    public function getAttributeById(int $attributeId): ?array
+    {
+        $code = $this->attributeCodeById[$attributeId] ?? null;
+
+        return $this->attributes[$code] ?? null;
     }
 
     public function getOptions(): array
@@ -129,10 +197,7 @@ abstract class EavAbstract extends ObjectA
 
     protected function getOptionsSelect(): Select
     {
-        $ids = [];
-        foreach ($this->attributes as $attribute) {
-            $ids[] = $attribute['attribute_id'];
-        }
+        $ids = array_keys($this->attributeCodeById);
 
         $select = $this->db->select()
             ->from(['o' => 'eav_attribute_option'])

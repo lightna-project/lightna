@@ -32,6 +32,7 @@ class Gallery extends ObjectA
         $this->imageQuality = $this->magentoConfig->getValue('system/upload_configuration/jpeg_quality');
     }
 
+    /** @noinspection PhpUnused */
     protected function defineGalleryAttributeId(): void
     {
         $this->galleryAttributeId = $this->db->fetchOneCol($this->getGalleryAttributeIdSelect());
