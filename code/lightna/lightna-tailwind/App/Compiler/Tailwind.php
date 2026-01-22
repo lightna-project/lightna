@@ -16,6 +16,11 @@ class Tailwind extends CompilerA
     protected array $modulesConfig;
     protected array $modulesIndex;
     protected array $importsIndex;
+    protected const TAILWIND_IMPORTS = [
+        'tailwindcss/base',
+        'tailwindcss/components',
+        'tailwindcss/utilities',
+    ];
 
     public function make(): void
     {
@@ -121,6 +126,10 @@ class Tailwind extends CompilerA
 
     protected function getImport(string $import): string
     {
+        if (in_array($import, self::TAILWIND_IMPORTS)) {
+            return $import;
+        }
+
         return '~/' . (
             $this->isCoreImport($import) ?
                 $import :
